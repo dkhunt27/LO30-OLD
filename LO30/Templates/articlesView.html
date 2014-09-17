@@ -1,0 +1,63 @@
+﻿<div id="blog">
+
+  <!-- PAGE TITLE -->
+  <header id="page-title">
+    <div class="container">
+      <h1>Atropos Blog</h1>
+
+      <ul class="breadcrumb">
+        <li><a href="index.html">Home</a></li>
+        <li class="active">Blog</li>
+      </ul>
+    </div>
+  </header>
+  <div>Article Count: {{ articles.length }}</div>
+
+  <section class="container">
+
+    <form method="get" action="#" class="input-group masonry-search">
+      <input type="text" class="form-control" name="k" id="k" value="" placeholder="search..." />
+      <span class="input-group-btn">
+        <button class="btn btn-primary"><i class="fa fa-search"></i></button>
+      </span>
+    </form>
+
+    <!-- Masonry Loader -->
+    <span ng-show="isBusy" class="js_loader"><i class="fa fa-asterisk fa-spin"></i>LOADING</span>
+
+    <ul ng-hide="isBusy" class="masonry-list">
+      <div ng-repeat="article in articles">
+
+        <li class="masonry-item">
+          <div class="item">
+
+            <!-- article title -->
+            <div class="item-title">
+              <h2><a href="blog-post.html">{{ article.title }}</a></h2>
+              <a href="blog.html" class="label label-default light"><i class="fa fa-dot-circle-o"></i> Business</a>
+              <a href="blog-post.html#comments" class="scrollTo label label-default light"><i class="fa fa-comment-o"></i> 3 Comments</a>
+              <span class="label label-default light">{{ article.created | date:"short" }}</span>
+            </div>
+
+            <!-- image -->
+            <!--figure>
+              <img ng-src="{{ article.imagePath }}" class="img-responsive" alt="img" />
+            </figure-->
+
+            <!-- blog short preview -->
+            <p>
+              {{ article.body }}
+            </p>
+
+            <!-- read more button -->
+            <a href="blog-post.html" class="btn btn-xs"><i class="fa fa-sign-out"></i> READ MORE</a>
+
+          </div>
+
+        </li>
+      </div>
+
+    </ul>
+
+  </section>
+</div>
