@@ -20,6 +20,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -191,12 +193,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Code\OleDbMembershipProvider.cs" />
+    <Content Include="App_Code\OleDbRoleProvider.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\WebApi\AccessStandingsController.cs" />
     <Compile Include="Controllers\WebApi\ArticlesController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
@@ -208,9 +213,14 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AboutUsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Data\AccessO30Standing.cs" />
+    <Compile Include="Data\IAccessO30Repository.cs" />
     <Compile Include="Data\ILo30Repository.cs" />
+    <Compile Include="Data\AccessO30Context.cs" />
     <Compile Include="Data\Lo30Context.cs" />
+    <Compile Include="Data\AccessO30MigrationsConfiguration.cs" />
     <Compile Include="Data\Lo30MigrationsConfiguration.cs" />
+    <Compile Include="Data\AccessO30Repository.cs" />
     <Compile Include="Data\Lo30Repository.cs" />
     <Compile Include="Data\Article.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
@@ -225,6 +235,7 @@
     <Compile Include="Services\MockMailService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Users.mdb" />
     <Content Include="App_Scripts\articlesIndex.js" />
     <Content Include="Content\Template\css\animate.css" />
     <Content Include="Content\Template\css\blog.css" />
@@ -1512,15 +1523,6 @@
       <DependentUpon>slider_revolution.js</DependentUpon>
     </Content>
     <Content Include="Templates\articlesView.html" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Images\accent.png" />
@@ -1600,9 +1602,16 @@
     <Content Include="Views\Scores\Index.cshtml" />
     <Content Include="Views\AboutUs\Services.cshtml" />
     <Content Include="Scripts\version.json" />
+    <Content Include="Web.config" />
+    <Content Include="Web.config.template" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Content\Template\images\demo\revolution_slider\New folder\" />
     <Folder Include="Views\News\" />
   </ItemGroup>
@@ -1637,6 +1646,13 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

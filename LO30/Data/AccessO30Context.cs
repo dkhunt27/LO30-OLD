@@ -6,20 +6,20 @@ using System.Web;
 
 namespace LO30.Data
 {
-    public class Lo30Context : DbContext
+  public class AccessO30Context : DbContext
   {
-      public Lo30Context()
-      : base("DefaultConnection")
+      public AccessO30Context()
+          : base("DefaultConnection")
     {
       this.Configuration.LazyLoadingEnabled = false;
       this.Configuration.ProxyCreationEnabled = false;
 
       Database.SetInitializer(
-        new MigrateDatabaseToLatestVersion<Lo30Context, Lo30MigrationsConfiguration>()
+        new MigrateDatabaseToLatestVersion<AccessO30Context, AccessO30MigrationsConfiguration>()
         );
     }
 
-      public DbSet<Article> Articles { get; set; }
+      public DbSet<AccessO30Standing> Standings { get; set; }
 
   }
 }

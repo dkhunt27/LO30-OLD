@@ -75,6 +75,9 @@ namespace LO30.App_Start
 
       kernel.Bind<Lo30Context>().To<Lo30Context>().InRequestScope();
       kernel.Bind<ILo30Repository>().To<Lo30Repository>().InRequestScope();
+
+      kernel.Bind<AccessO30Context>().To<AccessO30Context>().InRequestScope();
+      kernel.Bind<IAccessO30Repository>().To<AccessO30Repository>().InRequestScope();
     }
   }
 }
