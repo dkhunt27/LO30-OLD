@@ -7,14 +7,12 @@ using System.Web;
 
 namespace LO30.Data
 {
-  public class Article
+  public class PhoneType
   {
     [Key, Column(Order = 0)]
-    public int ArticleId { get; set; }
-    public string Title { get; set; }
-    public string Body { get; set; }
-    public string ImagePath { get; set; }
-    public DateTime Created { get; set; }
+    public int PhoneTypeId { get; set; }
 
+    [Required, MaxLength(10)]
+    public string PhoneTypeName { get; set; }
   }
 }

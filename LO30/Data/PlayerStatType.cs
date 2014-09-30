@@ -7,14 +7,12 @@ using System.Web;
 
 namespace LO30.Data
 {
-  public class Article
+  public class PlayerStatType
   {
     [Key, Column(Order = 0)]
-    public int ArticleId { get; set; }
-    public string Title { get; set; }
-    public string Body { get; set; }
-    public string ImagePath { get; set; }
-    public DateTime Created { get; set; }
+    public int PlayerStatTypeId { get; set; }
 
+    [Required, MaxLength(25)]
+    public string PlayerStatTypeName { get; set; }
   }
 }

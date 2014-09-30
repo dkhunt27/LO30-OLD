@@ -4,7 +4,7 @@ using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 
-namespace LO30.Data
+namespace LO30.Data.Access
 {
     public class AccessO30MigrationsConfiguration
       : DbMigrationsConfiguration<AccessO30Context>

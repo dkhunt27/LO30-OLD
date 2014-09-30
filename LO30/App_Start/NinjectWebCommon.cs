@@ -14,6 +14,7 @@ namespace LO30.App_Start
   using System.Web.Http;
   using WebApiContrib.IoC.Ninject;
   using LO30.Data;
+  using LO30.Data.Access;
 
   public static class NinjectWebCommon
   {

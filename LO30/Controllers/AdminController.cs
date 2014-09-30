@@ -8,38 +8,38 @@ using System.Web.Mvc;
 
 namespace LO30.Controllers
 {
-    public class AdminController : Controller
+  public class AdminController : Controller
+  {
+    public AdminController()
     {
-        public AdminController()
-        {
-        }
-        public ActionResult GameResult()
-        {
-            return View();
-        }
-        public ActionResult GameRoster()
-        {
-            return View();
-        }
-        public ActionResult GameSheet()
-        {
-            return View();
-        }
-        public ActionResult Registration()
-        {
-            return View();
-        }
-        public ActionResult Draft()
-        {
-            return View();
-        }
-        public ActionResult Roster()
-        {
-            return View();
-        }
-        public ActionResult Schedule()
-        {
-            return View();
-        }
     }
+    public ActionResult GameResult()
+    {
+      return View();
+    }
+    public ActionResult GameRoster()
+    {
+      return View();
+    }
+    public ActionResult GameSheet()
+    {
+      return View();
+    }
+    public ActionResult Registration()
+    {
+      return View();
+    }
+    public ActionResult Draft()
+    {
+      return View();
+    }
+    public ActionResult Roster()
+    {
+      return View();
+    }
+    public ActionResult Schedule()
+    {
+      return View();
+    }
+  }
 }

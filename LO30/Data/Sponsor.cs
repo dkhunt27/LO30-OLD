@@ -7,14 +7,15 @@ using System.Web;
 
 namespace LO30.Data
 {
-  public class Article
+  public class Sponsor
   {
     [Key, Column(Order = 0)]
-    public int ArticleId { get; set; }
-    public string Title { get; set; }
-    public string Body { get; set; }
-    public string ImagePath { get; set; }
-    public DateTime Created { get; set; }
+    public int SponsorId { get; set; }
 
+    [Required, MaxLength(15)]
+    public int TeamShortName { get; set; }
+
+    [Required, MaxLength(25)]
+    public int TeamLongName { get; set; }
   }
 }

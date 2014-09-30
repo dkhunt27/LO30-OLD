@@ -4,12 +4,12 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
-namespace LO30.Data
+namespace LO30.Data.Access
 {
   public class AccessO30Context : DbContext
   {
       public AccessO30Context()
-          : base("DefaultConnection")
+      : base("LO30AccessDB")
     {
       this.Configuration.LazyLoadingEnabled = false;
       this.Configuration.ProxyCreationEnabled = false;
@@ -19,6 +19,7 @@ namespace LO30.Data
         );
     }
 
+      public DbSet<AccessO30Season> Season { get; set; }
       public DbSet<AccessO30Standing> Standings { get; set; }
 
   }

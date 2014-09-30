@@ -20,9 +20,10 @@ namespace LO30.Controllers
     {
       IQueryable<Article> results = _repo.GetArticles();
 
-      var articles = results.OrderByDescending(t => t.Created)
-                          .Take(25)
-                          .ToList();
+      //var articles = results.OrderByDescending(t => t.Created)
+      //                    .Take(25)
+      //                    .ToList();
+      var articles = results.ToList();
 
       return articles;
     }
@@ -31,8 +32,8 @@ namespace LO30.Controllers
     {
       IQueryable<Article> results = _repo.GetArticles();
 
-      var article = results.Where(t => t.Id == id).FirstOrDefault();
-
+      var article = results.Where(t => t.ArticleId == id).FirstOrDefault();
+      
       if (article != null)
       {
         return Request.CreateResponse(HttpStatusCode.OK, article);

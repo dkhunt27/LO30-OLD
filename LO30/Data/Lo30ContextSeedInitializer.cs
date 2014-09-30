@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Data.Entity.Validation;
 using System.Data.OleDb;
@@ -12,16 +13,8 @@ using System.Transactions;
 
 namespace LO30.Data
 {
-  public class Lo30MigrationsConfiguration
-    : DbMigrationsConfiguration<Lo30Context>
+  public class LO30ContextSeedInitializer : DropCreateDatabaseAlways<Lo30Context>
   {
-
-
-    public Lo30MigrationsConfiguration()
-    {
-      this.AutomaticMigrationDataLossAllowed = true;
-      this.AutomaticMigrationsEnabled = true;
-    }
 
     protected override void Seed(Lo30Context context)
     {
