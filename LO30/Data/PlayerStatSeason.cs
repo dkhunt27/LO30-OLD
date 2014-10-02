@@ -7,9 +7,9 @@ using System.Web;
 
 namespace LO30.Data
 {
-  public class PlayerStat
+  public class PlayerStatSeason
   {
-    public PlayerStat()
+    public PlayerStatSeason()
     {
       this.Games = 0;
       this.Goals = 0;

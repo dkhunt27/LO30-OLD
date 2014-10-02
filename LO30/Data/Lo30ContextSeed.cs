@@ -70,8 +70,20 @@ namespace LO30.Data
       }
       #endregion
 
-      #region 0:PlayerStats
-      if (context.PlayerStats.Count() == 0)
+      #region 0:PlayerStatsCareer
+      if (context.PlayerStatsCareer.Count() == 0)
+      {
+      }
+      #endregion
+
+      #region 0:PlayerStatsGame
+      if (context.PlayerStatsGame.Count() == 0)
+      {
+      }
+      #endregion
+
+      #region 0:PlayerStatsSeason
+      if (context.PlayerStatsSeason.Count() == 0)
       {
       }
       #endregion
@@ -266,14 +278,21 @@ namespace LO30.Data
 
         var playerStatType = new PlayerStatType()
         {
-          PlayerStatTypeName = "rostered"
+          PlayerStatTypeName = "Rostered"
         };
 
         context.PlayerStatTypes.Add(playerStatType);
 
         playerStatType = new PlayerStatType()
         {
-          PlayerStatTypeName = "sub"
+          PlayerStatTypeName = "Sub"
+        };
+
+        context.PlayerStatTypes.Add(playerStatType);
+
+        playerStatType = new PlayerStatType()
+        {
+          PlayerStatTypeName = "Total"
         };
 
         context.PlayerStatTypes.Add(playerStatType);
@@ -582,6 +601,21 @@ namespace LO30.Data
         Debug.Print("Data Group 2: Creating Players");
         last = DateTime.Now;
 
+        var player = new Player()
+        {
+          PlayerId = 0,
+          FirstName = "Unknown",
+          LastName = "Player",
+          Suffix = null,
+          PreferredPosition = "X",
+          Shoots = "X",
+          BirthDate = DateTime.Parse("1/1/1970"),
+          Profession = null,
+          WifesName = null
+        };
+
+        context.Players.Add(player);
+
         var sql = "SELECT * FROM PLAYER";
         var dsView = new DataSet();
         var adp = new OleDbDataAdapter(sql, connString);
@@ -646,7 +680,7 @@ namespace LO30.Data
             birthDate = Convert.ToDateTime(row["BIRTHDATE"]);
           }
 
-          var player = new Player()
+          player = new Player()
           {
             PlayerId = Convert.ToInt32(row["PLAYER_ID"]),
             FirstName = firstName,
@@ -1360,6 +1394,7 @@ namespace LO30.Data
         throw;
       }
       #endregion
+
       diffFromFirst = DateTime.Now - first;
       Debug.Print("Total TimeToProcess: " + diffFromFirst.ToString());
 

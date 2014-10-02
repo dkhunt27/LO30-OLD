@@ -37,12 +37,16 @@ namespace LO30.Data
     public DbSet<PlayerEmail> PlayerEmails { get; set; }
     public DbSet<PlayerPhone> PlayerPhones { get; set; }
     public DbSet<PlayerRating> PlayerRatings { get; set; }
-    public DbSet<PlayerStat> PlayerStats { get; set; }
+    public DbSet<PlayerStatCareer> PlayerStatsCareer { get; set; }
+    public DbSet<PlayerStatGame> PlayerStatsGame { get; set; }
+    public DbSet<PlayerStatSeason> PlayerStatsSeason { get; set; }
     public DbSet<PlayerStatType> PlayerStatTypes { get; set; }
     public DbSet<PlayerStatus> PlayerStatuses { get; set; }
     public DbSet<PlayerStatusType> PlayerStatusTypes { get; set; }
     public DbSet<ScoreSheetEntry> ScoreSheetEntries { get; set; }
+    public DbSet<ScoreSheetEntryProcessed> ScoreSheetEntriesProcessed { get; set; }
     public DbSet<ScoreSheetEntryPenalty> ScoreSheetEntryPenalties { get; set; }
+    public DbSet<ScoreSheetEntryPenaltyProcessed> ScoreSheetEntryPenaltiesProcessed { get; set; }
     public DbSet<Season> Seasons { get; set; }
     public DbSet<SeasonTeam> SeasonTeams { get; set; }
     public DbSet<SeasonType> SeasonTypes { get; set; }

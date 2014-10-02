@@ -229,6 +229,10 @@
     <Compile Include="Data\Address.cs" />
     <Compile Include="Data\Game.cs" />
     <Compile Include="Data\Penalty.cs" />
+    <Compile Include="Data\PlayerStatSeason.cs" />
+    <Compile Include="Data\PlayerStatGame.cs" />
+    <Compile Include="Data\ScoreSheetEntryPenaltyProcessed.cs" />
+    <Compile Include="Data\ScoreSheetEntryProcessed.cs" />
     <Compile Include="Data\ScoreSheetEntryPenalty.cs" />
     <Compile Include="Data\ScoreSheetEntry.cs" />
     <Compile Include="Data\SponsorEmail.cs" />
@@ -248,7 +252,7 @@
     <Compile Include="Data\Sponsor.cs" />
     <Compile Include="Data\Season.cs" />
     <Compile Include="Data\TeamStanding.cs" />
-    <Compile Include="Data\PlayerStat.cs" />
+    <Compile Include="Data\PlayerStatCareer.cs" />
     <Compile Include="Data\Access\IAccessO30Repository.cs" />
     <Compile Include="Data\ILo30Repository.cs" />
     <Compile Include="Data\Access\AccessO30Context.cs" />
