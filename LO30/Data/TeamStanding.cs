@@ -55,9 +55,9 @@ namespace LO30.Data
     public int PenaltyMinutes { get; set; }
 
     [ForeignKey("SeasonTeamId")]
-    public virtual SeasonTeam SeasonTeam { get; set; }
+    public SeasonTeam SeasonTeam { get; set; }
 
     [ForeignKey("SeasonTypeId")]
-    public virtual SeasonType SeasonType { get; set; }
+    public SeasonType SeasonType { get; set; }
   }
 }

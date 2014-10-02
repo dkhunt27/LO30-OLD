@@ -10,6 +10,8 @@ namespace LO30.Data
   {
     IQueryable<Article> GetArticles();
 
+    IQueryable<TeamStanding> GetTeamStandings();
+
     bool Save();
 
     bool AddArticle(Article newArticle);

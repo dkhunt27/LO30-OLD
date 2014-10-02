@@ -25,8 +25,8 @@ namespace LO30.Controllers
 
     public ActionResult Process()
     {
-      _repo.ProcessScoreSheetEntriesIntoGameResults(3200, 3213);
-      _repo.ProcessGameResultsIntoTeamStandings(54, 1, 3200, 3213);
+      _repo.ProcessScoreSheetEntriesIntoGameResults(3200, 3220);
+      _repo.ProcessGameResultsIntoTeamStandings(54, 1, 3200, 3220);
 
       return Redirect("/ScoreSheetEntry/ScoreSheetEntry");
     }

@@ -19,6 +19,11 @@ namespace LO30.Data
       return _ctx.Articles;
     }
 
+    public IQueryable<TeamStanding> GetTeamStandings()
+    {
+      return _ctx.TeamStandings.Include("seasonTeam").Include("seasonTeam.team");
+    }
+
     public bool Save()
     {
       try

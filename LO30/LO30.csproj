@@ -202,7 +202,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ScoreSheetEntryController.cs" />
-    <Compile Include="Controllers\WebApi\AccessStandingsController.cs" />
+    <Compile Include="Controllers\WebApi\TeamStandingsController.cs" />
     <Compile Include="Controllers\WebApi\ArticlesController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
