@@ -9,10 +9,13 @@ namespace LO30.Data
 {
   public class GameResult
   {
-    [Key, Column(Order=0)]
+    [Key, Column(Order = 0)]
+    public int GameResultId { get; set; }
+
+    [Index("PK2", 1, IsUnique = true)]
     public int GameId { get; set; }
 
-    [Key, Column(Order = 1)]
+    [Index("PK2", 2, IsUnique = true)]
     public int SeasonTeamId { get; set; }
 
     [Required, MaxLength(1)]

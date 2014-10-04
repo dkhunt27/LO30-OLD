@@ -7,16 +7,18 @@ using System.Web;
 
 namespace LO30.Data
 {
-  public class PlayerStatCareer
+  public class PlayerStatSeasonTeam
   {
-    public PlayerStatCareer()
+    public PlayerStatSeasonTeam()
     {
     }
- 
-    public PlayerStatCareer(int pid, int pstid, int games, int g, int a, int p, int ppg, int shg, int gwg, int pim)
+
+    public PlayerStatSeasonTeam(int pid, int pstid, int sid, int stidpf, int games, int g, int a, int p, int ppg, int shg, int gwg, int pim)
     {
       this.PlayerId = pid;
       this.PlayerStatTypeId = pstid;
+      this.SeasonId = sid;
+      this.SeasonTeamIdPlayingFor = stidpf;
 
       this.Games = games;
 
@@ -40,6 +42,12 @@ namespace LO30.Data
 
     [Key, Column(Order = 1)]
     public int PlayerStatTypeId { get; set; }
+
+    [Key, Column(Order = 2)]
+    public int SeasonId { get; set; }
+
+    [Key, Column(Order = 3)]
+    public int SeasonTeamIdPlayingFor { get; set; }
 
     [Required]
     public int Games { get; set; }
@@ -74,11 +82,19 @@ namespace LO30.Data
     [ForeignKey("PlayerStatTypeId")]
     public virtual PlayerStatType PlayerStatType { get; set; }
 
+    [ForeignKey("SeasonId")]
+    public virtual Season Season { get; set; }
+
+    [ForeignKey("SeasonTeamIdPlayingFor")]
+    public virtual SeasonTeam SeasonTeamPlayingFor { get; set; }
+
     private void Validate()
     {
-      var locationKey = string.Format("pid: {0}, pstid: {1}",
-                                  this.PlayerId,
-                                  this.PlayerStatTypeId);
+      var locationKey = string.Format("pid: {0}, pstid: {1}, sid: {2}, stIdpf: {3}",
+                                      this.PlayerId,
+                                      this.PlayerStatTypeId,
+                                      this.SeasonId,
+                                      this.SeasonTeamIdPlayingFor);
 
       if (this.Points != this.Goals + this.Assists)
       {

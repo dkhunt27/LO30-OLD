@@ -151,21 +151,23 @@ namespace LO30.Services
 
       public int SaveScoreSheetEntryProcessed(int scoreSheetEntryId, int gameId, int period, bool homeTeam, int goalPlayerId, int? assist1PlayerId, int? assist2PlayerId, int? assist3PlayerId, string timeRemaining, bool shortHandedGoal, bool powerPlayGoal, bool gameWinningGoal)
       {
-        var scoreSheetEntryProcessed = new ScoreSheetEntryProcessed()
-        {
-          ScoreSheetEntryId = scoreSheetEntryId,
-          GameId = gameId,
-          Period = period,
-          HomeTeam = homeTeam,
-          GoalPlayerId = goalPlayerId,
-          Assist1PlayerId = assist1PlayerId,
-          Assist2PlayerId = assist2PlayerId,
-          Assist3PlayerId = assist3PlayerId,
-          TimeRemaining = timeRemaining,
-          ShortHandedGoal = shortHandedGoal,
-          PowerPlayGoal = powerPlayGoal,
-          GameWinningGoal = gameWinningGoal
-        };
+        var scoreSheetEntryProcessed = new ScoreSheetEntryProcessed(
+                                              sseid: scoreSheetEntryId,
+
+                                              gid: gameId,
+                                              per: period,
+                                              ht: homeTeam,
+                                              time: timeRemaining,
+
+                                              gpid: goalPlayerId,
+                                              a1pid: assist1PlayerId,
+                                              a2pid: assist2PlayerId,
+                                              a3pid: assist3PlayerId,
+          
+                                              shg: shortHandedGoal,
+                                              ppg: powerPlayGoal,
+                                              gwg: gameWinningGoal
+                                            );
 
         return SaveScoreSheetEntryProcessed(scoreSheetEntryProcessed);
       }
@@ -218,6 +220,36 @@ namespace LO30.Services
         return ContextSaveChanges();
       }
 
+      public int SavePlayerStatSeasonTeam(List<PlayerStatSeasonTeam> playerStatSeasonTeam)
+      {
+        var saved = 0;
+        foreach (var item in playerStatSeasonTeam)
+        {
+          var results = SavePlayerStatSeasonTeam(item);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SavePlayerStatSeasonTeam(PlayerStatSeasonTeam playerStatSeasonTeam)
+      {
+        var found = _ctx.PlayerStatsSeasonTeam.Find(playerStatSeasonTeam.SeasonId, playerStatSeasonTeam.PlayerId, playerStatSeasonTeam.PlayerStatTypeId, playerStatSeasonTeam.SeasonTeamIdPlayingFor);
+
+        if (found == null)
+        {
+          found = _ctx.PlayerStatsSeasonTeam.Add(playerStatSeasonTeam);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(playerStatSeasonTeam);
+        }
+
+        return ContextSaveChanges();
+      }
+
       public int SavePlayerStatSeason(List<PlayerStatSeason> playerStatSeason)
       {
         var saved = 0;
@@ -232,7 +264,7 @@ namespace LO30.Services
 
       public int SavePlayerStatSeason(PlayerStatSeason playerStatSeason)
       {
-        var found = _ctx.PlayerStatsSeason.Find(playerStatSeason.SeasonId, playerStatSeason.PlayerId, playerStatSeason.PlayerStatTypeId, playerStatSeason.SeasonTeamIdPlayingFor);
+        var found = _ctx.PlayerStatsSeason.Find(playerStatSeason.SeasonId, playerStatSeason.PlayerId, playerStatSeason.PlayerStatTypeId);
 
         if (found == null)
         {

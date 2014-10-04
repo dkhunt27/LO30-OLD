@@ -271,24 +271,11 @@ namespace LO30.Data
         Debug.Print("Data Group 1: Creating PlayerStatTypes");
         last = DateTime.Now;
 
-        var playerStatType = new PlayerStatType()
-        {
-          PlayerStatTypeName = "Rostered"
-        };
+        var playerStatType = new PlayerStatType(sub: false, name: "Rostered");
 
         context.PlayerStatTypes.Add(playerStatType);
 
-        playerStatType = new PlayerStatType()
-        {
-          PlayerStatTypeName = "Sub"
-        };
-
-        context.PlayerStatTypes.Add(playerStatType);
-
-        playerStatType = new PlayerStatType()
-        {
-          PlayerStatTypeName = "Total"
-        };
+        playerStatType = new PlayerStatType(sub: true, name: "Subbed");
 
         context.PlayerStatTypes.Add(playerStatType);
 
@@ -756,91 +743,35 @@ namespace LO30.Data
 
         #region add the position night placeholders for this season
         var team = context.Teams.Where(t => t.TeamShortName == "1st").FirstOrDefault();
-
-        var seasonTeam = new SeasonTeam()
-        {
-          SeasonTeamId = 321,
-          SeasonId = 54,
-          TeamId = team.TeamId
-        };
-
+        var seasonTeam = new SeasonTeam(stid: 321, sid: 54, tid: team.TeamId);
         context.SeasonTeams.Add(seasonTeam);
 
         team = context.Teams.Where(t => t.TeamShortName == "2nd").FirstOrDefault();
-
-        seasonTeam = new SeasonTeam()
-        {
-          SeasonTeamId = 322,
-          SeasonId = 54,
-          TeamId = team.TeamId
-        };
-
+        seasonTeam = new SeasonTeam(stid: 322, sid: 54, tid: team.TeamId);
         context.SeasonTeams.Add(seasonTeam);
 
         team = context.Teams.Where(t => t.TeamShortName == "3rd").FirstOrDefault();
-
-        seasonTeam = new SeasonTeam()
-        {
-          SeasonTeamId = 323,
-          SeasonId = 54,
-          TeamId = team.TeamId
-        };
-
+        seasonTeam = new SeasonTeam(stid: 323, sid: 54, tid: team.TeamId);
         context.SeasonTeams.Add(seasonTeam);
 
         team = context.Teams.Where(t => t.TeamShortName == "4th").FirstOrDefault();
-
-        seasonTeam = new SeasonTeam()
-        {
-          SeasonTeamId = 324,
-          SeasonId = 54,
-          TeamId = team.TeamId
-        };
-
+        seasonTeam = new SeasonTeam(stid: 324, sid: 54, tid: team.TeamId);
         context.SeasonTeams.Add(seasonTeam);
 
         team = context.Teams.Where(t => t.TeamShortName == "5th").FirstOrDefault();
-
-        seasonTeam = new SeasonTeam()
-        {
-          SeasonTeamId = 325,
-          SeasonId = 54,
-          TeamId = team.TeamId
-        };
-
+        seasonTeam = new SeasonTeam(stid: 325, sid: 54, tid: team.TeamId);
         context.SeasonTeams.Add(seasonTeam);
 
         team = context.Teams.Where(t => t.TeamShortName == "6th").FirstOrDefault();
-
-        seasonTeam = new SeasonTeam()
-        {
-          SeasonTeamId = 326,
-          SeasonId = 54,
-          TeamId = team.TeamId
-        };
-
+        seasonTeam = new SeasonTeam(stid: 322, sid: 54, tid: team.TeamId);
         context.SeasonTeams.Add(seasonTeam);
 
         team = context.Teams.Where(t => t.TeamShortName == "7th").FirstOrDefault();
-
-        seasonTeam = new SeasonTeam()
-        {
-          SeasonTeamId = 327,
-          SeasonId = 54,
-          TeamId = team.TeamId
-        };
-
+        seasonTeam = new SeasonTeam(stid: 327, sid: 54, tid: team.TeamId);
         context.SeasonTeams.Add(seasonTeam);
 
         team = context.Teams.Where(t => t.TeamShortName == "8th").FirstOrDefault();
-
-        seasonTeam = new SeasonTeam()
-        {
-          SeasonTeamId = 328,
-          SeasonId = 54,
-          TeamId = team.TeamId
-        };
-
+        seasonTeam = new SeasonTeam(stid: 328, sid: 54, tid: team.TeamId);
         context.SeasonTeams.Add(seasonTeam);
         #endregion
 
@@ -862,12 +793,11 @@ namespace LO30.Data
 
           team = context.Teams.Where(t => t.TeamShortName == teamShortName).FirstOrDefault();
 
-          seasonTeam = new SeasonTeam()
-          {
-            SeasonTeamId = Convert.ToInt32(row["TEAM_ID"]),
-            SeasonId = Convert.ToInt32(row["SEASON_ID"]),
-            TeamId = team.TeamId
-          };
+          seasonTeam = new SeasonTeam(
+                                stid: Convert.ToInt32(row["TEAM_ID"]), 
+                                sid: Convert.ToInt32(row["SEASON_ID"]),
+                                tid: team.TeamId
+                              );
 
           context.SeasonTeams.Add(seasonTeam);
         }
@@ -1062,7 +992,7 @@ namespace LO30.Data
       }
       #endregion
 
-      #region 3:GameRosters
+      #region 3:GameRosters...dependency on Players
       if (context.GameRosters.Count() == 0)
       {
         Debug.Print("Data Group 3: Creating GameRosters");
@@ -1141,15 +1071,14 @@ namespace LO30.Data
             subbingForPlayerId = null;
           }
 
-          var gameRoster = new GameRoster()
+          // TODO fix logic to handle when a goalie subs and plays out.
+          bool isGoalie = false;
+          var player = context.Players.Find(playerId);
+          if (player.PreferredPosition == "G")
           {
-            GameId = gameId,
-            SeasonTeamId = homeTeamId,
-            PlayerNumber = homePlayerNumber,
-            PlayerId = playerId,
-            Sub = homePlayerSubInd,
-            SubbingForPlayerId = subbingForPlayerId
-          };
+            isGoalie = true;
+          }
+          var gameRoster = new GameRoster(gid: gameId, stid: homeTeamId, pn: homePlayerNumber, g: isGoalie, pid: playerId, sub: homePlayerSubInd, sfpid: subbingForPlayerId);
 
           context.GameRosters.Add(gameRoster);
 
@@ -1207,15 +1136,14 @@ namespace LO30.Data
             subbingForPlayerId = null;
           }
 
-          gameRoster = new GameRoster()
+          // TODO fix logic to handle when a goalie subs and plays out.
+          isGoalie = false;
+          player = context.Players.Find(playerId);
+          if (player.PreferredPosition == "G")
           {
-            GameId = gameId,
-            SeasonTeamId = awayTeamId,
-            PlayerNumber = awayPlayerNumber,
-            PlayerId = playerId,
-            Sub = awayPlayerSubInd,
-            SubbingForPlayerId = subbingForPlayerId
-          };
+            isGoalie = true;
+          }
+          gameRoster = new GameRoster(gid: gameId, stid: awayTeamId, pn: awayPlayerNumber, g: isGoalie, pid: playerId, sub: awayPlayerSubInd, sfpid: subbingForPlayerId);
 
           context.GameRosters.Add(gameRoster);
         }

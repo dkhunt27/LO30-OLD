@@ -41,6 +41,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.2.0.0\lib\net45-full\Ninject.dll</HintPath>
@@ -53,7 +60,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -71,9 +77,6 @@
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -232,6 +235,8 @@
     <Compile Include="Data\Game.cs" />
     <Compile Include="Data\Penalty.cs" />
     <Compile Include="Data\ForWebPlayerStat.cs" />
+    <Compile Include="Data\GoalieStatGame.cs" />
+    <Compile Include="Data\PlayerStatSeasonTeam.cs" />
     <Compile Include="Data\PlayerStatSeason.cs" />
     <Compile Include="Data\PlayerStatGame.cs" />
     <Compile Include="Data\ScoreSheetEntryPenaltyProcessed.cs" />
@@ -275,6 +280,7 @@
     <Compile Include="Services\IMailService.cs" />
     <Compile Include="Services\MailService.cs" />
     <Compile Include="Services\LO30ContextService.cs" />
+    <Compile Include="Services\ErrorHandlingService.cs" />
     <Compile Include="Services\PlayerStatsService.cs" />
     <Compile Include="Services\MockMailService.cs" />
   </ItemGroup>
@@ -1082,8 +1088,6 @@
     <Content Include="Content\Template\plugins\superslides\Gruntfile.js" />
     <Content Include="Content\Template\plugins\superslides\libs\jquery-loader.js" />
     <Content Include="Content\Template\plugins\superslides\libs\jquery\jquery.js" />
-    <Content Include="Content\Template\plugins\superslides\libs\qunit\qunit.css" />
-    <Content Include="Content\Template\plugins\superslides\libs\qunit\qunit.js" />
     <Content Include="Content\Template\plugins\superslides\src\core.js" />
     <Content Include="Content\Template\plugins\superslides\src\core_outro.js" />
     <Content Include="Content\Template\plugins\superslides\src\core_prototype.js" />
@@ -1095,8 +1099,6 @@
     <Content Include="Content\Template\plugins\superslides\src\pagination.js" />
     <Content Include="Content\Template\plugins\superslides\src\plugin.js" />
     <Content Include="Content\Template\plugins\superslides\src\setup.js" />
-    <Content Include="Content\Template\plugins\superslides\test\superslides.html" />
-    <Content Include="Content\Template\plugins\superslides\test\superslides_test.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -1208,7 +1210,6 @@
     <Content Include="Content\Template\plugins\superslides\scss\superslides.scss" />
     <Content Include="Content\Template\plugins\superslides\src\.jshintrc" />
     <Content Include="Content\Template\plugins\superslides\superslides.jquery.json" />
-    <Content Include="Content\Template\plugins\superslides\test\.jshintrc" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
     <Content Include="Scripts\angular-cookies.js" />

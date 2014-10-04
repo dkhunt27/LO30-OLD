@@ -42,19 +42,7 @@ namespace LO30.Data
       } 
       catch (Exception ex)
       {
-        Debug.Print(ex.Message);
-        var innerEx = ex.InnerException;
-
-        while (innerEx != null)
-        {
-          Debug.Print("With inner exception of:");
-          Debug.Print(innerEx.Message);
-
-          innerEx = innerEx.InnerException;
-        }
-
-        Debug.Print(ex.StackTrace);
-
+        ErrorHandlingService.PrintFullErrorMessage(ex);
         throw ex;
       }
     }
@@ -76,7 +64,7 @@ namespace LO30.Data
 
     public List<ForWebPlayerStat> GetPlayerStatsForWeb()
     {
-      var data = _ctx.PlayerStatsSeason.Include("season").Include("player").Include("seasonTeamPlayingFor").Include("seasonTeamPlayingFor.team").ToList();
+      var data = _ctx.PlayerStatsSeasonTeam.Include("season").Include("player").Include("seasonTeamPlayingFor").Include("seasonTeamPlayingFor.team").ToList();
 
       var newData = new List<ForWebPlayerStat>();
 
@@ -210,21 +198,23 @@ namespace LO30.Data
           bool powerPlayGoal = scoreSheetEntry.ShortHandedPowerPlay == "PP" ? true : false;
           bool gameWinningGoal = false;
 
-          var scoreSheetEntryProcessed = new ScoreSheetEntryProcessed()
-          {
-            ScoreSheetEntryId = scoreSheetEntry.ScoreSheetEntryId,
-            GameId = scoreSheetEntry.GameId,
-            Period = scoreSheetEntry.Period,
-            HomeTeam = scoreSheetEntry.HomeTeam,
-            GoalPlayerId = Convert.ToInt32(goalPlayerId),
-            Assist1PlayerId = assist1PlayerId,
-            Assist2PlayerId = assist2PlayerId,
-            Assist3PlayerId = assist3PlayerId,
-            TimeRemaining = scoreSheetEntry.TimeRemaining,
-            ShortHandedGoal = shortHandedGoal,
-            PowerPlayGoal = powerPlayGoal,
-            GameWinningGoal = gameWinningGoal
-          };
+          var scoreSheetEntryProcessed = new ScoreSheetEntryProcessed(
+                                      sseid: scoreSheetEntry.ScoreSheetEntryId,
+
+                                      gid: scoreSheetEntry.GameId,
+                                      per: scoreSheetEntry.Period,
+                                      ht: scoreSheetEntry.HomeTeam,
+                                      time: scoreSheetEntry.TimeRemaining,
+
+                                      gpid: Convert.ToInt32(goalPlayerId),
+                                      a1pid: assist1PlayerId,
+                                      a2pid: assist2PlayerId,
+                                      a3pid: assist3PlayerId,
+
+                                      shg: shortHandedGoal,
+                                      ppg: powerPlayGoal,
+                                      gwg: gameWinningGoal
+                                    );
 
           var results = _lo30ContextService.SaveScoreSheetEntryProcessed(scoreSheetEntryProcessed);
           savedScoreSheetEntries = savedScoreSheetEntries + results;
@@ -234,8 +224,8 @@ namespace LO30.Data
       }
       catch (Exception ex)
       {
-        Debug.Print("Following error occurred:" + ex.StackTrace);
-        return false;
+        ErrorHandlingService.PrintFullErrorMessage(ex);
+        throw ex;
       }
     }
 
@@ -337,8 +327,8 @@ namespace LO30.Data
       }
       catch (Exception ex)
       {
-        Debug.Print("Following error occurred:" + ex.StackTrace);
-        return false;
+        ErrorHandlingService.PrintFullErrorMessage(ex);
+        throw ex;
       }
     }
 
@@ -425,8 +415,8 @@ namespace LO30.Data
       }
       catch (Exception ex)
       {
-        Debug.Print("Following error occurred:" + ex.StackTrace);
-        return false;
+        ErrorHandlingService.PrintFullErrorMessage(ex);
+        throw ex;
       }
     }
 
@@ -434,40 +424,36 @@ namespace LO30.Data
     {
       try
       {
-        // TODO...maybe filter this to only "available" players
-        var players = _ctx.Players.ToList();
-        var games = _ctx.Games.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
+        var playerStatTypes = _ctx.PlayerStatTypes.ToList();
         var gameRosters = _ctx.GameRosters.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
+        var gameRostersGoalies = _ctx.GameRosters.Include("Player").Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId && x.Goalie == true).ToList();
+        var gameResults = _ctx.GameResults.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
         var scoreSheetEntriesProcessed = _ctx.ScoreSheetEntriesProcessed.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
         var scoreSheetEntryPenaltiesProcessed = _ctx.ScoreSheetEntryPenaltiesProcessed.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
 
 
-        var playerGameStats = _playerStatsService.ProcessScoreSheetEntriesIntoPlayerGameStats(players, games, gameRosters, scoreSheetEntriesProcessed, scoreSheetEntryPenaltiesProcessed);
-        var playerSeasonStats = _playerStatsService.ProcessPlayerGameStatsIntoPlayerSeasonStats(playerGameStats);
+        var playerGameStats = _playerStatsService.ProcessScoreSheetEntriesIntoPlayerGameStats(scoreSheetEntriesProcessed, scoreSheetEntryPenaltiesProcessed, gameRosters, playerStatTypes);
+        var playerSeasonTeamStats = _playerStatsService.ProcessPlayerGameStatsIntoPlayerSeasonTeamStats(playerGameStats);
+        var playerSeasonStats = _playerStatsService.ProcessPlayerSeasonTeamStatsIntoPlayerSeasonStats(playerSeasonTeamStats);
+        var goalieGameStats = _playerStatsService.ProcessScoreSheetEntriesIntoGoalieGameStats(gameResults, gameRostersGoalies, playerStatTypes);
 
         var savedStatsGame = _lo30ContextService.SavePlayerStatGame(playerGameStats);
         Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsGame:" + savedStatsGame);
 
+        var savedStatsSeasonTeam = _lo30ContextService.SavePlayerStatSeasonTeam(playerSeasonTeamStats);
+        Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsSeasonTeam:" + savedStatsSeasonTeam);
+
         var savedStatsSeason = _lo30ContextService.SavePlayerStatSeason(playerSeasonStats);
         Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsSeason:" + savedStatsSeason);
 
-        return (savedStatsSeason + savedStatsGame) > 0;
+        var savedStatsGameGoalie = _lo30ContextService.SaveGoalieStatGame(goalieGameStats);
+        Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsSeason:" + savedStatsSeason);
+
+        return (savedStatsGame + savedStatsSeasonTeam + savedStatsSeason) > 0;
       }
       catch (Exception ex)
       {
-        Debug.Print(ex.Message);
-        var innerEx = ex.InnerException;
-
-        while (innerEx != null)
-        {
-          Debug.Print("With inner exception of:");
-          Debug.Print(innerEx.Message);
-
-          innerEx = innerEx.InnerException;
-        }
-
-        Debug.Print(ex.StackTrace);
-
+        ErrorHandlingService.PrintFullErrorMessage(ex);
         throw ex;
       }
     }

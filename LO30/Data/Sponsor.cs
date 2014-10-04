@@ -13,9 +13,9 @@ namespace LO30.Data
     public int SponsorId { get; set; }
 
     [Required, MaxLength(15)]
-    public int TeamShortName { get; set; }
+    public string TeamShortName { get; set; }
 
     [Required, MaxLength(25)]
-    public int TeamLongName { get; set; }
+    public string TeamLongName { get; set; }
   }
 }

@@ -9,19 +9,21 @@ namespace LO30.Data
 {
   public class GameTeam
   {
-    [Key, Column(Order=0)]
+    [Key, Column(Order = 0)]
+    public int GameTeamId { get; set; }
+
+    [ForeignKey("Game")]
+    [Index("PK2", 1, IsUnique=true)]
     public int GameId { get; set; }
 
-    [Key, Column(Order = 1)]
+    [Index("PK2", 2, IsUnique = true)]
     public bool HomeTeam { get; set; }
 
+    [ForeignKey("SeasonTeam")]
     [Required]
     public int SeasonTeamId { get; set; }
 
-    [ForeignKey("GameId")]
     public virtual Game Game { get; set; }
-
-    [ForeignKey("SeasonTeamId")]
     public virtual SeasonTeam SeasonTeam { get; set; }
   }
 }

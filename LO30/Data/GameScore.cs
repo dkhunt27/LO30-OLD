@@ -10,12 +10,15 @@ namespace LO30.Data
   public class GameScore
   {
     [Key, Column(Order = 0)]
+    public int GameScoreId { get; set; }
+
+    [Index("PK2", 1, IsUnique = true)]
     public int GameId { get; set; }
 
-    [Key, Column(Order = 1)]
+    [Index("PK2", 2, IsUnique = true)]
     public int SeasonTeamId { get; set; }
 
-    [Key, Column(Order = 2)]
+    [Index("PK2", 3, IsUnique = true)]
     public int Period { get; set; }
 
     [Required]
