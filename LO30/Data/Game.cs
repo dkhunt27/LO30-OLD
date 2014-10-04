@@ -13,15 +13,22 @@ namespace LO30.Data
     public int GameId { get; set; }
 
     [Required]
-    public int SeasonTypeId { get; set; }
-
-    [Required]
     public DateTime GameDateTime { get; set; }
 
     [Required, MaxLength(15)]
     public string Location { get; set; }
 
+    [Required]
+    public int SeasonId { get; set; }
+
+    [Required]
+    public int SeasonTypeId { get; set; }
+    
+    [ForeignKey("SeasonId")]
+    public virtual Season Season { get; set; }
+
     [ForeignKey("SeasonTypeId")]
     public virtual SeasonType SeasonType { get; set; }
+
   }
 }

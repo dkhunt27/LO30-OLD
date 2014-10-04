@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Serialization;
+﻿using LO30.Formatters;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace LO30
   {
     public static void Register(HttpConfiguration config)
     {
+
       var jsonFormatter = config.Formatters.OfType<JsonMediaTypeFormatter>().First();
       jsonFormatter.SerializerSettings.ContractResolver =
         new CamelCasePropertyNamesContractResolver();
@@ -22,7 +24,7 @@ namespace LO30
           defaults: new { id = RouteParameter.Optional }
       );
 
-
+      config.Formatters.Add(new BrowserJsonFormatter());
       config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
 
       // Uncomment the following line of code to enable query support for actions with an IQueryable or IQueryable<T> return type.

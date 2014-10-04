@@ -12,6 +12,10 @@ namespace LO30.Data
 
     IQueryable<TeamStanding> GetTeamStandings();
 
+    IQueryable<PlayerStatSeason> GetPlayerStatsSeason();
+
+    List<ForWebPlayerStat> GetPlayerStatsForWeb();
+
     bool Save();
 
     bool AddArticle(Article newArticle);

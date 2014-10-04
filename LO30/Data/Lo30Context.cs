@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Web;
 
@@ -19,7 +20,10 @@ namespace LO30.Data
       Database.SetInitializer(new MigrateDatabaseToLatestVersion<Lo30Context, Lo30MigrationsConfiguration>());
     }
 
-
+    protected override void OnModelCreating(DbModelBuilder modelBuilder)
+    {
+      modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+    }
 
     public DbSet<Address> Addresses { get; set; }
     public DbSet<Email> Emails { get; set; }

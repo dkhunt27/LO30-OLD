@@ -64,11 +64,6 @@ namespace LO30.Data
       }
       #endregion
 
-      #region 0:PlayerRatings
-      if (context.PlayerRatings.Count() == 0)
-      {
-      }
-      #endregion
 
       #region 0:PlayerStatsCareer
       if (context.PlayerStatsCareer.Count() == 0)
@@ -625,10 +620,21 @@ namespace LO30.Data
 
         Debug.Print("Access records to process:" + tbl.Rows.Count);
 
+        // update the position to match the drafted position
+        sql = "SELECT * FROM PLAYER_RATING WHERE SEASON_ID = 54";
+        var dsViewPR = new DataSet();
+        var adpPR = new OleDbDataAdapter(sql, connString);
+        adpPR.Fill(dsView, "PlayerRating");
+        adpPR.Dispose();
+        var tblPR = dsView.Tables["PlayerRating"];
+        var playerRatings = tblPR.AsEnumerable().ToList();
+
         for (var d = 0; d < tbl.Rows.Count; d++)
         {
           if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
           var row = tbl.Rows[d];
+
+          int playerId = Convert.ToInt32(row["PLAYER_ID"]);
 
           string firstName = row["PLAYER_FIRST_NAME"].ToString();
           if (string.IsNullOrWhiteSpace(firstName)) {
@@ -680,9 +686,19 @@ namespace LO30.Data
             birthDate = Convert.ToDateTime(row["BIRTHDATE"]);
           }
 
+
+          // update the position to match the drafted position
+          var found = playerRatings.Where(x=> Convert.ToInt32(x["PLAYER_ID"]) == playerId).FirstOrDefault();
+
+          if (found != null)
+          {
+            var draftRound = found["PLAYER_DRAFT_ROUND"].ToString();
+            positionMapped = draftRound.Substring(1);
+          }
+
           player = new Player()
           {
-            PlayerId = Convert.ToInt32(row["PLAYER_ID"]),
+            PlayerId = playerId,
             FirstName = firstName,
             LastName = lastName,
             Suffix = row["PLAYER_SUFFIX"].ToString(),
@@ -861,14 +877,14 @@ namespace LO30.Data
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
       }
       #endregion
-
+      
       #region 3:Games
       if (context.Games.Count() == 0)
       {
         Debug.Print("Data Group 3: Creating Games");
         last = DateTime.Now;
 
-        var sql = "SELECT GAME_ID, GAME_DATE, GAME_TIME, PLAYOFF_GAME_IND FROM GAME WHERE SEASON_ID = 54";
+        var sql = "SELECT SEASON_ID, GAME_ID, GAME_DATE, GAME_TIME, PLAYOFF_GAME_IND FROM GAME WHERE SEASON_ID = 54";
         var dsView = new DataSet();
         var adp = new OleDbDataAdapter(sql, connString);
         adp.Fill(dsView, "AccessData");
@@ -882,6 +898,8 @@ namespace LO30.Data
           if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
           var row = tbl.Rows[d];
 
+          var seasonId = Convert.ToInt32(row["SEASON_ID"]);
+          var gameId = Convert.ToInt32(row["GAME_ID"]);
           var gameDate = Convert.ToDateTime(row["GAME_DATE"]);
           var gameTime = Convert.ToDateTime(row["GAME_TIME"]);
           var playoffGame = Convert.ToBoolean(row["PLAYOFF_GAME_IND"]);
@@ -890,14 +908,15 @@ namespace LO30.Data
 
           var gameDateTime = gameDate.Add(timeSpan);
 
-          var seasonTypeId = context.SeasonTypes.Where(s => s.PlayoffSeason ==  playoffGame).FirstOrDefault();
+          var seasonTypeId = context.SeasonTypes.Where(s => s.PlayoffSeason == playoffGame).FirstOrDefault();
 
           var game = new Game()
           {
-            GameId = Convert.ToInt32(row["GAME_ID"]),
-            SeasonTypeId = seasonTypeId.SeasonTypeId,
+            GameId = gameId,
             GameDateTime = gameDateTime,
-            Location = "not set"
+            Location = "not set",
+            SeasonId = seasonId,
+            SeasonTypeId = seasonTypeId.SeasonTypeId,
           };
 
           context.Games.Add(game);
@@ -1128,12 +1147,11 @@ namespace LO30.Data
             SeasonTeamId = homeTeamId,
             PlayerNumber = homePlayerNumber,
             PlayerId = playerId,
+            Sub = homePlayerSubInd,
             SubbingForPlayerId = subbingForPlayerId
           };
 
           context.GameRosters.Add(gameRoster);
-
-
 
           var awayTeamId = -1;
           if (row["AWAY_TEAM_ID"] != System.DBNull.Value)
@@ -1195,6 +1213,7 @@ namespace LO30.Data
             SeasonTeamId = awayTeamId,
             PlayerNumber = awayPlayerNumber,
             PlayerId = playerId,
+            Sub = awayPlayerSubInd,
             SubbingForPlayerId = subbingForPlayerId
           };
 
@@ -1202,6 +1221,70 @@ namespace LO30.Data
         }
 
         Debug.Print("Data Group 3: Created GameRosters");
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+      }
+      #endregion
+
+      #region 3:PlayerRatings
+      if (context.PlayerRatings.Count() == 0)
+      {
+        Debug.Print("Data Group 3: Creating PlayerRatings");
+        last = DateTime.Now;
+
+        var sql = "SELECT * FROM PLAYER_RATING WHERE SEASON_ID = 54";
+        var dsView = new DataSet();
+        var adp = new OleDbDataAdapter(sql, connString);
+        adp.Fill(dsView, "AccessData");
+        adp.Dispose();
+        var tbl = dsView.Tables["AccessData"];
+
+        Debug.Print("Access records to process:" + tbl.Rows.Count);
+
+        for (var d = 0; d < tbl.Rows.Count; d++)
+        {
+          if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
+          var row = tbl.Rows[d];
+
+          string[] ratingParts = new string[0];
+
+          if (row["PLAYER_RATING"] != System.DBNull.Value)
+          {
+            var rating = row["PLAYER_RATING"].ToString();
+            ratingParts = rating.Split('.');
+          }
+
+          int ratingPrimary = -1;
+          int ratingSecondary = -1;
+          if (ratingParts.Length > 0) 
+          {
+            ratingPrimary = Convert.ToInt32(ratingParts[0]);
+            ratingSecondary = 0;
+            if (ratingParts.Length > 1)
+            {
+              ratingSecondary = Convert.ToInt32(ratingParts[1]);
+            }
+          }
+
+          int line = 0;
+          if (row["PLAYER_LINE"] != System.DBNull.Value)
+          {
+            line = Convert.ToInt32(row["PLAYER_LINE"]);
+          }
+
+          var playerRating = new PlayerRating()
+          {
+            SeasonId = Convert.ToInt32(row["SEASON_ID"]),
+            PlayerId = Convert.ToInt32(row["PLAYER_ID"]),
+            RatingPrimary = ratingPrimary,
+            RatingSecondary = ratingSecondary,
+            Line = line
+          };
+
+          context.PlayerRatings.Add(playerRating);
+        }
+
+        Debug.Print("Data Group 3: Created PlayerRatings");
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
       }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LO30.Services;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,6 +10,9 @@ namespace LO30.Data
   public class Lo30Repository : ILo30Repository
   {
     Lo30Context _ctx;
+    PlayerStatsService _playerStatsService;
+    LO30ContextService _lo30ContextService;
+
     Player _unknownPlayer;
 
     public Lo30Repository(Lo30Context ctx)
@@ -26,6 +30,33 @@ namespace LO30.Data
           Profession = null,
           WifesName = null
         };
+
+      _playerStatsService = new PlayerStatsService();
+      _lo30ContextService = new LO30ContextService(_ctx);
+
+      // force the context to populate the data...just for improved error messaging
+
+      try
+      {
+        var seasons = _ctx.Seasons.ToList();
+      } 
+      catch (Exception ex)
+      {
+        Debug.Print(ex.Message);
+        var innerEx = ex.InnerException;
+
+        while (innerEx != null)
+        {
+          Debug.Print("With inner exception of:");
+          Debug.Print(innerEx.Message);
+
+          innerEx = innerEx.InnerException;
+        }
+
+        Debug.Print(ex.StackTrace);
+
+        throw ex;
+      }
     }
 
     public IQueryable<Article> GetArticles()
@@ -36,6 +67,53 @@ namespace LO30.Data
     public IQueryable<TeamStanding> GetTeamStandings()
     {
       return _ctx.TeamStandings.Include("seasonTeam").Include("seasonTeam.team");
+    }
+
+    public IQueryable<PlayerStatSeason> GetPlayerStatsSeason()
+    {
+      return _ctx.PlayerStatsSeason.Include("season").Include("player").Include("seasonTeamPlayingFor").Include("seasonTeamPlayingFor.team");
+    }
+
+    public List<ForWebPlayerStat> GetPlayerStatsForWeb()
+    {
+      var data = _ctx.PlayerStatsSeason.Include("season").Include("player").Include("seasonTeamPlayingFor").Include("seasonTeamPlayingFor.team").ToList();
+
+      var newData = new List<ForWebPlayerStat>();
+
+      foreach (var item in data)
+      {
+        var ratings = _ctx.PlayerRatings.Where(x=> x.SeasonId == item.SeasonId && x.PlayerId == item.PlayerId).FirstOrDefault();
+
+        var line = 0;
+        if (ratings != null)
+        {
+          line = ratings.Line;
+        }
+
+        var playerName = item.Player.FirstName + " " + item.Player.LastName;
+        if (!string.IsNullOrWhiteSpace(item.Player.Suffix))
+        {
+          playerName = playerName + " " + item.Player.Suffix;
+        }
+
+        newData.Add(new ForWebPlayerStat()
+        {
+          Player = playerName,
+          Team = item.SeasonTeamPlayingFor.Team.TeamLongName,
+          Sub = item.PlayerStatTypeId == 2 ? "Y" : "N",
+          Pos = item.Player.PreferredPosition,
+          Line = line,
+          GP = item.Games,
+          G = item.Goals,
+          A = item.Assists,
+          P = item.Points,
+          PPG = item.PowerPlayGoals,
+          SHG = item.ShortHandedGoals,
+          GWG = item.GameWinningGoals,
+          PIM = item.PenaltyMinutes
+        });
+      }
+      return newData;
     }
 
     public bool Save()
@@ -148,7 +226,7 @@ namespace LO30.Data
             GameWinningGoal = gameWinningGoal
           };
 
-          var results = SaveScoreSheetEntryProcessed(scoreSheetEntryProcessed);
+          var results = _lo30ContextService.SaveScoreSheetEntryProcessed(scoreSheetEntryProcessed);
           savedScoreSheetEntries = savedScoreSheetEntries + results;
         };
 
@@ -213,7 +291,7 @@ namespace LO30.Data
             #endregion
 
             // save game score for the period
-            SaveGameScore(gameId, period, homeSeasonTeamId, scoreHomeTeamPeriod, awaySeasonTeamId, scoreAwayTeamPeriod);
+            _lo30ContextService.SaveGameScore(gameId, period, homeSeasonTeamId, scoreHomeTeamPeriod, awaySeasonTeamId, scoreAwayTeamPeriod);
 
             #region process all score sheet entry penalties for this specific game/period
             var scoreSheetEntryPenalties = _ctx.ScoreSheetEntryPenalties.Where(s => s.GameId == gameId && s.Period == period).ToList();
@@ -237,7 +315,7 @@ namespace LO30.Data
 
           // save game score for the game
           var finalPeriod = 0;
-          SaveGameScore(gameId, finalPeriod, homeSeasonTeamId, scoreHomeTeamTotal, awaySeasonTeamId, scoreAwayTeamTotal);
+          _lo30ContextService.SaveGameScore(gameId, finalPeriod, homeSeasonTeamId, scoreHomeTeamTotal, awaySeasonTeamId, scoreAwayTeamTotal);
 
           // save game results for the game
           string homeResult = "T";
@@ -252,7 +330,7 @@ namespace LO30.Data
             homeResult = "L";
             awayResult = "W";
           }
-          SaveGameResults(gameId, homeSeasonTeamId, scoreHomeTeamTotal, penaltyHomeTeamTotal, homeResult, awaySeasonTeamId, scoreAwayTeamTotal, penaltyAwayTeamTotal, awayResult);
+          _lo30ContextService.SaveGameResults(gameId, homeSeasonTeamId, scoreHomeTeamTotal, penaltyHomeTeamTotal, homeResult, awaySeasonTeamId, scoreAwayTeamTotal, penaltyAwayTeamTotal, awayResult);
         }
 
         return _ctx.SaveChanges() > 0;
@@ -324,7 +402,7 @@ namespace LO30.Data
             }
 
             var rank = -1;
-            SaveTeamStanding(seasonTeam.SeasonTeamId, seasonTypeId, rank, games, wins, losses, ties, points, goalsFor, goalsAgainst, penaltyMinutes);
+            _lo30ContextService.SaveTeamStanding(seasonTeam.SeasonTeamId, seasonTypeId, rank, games, wins, losses, ties, points, goalsFor, goalsAgainst, penaltyMinutes);
           }
         }
 
@@ -341,7 +419,7 @@ namespace LO30.Data
         {
           var s = standings[x];
           var rank = x + 1;
-          SaveTeamStanding(s.SeasonTeamId, s.SeasonTypeId, rank, s.Games, s.Wins, s.Losses, s.Ties, s.Points, s.GoalsFor, s.GoalsAgainst, s.PenaltyMinutes);
+          _lo30ContextService.SaveTeamStanding(s.SeasonTeamId, s.SeasonTypeId, rank, s.Games, s.Wins, s.Losses, s.Ties, s.Points, s.GoalsFor, s.GoalsAgainst, s.PenaltyMinutes);
         }
         return _ctx.SaveChanges() > 0;
       }
@@ -356,400 +434,40 @@ namespace LO30.Data
     {
       try
       {
-        // get list of players
         // TODO...maybe filter this to only "available" players
         var players = _ctx.Players.ToList();
-
-        // get list of game entries for these games (use game just in case there was no score sheet entries...0-0 game with no penalty minutes)
-        var games = _ctx.Games.Where(s => s.GameId >= startingGameId && s.GameId <= endingGameId).ToList();
-
-        int savedStatsCareer = 0;
-        int savedStatsSeason = 0;
-        int savedStatsGame = 0;
-        int saved = 0;
-
-        // loop through each player
-        foreach (var player in players)
-        {
-          var playerId = player.PlayerId;
-          int gamesCareer = 0;
-          int goalsCareer = 0;
-          int assistsCareer = 0;
-          int penaltyMinutesCareer = 0;
-          int powerPlayGoalsCareer = 0;
-          int shortHandedGoalsCareer = 0;
-          int gameWinningGoalsCareer = 0;
-          saved = 0;
-
-          // get list of games that this player played in
-          var gameRostersPlayerPlayedIn = _ctx.GameRosters.Where(x => x.PlayerId == playerId).ToList();
-
-          // get list of distinct seasons that those games cover
-          var seasonsPlayerPlayedIn = gameRostersPlayerPlayedIn.Select(x => x.SeasonTeam.SeasonId).Distinct();
-
-          #region process all seasons for that player
-          foreach (var seasonId in seasonsPlayerPlayedIn)
-          {
-            int gamesSeason = 0;
-            int goalsSeason = 0;
-            int assistsSeason = 0;
-            int penaltyMinutesSeason = 0;
-            int powerPlayGoalsSeason = 0;
-            int shortHandedGoalsSeason = 0;
-            int gameWinningGoalsSeason = 0;
-            saved = 0;
-
-            // get list of distinct games for this season
-            var gamesPlayerPlayedIn = gameRostersPlayerPlayedIn
-                                        .Where(x => x.SeasonTeam.SeasonId == seasonId)
-                                        .Select(x => x.GameId)
-                                        .Distinct();
-
-            #region process all games for that season for that player
-            foreach (var gameId in gamesPlayerPlayedIn)
-            {
-              gamesSeason++;
-
-              int goalsGame = 0;
-              int assistsGame = 0;
-              int penaltyMinutesGame = 0;
-              int powerPlayGoalsGame = 0;
-              int shortHandedGoalsGame = 0;
-              int gameWinningGoalsGame = 0;
-              saved = 0;
-
-              #region process all score sheet entries for this specific game/player
-              var scoreSheetEntries = _ctx.ScoreSheetEntriesProcessed
-                                          .Where(x =>
-                                            x.GameId == gameId &&
-                                            (
-                                              x.GoalPlayerId == playerId ||
-                                              x.Assist1PlayerId == playerId ||
-                                              x.Assist2PlayerId == playerId ||
-                                              x.Assist3PlayerId == playerId
-                                            )
-                                          )
-                                          .ToList();
-
-              foreach (var scoreSheetEntry in scoreSheetEntries)
-              {
-                if (scoreSheetEntry.GoalPlayerId == playerId)
-                {
-                  goalsGame++;
-                  goalsSeason++;
-
-                  if (scoreSheetEntry.ShortHandedGoal)
-                  {
-                    shortHandedGoalsGame++;
-                    shortHandedGoalsSeason++;
-                  }
-                  else if (scoreSheetEntry.PowerPlayGoal)
-                  {
-                    powerPlayGoalsGame++;
-                    powerPlayGoalsSeason++;
-                  }
-
-                  // can be (shorthanded or powerplay) and a game winner...so not else if here, just if
-                  if (scoreSheetEntry.GameWinningGoal)
-                  {
-                    gameWinningGoalsGame++;
-                    gameWinningGoalsSeason++;
-                  }
-
-                }
-                else
-                {
-                  // the score sheet entry must match this player on a goal or assist
-                  assistsGame++;
-                  assistsSeason++;
-                }
-
-              }
-              #endregion
-
-              #region process all score sheet entry penalties for this specific game/player
-              var scoreSheetEntryPenalties = _ctx.ScoreSheetEntryPenaltiesProcessed
-                  .Where(x => x.GameId == gameId && x.PlayerId == player.PlayerId)
-                  .ToList();
-
-              foreach (var scoreSheetEntryPenalty in scoreSheetEntryPenalties)
-              {
-                penaltyMinutesGame = penaltyMinutesGame + scoreSheetEntryPenalty.PenaltyMinutes;
-                penaltyMinutesSeason = penaltyMinutesSeason + scoreSheetEntryPenalty.PenaltyMinutes;
-              }
-              #endregion
+        var games = _ctx.Games.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
+        var gameRosters = _ctx.GameRosters.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
+        var scoreSheetEntriesProcessed = _ctx.ScoreSheetEntriesProcessed.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
+        var scoreSheetEntryPenaltiesProcessed = _ctx.ScoreSheetEntryPenaltiesProcessed.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
 
 
-              // now save player stat game
-              var playerStatGame = new PlayerStatGame()
-              {
-                GameId = gameId,
-                PlayerId = playerId,
-                PlayerStatTypeId = 1,
-                Goals = goalsGame,
-                Assists = assistsGame,
-                Points = goalsGame + assistsGame,
-                PenaltyMinutes = penaltyMinutesGame,
-                ShortHandedGoals = shortHandedGoalsGame,
-                PowerPlayGoals = powerPlayGoalsGame,
-                GameWinningGoals = gameWinningGoalsGame
-              };
+        var playerGameStats = _playerStatsService.ProcessScoreSheetEntriesIntoPlayerGameStats(players, games, gameRosters, scoreSheetEntriesProcessed, scoreSheetEntryPenaltiesProcessed);
+        var playerSeasonStats = _playerStatsService.ProcessPlayerGameStatsIntoPlayerSeasonStats(playerGameStats);
 
-              // save game score for the period
-              saved = SavePlayerStatGame(playerStatGame);
-              savedStatsGame = savedStatsGame + saved;
-            }
-            #endregion
+        var savedStatsGame = _lo30ContextService.SavePlayerStatGame(playerGameStats);
+        Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsGame:" + savedStatsGame);
 
-            // now save player stat season
-            var playerStatSeason = new PlayerStatSeason()
-            {
-              SeasonId = seasonId,
-              PlayerId = playerId,
-              PlayerStatTypeId = 1,
-              Games = gamesSeason,
-              Goals = goalsSeason,
-              Assists = assistsSeason,
-              Points = goalsSeason + assistsSeason,
-              PenaltyMinutes = penaltyMinutesSeason,
-              ShortHandedGoals = shortHandedGoalsSeason,
-              PowerPlayGoals = powerPlayGoalsSeason,
-              GameWinningGoals = gameWinningGoalsSeason
-            };
-
-            // save game score for the period
-            saved = SavePlayerStatSeason(playerStatSeason);
-            savedStatsSeason = savedStatsSeason + saved;
-          }
-          #endregion
-        }
+        var savedStatsSeason = _lo30ContextService.SavePlayerStatSeason(playerSeasonStats);
+        Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsSeason:" + savedStatsSeason);
 
         return (savedStatsSeason + savedStatsGame) > 0;
       }
       catch (Exception ex)
       {
-        Debug.Print("Following error occurred:" + ex.StackTrace);
-        return false;
-      }
-    }
+        Debug.Print(ex.Message);
+        var innerEx = ex.InnerException;
 
-    public int SaveTeamStanding(int seasonTeamId, int seasonTypeId, int rank, int games, int wins, int losses, int ties, int points, int goalsFor, int goalsAgainst, int penaltyMinutes)
-    {
-      var teamStanding = new TeamStanding()
-      {
-        SeasonTeamId = seasonTeamId,
-        SeasonTypeId = seasonTypeId,
-        Rank = rank,
-        Games = games,
-        Wins = wins,
-        Losses = losses,
-        Ties = ties,
-        Points = points,
-        GoalsFor = goalsFor,
-        GoalsAgainst = goalsAgainst,
-        PenaltyMinutes = penaltyMinutes
-      };
+        while (innerEx != null)
+        {
+          Debug.Print("With inner exception of:");
+          Debug.Print(innerEx.Message);
 
-      var found = _ctx.TeamStandings.Find(teamStanding.SeasonTeamId, teamStanding.SeasonTypeId);
+          innerEx = innerEx.InnerException;
+        }
 
-      if (found == null)
-      {
-        found = _ctx.TeamStandings.Add(teamStanding);
-      }
-      else
-      {
-        var entry = _ctx.Entry(found);
-        entry.OriginalValues.SetValues(found);
-        entry.CurrentValues.SetValues(teamStanding);
-      }
+        Debug.Print(ex.StackTrace);
 
-      return ContextSaveChanges();
-    }
-
-    public int SaveGameScore(int gameId, int period, int homeSeasonTeamId, int scoreHomeTeamPeriod, int awaySeasonTeamId, int scoreAwayTeamPeriod)
-    {
-      var gameScore = new GameScore()
-      {
-        GameId = gameId,
-        Period = period,
-        SeasonTeamId = homeSeasonTeamId,
-        Score = scoreHomeTeamPeriod
-      };
-
-      var found = _ctx.GameScores.Find(gameScore.GameId, gameScore.SeasonTeamId, gameScore.Period);
-
-      if (found == null)
-      {
-        found = _ctx.GameScores.Add(gameScore);
-      }
-      else
-      {
-        var entry = _ctx.Entry(found);
-        entry.OriginalValues.SetValues(found);
-        entry.CurrentValues.SetValues(gameScore);
-      }
-
-      gameScore = new GameScore()
-      {
-        GameId = gameId,
-        Period = period,
-        SeasonTeamId = awaySeasonTeamId,
-        Score = scoreAwayTeamPeriod
-      };
-
-      found = _ctx.GameScores.Find(gameScore.GameId, gameScore.SeasonTeamId, gameScore.Period);
-
-      if (found == null)
-      {
-        found = _ctx.GameScores.Add(gameScore);
-      }
-      else
-      {
-        var entry = _ctx.Entry(found);
-        entry.OriginalValues.SetValues(found);
-        entry.CurrentValues.SetValues(gameScore);
-      }
-
-      return ContextSaveChanges();
-    }
-
-    public int SaveGameResults(int gameId, int homeSeasonTeamId, int homeTeamScore, int homeTeamPenalties, string homeResult, int awaySeasonTeamId, int awayTeamScore, int awayTeamPenalties, string awayResult)
-    {
-      var gameResult = new GameResult()
-      {
-        GameId = gameId,
-        SeasonTeamId = homeSeasonTeamId,
-        Result = homeResult,
-        GoalsFor = homeTeamScore,
-        GoalsAgainst = awayTeamScore,
-        PenaltyMinutes = homeTeamPenalties,
-        Override = false
-      };
-
-      var found = _ctx.GameResults.Find(gameResult.GameId, gameResult.SeasonTeamId);
-
-      if (found == null)
-      {
-        found = _ctx.GameResults.Add(gameResult);
-      }
-      else
-      {
-        var entry = _ctx.Entry(found);
-        entry.OriginalValues.SetValues(found);
-        entry.CurrentValues.SetValues(gameResult);
-      }
-
-      gameResult = new GameResult()
-      {
-        GameId = gameId,
-        SeasonTeamId = awaySeasonTeamId,
-        Result = awayResult,
-        GoalsFor = awayTeamScore,
-        GoalsAgainst = homeTeamScore,
-        PenaltyMinutes = awayTeamPenalties,
-        Override = false
-      };
-
-      found = _ctx.GameResults.Find(gameResult.GameId, gameResult.SeasonTeamId);
-
-      if (found == null)
-      {
-        found = _ctx.GameResults.Add(gameResult);
-      }
-      else
-      {
-        var entry = _ctx.Entry(found);
-        entry.OriginalValues.SetValues(found);
-        entry.CurrentValues.SetValues(gameResult);
-      }
-
-      return ContextSaveChanges();
-    }
-
-    public int SaveScoreSheetEntryProcessed(int scoreSheetEntryId, int gameId, int period, bool homeTeam, int goalPlayerId, int? assist1PlayerId, int? assist2PlayerId, int? assist3PlayerId, string timeRemaining, bool shortHandedGoal, bool powerPlayGoal, bool gameWinningGoal)
-    {
-      var scoreSheetEntryProcessed = new ScoreSheetEntryProcessed()
-      {
-        ScoreSheetEntryId = scoreSheetEntryId,
-        GameId = gameId,
-        Period = period,
-        HomeTeam = homeTeam,
-        GoalPlayerId = goalPlayerId,
-        Assist1PlayerId = assist1PlayerId,
-        Assist2PlayerId = assist2PlayerId,
-        Assist3PlayerId = assist3PlayerId,
-        TimeRemaining = timeRemaining,
-        ShortHandedGoal = shortHandedGoal,
-        PowerPlayGoal = powerPlayGoal,
-        GameWinningGoal = gameWinningGoal
-      };
-
-      return SaveScoreSheetEntryProcessed(scoreSheetEntryProcessed);
-    }
-
-    public int SaveScoreSheetEntryProcessed(ScoreSheetEntryProcessed scoreSheetEntryProcessed)
-    {
-      var found = _ctx.ScoreSheetEntriesProcessed.Find(scoreSheetEntryProcessed.ScoreSheetEntryId);
-
-      if (found == null)
-      {
-        found = _ctx.ScoreSheetEntriesProcessed.Add(scoreSheetEntryProcessed);
-      }
-      else
-      {
-        var entry = _ctx.Entry(found);
-        entry.OriginalValues.SetValues(found);
-        entry.CurrentValues.SetValues(scoreSheetEntryProcessed);
-      }
-
-      return ContextSaveChanges();
-    }
-
-    public int SavePlayerStatGame(PlayerStatGame playerStatGame)
-    {
-      var found = _ctx.PlayerStatsGame.Find(playerStatGame.GameId, playerStatGame.PlayerId, playerStatGame.PlayerStatTypeId);
-
-      if (found == null)
-      {
-        found = _ctx.PlayerStatsGame.Add(playerStatGame);
-      }
-      else
-      {
-        var entry = _ctx.Entry(found);
-        entry.OriginalValues.SetValues(found);
-        entry.CurrentValues.SetValues(playerStatGame);
-      }
-
-      return ContextSaveChanges();
-    }
-
-    public int SavePlayerStatSeason(PlayerStatSeason playerStatSeason)
-    {
-      var found = _ctx.PlayerStatsSeason.Find(playerStatSeason.SeasonId, playerStatSeason.PlayerId, playerStatSeason.PlayerStatTypeId);
-
-      if (found == null)
-      {
-        found = _ctx.PlayerStatsSeason.Add(playerStatSeason);
-      }
-      else
-      {
-        var entry = _ctx.Entry(found);
-        entry.OriginalValues.SetValues(found);
-        entry.CurrentValues.SetValues(playerStatSeason);
-      }
-
-      return ContextSaveChanges();
-    }
-
-    private int ContextSaveChanges()
-    {
-      try
-      {
-        return _ctx.SaveChanges();
-      }
-      catch (Exception ex)
-      {
-        Debug.Print("Following error occurred:" + ex.StackTrace);
         throw ex;
       }
     }

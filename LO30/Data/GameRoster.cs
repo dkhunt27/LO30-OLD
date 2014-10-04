@@ -21,6 +21,9 @@ namespace LO30.Data
     [Required]
     public int PlayerId { get; set; }
 
+    [Required]
+    public bool Sub { get; set; }
+
     public int? SubbingForPlayerId { get; set; }
 
     [ForeignKey("GameId")]

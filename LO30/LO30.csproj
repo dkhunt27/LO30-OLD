@@ -202,6 +202,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ScoreSheetEntryController.cs" />
+    <Compile Include="Controllers\WebApi\ForWebPlayerStatsController.cs" />
+    <Compile Include="Controllers\WebApi\PlayerStatsSeasonController.cs" />
     <Compile Include="Controllers\WebApi\TeamStandingsController.cs" />
     <Compile Include="Controllers\WebApi\ArticlesController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -229,6 +231,7 @@
     <Compile Include="Data\Address.cs" />
     <Compile Include="Data\Game.cs" />
     <Compile Include="Data\Penalty.cs" />
+    <Compile Include="Data\ForWebPlayerStat.cs" />
     <Compile Include="Data\PlayerStatSeason.cs" />
     <Compile Include="Data\PlayerStatGame.cs" />
     <Compile Include="Data\ScoreSheetEntryPenaltyProcessed.cs" />
@@ -271,6 +274,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IMailService.cs" />
     <Compile Include="Services\MailService.cs" />
+    <Compile Include="Services\LO30ContextService.cs" />
+    <Compile Include="Services\PlayerStatsService.cs" />
     <Compile Include="Services\MockMailService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1147,6 +1152,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="favicon.ico" />
+    <Compile Include="Formatters\BrowserJsonFormatter.cs" />
     <Content Include="Global.asax" />
     <Content Include="Content\Template\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\Template\fonts\fontawesome-webfont.ttf" />
