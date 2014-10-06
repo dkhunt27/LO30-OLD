@@ -192,7 +192,7 @@ namespace LO30.Services
                 SeasonId = grp.Key.SeasonId,
                 Sub = grp.Key.Sub,
 
-                Games = grp.Count(),
+                Games = grp.Sum(x => x.Games),
                 Goals = grp.Sum(x => x.Goals),
                 Assists = grp.Sum(x => x.Assists),
                 Points = grp.Sum(x => x.Points),
@@ -296,6 +296,82 @@ namespace LO30.Services
         ErrorHandlingService.PrintFullErrorMessage(ex);
         throw ex;
       }
+    }
+
+    public List<GoalieStatSeasonTeam> ProcessGoalieGameStatsIntoGoalieSeasonTeamStats(List<GoalieStatGame> goalieGameStats)
+    {
+      var goalieSeasonTeamStats = new List<GoalieStatSeasonTeam>();
+
+      var summedStats = goalieGameStats
+              .GroupBy(x => new { x.PlayerId, x.SeasonId, x.Sub, x.SeasonTeamIdPlayingFor })
+              .Select(grp => new
+              {
+                PlayerId = grp.Key.PlayerId,
+                SeasonId = grp.Key.SeasonId,
+                Sub = grp.Key.Sub,
+                SeasonTeamIdPlayingFor = grp.Key.SeasonTeamIdPlayingFor,
+
+                Games = grp.Count(),
+                GoalsAgainst = grp.Sum(x => x.GoalsAgainst),
+                Shutouts = grp.Sum(x => x.Shutouts),
+                Wins = grp.Sum(x => x.Wins)
+              })
+              .ToList();
+
+      foreach (var stat in summedStats)
+      {
+        goalieSeasonTeamStats.Add(new GoalieStatSeasonTeam(
+                                    pid: stat.PlayerId,
+                                    sid: stat.SeasonId,
+                                    sub: stat.Sub,
+                                    stidpf: stat.SeasonTeamIdPlayingFor,
+
+                                    games: stat.Games,
+                                    ga: stat.GoalsAgainst,
+                                    so: stat.Shutouts,
+                                    w: stat.Wins
+                                    )
+                              );
+      }
+
+      return goalieSeasonTeamStats;
+    }
+
+    public List<GoalieStatSeason> ProcessGoalieSeasonTeamStatsIntoGoalieSeasonStats(List<GoalieStatSeasonTeam> goalieSeasonTeamStats)
+    {
+      var goalieSeasonStats = new List<GoalieStatSeason>();
+
+      var summedStats = goalieSeasonTeamStats
+              .GroupBy(x => new { x.PlayerId, x.SeasonId, x.Sub })
+              .Select(grp => new
+              {
+                PlayerId = grp.Key.PlayerId,
+                SeasonId = grp.Key.SeasonId,
+                Sub = grp.Key.Sub,
+
+                Games = grp.Sum(x => x.Games),
+                GoalsAgainst = grp.Sum(x => x.GoalsAgainst),
+                Shutouts = grp.Sum(x => x.Shutouts),
+                Wins = grp.Sum(x => x.Wins)
+              })
+              .ToList();
+
+      foreach (var stat in summedStats)
+      {
+        goalieSeasonStats.Add(new GoalieStatSeason(
+                                    pid: stat.PlayerId,
+                                    sid: stat.SeasonId,
+                                    sub: stat.Sub,
+
+                                    games: stat.Games,
+                                    ga: stat.GoalsAgainst,
+                                    so: stat.Shutouts,
+                                    w: stat.Wins
+                                    )
+                              );
+      }
+
+      return goalieSeasonStats;
     }
   }
 }

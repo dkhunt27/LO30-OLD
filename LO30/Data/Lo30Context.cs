@@ -36,6 +36,8 @@ namespace LO30.Data
     public DbSet<GameTeam> GameTeams { get; set; }
 
     public DbSet<GoalieStatGame> GoalieStatsGame { get; set; }
+    public DbSet<GoalieStatSeason> GoalieStatsSeason { get; set; }
+    public DbSet<GoalieStatSeasonTeam> GoalieStatsSeasonTeam { get; set; }
 
     public DbSet<Penalty> Penalties { get; set; }
     public DbSet<Phone> Phones { get; set; }

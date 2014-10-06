@@ -34,7 +34,7 @@ namespace LO30.Controllers
       int seasonId = 54;
       bool playoff = false;
       int startingGameId = 3200;
-      int endingGameId = 3220;
+      int endingGameId = 3227;
 
       Debug.Print("ScoreSheetEntries processing...");
       last = DateTime.Now;

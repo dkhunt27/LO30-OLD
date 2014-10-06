@@ -17,6 +17,8 @@ namespace LO30.Services
         _ctx = ctx;
       }
 
+      #region SaveOrUpdate functions
+
       public int SaveTeamStanding(int seasonTeamId, bool playoff, int rank, int games, int wins, int losses, int ties, int points, int goalsFor, int goalsAgainst, int penaltyMinutes)
       {
         var teamStanding = new TeamStanding()
@@ -237,36 +239,83 @@ namespace LO30.Services
 
       public int SaveOrUpdateGoalieStatGame(GoalieStatGame goalieStatGame)
       {
-        var found = _ctx.GoalieStatsGame.Where(x => x.PlayerId == goalieStatGame.PlayerId &&
-                                                    x.GameId == goalieStatGame.GameId &&
-                                                    x.SeasonId == goalieStatGame.SeasonId &&
-                                                    x.SeasonTeamIdPlayingFor == goalieStatGame.SeasonTeamIdPlayingFor &&
-                                                    x.Sub == goalieStatGame.Sub
-                                              ).ToList();
+        var found = FindGoalieStatGame(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: goalieStatGame.PlayerId, gameId: goalieStatGame.GameId);
 
-        if (found.Count > 1)
-        {
-          throw new ArgumentNullException("found", "More than 1 GoalieStatsGame was not found for" +
-                                                  " PlayerId:" + goalieStatGame.PlayerId +
-                                                  " GameId:" + goalieStatGame.GameId + 
-                                                  " SeasonId:" + goalieStatGame.SeasonId + 
-                                                  " SeasonTeamIdPlayingFor:" + goalieStatGame.SeasonTeamIdPlayingFor +
-                                                  " Sub:" + goalieStatGame.Sub);
-        }
-
-        if (found.Count == 0)
+        if (found == null)
         {
           _ctx.GoalieStatsGame.Add(goalieStatGame);
         }
         else
         {
-          var entry = _ctx.Entry(found[0]);
-          entry.OriginalValues.SetValues(found[0]);
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
           entry.CurrentValues.SetValues(goalieStatGame);
         }
 
         return ContextSaveChanges();
       }
+
+      public int SaveOrUpdateGoalieStatSeasonTeam(List<GoalieStatSeasonTeam> goalieStatSeasonTeam)
+      {
+        var saved = 0;
+        foreach (var item in goalieStatSeasonTeam)
+        {
+          var results = SaveOrUpdateGoalieStatSeasonTeam(item);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateGoalieStatSeasonTeam(GoalieStatSeasonTeam goalieStatSeasonTeam)
+      {
+        var found = FindGoalieStatSeasonTeam(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: goalieStatSeasonTeam.PlayerId, seasonTeamIdPlayingFor: goalieStatSeasonTeam.SeasonTeamIdPlayingFor);
+
+        if (found == null)
+        {
+          _ctx.GoalieStatsSeasonTeam.Add(goalieStatSeasonTeam);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(goalieStatSeasonTeam);
+        }
+
+        return ContextSaveChanges();
+      }
+
+      public int SaveOrUpdateGoalieStatSeason(List<GoalieStatSeason> goalieStatSeason)
+      {
+        var saved = 0;
+        foreach (var item in goalieStatSeason)
+        {
+          var results = SaveOrUpdateGoalieStatSeason(item);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateGoalieStatSeason(GoalieStatSeason goalieStatSeason)
+      {
+        var found = FindGoalieStatSeason(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: goalieStatSeason.PlayerId, seasonId: goalieStatSeason.SeasonId, sub: goalieStatSeason.Sub);
+
+        if (found == null)
+        {
+          _ctx.GoalieStatsSeason.Add(goalieStatSeason);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(goalieStatSeason);
+        }
+
+        return ContextSaveChanges();
+      }
+
+      #endregion
 
       #region find functions
 
@@ -335,7 +384,14 @@ namespace LO30.Services
                                           );
         }
 
-        return found[0];
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
       }
       #endregion
 
@@ -404,7 +460,14 @@ namespace LO30.Services
                                           );
         }
 
-        return found[0];
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
       }
       #endregion
 
@@ -434,7 +497,14 @@ namespace LO30.Services
                                           );
         }
 
-        return found[0];
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
       }
       #endregion
 
@@ -464,7 +534,14 @@ namespace LO30.Services
                                           );
         }
 
-        return found[0];
+        if (found.Count == 1)
+        {
+          return found[0];
+        } 
+        else
+        {
+          return null;
+        }
       }
       #endregion
 
@@ -494,7 +571,14 @@ namespace LO30.Services
                                           );
         }
 
-        return found[0];
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
       }
       #endregion
 
@@ -526,9 +610,130 @@ namespace LO30.Services
                                           );
         }
 
-        return found[0];
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
       }
       #endregion
+
+      #region FindGoalieStatGame
+      public GoalieStatGame FindGoalieStatGame(int playerId, int gameId)
+      {
+        return FindGoalieStatGame(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId, gameId: gameId);
+      }
+
+      public GoalieStatGame FindGoalieStatGame(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId, int gameId)
+      {
+        var found = _ctx.GoalieStatsGame.Where(x => x.PlayerId == playerId && x.GameId == gameId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find GoalieStatsGame for" +
+                                                  " PlayerId:" + playerId +
+                                                  " GameId:" + gameId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 GoalieStatsGame was not found for" +
+                                                  " PlayerId:" + playerId +
+                                                  " GameId:" + gameId
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region FindGoalieStatSeasonTeam
+      public GoalieStatSeasonTeam FindGoalieStatSeasonTeam(int playerId, int seasonTeamIdPlayingFor)
+      {
+        return FindGoalieStatSeasonTeam(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId, seasonTeamIdPlayingFor: seasonTeamIdPlayingFor);
+      }
+
+      public GoalieStatSeasonTeam FindGoalieStatSeasonTeam(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId, int seasonTeamIdPlayingFor)
+      {
+        var found = _ctx.GoalieStatsSeasonTeam.Where(x => x.PlayerId == playerId && x.SeasonTeamIdPlayingFor == seasonTeamIdPlayingFor).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find GoalieStatSeasonTeam for" +
+                                                  " PlayerId:" + playerId +
+                                                  " SeasonTeamIdPlayingFor:" + seasonTeamIdPlayingFor
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 GoalieStatSeasonTeam was not found for" +
+                                                  " PlayerId:" + playerId +
+                                                  " SeasonTeamIdPlayingFor:" + seasonTeamIdPlayingFor
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region FindGoalieStatSeason
+      public GoalieStatSeason FindGoalieStatSeason(int playerId, int seasonId, bool sub)
+      {
+        return FindGoalieStatSeason(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId, seasonId: seasonId, sub: sub);
+      }
+
+      public GoalieStatSeason FindGoalieStatSeason(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId, int seasonId, bool sub)
+      {
+        var found = _ctx.GoalieStatsSeason.Where(x => x.PlayerId == playerId && x.SeasonId == seasonId && x.Sub == sub).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find GoalieStatSeason for" +
+                                                  " PlayerId:" + playerId +
+                                                  " SeasonId:" + seasonId +
+                                                  " Sub:" + sub
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 GoalieStatSeason was not found for" +
+                                                  " PlayerId:" + playerId +
+                                                  " SeasonId:" + seasonId +
+                                                  " Sub:" + sub
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
       #endregion
 
       public int ContextSaveChanges()

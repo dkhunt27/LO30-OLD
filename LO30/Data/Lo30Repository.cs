@@ -70,7 +70,7 @@ namespace LO30.Data
 
       foreach (var item in data)
       {
-        var ratings = _ctx.PlayerRatings.Where(x=> x.SeasonId == item.SeasonId && x.PlayerId == item.PlayerId).FirstOrDefault();
+        var ratings = _ctx.PlayerRatings.Where(x => x.SeasonId == item.SeasonId && x.PlayerId == item.PlayerId).FirstOrDefault();
 
         var line = 0;
         if (ratings != null)
@@ -99,6 +99,35 @@ namespace LO30.Data
           SHG = item.ShortHandedGoals,
           GWG = item.GameWinningGoals,
           PIM = item.PenaltyMinutes
+        });
+      }
+      return newData;
+    }
+
+    public List<ForWebGoalieStat> GetGoalieStatsForWeb()
+    {
+      var data = _ctx.GoalieStatsSeasonTeam.Include("season").Include("player").Include("seasonTeamPlayingFor").Include("seasonTeamPlayingFor.team").ToList();
+
+      var newData = new List<ForWebGoalieStat>();
+
+      foreach (var item in data)
+      {
+        var playerName = item.Player.FirstName + " " + item.Player.LastName;
+        if (!string.IsNullOrWhiteSpace(item.Player.Suffix))
+        {
+          playerName = playerName + " " + item.Player.Suffix;
+        }
+
+        newData.Add(new ForWebGoalieStat()
+        {
+          Player = playerName,
+          Team = item.SeasonTeamPlayingFor.Team.TeamLongName,
+          Sub = item.Sub == true ? "Y" : "N",
+          GP = item.Games,
+          GA = item.GoalsAgainst,
+          GAA = item.GoalsAgainstAverage,
+          SO = item.Shutouts,
+          W = item.Wins
         });
       }
       return newData;
@@ -495,7 +524,10 @@ namespace LO30.Data
         var playerGameStats = _playerStatsService.ProcessScoreSheetEntriesIntoPlayerGameStats(scoreSheetEntriesProcessed, scoreSheetEntryPenaltiesProcessed, gameRosters);
         var playerSeasonTeamStats = _playerStatsService.ProcessPlayerGameStatsIntoPlayerSeasonTeamStats(playerGameStats);
         var playerSeasonStats = _playerStatsService.ProcessPlayerSeasonTeamStatsIntoPlayerSeasonStats(playerSeasonTeamStats);
+
         var goalieGameStats = _playerStatsService.ProcessScoreSheetEntriesIntoGoalieGameStats(gameOutcomes, gameRostersGoalies);
+        var goalieSeasonTeamStats = _playerStatsService.ProcessGoalieGameStatsIntoGoalieSeasonTeamStats(goalieGameStats);
+        var goalieSeasonStats = _playerStatsService.ProcessGoalieSeasonTeamStatsIntoGoalieSeasonStats(goalieSeasonTeamStats);
 
         var savedStatsGame = _contextService.SaveOrUpdatePlayerStatGame(playerGameStats);
         Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsGame:" + savedStatsGame);
@@ -507,7 +539,13 @@ namespace LO30.Data
         Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsSeason:" + savedStatsSeason);
 
         var savedStatsGameGoalie = _contextService.SaveOrUpdateGoalieStatGame(goalieGameStats);
-        Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsSeason:" + savedStatsSeason);
+        Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsGameGoalie:" + savedStatsGameGoalie);
+
+        var savedStatsSeasonTeamGoalie = _contextService.SaveOrUpdateGoalieStatSeasonTeam(goalieSeasonTeamStats);
+        Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsSeasonTeamGoalie:" + savedStatsSeasonTeamGoalie);
+
+        var savedStatsSeasonGoalie = _contextService.SaveOrUpdateGoalieStatSeason(goalieSeasonStats);
+        Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsSeasonGoalie:" + savedStatsSeasonGoalie);
 
         return (savedStatsGame + savedStatsSeasonTeam + savedStatsSeason) > 0;
       }

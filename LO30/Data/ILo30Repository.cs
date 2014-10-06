@@ -16,6 +16,8 @@ namespace LO30.Data
 
     List<ForWebPlayerStat> GetPlayerStatsForWeb();
 
+    List<ForWebGoalieStat> GetGoalieStatsForWeb();
+
     bool Save();
 
     bool AddArticle(Article newArticle);
