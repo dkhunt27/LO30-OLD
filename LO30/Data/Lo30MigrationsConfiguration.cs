@@ -1,4 +1,5 @@
 ﻿using LO30.Data.Access;
+using LO30.Services;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -26,7 +27,6 @@ namespace LO30.Data
     protected override void Seed(Lo30Context context)
     {
       base.Seed(context);
-
       Lo30ContextSeed seeder = new Lo30ContextSeed();
       seeder.Seed(context);
     }

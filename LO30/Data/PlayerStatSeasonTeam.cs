@@ -9,45 +9,17 @@ namespace LO30.Data
 {
   public class PlayerStatSeasonTeam
   {
-    public PlayerStatSeasonTeam()
-    {
-    }
-
-    public PlayerStatSeasonTeam(int pid, int pstid, int sid, int stidpf, int games, int g, int a, int p, int ppg, int shg, int gwg, int pim)
-    {
-      this.PlayerId = pid;
-      this.PlayerStatTypeId = pstid;
-      this.SeasonId = sid;
-      this.SeasonTeamIdPlayingFor = stidpf;
-
-      this.Games = games;
-
-      this.Goals = g;
-      this.Assists = a;
-      this.Points = p;
-
-      this.PowerPlayGoals = ppg;
-      this.ShortHandedGoals = shg;
-      this.GameWinningGoals = gwg;
-
-      this.PenaltyMinutes = pim;
-
-      this.UpdatedOn = DateTime.Now;
-
-      Validate();
-    }
-
-    [Key, Column(Order = 0)]
+    [Required, Key, Column(Order = 1), ForeignKey("Player")]
     public int PlayerId { get; set; }
 
-    [Key, Column(Order = 1)]
-    public int PlayerStatTypeId { get; set; }
+    [Required, Key, Column(Order = 2), ForeignKey("SeasonTeamPlayingFor")]
+    public int SeasonTeamIdPlayingFor { get; set; }
 
-    [Key, Column(Order = 2)]
+    [Required, ForeignKey("Season")]
     public int SeasonId { get; set; }
 
-    [Key, Column(Order = 3)]
-    public int SeasonTeamIdPlayingFor { get; set; }
+    [Required]
+    public bool Sub { get; set; }
 
     [Required]
     public int Games { get; set; }
@@ -76,25 +48,46 @@ namespace LO30.Data
     [Required]
     public DateTime UpdatedOn { get; set; }
 
-    [ForeignKey("PlayerId")]
     public virtual Player Player { get; set; }
-
-    [ForeignKey("PlayerStatTypeId")]
-    public virtual PlayerStatType PlayerStatType { get; set; }
-
-    [ForeignKey("SeasonId")]
     public virtual Season Season { get; set; }
-
-    [ForeignKey("SeasonTeamIdPlayingFor")]
     public virtual SeasonTeam SeasonTeamPlayingFor { get; set; }
+
+    public PlayerStatSeasonTeam()
+    {
+    }
+
+    public PlayerStatSeasonTeam(int pid, int stidpf, int sid, bool sub, int games, int g, int a, int p, int ppg, int shg, int gwg, int pim)
+    {
+      this.PlayerId = pid;
+      this.SeasonTeamIdPlayingFor = stidpf;
+
+      this.SeasonId = sid;
+      this.Sub = sub;
+
+      this.Games = games;
+
+      this.Goals = g;
+      this.Assists = a;
+      this.Points = p;
+
+      this.PowerPlayGoals = ppg;
+      this.ShortHandedGoals = shg;
+      this.GameWinningGoals = gwg;
+
+      this.PenaltyMinutes = pim;
+
+      this.UpdatedOn = DateTime.Now;
+
+      Validate();
+    }
 
     private void Validate()
     {
-      var locationKey = string.Format("pid: {0}, pstid: {1}, sid: {2}, stIdpf: {3}",
+      var locationKey = string.Format("pid: {0}, stidpf: {1}, sid: {2}, sub: {3}",
                                       this.PlayerId,
-                                      this.PlayerStatTypeId,
+                                      this.SeasonTeamIdPlayingFor,
                                       this.SeasonId,
-                                      this.SeasonTeamIdPlayingFor);
+                                      this.Sub);
 
       if (this.Points != this.Goals + this.Assists)
       {

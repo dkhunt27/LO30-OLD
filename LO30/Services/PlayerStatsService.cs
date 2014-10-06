@@ -9,7 +9,7 @@ namespace LO30.Services
 {
   public class PlayerStatsService
   {
-    public List<PlayerStatGame> ProcessScoreSheetEntriesIntoPlayerGameStats(List<ScoreSheetEntryProcessed> scoreSheetEntriesProcessed, List<ScoreSheetEntryPenaltyProcessed> scoreSheetEntryPenaltiesProcessed, List<GameRoster> gameRosters, List<PlayerStatType> playerStatTypes)
+    public List<PlayerStatGame> ProcessScoreSheetEntriesIntoPlayerGameStats(List<ScoreSheetEntryProcessed> scoreSheetEntriesProcessed, List<ScoreSheetEntryPenaltyProcessed> scoreSheetEntryPenaltiesProcessed, List<GameRoster> gameRosters)
     {
       var playerGameStats = new List<PlayerStatGame>();
 
@@ -19,36 +19,26 @@ namespace LO30.Services
         foreach (var gameRoster in gameRosters)
         {
           #region determine key fields (gameId, seasonTeamId, playerId, playerStatTypeId, sub, etc)
-          var gameId = gameRoster.GameId;
-          var seasonTeamId = gameRoster.SeasonTeamId;
+          var gameId = gameRoster.GameTeam.GameId;
+          var seasonTeamId = gameRoster.GameTeam.SeasonTeamId;
           var sub = gameRoster.Sub;
 
           int playerId;
-          bool subLookup;
           if (gameRoster.SubbingForPlayerId == null)
           {
             playerId = gameRoster.PlayerId;
-            subLookup = false;
           }
           else
           {
             // if there is a sub, use him
             playerId = Convert.ToInt32(gameRoster.SubbingForPlayerId);
-            subLookup = true;
           }
 
-          var playerStatType = playerStatTypes.Where(x => x.Sub == subLookup).FirstOrDefault();
-          if (playerStatType == null)
+          if (gameRoster.GameTeam.SeasonTeam == null || gameRoster.GameTeam.SeasonTeam.SeasonId == null)
           {
-            throw new ArgumentNullException("playerStatType", "playerStatType was not found");
+            throw new ArgumentNullException("gameRoster.GameTeam.SeasonTeam.SeasonId");
           }
-          var playerStatTypeId = playerStatType.PlayerStatTypeId;
-
-          if (gameRoster.SeasonTeam == null || gameRoster.SeasonTeam.SeasonId == null)
-          {
-            throw new ArgumentNullException("gameRoster.SeasonTeam.SeasonId");
-          }
-          var seasonId = gameRoster.SeasonTeam.SeasonId;
+          var seasonId = gameRoster.GameTeam.SeasonTeam.SeasonId;
           #endregion
 
           // get score sheet entries for this player, for this game...if exists...if he had no points or pim, it won't exist
@@ -115,11 +105,13 @@ namespace LO30.Services
           #endregion
 
           playerGameStats.Add(new PlayerStatGame(
-                                        sid: seasonId,
                                         pid: playerId,
-                                        pstid: playerStatTypeId,
-                                        stidpf: seasonTeamId,
                                         gid: gameId,
+
+                                        sid: seasonId,
+                                        stidpf: seasonTeamId,
+                                        sub: sub,
+
                                         g: goals,
                                         a: assists,
                                         p: goals + assists,
@@ -146,12 +138,12 @@ namespace LO30.Services
       var playerSeasonTeamStats = new List<PlayerStatSeasonTeam>();
 
       var summedStats = playerGameStats
-              .GroupBy(x => new { x.PlayerId, x.PlayerStatTypeId, x.SeasonId, x.SeasonTeamIdPlayingFor })
+              .GroupBy(x => new { x.PlayerId, x.SeasonId, x.Sub, x.SeasonTeamIdPlayingFor })
               .Select(grp => new
               {
                 PlayerId = grp.Key.PlayerId,
-                PlayerStatTypeId = grp.Key.PlayerStatTypeId,
                 SeasonId = grp.Key.SeasonId,
+                Sub = grp.Key.Sub,
                 SeasonTeamIdPlayingFor = grp.Key.SeasonTeamIdPlayingFor,
 
                 Games = grp.Count(),
@@ -169,8 +161,8 @@ namespace LO30.Services
       {
         playerSeasonTeamStats.Add(new PlayerStatSeasonTeam(
                                     pid: stat.PlayerId,
-                                    pstid: stat.PlayerStatTypeId,
                                     sid: stat.SeasonId,
+                                    sub: stat.Sub,
                                     stidpf: stat.SeasonTeamIdPlayingFor,
 
                                     games: stat.Games,
@@ -193,12 +185,12 @@ namespace LO30.Services
       var playerSeasonStats = new List<PlayerStatSeason>();
 
       var summedStats = playerSeasonTeamStats
-              .GroupBy(x => new { x.PlayerId, x.PlayerStatTypeId, x.SeasonId })
+              .GroupBy(x => new { x.PlayerId, x.SeasonId, x.Sub })
               .Select(grp => new
               {
                 PlayerId = grp.Key.PlayerId,
-                PlayerStatTypeId = grp.Key.PlayerStatTypeId,
                 SeasonId = grp.Key.SeasonId,
+                Sub = grp.Key.Sub,
 
                 Games = grp.Count(),
                 Goals = grp.Sum(x => x.Goals),
@@ -215,8 +207,8 @@ namespace LO30.Services
       {
         playerSeasonStats.Add(new PlayerStatSeason(
                                     pid: stat.PlayerId,
-                                    pstid: stat.PlayerStatTypeId,
                                     sid: stat.SeasonId,
+                                    sub: stat.Sub,
 
                                     games: stat.Games,
                                     g: stat.Goals,
@@ -233,7 +225,7 @@ namespace LO30.Services
       return playerSeasonStats;
     }
 
-    public List<GoalieStatGame> ProcessScoreSheetEntriesIntoGoalieGameStats(List<GameResult> gameResults, List<GameRoster> gameRostersGoalies, List<PlayerStatType> playerStatTypes)
+    public List<GoalieStatGame> ProcessScoreSheetEntriesIntoGoalieGameStats(List<GameOutcome> gameOutcomes, List<GameRoster> gameRostersGoalies)
     {
       var goalieGameStats = new List<GoalieStatGame>();
 
@@ -243,62 +235,55 @@ namespace LO30.Services
         foreach (var gameRoster in gameRostersGoalies)
         {
           #region determine key fields (gameId, seasonTeamId, playerId, playerStatTypeId, sub, etc)
-          var gameId = gameRoster.GameId;
-          var seasonTeamId = gameRoster.SeasonTeamId;
+          var gameId = gameRoster.GameTeam.GameId;
+          var seasonTeamId = gameRoster.GameTeam.SeasonTeamId;
           var sub = gameRoster.Sub;
 
           int playerId;
-          bool subLookup;
           if (gameRoster.SubbingForPlayerId == null)
           {
             playerId = gameRoster.PlayerId;
-            subLookup = false;
           }
           else
           {
             // if there is a sub, use him
             playerId = Convert.ToInt32(gameRoster.SubbingForPlayerId);
-            subLookup = true;
           }
 
-          var playerStatType = playerStatTypes.Where(x => x.Sub == subLookup).FirstOrDefault();
-          if (playerStatType == null)
-          {
-            throw new ArgumentNullException("playerStatType", "playerStatType was not found");
-          }
-          var playerStatTypeId = playerStatType.PlayerStatTypeId;
 
-          if (gameRoster.SeasonTeam == null || gameRoster.SeasonTeam.SeasonId == null)
+          if (gameRoster.GameTeam.SeasonTeam == null || gameRoster.GameTeam.SeasonTeam.SeasonId == null)
           {
             throw new ArgumentNullException("gameRoster.SeasonTeam.SeasonId");
           }
-          var seasonId = gameRoster.SeasonTeam.SeasonId;
+          var seasonId = gameRoster.GameTeam.SeasonTeam.SeasonId;
           #endregion
 
           // sanity check...make sure there is only 1 goalie for each team for each game
-          var check = gameRostersGoalies.Where(x => x.GameId == gameId && x.SeasonTeamId == seasonTeamId && x.Goalie == true).ToList();
+          var check = gameRostersGoalies.Where(x => x.GameTeam.GameId == gameId && x.GameTeam.SeasonTeamId == seasonTeamId && x.Goalie == true).ToList();
 
           if (check.Count < 1 || check.Count > 1)
           {
             throw new ArgumentNullException("gameRosterGoalies", "Every GameRoster must have 1 and only 1 goalie GameId:" + gameId + " SeasonTeamId:" + seasonTeamId + " Goalie Count:" + check.Count);
           }
 
-          var gameResult = gameResults.Where(x => x.GameId == gameId && x.SeasonTeamId == seasonTeamId).FirstOrDefault();
+          var gameOutcome = gameOutcomes.Where(x => x.GameTeam.GameId == gameId && x.GameTeam.SeasonTeamId == seasonTeamId).FirstOrDefault();
 
-          if (gameResult == null)
+          if (gameOutcome == null)
           {
-            throw new ArgumentNullException("gameResult", "gameResult not found for gameId:" + gameId + " seasonTeamId:" + seasonTeamId);
+            throw new ArgumentNullException("gameOutcome", "gameOutcome not found for gameId:" + gameId + " seasonTeamId:" + seasonTeamId);
           }
 
           goalieGameStats.Add(new GoalieStatGame(
-                                        sid: seasonId,
                                         pid: playerId,
-                                        pstid: playerStatTypeId,
-                                        stidpf: seasonTeamId,
                                         gid: gameId,
-                                        ga: gameResult.GoalsAgainst,
-                                        so: gameResult.GoalsAgainst == 0 ? 1 : 0,
-                                        w: gameResult.Result == "W" ? 1 : 0
+
+                                        sid: seasonId,
+                                        stidpf: seasonTeamId,
+                                        sub: sub,
+
+                                        ga: gameOutcome.GoalsAgainst,
+                                        so: gameOutcome.GoalsAgainst == 0 ? 1 : 0,
+                                        w: gameOutcome.Outcome == "W" ? 1 : 0
                                         )
                                 );
         }

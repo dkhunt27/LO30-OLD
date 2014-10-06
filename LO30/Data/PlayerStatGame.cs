@@ -9,47 +9,20 @@ namespace LO30.Data
 {
   public class PlayerStatGame
   {
-    public PlayerStatGame()
-    {
-    }
-
-    public PlayerStatGame(int pid, int pstid, int sid, int stidpf, int gid, int g, int a, int p, int ppg, int shg, int gwg, int pim)
-    {
-      this.PlayerId = pid;
-      this.PlayerStatTypeId = pstid;
-      this.SeasonId = sid;
-      this.SeasonTeamIdPlayingFor = stidpf;
-      this.GameId = gid;
-
-      this.Goals = g;
-      this.Assists = a;
-      this.Points = p;
-
-      this.PowerPlayGoals = ppg;
-      this.ShortHandedGoals = shg;
-      this.GameWinningGoals = gwg;
-
-      this.PenaltyMinutes = pim;
-
-      this.UpdatedOn = DateTime.Now;
-
-      Validate();
-    }
-
-    [Key, Column(Order = 1)]
+    [Required, Key, Column(Order = 1), ForeignKey("Player")]
     public int PlayerId { get; set; }
 
-    [Key, Column(Order = 2)]
-    public int PlayerStatTypeId { get; set; }
+    [Required, Key, Column(Order = 2), ForeignKey("Game")]
+    public int GameId { get; set; }
 
-    [Key, Column(Order = 3)]
+    [Required, ForeignKey("Season")]
     public int SeasonId { get; set; }
 
-    [Key, Column(Order = 4)]
+    [Required, ForeignKey("SeasonTeamPlayingFor")]
     public int SeasonTeamIdPlayingFor { get; set; }
 
-    [Key, Column(Order = 5)]
-    public int GameId { get; set; }
+    [Required]
+    public bool Sub { get; set; }
 
     [Required]
     public int Goals { get; set; }
@@ -75,29 +48,46 @@ namespace LO30.Data
     [Required]
     public DateTime UpdatedOn { get; set; }
 
-    [ForeignKey("PlayerId")]
     public virtual Player Player { get; set; }
-
-    [ForeignKey("PlayerStatTypeId")]
-    public virtual PlayerStatType PlayerStatType { get; set; }
-
-    [ForeignKey("SeasonId")]
     public virtual Season Season { get; set; }
-
-    [ForeignKey("SeasonTeamIdPlayingFor")]
     public virtual SeasonTeam SeasonTeamPlayingFor { get; set; }
-
-    [ForeignKey("GameId")]
     public virtual Game Game { get; set; }
+
+    public PlayerStatGame()
+    {
+    }
+
+    public PlayerStatGame(int pid, int gid, int sid, int stidpf, bool sub, int g, int a, int p, int ppg, int shg, int gwg, int pim)
+    {
+      this.PlayerId = pid;
+      this.GameId = gid;
+      this.SeasonId = sid;
+      this.SeasonTeamIdPlayingFor = stidpf;
+      this.Sub = sub;
+
+      this.Goals = g;
+      this.Assists = a;
+      this.Points = p;
+
+      this.PowerPlayGoals = ppg;
+      this.ShortHandedGoals = shg;
+      this.GameWinningGoals = gwg;
+
+      this.PenaltyMinutes = pim;
+
+      this.UpdatedOn = DateTime.Now;
+
+      Validate();
+    }
 
     private void Validate()
     {
-      var locationKey = string.Format("pid: {0}, pstid: {1}, sid: {2}, stIdpf: {3}, gid: {4}",
+      var locationKey = string.Format("pid: {0}, gid: {1}, sid: {2}, stIdpf: {3}, sub: {4}",
                                       this.PlayerId,
-                                      this.PlayerStatTypeId,
+                                      this.GameId,
                                       this.SeasonId,
                                       this.SeasonTeamIdPlayingFor,
-                                      this.GameId);
+                                      this.Sub);
 
       if (this.Points != this.Goals + this.Assists)
       {

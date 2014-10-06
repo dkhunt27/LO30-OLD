@@ -9,81 +9,68 @@ namespace LO30.Data
 {
   public class GameRoster
   {
-    public GameRoster()
-    {
-    }
-
-    public GameRoster(int gid, int stid, int pn, bool g, int pid, bool sub, int? sfpid)
-    {
-      this.GameId = gid;
-      this.SeasonTeamId = stid;
-      this.PlayerNumber = pn;
-
-      this.Goalie = g;
-      this.PlayerId = pid;
-      this.Sub = sub;
-      this.SubbingForPlayerId = sfpid;
-
-      Validate();
-    }
-
-    public GameRoster(int grid, int gid, int stid, int pn, bool g, int pid, bool sub, int? sfpid)
-    {
-      this.GameRosterId = grid;
-
-      this.GameId = gid;
-      this.SeasonTeamId = stid;
-      this.PlayerNumber = pn;
-
-      this.Goalie = g;
-      this.PlayerId = pid;
-      this.Sub = sub;
-      this.SubbingForPlayerId = sfpid;
-
-      Validate();
-    }
-
     [Key, Column(Order = 0)]
     public int GameRosterId { get; set; }
 
-    [Index("PK2", 1, IsUnique = true)]
-    public int GameId { get; set; }
+    [Required, ForeignKey("GameTeam"), Index("PK2", 1, IsUnique = true)]
+    public int GameTeamId { get; set; }
 
-    [Index("PK2", 2, IsUnique = true)]
-    public int SeasonTeamId { get; set; }
-
-    [Index("PK2", 3, IsUnique = true)]
+    [Required, Index("PK2", 2, IsUnique = true)]
     public int PlayerNumber { get; set; }
 
     [Required]
     public bool Goalie { get; set; }
 
-    [Required]
+    [Required, ForeignKey("Player")]
     public int PlayerId { get; set; }
 
     [Required]
     public bool Sub { get; set; }
 
+    [ForeignKey("SubbingForPlayer")]
     public int? SubbingForPlayerId { get; set; }
 
-    [ForeignKey("GameId")]
-    public virtual Game Game { get; set; }
-
-    [ForeignKey("SeasonTeamId")]
-    public virtual SeasonTeam SeasonTeam { get; set; }
-
-    [ForeignKey("PlayerId")]
+    public virtual GameTeam GameTeam { get; set; }
     public virtual Player Player { get; set; }
-
-    [ForeignKey("SubbingForPlayerId")]
     public virtual Player SubbingForPlayer { get; set; }
+
+    public GameRoster()
+    {
+    }
+
+    public GameRoster(int gtid, int pn, bool g, int pid, bool sub, int? sfpid)
+    {
+      this.GameTeamId = gtid;
+      this.PlayerNumber = pn;
+
+      this.Goalie = g;
+      this.PlayerId = pid;
+      this.Sub = sub;
+      this.SubbingForPlayerId = sfpid;
+
+      Validate();
+    }
+
+    public GameRoster(int grid, int gtid, int pn, bool g, int pid, bool sub, int? sfpid)
+    {
+      this.GameRosterId = grid;
+
+      this.GameTeamId = gtid;
+      this.PlayerNumber = pn;
+
+      this.Goalie = g;
+      this.PlayerId = pid;
+      this.Sub = sub;
+      this.SubbingForPlayerId = sfpid;
+
+      Validate();
+    }
 
     private void Validate()
     {
-      var locationKey = string.Format("grid: {0}, gid: {1}, stid: {2}, pn: {3}",
+      var locationKey = string.Format("grid: {0}, gtid: {1}, pn: {2}",
                             this.GameRosterId,
-                            this.GameId,
-                            this.SeasonTeamId,
+                            this.GameTeamId,
                             this.PlayerNumber);
 
       if (this.Sub == true && this.SubbingForPlayerId == null)

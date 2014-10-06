@@ -25,7 +25,7 @@ namespace LO30.Data
     public int SeasonTeamId { get; set; }
 
     [Key, Column(Order = 2)]
-    public int SeasonTypeId { get; set; }
+    public bool Playoff { get; set; }
 
     [Required]
     public int Rank { get; set; }
@@ -56,8 +56,5 @@ namespace LO30.Data
 
     [ForeignKey("SeasonTeamId")]
     public SeasonTeam SeasonTeam { get; set; }
-
-    [ForeignKey("SeasonTypeId")]
-    public SeasonType SeasonType { get; set; }
   }
 }

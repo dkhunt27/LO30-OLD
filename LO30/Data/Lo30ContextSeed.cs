@@ -1,4 +1,5 @@
 ﻿using LO30.Data.Access;
+using LO30.Services;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,9 +15,16 @@ namespace LO30.Data
 {
   public class Lo30ContextSeed
   {
+    private Lo30ContextService _lo30ContextService;
+
+    public Lo30ContextSeed()
+    {
+    }
 
     public void Seed(Lo30Context context)
     {
+      _lo30ContextService = new Lo30ContextService(context);
+
       DateTime first = DateTime.Now;
       DateTime last = DateTime.Now;
       TimeSpan diffFromFirst = new TimeSpan();
@@ -110,8 +118,8 @@ namespace LO30.Data
 
 
 
-      #region 0:GameResults
-      if (context.GameResults.Count() == 0)
+      #region 0:GameOutcomes
+      if (context.GameOutcomes.Count() == 0)
       {
       }
       #endregion
@@ -152,6 +160,11 @@ namespace LO30.Data
         Debug.Print("Data Group 1: Created Articles");
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+
+        _lo30ContextService.ContextSaveChanges();
+        Debug.Print("Data Group 1: Saved Articles" + context.PlayerStatusTypes.Count());
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
       }
       #endregion
 
@@ -183,6 +196,11 @@ namespace LO30.Data
         context.EmailTypes.Add(emailType);
 
         Debug.Print("Data Group 1: Created EmailTypes");
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+
+        _lo30ContextService.ContextSaveChanges();
+        Debug.Print("Data Group 1: Saved EmailTypes" + context.EmailTypes.Count());
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
       }
@@ -219,6 +237,11 @@ namespace LO30.Data
         }
 
         Debug.Print("Data Group 1: Created Penalties");
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+
+        _lo30ContextService.ContextSaveChanges();
+        Debug.Print("Data Group 1: Saved Penalties" + context.Penalties.Count());
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
       }
@@ -262,29 +285,14 @@ namespace LO30.Data
         Debug.Print("Data Group 1: Created PhoneTypes");
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-      }
-      #endregion
 
-      #region 1:PlayerStatTypes
-      if (context.PlayerStatTypes.Count() == 0)
-      {
-        Debug.Print("Data Group 1: Creating PlayerStatTypes");
-        last = DateTime.Now;
-
-        var playerStatType = new PlayerStatType(sub: false, name: "Rostered");
-
-        context.PlayerStatTypes.Add(playerStatType);
-
-        playerStatType = new PlayerStatType(sub: true, name: "Subbed");
-
-        context.PlayerStatTypes.Add(playerStatType);
-
-        Debug.Print("Data Group 1: Created PlayerStatTypes");
+        _lo30ContextService.ContextSaveChanges();
+        Debug.Print("Data Group 1: Saved PhoneTypes" + context.PhoneTypes.Count());
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
       }
       #endregion
-
+      
       #region 1:PlayerStatusTypes
       if (context.PlayerStatusTypes.Count() == 0)
       {
@@ -315,65 +323,11 @@ namespace LO30.Data
         Debug.Print("Data Group 1: Created PlayerStatusTypes");
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-      }
-      #endregion
 
-      #region 1:SeasonType
-      if (context.SeasonTypes.Count() == 0)
-      {
-        Debug.Print("Data Group 1: Creating SeasonTypes");
-        last = DateTime.Now;
-
-        var seasonType = new SeasonType()
-        {
-          SeasonTypeName = "Regular Season",
-          RegularSeason = true,
-          PlayoffSeason = false
-        };
-
-        context.SeasonTypes.Add(seasonType);
-
-        seasonType = new SeasonType()
-        {
-          SeasonTypeName = "Playoffs",
-          RegularSeason = false,
-          PlayoffSeason = true
-        };
-        context.SeasonTypes.Add(seasonType);
-
-        Debug.Print("Data Group 1: Creating SeasonTypes");
+        _lo30ContextService.ContextSaveChanges();
+        Debug.Print("Data Group 1: Saved PlayerStatusTypes " + context.PlayerStatusTypes.Count());
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-      }
-      #endregion
-
-      #region save changes
-      try
-      {
-        Debug.Print("Data Group 1: Saving changes");
-        last = DateTime.Now;
-        context.SaveChanges();
-        Debug.Print("Data Group 1: Saved changes");
-        diffFromLast = DateTime.Now - last;
-        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-      }
-      catch (DbEntityValidationException e)
-      {
-        foreach (var eve in e.EntityValidationErrors)
-        {
-          Debug.Print("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-              eve.Entry.Entity.GetType().Name, eve.Entry.State);
-          foreach (var ve in eve.ValidationErrors)
-          {
-            Debug.Print("- Property: \"{0}\", Error: \"{1}\"",
-                ve.PropertyName, ve.ErrorMessage);
-          }
-        }
-        throw;
-      }
-      catch (Exception ex)
-      {
-        throw;
       }
       #endregion
 
@@ -423,6 +377,11 @@ namespace LO30.Data
         }
 
         Debug.Print("Data Group 2: Created Seasons");
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+
+        _lo30ContextService.ContextSaveChanges();
+        Debug.Print("Data Group 2: Saved Seasons " + context.Seasons.Count());
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
       }
@@ -574,6 +533,11 @@ namespace LO30.Data
         Debug.Print("Data Group 2: Created Teams");
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+
+        _lo30ContextService.ContextSaveChanges();
+        Debug.Print("Data Group 2: Saved Teams " + context.Teams.Count());
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
       }
       #endregion
 
@@ -702,36 +666,11 @@ namespace LO30.Data
         Debug.Print("Data Group 2: Created Players");
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-      }
-      #endregion
 
-      #region save changes
-      try
-      {
-        Debug.Print("Data Group 2: Saving changes");
-        last = DateTime.Now;
-        context.SaveChanges();
-        Debug.Print("Data Group 2: Saved changes");
+        _lo30ContextService.ContextSaveChanges();
+        Debug.Print("Data Group 2: Saved Players " + context.Players.Count());
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-      }
-      catch (DbEntityValidationException e)
-      {
-        foreach (var eve in e.EntityValidationErrors)
-        {
-          Debug.Print("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-              eve.Entry.Entity.GetType().Name, eve.Entry.State);
-          foreach (var ve in eve.ValidationErrors)
-          {
-            Debug.Print("- Property: \"{0}\", Error: \"{1}\"",
-                ve.PropertyName, ve.ErrorMessage);
-          }
-        }
-        throw;
-      }
-      catch (Exception ex)
-      {
-        throw;
       }
       #endregion
 
@@ -763,7 +702,7 @@ namespace LO30.Data
         context.SeasonTeams.Add(seasonTeam);
 
         team = context.Teams.Where(t => t.TeamShortName == "6th").FirstOrDefault();
-        seasonTeam = new SeasonTeam(stid: 322, sid: 54, tid: team.TeamId);
+        seasonTeam = new SeasonTeam(stid: 326, sid: 54, tid: team.TeamId);
         context.SeasonTeams.Add(seasonTeam);
 
         team = context.Teams.Where(t => t.TeamShortName == "7th").FirstOrDefault();
@@ -805,6 +744,11 @@ namespace LO30.Data
         Debug.Print("Data Group 3: Created SeasonTeams");
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+
+        _lo30ContextService.ContextSaveChanges();
+        Debug.Print("Data Group 3: Saved SeasonTeams " + context.SeasonTeams.Count());
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
       }
       #endregion
       
@@ -838,21 +782,23 @@ namespace LO30.Data
 
           var gameDateTime = gameDate.Add(timeSpan);
 
-          var seasonTypeId = context.SeasonTypes.Where(s => s.PlayoffSeason == playoffGame).FirstOrDefault();
-
-          var game = new Game()
-          {
-            GameId = gameId,
-            GameDateTime = gameDateTime,
-            Location = "not set",
-            SeasonId = seasonId,
-            SeasonTypeId = seasonTypeId.SeasonTypeId,
-          };
+          var game = new Game(
+                gid: gameId,
+                time: gameDateTime,
+                loc: "not set",
+                sid: seasonId,
+                play: playoffGame
+          );
 
           context.Games.Add(game);
         }
 
         Debug.Print("Data Group 3: Created Games");
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+
+        _lo30ContextService.ContextSaveChanges();
+        Debug.Print("Data Group 3: Saved Games " + context.Games.Count());
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
       }
@@ -921,26 +867,19 @@ namespace LO30.Data
               break;
           };
 
-          var gameTeam = new GameTeam()
-          {
-            GameId = gameId,
-            HomeTeam = true,
-            SeasonTeamId = homeTeamId
-          };
-
+          var gameTeam = new GameTeam(gid: gameId, ht: true, stid: homeTeamId);
           context.GameTeams.Add(gameTeam);
 
-          gameTeam = new GameTeam()
-          {
-            GameId = gameId,
-            HomeTeam = false,
-            SeasonTeamId = awayTeamId
-          };
-
+          gameTeam = new GameTeam(gid: gameId, ht: false, stid: awayTeamId);
           context.GameTeams.Add(gameTeam);
         }
 
         Debug.Print("Data Group 3: Created GameTeams");
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+
+        _lo30ContextService.ContextSaveChanges();
+        Debug.Print("Data Group 3: Saved GameTeams " + context.GameTeams.Count());
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
       }
@@ -967,7 +906,6 @@ namespace LO30.Data
           var row = tbl.Rows[d];
 
           var playoff = Convert.ToBoolean(row["PLAYOFF_SEASON_IND"]);
-          var seasonType = context.SeasonTypes.Where(s => s.PlayoffSeason == playoff).FirstOrDefault();
 
           var playerNumber = -1;
           if (row["TEAM_ID"] != System.DBNull.Value)
@@ -979,7 +917,7 @@ namespace LO30.Data
           {
             SeasonTeamId = Convert.ToInt32(row["TEAM_ID"]),
             PlayerId = Convert.ToInt32(row["PLAYER_ID"]),
-            SeasonTypeId = seasonType.SeasonTypeId,
+            Playoff = playoff,
             PlayerNumber = playerNumber
           };
 
@@ -989,13 +927,87 @@ namespace LO30.Data
         Debug.Print("Data Group 3: Created TeamRosters");
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+
+        _lo30ContextService.ContextSaveChanges();
+        Debug.Print("Data Group 3: Saved TeamRosters " + context.TeamRosters.Count());
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
       }
       #endregion
 
-      #region 3:GameRosters...dependency on Players
+      #region 3:PlayerRatings
+      if (context.PlayerRatings.Count() == 0)
+      {
+        Debug.Print("Data Group 3: Creating PlayerRatings");
+        last = DateTime.Now;
+
+        var sql = "SELECT * FROM PLAYER_RATING WHERE SEASON_ID = 54";
+        var dsView = new DataSet();
+        var adp = new OleDbDataAdapter(sql, connString);
+        adp.Fill(dsView, "AccessData");
+        adp.Dispose();
+        var tbl = dsView.Tables["AccessData"];
+
+        Debug.Print("Access records to process:" + tbl.Rows.Count);
+
+        for (var d = 0; d < tbl.Rows.Count; d++)
+        {
+          if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
+          var row = tbl.Rows[d];
+
+          string[] ratingParts = new string[0];
+
+          if (row["PLAYER_RATING"] != System.DBNull.Value)
+          {
+            var rating = row["PLAYER_RATING"].ToString();
+            ratingParts = rating.Split('.');
+          }
+
+          int ratingPrimary = -1;
+          int ratingSecondary = -1;
+          if (ratingParts.Length > 0) 
+          {
+            ratingPrimary = Convert.ToInt32(ratingParts[0]);
+            ratingSecondary = 0;
+            if (ratingParts.Length > 1)
+            {
+              ratingSecondary = Convert.ToInt32(ratingParts[1]);
+            }
+          }
+
+          int line = 0;
+          if (row["PLAYER_LINE"] != System.DBNull.Value)
+          {
+            line = Convert.ToInt32(row["PLAYER_LINE"]);
+          }
+
+          var playerRating = new PlayerRating()
+          {
+            SeasonId = Convert.ToInt32(row["SEASON_ID"]),
+            PlayerId = Convert.ToInt32(row["PLAYER_ID"]),
+            RatingPrimary = ratingPrimary,
+            RatingSecondary = ratingSecondary,
+            Line = line
+          };
+
+          context.PlayerRatings.Add(playerRating);
+        }
+
+        Debug.Print("Data Group 3: Created PlayerRatings");
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+
+        _lo30ContextService.ContextSaveChanges();
+        Debug.Print("Data Group 3: Saved PlayerRatings " + context.PlayerRatings.Count());
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+      }
+      #endregion
+
+      #region 4:GameRosters...dependency on GameTeams and Players
       if (context.GameRosters.Count() == 0)
       {
-        Debug.Print("Data Group 3: Creating GameRosters");
+        Debug.Print("Data Group 4: Creating GameRosters");
         last = DateTime.Now;
 
         var sql = "SELECT * FROM GAME_ROSTER WHERE SEASON_ID = 54 AND GAME_ID >= 3200";
@@ -1005,7 +1017,7 @@ namespace LO30.Data
         adp.Dispose();
         var tbl = dsView.Tables["AccessData"];
 
-        Debug.Print("Access records to process:"+ tbl.Rows.Count);
+        Debug.Print("Access records to process:" + tbl.Rows.Count);
 
         for (var d = 0; d < tbl.Rows.Count; d++)
         {
@@ -1078,7 +1090,9 @@ namespace LO30.Data
           {
             isGoalie = true;
           }
-          var gameRoster = new GameRoster(gid: gameId, stid: homeTeamId, pn: homePlayerNumber, g: isGoalie, pid: playerId, sub: homePlayerSubInd, sfpid: subbingForPlayerId);
+
+          var homeGameTeam = _lo30ContextService.FindGameTeam(gameId, homeTeam: true);
+          var gameRoster = new GameRoster(gtid: homeGameTeam.GameTeamId, pn: homePlayerNumber, g: isGoalie, pid: playerId, sub: homePlayerSubInd, sfpid: subbingForPlayerId);
 
           context.GameRosters.Add(gameRoster);
 
@@ -1143,114 +1157,21 @@ namespace LO30.Data
           {
             isGoalie = true;
           }
-          gameRoster = new GameRoster(gid: gameId, stid: awayTeamId, pn: awayPlayerNumber, g: isGoalie, pid: playerId, sub: awayPlayerSubInd, sfpid: subbingForPlayerId);
+
+          var awayGameTeam = _lo30ContextService.FindGameTeam(gameId, homeTeam: false);
+          gameRoster = new GameRoster(gtid: awayGameTeam.GameTeamId, pn: awayPlayerNumber, g: isGoalie, pid: playerId, sub: awayPlayerSubInd, sfpid: subbingForPlayerId);
 
           context.GameRosters.Add(gameRoster);
         }
 
-        Debug.Print("Data Group 3: Created GameRosters");
+        Debug.Print("Data Group 4: Created GameRosters");
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-      }
-      #endregion
 
-      #region 3:PlayerRatings
-      if (context.PlayerRatings.Count() == 0)
-      {
-        Debug.Print("Data Group 3: Creating PlayerRatings");
-        last = DateTime.Now;
-
-        var sql = "SELECT * FROM PLAYER_RATING WHERE SEASON_ID = 54";
-        var dsView = new DataSet();
-        var adp = new OleDbDataAdapter(sql, connString);
-        adp.Fill(dsView, "AccessData");
-        adp.Dispose();
-        var tbl = dsView.Tables["AccessData"];
-
-        Debug.Print("Access records to process:" + tbl.Rows.Count);
-
-        for (var d = 0; d < tbl.Rows.Count; d++)
-        {
-          if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
-          var row = tbl.Rows[d];
-
-          string[] ratingParts = new string[0];
-
-          if (row["PLAYER_RATING"] != System.DBNull.Value)
-          {
-            var rating = row["PLAYER_RATING"].ToString();
-            ratingParts = rating.Split('.');
-          }
-
-          int ratingPrimary = -1;
-          int ratingSecondary = -1;
-          if (ratingParts.Length > 0) 
-          {
-            ratingPrimary = Convert.ToInt32(ratingParts[0]);
-            ratingSecondary = 0;
-            if (ratingParts.Length > 1)
-            {
-              ratingSecondary = Convert.ToInt32(ratingParts[1]);
-            }
-          }
-
-          int line = 0;
-          if (row["PLAYER_LINE"] != System.DBNull.Value)
-          {
-            line = Convert.ToInt32(row["PLAYER_LINE"]);
-          }
-
-          var playerRating = new PlayerRating()
-          {
-            SeasonId = Convert.ToInt32(row["SEASON_ID"]),
-            PlayerId = Convert.ToInt32(row["PLAYER_ID"]),
-            RatingPrimary = ratingPrimary,
-            RatingSecondary = ratingSecondary,
-            Line = line
-          };
-
-          context.PlayerRatings.Add(playerRating);
-        }
-
-        Debug.Print("Data Group 3: Created PlayerRatings");
+        _lo30ContextService.ContextSaveChanges();
+        Debug.Print("Data Group 4: Saved GameRosters " + context.GameRosters.Count());
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-      }
-      #endregion
-
-      #region save changes
-      try
-      {
-        // using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew))
-        // {
-        //   context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Seasons ON");
-        Debug.Print("Data Group 3: Saving changes");
-        last = DateTime.Now;
-        context.SaveChanges();
-        Debug.Print("Data Group 3: Saved changes");
-        diffFromLast = DateTime.Now - last;
-        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-        //   context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Seasons OFF");
-
-        //   scope.Complete();
-        // }
-      }
-      catch (DbEntityValidationException e)
-      {
-        foreach (var eve in e.EntityValidationErrors)
-        {
-          Debug.Print("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:", eve.Entry.Entity.GetType().Name, eve.Entry.State);
-          foreach (var ve in eve.ValidationErrors)
-          {
-            Debug.Print("- Property: \"{0}\", Error: \"{1}\"", ve.PropertyName, ve.ErrorMessage);
-          }
-        }
-        throw;
-      }
-      catch (Exception ex)
-      {
-        Debug.Print("The following error occured:", ex.StackTrace);
-        throw;
       }
       #endregion
 
@@ -1319,6 +1240,11 @@ namespace LO30.Data
         Debug.Print("Data Group 4: Created ScoreSheetEntries");
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+
+        _lo30ContextService.ContextSaveChanges();
+        Debug.Print("Data Group 4: Saved ScoreSheetEntries " + context.ScoreSheetEntries.Count());
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
       }
       #endregion
 
@@ -1367,42 +1293,11 @@ namespace LO30.Data
         Debug.Print("Data Group 4: Created ScoreSheetEntryPenalties");
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-      }
-      #endregion
 
-      #region save changes
-      try
-      {
-        // using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew))
-        // {
-        //   context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Seasons ON");
-        Debug.Print("Data Group 4: Saving changes");
-        last = DateTime.Now;
-        context.SaveChanges();
-        Debug.Print("Data Group 4: Saved changes");
+        _lo30ContextService.ContextSaveChanges();
+        Debug.Print("Data Group 4: Saved ScoreSheetEntryPenalties " + context.ScoreSheetEntryPenalties.Count());
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-        //   context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Seasons OFF");
-
-        //   scope.Complete();
-        // }
-      }
-      catch (DbEntityValidationException e)
-      {
-        foreach (var eve in e.EntityValidationErrors)
-        {
-          Debug.Print("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:", eve.Entry.Entity.GetType().Name, eve.Entry.State);
-          foreach (var ve in eve.ValidationErrors)
-          {
-            Debug.Print("- Property: \"{0}\", Error: \"{1}\"", ve.PropertyName, ve.ErrorMessage);
-          }
-        }
-        throw;
-      }
-      catch (Exception ex)
-      {
-        Debug.Print("The following error occured:", ex.StackTrace);
-        throw;
       }
       #endregion
 

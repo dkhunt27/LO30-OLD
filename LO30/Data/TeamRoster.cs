@@ -26,7 +26,7 @@ namespace LO30.Data
     [ForeignKey("PlayerId")]
     public virtual Player Player { get; set; }
 
-    [ForeignKey("SeasonTypeId")]
-    public virtual SeasonType SeasonType { get; set; }
+    [Required]
+    public bool Playoff { get; set; }
   }
 }

@@ -11,7 +11,7 @@ namespace LO30.Data
   {
     Lo30Context _ctx;
     PlayerStatsService _playerStatsService;
-    LO30ContextService _lo30ContextService;
+    Lo30ContextService _contextService;
 
     Player _unknownPlayer;
 
@@ -32,7 +32,7 @@ namespace LO30.Data
         };
 
       _playerStatsService = new PlayerStatsService();
-      _lo30ContextService = new LO30ContextService(_ctx);
+      _contextService = new Lo30ContextService(_ctx);
 
       // force the context to populate the data...just for improved error messaging
 
@@ -88,7 +88,7 @@ namespace LO30.Data
         {
           Player = playerName,
           Team = item.SeasonTeamPlayingFor.Team.TeamLongName,
-          Sub = item.PlayerStatTypeId == 2 ? "Y" : "N",
+          Sub = item.Sub == true ? "Y" : "N",
           Pos = item.Player.PreferredPosition,
           Line = line,
           GP = item.Games,
@@ -159,16 +159,14 @@ namespace LO30.Data
 
           // lookup team rosters
           var homeTeamRoster = _ctx.GameRosters
-                                      .Include("Game")
-                                      .Include("Player")
-                                      .Where(x => x.GameId == gameId && x.SeasonTeamId == homeSeasonTeamId)
-                                      .ToList();
+                                   .Include("GameTeam")
+                                   .Where(x => x.GameTeam.GameId == gameId && x.GameTeam.SeasonTeamId == homeSeasonTeamId)
+                                   .ToList();
 
           var awayTeamRoster = _ctx.GameRosters
-                            .Include("Game")
-                            .Include("Player")
-                            .Where(x => x.GameId == gameId && x.SeasonTeamId == awaySeasonTeamId)
-                            .ToList();
+                                   .Include("GameTeam")
+                                   .Where(x => x.GameTeam.GameId == gameId && x.GameTeam.SeasonTeamId == awaySeasonTeamId)
+                                   .ToList();
 
           var homeTeam = scoreSheetEntry.HomeTeam;
           var goalPlayerNumber = scoreSheetEntry.Goal;
@@ -216,7 +214,7 @@ namespace LO30.Data
                                       gwg: gameWinningGoal
                                     );
 
-          var results = _lo30ContextService.SaveScoreSheetEntryProcessed(scoreSheetEntryProcessed);
+          var results = _contextService.SaveScoreSheetEntryProcessed(scoreSheetEntryProcessed);
           savedScoreSheetEntries = savedScoreSheetEntries + results;
         };
 
@@ -253,6 +251,17 @@ namespace LO30.Data
           var homeSeasonTeamId = gameTeams.Where(gt => gt.HomeTeam == true).FirstOrDefault().SeasonTeamId;
           var awaySeasonTeamId = gameTeams.Where(gt => gt.HomeTeam == false).FirstOrDefault().SeasonTeamId;
 
+          var homeGameTeam = _ctx.GameTeams.Where(x => x.GameId == gameId && x.SeasonTeamId == homeSeasonTeamId).FirstOrDefault();
+          if (homeGameTeam == null)
+          {
+            throw new ArgumentNullException("homeGameTeam", "GameTeam was not found for GameId:" + gameId + " SeasonTeamId:" + homeSeasonTeamId);
+          }
+          var awayGameTeam = _ctx.GameTeams.Where(x => x.GameId == gameId && x.SeasonTeamId == awaySeasonTeamId).FirstOrDefault();
+          if (awayGameTeam == null)
+          {
+            throw new ArgumentNullException("awayGameTeam", "GameTeam was not found for GameId:" + gameId + " SeasonTeamId:" + awaySeasonTeamId);
+          }
+
           #region loop through each period
           for (var p = 0; p < periods.Length; p++)
           {
@@ -280,8 +289,23 @@ namespace LO30.Data
             }
             #endregion
 
-            // save game score for the period
-            _lo30ContextService.SaveGameScore(gameId, period, homeSeasonTeamId, scoreHomeTeamPeriod, awaySeasonTeamId, scoreAwayTeamPeriod);
+            #region create and save (or update) the home and away teams GameScore by period
+            var homeGameScore = new GameScore(
+                                  gtid: homeGameTeam.GameTeamId,
+                                  per: period,
+                                  score: scoreAwayTeamPeriod
+                                );
+
+            _contextService.SaveOrUpdateGameScore(homeGameScore);
+
+            var awayGameScore = new GameScore(
+                                    gtid: awayGameTeam.GameTeamId,
+                                    per: period,
+                                    score: scoreAwayTeamPeriod
+                                  );
+
+            _contextService.SaveOrUpdateGameScore(awayGameScore);
+            #endregion
 
             #region process all score sheet entry penalties for this specific game/period
             var scoreSheetEntryPenalties = _ctx.ScoreSheetEntryPenalties.Where(s => s.GameId == gameId && s.Period == period).ToList();
@@ -303,10 +327,26 @@ namespace LO30.Data
           }
           #endregion
 
-          // save game score for the game
+          #region create and save (or update) the home and away teams GameScore for game
           var finalPeriod = 0;
-          _lo30ContextService.SaveGameScore(gameId, finalPeriod, homeSeasonTeamId, scoreHomeTeamTotal, awaySeasonTeamId, scoreAwayTeamTotal);
+          var homeFinalGameScore = new GameScore(
+                                          gtid: homeGameTeam.GameTeamId,
+                                          per: finalPeriod,
+                                          score: scoreHomeTeamTotal
+                                        );
 
+          _contextService.SaveOrUpdateGameScore(homeFinalGameScore);
+
+          var awayFinalGameScore = new GameScore(
+                                          gtid: awayGameTeam.GameTeamId,
+                                          per: finalPeriod,
+                                          score: scoreAwayTeamTotal
+                                        );
+
+          _contextService.SaveOrUpdateGameScore(awayFinalGameScore);
+          #endregion
+
+          #region create and save (or update) the home and away teams GameOutcome for game
           // save game results for the game
           string homeResult = "T";
           string awayResult = "T";
@@ -320,7 +360,29 @@ namespace LO30.Data
             homeResult = "L";
             awayResult = "W";
           }
-          _lo30ContextService.SaveGameResults(gameId, homeSeasonTeamId, scoreHomeTeamTotal, penaltyHomeTeamTotal, homeResult, awaySeasonTeamId, scoreAwayTeamTotal, penaltyAwayTeamTotal, awayResult);
+
+          var homeGameOutcome = new GameOutcome(
+                                        gtid: homeGameTeam.GameTeamId,
+                                        res: homeResult,
+                                        gf: scoreHomeTeamTotal,
+                                        ga: scoreAwayTeamTotal,
+                                        pim: penaltyHomeTeamTotal,
+                                        over: false
+                                        );
+
+          _contextService.SaveOrUpdateGameOutcome(homeGameOutcome);
+
+          var awayGameOutcome = new GameOutcome(
+                                        gtid: awayGameTeam.GameTeamId,
+                                        res: awayResult,
+                                        gf: scoreAwayTeamTotal,
+                                        ga: scoreHomeTeamTotal,
+                                        pim: penaltyAwayTeamTotal,
+                                        over: false
+                                        );
+
+          _contextService.SaveOrUpdateGameOutcome(awayGameOutcome);
+          #endregion
         }
 
         return _ctx.SaveChanges() > 0;
@@ -332,7 +394,8 @@ namespace LO30.Data
       }
     }
 
-    public bool ProcessGameResultsIntoTeamStandings(int seasonId, int seasonTypeId, int startingGameId, int endingGameId)
+    // TODO, remove playoff input and determine it from the gameIds
+    public bool ProcessGameResultsIntoTeamStandings(int seasonId, bool playoffs, int startingGameId, int endingGameId)
     {
       try
       {
@@ -357,24 +420,20 @@ namespace LO30.Data
             int goalsAgainst = 0;
             int penaltyMinutes = 0;
 
-            // get game results for this season team
-            var gameResults = _ctx.GameResults.Where(gr => gr.GameId >= startingGameId && gr.GameId <= endingGameId && gr.SeasonTeamId == seasonTeam.SeasonTeamId).ToList();
+            // get game outcomes for this season team
+            var gameOutcomes = _contextService.FindGameOutcomesWithGameIdsAndTeamId(startingGameId, endingGameId, seasonTeam.SeasonTeamId);
 
             // loop through each game
-            //int seasonTypeId=-1; // TODO, make sure teh games match seasonTYpe
-            for (var g = 0; g < gameResults.Count; g++)
+            //int seasonTypeId=-1; // TODO, make sure the games match seasonTYpe
+            for (var g = 0; g < gameOutcomes.Count; g++)
             {
-              var gameResult = gameResults[g];
+              var gameOutcome = gameOutcomes[g];
 
-              // look up type of season for game to be applied to standings
-              var game = _ctx.Games.Where(gg => gg.GameId == gameResult.GameId).FirstOrDefault();
-              //seasonTypeId = game.SeasonTypeId;
-
-              if (gameResult.Result.ToLower() == "w")
+              if (gameOutcome.Outcome.ToLower() == "w")
               {
                 wins++;
               }
-              else if (gameResult.Result.ToLower() == "l")
+              else if (gameOutcome.Outcome.ToLower() == "l")
               {
                 losses++;
               }
@@ -386,13 +445,13 @@ namespace LO30.Data
               games++;
               points = (wins * 2) + (losses * 0) + (ties * 1);
 
-              goalsFor = goalsFor + gameResult.GoalsFor;
-              goalsAgainst = goalsAgainst + gameResult.GoalsAgainst;
-              penaltyMinutes = penaltyMinutes + gameResult.PenaltyMinutes;
+              goalsFor = goalsFor + gameOutcome.GoalsFor;
+              goalsAgainst = goalsAgainst + gameOutcome.GoalsAgainst;
+              penaltyMinutes = penaltyMinutes + gameOutcome.PenaltyMinutes;
             }
 
             var rank = -1;
-            _lo30ContextService.SaveTeamStanding(seasonTeam.SeasonTeamId, seasonTypeId, rank, games, wins, losses, ties, points, goalsFor, goalsAgainst, penaltyMinutes);
+            _contextService.SaveTeamStanding(seasonTeam.SeasonTeamId, playoffs, rank, games, wins, losses, ties, points, goalsFor, goalsAgainst, penaltyMinutes);
           }
         }
 
@@ -409,7 +468,7 @@ namespace LO30.Data
         {
           var s = standings[x];
           var rank = x + 1;
-          _lo30ContextService.SaveTeamStanding(s.SeasonTeamId, s.SeasonTypeId, rank, s.Games, s.Wins, s.Losses, s.Ties, s.Points, s.GoalsFor, s.GoalsAgainst, s.PenaltyMinutes);
+          _contextService.SaveTeamStanding(s.SeasonTeamId, s.Playoff, rank, s.Games, s.Wins, s.Losses, s.Ties, s.Points, s.GoalsFor, s.GoalsAgainst, s.PenaltyMinutes);
         }
         return _ctx.SaveChanges() > 0;
       }
@@ -424,29 +483,30 @@ namespace LO30.Data
     {
       try
       {
-        var playerStatTypes = _ctx.PlayerStatTypes.ToList();
-        var gameRosters = _ctx.GameRosters.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
-        var gameRostersGoalies = _ctx.GameRosters.Include("Player").Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId && x.Goalie == true).ToList();
-        var gameResults = _ctx.GameResults.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
+        var gameRosters = _contextService.FindGameRostersWithGameIds(startingGameId, endingGameId);
+        var gameRostersGoalies = _contextService.FindGameRostersWithGameIdsAndGoalie(startingGameId, endingGameId, goalie: true);
+        var gameOutcomes = _contextService.FindGameOutcomesWithGameIds(startingGameId, endingGameId);
+
+
         var scoreSheetEntriesProcessed = _ctx.ScoreSheetEntriesProcessed.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
         var scoreSheetEntryPenaltiesProcessed = _ctx.ScoreSheetEntryPenaltiesProcessed.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
 
 
-        var playerGameStats = _playerStatsService.ProcessScoreSheetEntriesIntoPlayerGameStats(scoreSheetEntriesProcessed, scoreSheetEntryPenaltiesProcessed, gameRosters, playerStatTypes);
+        var playerGameStats = _playerStatsService.ProcessScoreSheetEntriesIntoPlayerGameStats(scoreSheetEntriesProcessed, scoreSheetEntryPenaltiesProcessed, gameRosters);
         var playerSeasonTeamStats = _playerStatsService.ProcessPlayerGameStatsIntoPlayerSeasonTeamStats(playerGameStats);
         var playerSeasonStats = _playerStatsService.ProcessPlayerSeasonTeamStatsIntoPlayerSeasonStats(playerSeasonTeamStats);
-        var goalieGameStats = _playerStatsService.ProcessScoreSheetEntriesIntoGoalieGameStats(gameResults, gameRostersGoalies, playerStatTypes);
+        var goalieGameStats = _playerStatsService.ProcessScoreSheetEntriesIntoGoalieGameStats(gameOutcomes, gameRostersGoalies);
 
-        var savedStatsGame = _lo30ContextService.SavePlayerStatGame(playerGameStats);
+        var savedStatsGame = _contextService.SaveOrUpdatePlayerStatGame(playerGameStats);
         Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsGame:" + savedStatsGame);
 
-        var savedStatsSeasonTeam = _lo30ContextService.SavePlayerStatSeasonTeam(playerSeasonTeamStats);
+        var savedStatsSeasonTeam = _contextService.SaveOrUpdatePlayerStatSeasonTeam(playerSeasonTeamStats);
         Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsSeasonTeam:" + savedStatsSeasonTeam);
 
-        var savedStatsSeason = _lo30ContextService.SavePlayerStatSeason(playerSeasonStats);
+        var savedStatsSeason = _contextService.SaveOrUpdatePlayerStatSeason(playerSeasonStats);
         Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsSeason:" + savedStatsSeason);
 
-        var savedStatsGameGoalie = _lo30ContextService.SaveGoalieStatGame(goalieGameStats);
+        var savedStatsGameGoalie = _contextService.SaveOrUpdateGoalieStatGame(goalieGameStats);
         Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsSeason:" + savedStatsSeason);
 
         return (savedStatsGame + savedStatsSeasonTeam + savedStatsSeason) > 0;

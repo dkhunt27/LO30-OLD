@@ -26,7 +26,7 @@ namespace LO30.Data
 
     bool ProcessScoreSheetEntriesIntoGameResults(int startingGameId, int endingGameId);
 
-    bool ProcessGameResultsIntoTeamStandings(int seasonId, int seasonTypeId, int startingGameId, int endingGameId);
+    bool ProcessGameResultsIntoTeamStandings(int seasonId, bool playoff, int startingGameId, int endingGameId);
 
     bool ProcessScoreSheetEntriesIntoPlayerStats(int startingGameId, int endingGameId);
   }

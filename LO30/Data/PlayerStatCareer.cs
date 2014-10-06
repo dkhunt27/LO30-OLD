@@ -9,37 +9,11 @@ namespace LO30.Data
 {
   public class PlayerStatCareer
   {
-    public PlayerStatCareer()
-    {
-    }
- 
-    public PlayerStatCareer(int pid, int pstid, int games, int g, int a, int p, int ppg, int shg, int gwg, int pim)
-    {
-      this.PlayerId = pid;
-      this.PlayerStatTypeId = pstid;
-
-      this.Games = games;
-
-      this.Goals = g;
-      this.Assists = a;
-      this.Points = p;
-
-      this.PowerPlayGoals = ppg;
-      this.ShortHandedGoals = shg;
-      this.GameWinningGoals = gwg;
-
-      this.PenaltyMinutes = pim;
-
-      this.UpdatedOn = DateTime.Now;
-
-      Validate();
-    }
-
     [Key, Column(Order = 0)]
     public int PlayerId { get; set; }
 
     [Key, Column(Order = 1)]
-    public int PlayerStatTypeId { get; set; }
+    public bool Sub { get; set; }
 
     [Required]
     public int Games { get; set; }
@@ -71,14 +45,37 @@ namespace LO30.Data
     [ForeignKey("PlayerId")]
     public virtual Player Player { get; set; }
 
-    [ForeignKey("PlayerStatTypeId")]
-    public virtual PlayerStatType PlayerStatType { get; set; }
+    public PlayerStatCareer()
+    {
+    }
+
+    public PlayerStatCareer(int pid, bool sub, int games, int g, int a, int p, int ppg, int shg, int gwg, int pim)
+    {
+      this.PlayerId = pid;
+      this.Sub = sub;
+
+      this.Games = games;
+
+      this.Goals = g;
+      this.Assists = a;
+      this.Points = p;
+
+      this.PowerPlayGoals = ppg;
+      this.ShortHandedGoals = shg;
+      this.GameWinningGoals = gwg;
+
+      this.PenaltyMinutes = pim;
+
+      this.UpdatedOn = DateTime.Now;
+
+      Validate();
+    }
 
     private void Validate()
     {
-      var locationKey = string.Format("pid: {0}, pstid: {1}",
+      var locationKey = string.Format("pid: {0}, sub: {1}",
                                   this.PlayerId,
-                                  this.PlayerStatTypeId);
+                                  this.Sub);
 
       if (this.Points != this.Goals + this.Assists)
       {
