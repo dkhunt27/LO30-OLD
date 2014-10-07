@@ -1,10 +1,14 @@
 ﻿using LO30.Data;
 using LO30.Models;
 using LO30.Services;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Json;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -13,9 +17,11 @@ namespace LO30.Controllers
   public class ScoreSheetEntryController : Controller
   {
     private ILo30Repository _repo;
+    private AccessDatabaseService _accessDbService;
 
     public ScoreSheetEntryController(ILo30Repository repo)
     {
+      _accessDbService = new AccessDatabaseService();
       _repo = repo;
     }
 
@@ -68,6 +74,20 @@ namespace LO30.Controllers
 
       diffFromFirst = DateTime.Now - first;
       Debug.Print("Total TimeToProcess: " + diffFromFirst.ToString());
+
+      return Redirect("/ScoreSheetEntry/ScoreSheetEntry");
+    }
+
+    public ActionResult ToJson()
+    {
+      _accessDbService.SaveTablesToJson();
+
+      return Redirect("/ScoreSheetEntry/ScoreSheetEntry");
+    }
+
+    public ActionResult FromJson()
+    {
+      //_accessDbService.LoadTablesFromJson();
 
       return Redirect("/ScoreSheetEntry/ScoreSheetEntry");
     }

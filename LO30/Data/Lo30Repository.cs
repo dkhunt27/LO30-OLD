@@ -47,6 +47,11 @@ namespace LO30.Data
       }
     }
 
+    public IQueryable<ScoreSheetEntry> GetScoreSheetEntries()
+    {
+      return _ctx.ScoreSheetEntries;
+    }
+
     public IQueryable<Article> GetArticles()
     {
       return _ctx.Articles;

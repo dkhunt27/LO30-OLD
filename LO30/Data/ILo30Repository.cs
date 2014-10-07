@@ -18,6 +18,8 @@ namespace LO30.Data
 
     List<ForWebGoalieStat> GetGoalieStatsForWeb();
 
+    IQueryable<ScoreSheetEntry> GetScoreSheetEntries();
+
     bool Save();
 
     bool AddArticle(Article newArticle);

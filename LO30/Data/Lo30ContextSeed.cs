@@ -1,5 +1,4 @@
-﻿using LO30.Data.Access;
-using LO30.Services;
+﻿using LO30.Services;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,6 +15,7 @@ namespace LO30.Data
   public class Lo30ContextSeed
   {
     private Lo30ContextService _lo30ContextService;
+    private AccessDatabaseService _accessDatabaseService;
 
     public Lo30ContextSeed()
     {
@@ -23,7 +23,11 @@ namespace LO30.Data
 
     public void Seed(Lo30Context context)
     {
+      var functionName = "LoadTablesFromJson";
+      var folderPath = "C:\\git\\LO30\\LO30\\Data\\Access\\";
+
       _lo30ContextService = new Lo30ContextService(context);
+      _accessDatabaseService = new AccessDatabaseService();
 
       DateTime first = DateTime.Now;
       DateTime last = DateTime.Now;
@@ -758,25 +762,21 @@ namespace LO30.Data
         Debug.Print("Data Group 3: Creating Games");
         last = DateTime.Now;
 
-        var sql = "SELECT SEASON_ID, GAME_ID, GAME_DATE, GAME_TIME, PLAYOFF_GAME_IND FROM GAME WHERE SEASON_ID = 54";
-        var dsView = new DataSet();
-        var adp = new OleDbDataAdapter(sql, connString);
-        adp.Fill(dsView, "AccessData");
-        adp.Dispose();
-        var tbl = dsView.Tables["AccessData"];
+        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "Games.json");
+        int count = parsedJson.Count;
 
-        Debug.Print("Access records to process:" + tbl.Rows.Count);
+        Debug.Print("Access records to process:" + count);
 
-        for (var d = 0; d < tbl.Rows.Count; d++)
+        for (var d = 0; d < parsedJson.Count; d++)
         {
           if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
-          var row = tbl.Rows[d];
+          var json = parsedJson[d];
 
-          var seasonId = Convert.ToInt32(row["SEASON_ID"]);
-          var gameId = Convert.ToInt32(row["GAME_ID"]);
-          var gameDate = Convert.ToDateTime(row["GAME_DATE"]);
-          var gameTime = Convert.ToDateTime(row["GAME_TIME"]);
-          var playoffGame = Convert.ToBoolean(row["PLAYOFF_GAME_IND"]);
+          int seasonId = json["SEASON_ID"];
+          int gameId = json["GAME_ID"];
+          DateTime gameDate = json["GAME_DATE"];
+          DateTime gameTime = json["GAME_TIME"];
+          bool playoffGame = json["PLAYOFF_GAME_IND"];
 
           var timeSpan = new TimeSpan(gameTime.Hour, gameTime.Minute, gameTime.Second);
 
