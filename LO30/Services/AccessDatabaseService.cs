@@ -55,7 +55,7 @@ namespace LO30.Services
 
     public void ProcessAccessTableToJsonFile(string queryBegin, string queryEnd, string table, string file)
     {
-      Debug.Print("ProcessAccessTableToJsonFile: Processing Games");
+      Debug.Print("ProcessAccessTableToJsonFile: Processing " + table);
       var last = DateTime.Now;
 
       var sql = queryBegin + " " + table + " " + queryEnd;
@@ -67,7 +67,7 @@ namespace LO30.Services
 
       SaveObjToJsonFile(tbl, _folderPath + file + ".json");
 
-      Debug.Print("ProcessAccessTableToJsonFile: Processed Games");
+      Debug.Print("ProcessAccessTableToJsonFile: Processed " + table);
       var diffFromLast = DateTime.Now - last;
       Debug.Print("TimeToProcess: " + diffFromLast.ToString());
     }
@@ -87,7 +87,7 @@ namespace LO30.Services
         new TableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="PENALTY_DETAIL", FileName="PenaltyDetails"},
         new TableList(){QueryBegin="SELECT PLAYER_ID, PLAYER_FIRST_NAME, PLAYER_LAST_NAME, PLAYER_SUFFIX, PLAYER_POSITION, SHOOTS FROM", QueryEnd="", TableName="PLAYER", FileName="Players"},
         new TableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="PLAYER_RATING", FileName="PlayerRatings"},
-        new TableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="PLAYER_STATUS", FileName="PlayerStatuss"},
+        new TableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="PLAYER_STATUS", FileName="PlayerStatuses"},
         new TableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="REF_PENALTY", FileName="Penalties"},
         new TableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="REF_SEASON", FileName="Seasons"},
         new TableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="REF_STATUS", FileName="Statuses"},

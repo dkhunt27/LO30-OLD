@@ -1,26 +1,5 @@
 [
   {
-    "SEASON_ID": 1,
-    "GAME_ID": 2092,
-    "GAME_DATE": "2013-01-24T00:00:00",
-    "GAME_TIME": "1899-12-30T21:45:00",
-    "WEEK_NUMBER": 21,
-    "TIME_SLOT_NUMBER": 123,
-    "PLAYOFF_GAME_IND": true,
-    "HOME_TEAM_ID": 298,
-    "AWAY_TEAM_ID": 292,
-    "HOME_TEAM_SCORE": 3,
-    "AWAY_TEAM_SCORE": 0,
-    "HOME_TEAM_SHOTS_ON_GOAL": null,
-    "AWAY_TEAM_SHOTS_ON_GOAL": null,
-    "HOME_TEAM_RESULT": "W",
-    "AWAY_TEAM_RESULT": "L",
-    "SCORER_1": null,
-    "SCORER_2": null,
-    "REFEREE_1": null,
-    "REFEREE_2": null
-  },
-  {
     "SEASON_ID": 42,
     "GAME_ID": 2,
     "GAME_DATE": "2002-10-17T00:00:00",
@@ -31691,8 +31670,8 @@
   {
     "SEASON_ID": 51,
     "GAME_ID": 1935,
-    "GAME_DATE": "1899-12-30T20:10:00",
-    "GAME_TIME": "2012-02-19T00:00:00",
+    "GAME_DATE": "2012-02-19T00:00:00",
+    "GAME_TIME": "1899-12-30T20:10:00",
     "WEEK_NUMBER": 24,
     "TIME_SLOT_NUMBER": 142,
     "PLAYOFF_GAME_IND": true,

@@ -1208,6 +1208,20 @@
     <Content Include="Content\Template\plugins\superslides\scss\superslides.scss" />
     <Content Include="Content\Template\plugins\superslides\src\.jshintrc" />
     <Content Include="Content\Template\plugins\superslides\superslides.jquery.json" />
+    <Content Include="Data\Access\GameRosters.json" />
+    <Content Include="Data\Access\Games.json" />
+    <Content Include="Data\Access\Penalties.json" />
+    <Content Include="Data\Access\PenaltyDetails.json" />
+    <Content Include="Data\Access\PlayerRatings.json" />
+    <Content Include="Data\Access\Players.json" />
+    <Content Include="Data\Access\PlayerStatuses.json" />
+    <Content Include="Data\Access\ScoreSheetEntries.json" />
+    <Content Include="Data\Access\ScoreSheetEntryPenalties.json" />
+    <Content Include="Data\Access\ScoringDetails.json" />
+    <Content Include="Data\Access\Seasons.json" />
+    <Content Include="Data\Access\Statuses.json" />
+    <Content Include="Data\Access\TeamRosters.json" />
+    <Content Include="Data\Access\Teams.json" />
     <None Include="Properties\PublishProfiles\lo30.pubxml" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
@@ -2096,7 +2110,6 @@
     <Content Include="Views\Scores\Index.cshtml" />
     <Content Include="Views\AboutUs\Services.cshtml" />
     <Content Include="Web.config" />
-    <Content Include="Web.config.template" />
     <Content Include="Views\ScoreSheetEntry\ScoreSheetEntry.cshtml" />
     <Content Include="Scripts\version.json" />
     <None Include="Web.Debug.config">
@@ -2108,7 +2121,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Template\images\demo\revolution_slider\New folder\" />
-    <Folder Include="Data\Access\" />
     <Folder Include="Views\News\" />
   </ItemGroup>
   <ItemGroup>

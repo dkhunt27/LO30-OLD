@@ -16,7 +16,7 @@ namespace LO30.Data
     public int PlayerId { get; set; }
 
     [Key, Column(Order = 2)]
-    public int SeasonTypeId { get; set; }
+    public bool Playoff { get; set; }
 
     public int? PlayerNumber { get; set; }
 
@@ -25,8 +25,5 @@ namespace LO30.Data
 
     [ForeignKey("PlayerId")]
     public virtual Player Player { get; set; }
-
-    [Required]
-    public bool Playoff { get; set; }
   }
 }

@@ -34,9 +34,7 @@ namespace LO30.Data
       TimeSpan diffFromFirst = new TimeSpan();
       TimeSpan diffFromLast = new TimeSpan();
 
-#if DEBUG
-      var connString = System.Configuration.ConfigurationManager.ConnectionStrings["LO30AccessDB"].ConnectionString;
-      var connStringReportingDB = System.Configuration.ConfigurationManager.ConnectionStrings["LO30ReportingDB"].ConnectionString;
+      #region not populated for now
 
       #region 0:Addresses
       if (context.Addresses.Count() == 0)
@@ -54,8 +52,6 @@ namespace LO30.Data
       if (context.Phones.Count() == 0)
       {
       }
-
-
       #endregion
 
       #region 0:PlayerDrafts
@@ -75,7 +71,6 @@ namespace LO30.Data
       {
       }
       #endregion
-
 
       #region 0:PlayerStatsCareer
       if (context.PlayerStatsCareer.Count() == 0)
@@ -119,23 +114,7 @@ namespace LO30.Data
       }
       #endregion
 
-
-
-
-      #region 0:GameOutcomes
-      if (context.GameOutcomes.Count() == 0)
-      {
-      }
       #endregion
-
-      #region 0:TeamStandings
-      if (context.TeamStandings.Count() == 0)
-      {
-      }
-      #endregion
-
-
-
 
       #region 1:Articles
       if (context.Articles.Count() == 0)
@@ -216,25 +195,23 @@ namespace LO30.Data
         Debug.Print("Data Group 1: Creating Penalties");
         last = DateTime.Now;
 
-        var sql = "SELECT * from REF_PENALTY";
-        var dsView = new DataSet();
-        var adp = new OleDbDataAdapter(sql, connString);
-        adp.Fill(dsView, "AccessData");
-        adp.Dispose();
-        var tbl = dsView.Tables["AccessData"];
+        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "Penalties.json");
+        int count = parsedJson.Count;
 
+        Debug.Print("Access records to process:" + count);
 
-        for (var d = 0; d < tbl.Rows.Count; d++)
+        for (var d = 0; d < parsedJson.Count; d++)
         {
-          var row = tbl.Rows[d];
+          if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
+          var json = parsedJson[d];
 
           var penalty = new Penalty()
           {
-            PenaltyId = Convert.ToInt32(row["PENALTY_ID"]),
-            PenaltyCode = row["PENALTY_SHORT_DESC"].ToString(),
-            PenaltyName = row["PENALTY_LONG_DESC"].ToString(),
-            DefaultPenaltyMinutes = Convert.ToInt32(row["DEFAULT_PENALTY_MINUTES"]),
-            StickPenalty = Convert.ToBoolean(row["STICK_PENALTY"])
+            PenaltyId = json["PENALTY_ID"],
+            PenaltyCode = json["PENALTY_SHORT_DESC"],
+            PenaltyName = json["PENALTY_LONG_DESC"],
+            DefaultPenaltyMinutes = json["DEFAULT_PENALTY_MINUTES"],
+            StickPenalty = json["STICK_PENALTY"]
           };
 
           context.Penalties.Add(penalty);
@@ -303,22 +280,20 @@ namespace LO30.Data
         Debug.Print("Data Group 1: Creating PlayerStatusTypes");
         last = DateTime.Now;
 
-        var sql = "SELECT * from REF_STATUS";
-        var dsView = new DataSet();
-        var adp = new OleDbDataAdapter(sql, connString);
-        adp.Fill(dsView, "Statuses");
-        adp.Dispose();
-        var tblStatuses = dsView.Tables["Statuses"];
+        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "Statuses.json");
+        int count = parsedJson.Count;
 
+        Debug.Print("Access records to process:" + count);
 
-        for (var d = 0; d < tblStatuses.Rows.Count; d++)
+        for (var d = 0; d < parsedJson.Count; d++)
         {
-          var row = tblStatuses.Rows[d];
+          if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
+          var json = parsedJson[d];
 
           var playerStatusType = new PlayerStatusType()
           {
-            PlayerStatusTypeId = Convert.ToInt32(row["STATUS_ID"]),
-            PlayerStatusTypeName = row["STATUS_DESC"].ToString()
+            PlayerStatusTypeId = json["STATUS_ID"],
+            PlayerStatusTypeName = json["STATUS_DESC"]
           };
 
           context.PlayerStatusTypes.Add(playerStatusType);
@@ -341,38 +316,34 @@ namespace LO30.Data
         Debug.Print("Data Group 2: Creating Seasons");
         last = DateTime.Now;
 
-        var sql = "SELECT * from REF_SEASON";
-        var dsView = new DataSet();
-        var adp = new OleDbDataAdapter(sql, connString);
-        adp.Fill(dsView, "AccessData");
-        adp.Dispose();
-        var tbl = dsView.Tables["AccessData"];
+        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "Seasons.json");
+        int count = parsedJson.Count;
 
-        Debug.Print("Access records to process:" + tbl.Rows.Count);
+        Debug.Print("Access records to process:" + count);
 
-        for (var d = 0; d < tbl.Rows.Count; d++)
+        for (var d = 0; d < parsedJson.Count; d++)
         {
           if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
-          var row = tbl.Rows[d];
+          var json = parsedJson[d];
 
           DateTime? startDate = null;
           DateTime? endDate = null;
 
-          if (row["START_DATE"] != System.DBNull.Value)
+          if (json["START_DATE"] != null)
           {
-            startDate = Convert.ToDateTime(row["START_DATE"]);
+            startDate = json["START_DATE"];
           }
 
-          if (row["END_DATE"] != System.DBNull.Value)
+          if (json["END_DATE"] != null)
           {
-            endDate = Convert.ToDateTime(row["END_DATE"]);
+            endDate = json["END_DATE"];
           }
 
           var season = new Season()
           {
-            SeasonId = Convert.ToInt32(row["SEASON_ID"]),
-            SeasonName = row["SEASON_NAME"].ToString(),
-            IsCurrentSeason = Convert.ToBoolean(row["CURRENT_SEASON_IND"]),
+            SeasonId = json["SEASON_ID"],
+            SeasonName = json["SEASON_NAME"],
+            IsCurrentSeason = json["CURRENT_SEASON_IND"],
             StartDate = startDate,
             EndDate = endDate
           };
@@ -512,23 +483,21 @@ namespace LO30.Data
         #endregion
 
         var sql = "SELECT DISTINCT TEAM_SHORT_NAME, TEAM_LONG_NAME FROM TEAM";
-        var dsView = new DataSet();
-        var adp = new OleDbDataAdapter(sql, connString);
-        adp.Fill(dsView, "AccessData");
-        adp.Dispose();
-        var tbl = dsView.Tables["AccessData"];
 
-        Debug.Print("Access records to process:" + tbl.Rows.Count);
+        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "Teams.json");
+        int count = parsedJson.Count;
 
-        for (var d = 0; d < tbl.Rows.Count; d++)
+        Debug.Print("Access records to process:" + count);
+
+        for (var d = 0; d < parsedJson.Count; d++)
         {
           if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
-          var row = tbl.Rows[d];
+          var json = parsedJson[d];
 
           team = new Team()
           {
-            TeamShortName = row["TEAM_SHORT_NAME"].ToString(),
-            TeamLongName = row["TEAM_LONG_NAME"].ToString()
+            TeamShortName = json["TEAM_SHORT_NAME"],
+            TeamLongName = json["TEAM_LONG_NAME"]
           };
 
           context.Teams.Add(team);
@@ -566,43 +535,61 @@ namespace LO30.Data
 
         context.Players.Add(player);
 
-        var sql = "SELECT * FROM PLAYER";
-        var dsView = new DataSet();
-        var adp = new OleDbDataAdapter(sql, connString);
-        adp.Fill(dsView, "AccessData");
-        adp.Dispose();
-        var tbl = dsView.Tables["AccessData"];
+        dynamic parsedJsonPR = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "PlayerRatings.json");
+        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "Players.json");
+        int count = parsedJson.Count;
 
-        Debug.Print("Access records to process:" + tbl.Rows.Count);
+        Debug.Print("Access records to process:" + count);
 
-        // update the position to match the drafted position
-        sql = "SELECT * FROM PLAYER_RATING WHERE SEASON_ID = 54";
-        var dsViewPR = new DataSet();
-        var adpPR = new OleDbDataAdapter(sql, connString);
-        adpPR.Fill(dsView, "PlayerRating");
-        adpPR.Dispose();
-        var tblPR = dsView.Tables["PlayerRating"];
-        var playerRatings = tblPR.AsEnumerable().ToList();
-
-        for (var d = 0; d < tbl.Rows.Count; d++)
+        for (var d = 0; d < parsedJson.Count; d++)
         {
           if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
-          var row = tbl.Rows[d];
+          var json = parsedJson[d];
+          int playerId = json["PLAYER_ID"];
 
-          int playerId = Convert.ToInt32(row["PLAYER_ID"]);
-
-          string firstName = row["PLAYER_FIRST_NAME"].ToString();
+          string firstName = json["PLAYER_FIRST_NAME"];
           if (string.IsNullOrWhiteSpace(firstName)) {
             firstName = "_";
           };
 
-          string lastName = row["PLAYER_LAST_NAME"].ToString();
+          string lastName = json["PLAYER_LAST_NAME"];
           if (string.IsNullOrWhiteSpace(lastName)) {
             lastName = "_";
           };
-          
+
           string position, positionMapped;
-          position = row["PLAYER_POSITION"].ToString();
+
+          // update the position to match the drafted position
+          string draftRound = null;
+          foreach (var playerRating in parsedJsonPR)
+          {
+            if (playerRating["PLAYER_ID"] == playerId)
+            {
+              draftRound = playerRating["PLAYER_DRAFT_ROUND"];
+              break;
+            }
+          }
+
+          string draftPosition = null;
+          if (draftRound != null)
+          {
+            draftPosition = draftRound.Substring(1);
+          }
+
+          if (!string.IsNullOrWhiteSpace(draftPosition))
+          {
+            position = draftPosition;
+          }
+          else
+          {
+            position = json["PLAYER_POSITION"];
+
+            if (string.IsNullOrWhiteSpace(position))
+            {
+              position = "X";
+            }
+          }
+
           switch (position.ToLower()) 
           {
             case "forward":
@@ -619,8 +606,17 @@ namespace LO30.Data
               break;
           }
 
+
+
+
+
           string shoots, shootsMapped;
-          shoots = row["SHOOTS"].ToString();
+          shoots = json["SHOOTS"];
+          if (string.IsNullOrWhiteSpace(shoots))
+          {
+            shoots = "X";
+          }
+
           switch (shoots.ToLower()) 
           {
             case "l":
@@ -636,19 +632,9 @@ namespace LO30.Data
 
           DateTime? birthDate = null;
 
-          if (row["BIRTHDATE"] != System.DBNull.Value)
+          if (json["BIRTHDATE"] != null)
           {
-            birthDate = Convert.ToDateTime(row["BIRTHDATE"]);
-          }
-
-
-          // update the position to match the drafted position
-          var found = playerRatings.Where(x=> Convert.ToInt32(x["PLAYER_ID"]) == playerId).FirstOrDefault();
-
-          if (found != null)
-          {
-            var draftRound = found["PLAYER_DRAFT_ROUND"].ToString();
-            positionMapped = draftRound.Substring(1);
+            birthDate = json["BIRTHDATE"];
           }
 
           player = new Player()
@@ -656,12 +642,12 @@ namespace LO30.Data
             PlayerId = playerId,
             FirstName = firstName,
             LastName = lastName,
-            Suffix = row["PLAYER_SUFFIX"].ToString(),
+            Suffix = json["PLAYER_SUFFIX"],
             PreferredPosition = positionMapped,
             Shoots = shootsMapped,
             BirthDate = birthDate,
-            Profession = row["PROFESSION"].ToString(),
-            WifesName = row["WIFES_NAME"].ToString()
+            Profession = json["PROFESSION"],
+            WifesName = json["WIFES_NAME"]
           };
 
           context.Players.Add(player);
@@ -718,29 +704,25 @@ namespace LO30.Data
         context.SeasonTeams.Add(seasonTeam);
         #endregion
 
-        var sql = "SELECT SEASON_ID, TEAM_ID, TEAM_SHORT_NAME FROM TEAM";
-        var dsView = new DataSet();
-        var adp = new OleDbDataAdapter(sql, connString);
-        adp.Fill(dsView, "AccessData");
-        adp.Dispose();
-        var tbl = dsView.Tables["AccessData"];
+        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "Teams.json");
+        int count = parsedJson.Count;
 
-        Debug.Print("Access records to process:" + tbl.Rows.Count);
+        Debug.Print("Access records to process:" + count);
 
-        for (var d = 0; d < tbl.Rows.Count; d++)
+        for (var d = 0; d < parsedJson.Count; d++)
         {
           if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
-          var row = tbl.Rows[d];
+          var json = parsedJson[d];
 
-          var teamShortName = row["TEAM_SHORT_NAME"].ToString();
+          string teamShortName = json["TEAM_SHORT_NAME"];
 
           team = context.Teams.Where(t => t.TeamShortName == teamShortName).FirstOrDefault();
 
-          seasonTeam = new SeasonTeam(
-                                stid: Convert.ToInt32(row["TEAM_ID"]), 
-                                sid: Convert.ToInt32(row["SEASON_ID"]),
-                                tid: team.TeamId
-                              );
+          int stid = json["TEAM_ID"];
+          int sid = json["SEASON_ID"];
+          int tid = team.TeamId;
+
+          seasonTeam = new SeasonTeam(stid, sid, tid);
 
           context.SeasonTeams.Add(seasonTeam);
         }
@@ -810,21 +792,17 @@ namespace LO30.Data
         Debug.Print("Data Group 3: Creating GameTeams");
         last = DateTime.Now;
 
-        var sql = "SELECT GAME_ID, HOME_TEAM_ID, AWAY_TEAM_ID FROM GAME WHERE SEASON_ID = 54";
-        var dsView = new DataSet();
-        var adp = new OleDbDataAdapter(sql, connString);
-        adp.Fill(dsView, "AccessData");
-        adp.Dispose();
-        var tbl = dsView.Tables["AccessData"];
+        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "Games.json");
+        int count = parsedJson.Count;
 
-        Debug.Print("Access records to process:" + tbl.Rows.Count);
+        Debug.Print("Access records to process:" + count);
 
-        for (var d = 0; d < tbl.Rows.Count; d++)
+        for (var d = 0; d < parsedJson.Count; d++)
         {
           if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
-          var row = tbl.Rows[d];
+          var json = parsedJson[d];
 
-          var gameId = Convert.ToInt32(row["GAME_ID"]);
+          int gameId = json["GAME_ID"];
           int homeTeamId, awayTeamId;
 
           switch (gameId)
@@ -862,8 +840,8 @@ namespace LO30.Data
               awayTeamId = 321;
               break;
             default:
-              homeTeamId = Convert.ToInt32(row["HOME_TEAM_ID"]);
-              awayTeamId = Convert.ToInt32(row["AWAY_TEAM_ID"]);
+              homeTeamId = json["HOME_TEAM_ID"];
+              awayTeamId = json["AWAY_TEAM_ID"];
               break;
           };
 
@@ -891,32 +869,28 @@ namespace LO30.Data
         Debug.Print("Data Group 3: Creating TeamRosters");
         last = DateTime.Now;
 
-        var sql = "SELECT * FROM TEAM_ROSTER WHERE SEASON_ID = 54";
-        var dsView = new DataSet();
-        var adp = new OleDbDataAdapter(sql, connString);
-        adp.Fill(dsView, "AccessData");
-        adp.Dispose();
-        var tbl = dsView.Tables["AccessData"];
+        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "TeamRosters.json");
+        int count = parsedJson.Count;
 
-        Debug.Print("Access records to process:" + tbl.Rows.Count);
+        Debug.Print("Access records to process:" + count);
 
-        for (var d = 0; d < tbl.Rows.Count; d++)
+        for (var d = 0; d < parsedJson.Count; d++)
         {
           if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
-          var row = tbl.Rows[d];
+          var json = parsedJson[d];
 
-          var playoff = Convert.ToBoolean(row["PLAYOFF_SEASON_IND"]);
+          var playoff = json["PLAYOFF_SEASON_IND"];
 
           var playerNumber = -1;
-          if (row["TEAM_ID"] != System.DBNull.Value)
+          if (json["TEAM_ID"] != null)
           {
-            playerNumber = Convert.ToInt32(row["TEAM_ID"]);
+            playerNumber = json["TEAM_ID"];
           }
 
           var teamRoster = new TeamRoster()
           {
-            SeasonTeamId = Convert.ToInt32(row["TEAM_ID"]),
-            PlayerId = Convert.ToInt32(row["PLAYER_ID"]),
+            SeasonTeamId = json["TEAM_ID"],
+            PlayerId = json["PLAYER_ID"],
             Playoff = playoff,
             PlayerNumber = playerNumber
           };
@@ -941,25 +915,21 @@ namespace LO30.Data
         Debug.Print("Data Group 3: Creating PlayerRatings");
         last = DateTime.Now;
 
-        var sql = "SELECT * FROM PLAYER_RATING WHERE SEASON_ID = 54";
-        var dsView = new DataSet();
-        var adp = new OleDbDataAdapter(sql, connString);
-        adp.Fill(dsView, "AccessData");
-        adp.Dispose();
-        var tbl = dsView.Tables["AccessData"];
+        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "PlayerRatings.json");
+        int count = parsedJson.Count;
 
-        Debug.Print("Access records to process:" + tbl.Rows.Count);
+        Debug.Print("Access records to process:" + count);
 
-        for (var d = 0; d < tbl.Rows.Count; d++)
+        for (var d = 0; d < parsedJson.Count; d++)
         {
           if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
-          var row = tbl.Rows[d];
+          var json = parsedJson[d];
 
           string[] ratingParts = new string[0];
 
-          if (row["PLAYER_RATING"] != System.DBNull.Value)
+          if (json["PLAYER_RATING"] != null)
           {
-            var rating = row["PLAYER_RATING"].ToString();
+            string rating = json["PLAYER_RATING"];
             ratingParts = rating.Split('.');
           }
 
@@ -976,21 +946,30 @@ namespace LO30.Data
           }
 
           int line = 0;
-          if (row["PLAYER_LINE"] != System.DBNull.Value)
+          if (json["PLAYER_LINE"] != null)
           {
-            line = Convert.ToInt32(row["PLAYER_LINE"]);
+            line = json["PLAYER_LINE"];
           }
 
-          var playerRating = new PlayerRating()
-          {
-            SeasonId = Convert.ToInt32(row["SEASON_ID"]),
-            PlayerId = Convert.ToInt32(row["PLAYER_ID"]),
-            RatingPrimary = ratingPrimary,
-            RatingSecondary = ratingSecondary,
-            Line = line
-          };
+          int playerId = json["PLAYER_ID"];
 
-          context.PlayerRatings.Add(playerRating);
+          if (playerId == 545 || playerId == 512 || playerId == 426 || playerId == 432 || playerId == 381 || playerId == 282)
+          {
+            // skip these players...they do not exist in the players table
+          }
+          else
+          {
+            var playerRating = new PlayerRating()
+            {
+              SeasonId = json["SEASON_ID"],
+              PlayerId = json["PLAYER_ID"],
+              RatingPrimary = ratingPrimary,
+              RatingSecondary = ratingSecondary,
+              Line = line
+            };
+
+            context.PlayerRatings.Add(playerRating);
+          }
         }
 
         Debug.Print("Data Group 3: Created PlayerRatings");
@@ -1010,158 +989,161 @@ namespace LO30.Data
         Debug.Print("Data Group 4: Creating GameRosters");
         last = DateTime.Now;
 
-        var sql = "SELECT * FROM GAME_ROSTER WHERE SEASON_ID = 54 AND GAME_ID >= 3200";
-        var dsView = new DataSet();
-        var adp = new OleDbDataAdapter(sql, connString);
-        adp.Fill(dsView, "AccessData");
-        adp.Dispose();
-        var tbl = dsView.Tables["AccessData"];
+        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "GameRosters.json");
+        int count = parsedJson.Count;
 
-        Debug.Print("Access records to process:" + tbl.Rows.Count);
+        Debug.Print("Access records to process:" + count);
 
-        for (var d = 0; d < tbl.Rows.Count; d++)
+        for (var d = 0; d < parsedJson.Count; d++)
         {
           if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
-          var row = tbl.Rows[d];
+          var json = parsedJson[d];
 
-          var gameId = Convert.ToInt32(row["GAME_ID"]);
+          int seasonId = json["SEASON_ID"];
+          int gameId = json["GAME_ID"];
 
-          var homeTeamId = -1;
-          if (row["HOME_TEAM_ID"] != System.DBNull.Value)
+          // ONLY PROCESS THIS YEARS...TODO speed up to process historic data
+          if (seasonId == 54 && gameId >= 3200)
           {
-            homeTeamId = Convert.ToInt32(row["HOME_TEAM_ID"]);
-          }
+            int homeTeamId = -1;
+            if (json["HOME_TEAM_ID"] != null)
+            {
+              homeTeamId = json["HOME_TEAM_ID"];
+            }
 
-          var homePlayerId = -1;
-          if (row["HOME_PLAYER_ID"] != System.DBNull.Value)
-          {
-            homePlayerId = Convert.ToInt32(row["HOME_PLAYER_ID"]);
-          }
+            int homePlayerId = -1;
+            if (json["HOME_PLAYER_ID"] != null)
+            {
+              homePlayerId = json["HOME_PLAYER_ID"];
+            }
 
-          var homeSubPlayerId = -1;
-          if (row["HOME_SUB_FOR_PLAYER_ID"] != System.DBNull.Value)
-          {
-            homeSubPlayerId = Convert.ToInt32(row["HOME_SUB_FOR_PLAYER_ID"]);
-          }
+            int homeSubPlayerId = -1;
+            if (json["HOME_SUB_FOR_PLAYER_ID"] != null)
+            {
+              homeSubPlayerId = json["HOME_SUB_FOR_PLAYER_ID"];
+            }
 
-          var homePlayerSubInd = false;
-          if (row["HOME_PLAYER_SUB_IND"] != System.DBNull.Value)
-          {
-            homePlayerSubInd = Convert.ToBoolean(row["HOME_PLAYER_SUB_IND"]);
+            bool homePlayerSubInd = false;
+            if (json["HOME_PLAYER_SUB_IND"] != null)
+            {
+              homePlayerSubInd = json["HOME_PLAYER_SUB_IND"];
 
-          }
-          var homePlayerNumber = -1;
-          if (row["HOME_PLAYER_NUMBER"] != System.DBNull.Value)
-          {
-            homePlayerNumber = Convert.ToInt32(row["HOME_PLAYER_NUMBER"]);
-          }
+            }
 
-          if (homeTeamId == -1)
-          {
-            Debug.Print(string.Format("The homeTeamId is -1, not sure how to process. homeTeamId:{0}, homePlayerId:{1}, homeSubPlayerId:{2}, homePlayerSubInd:{3}, homePlayerNumber:{4}, gameId:{5}", homeTeamId, homePlayerId, homeSubPlayerId, homePlayerSubInd, homePlayerNumber, gameId));
-          }
-          else if (homePlayerId == -1)
-          {
-            Debug.Print(string.Format("The homePlayerId is -1, not sure how to process. homeTeamId:{0}, homePlayerId:{1}, homeSubPlayerId:{2}, homePlayerSubInd:{3}, homePlayerNumber:{4}, gameId:{5}", homeTeamId, homePlayerId, homeSubPlayerId, homePlayerSubInd, homePlayerNumber, gameId));
-          }
-          else if (homePlayerNumber == -1)
-          {
-            Debug.Print(string.Format("The homePlayerId is -1, not sure how to process. homeTeamId:{0}, homePlayerId:{1}, homeSubPlayerId:{2}, homePlayerSubInd:{3}, homePlayerNumber:{4}, gameId:{5}", homeTeamId, homePlayerId, homeSubPlayerId, homePlayerSubInd, homePlayerNumber, gameId));
-          }
+            int homePlayerNumber = -1;
+            if (json["HOME_PLAYER_NUMBER"] != null)
+            {
+              homePlayerNumber = json["HOME_PLAYER_NUMBER"];
+            }
 
-          int playerId;
-          int? subbingForPlayerId;
+            if (homeTeamId == -1)
+            {
+              Debug.Print(string.Format("The homeTeamId is -1, not sure how to process. homeTeamId:{0}, homePlayerId:{1}, homeSubPlayerId:{2}, homePlayerSubInd:{3}, homePlayerNumber:{4}, gameId:{5}", homeTeamId, homePlayerId, homeSubPlayerId, homePlayerSubInd, homePlayerNumber, gameId));
+            }
+            else if (homePlayerId == -1)
+            {
+              Debug.Print(string.Format("The homePlayerId is -1, not sure how to process. homeTeamId:{0}, homePlayerId:{1}, homeSubPlayerId:{2}, homePlayerSubInd:{3}, homePlayerNumber:{4}, gameId:{5}", homeTeamId, homePlayerId, homeSubPlayerId, homePlayerSubInd, homePlayerNumber, gameId));
+            }
+            else if (homePlayerNumber == -1)
+            {
+              Debug.Print(string.Format("The homePlayerId is -1, not sure how to process. homeTeamId:{0}, homePlayerId:{1}, homeSubPlayerId:{2}, homePlayerSubInd:{3}, homePlayerNumber:{4}, gameId:{5}", homeTeamId, homePlayerId, homeSubPlayerId, homePlayerSubInd, homePlayerNumber, gameId));
+            }
 
-          if (homePlayerSubInd)
-          {
-            playerId = homeSubPlayerId;
-            subbingForPlayerId = homePlayerId;
-          }
-          else
-          {
-            playerId = homePlayerId;
-            subbingForPlayerId = null;
-          }
+            int playerId;
+            int? subbingForPlayerId;
 
-          // TODO fix logic to handle when a goalie subs and plays out.
-          bool isGoalie = false;
-          var player = context.Players.Find(playerId);
-          if (player.PreferredPosition == "G")
-          {
-            isGoalie = true;
-          }
+            if (homePlayerSubInd)
+            {
+              playerId = homeSubPlayerId;
+              subbingForPlayerId = homePlayerId;
+            }
+            else
+            {
+              playerId = homePlayerId;
+              subbingForPlayerId = null;
+            }
 
-          var homeGameTeam = _lo30ContextService.FindGameTeam(gameId, homeTeam: true);
-          var gameRoster = new GameRoster(gtid: homeGameTeam.GameTeamId, pn: homePlayerNumber, g: isGoalie, pid: playerId, sub: homePlayerSubInd, sfpid: subbingForPlayerId);
+            // TODO fix logic to handle when a goalie subs and plays out.
+            bool isGoalie = false;
+            var player = context.Players.Find(playerId);
+            if (player != null && player.PreferredPosition == "G")
+            {
+              isGoalie = true;
+            }
 
-          context.GameRosters.Add(gameRoster);
+            var homeGameTeam = _lo30ContextService.FindGameTeam(gameId, homeTeam: true);
+            var gameRoster = new GameRoster(gtid: homeGameTeam.GameTeamId, pn: homePlayerNumber, g: isGoalie, pid: playerId, sub: homePlayerSubInd, sfpid: subbingForPlayerId);
 
-          var awayTeamId = -1;
-          if (row["AWAY_TEAM_ID"] != System.DBNull.Value)
-          {
-            awayTeamId = Convert.ToInt32(row["AWAY_TEAM_ID"]);
-          }
+            context.GameRosters.Add(gameRoster);
 
-          var awayPlayerId = -1;
-          if (row["AWAY_PLAYER_ID"] != System.DBNull.Value)
-          {
-            awayPlayerId = Convert.ToInt32(row["AWAY_PLAYER_ID"]);
-          }
+            int awayTeamId = -1;
+            if (json["AWAY_TEAM_ID"] != null)
+            {
+              awayTeamId = json["AWAY_TEAM_ID"];
+            }
 
-          var awaySubPlayerId = -1;
-          if (row["AWAY_SUB_FOR_PLAYER_ID"] != System.DBNull.Value)
-          {
-            awaySubPlayerId = Convert.ToInt32(row["AWAY_SUB_FOR_PLAYER_ID"]);
-          }
+            int awayPlayerId = -1;
+            if (json["AWAY_PLAYER_ID"] != null)
+            {
+              awayPlayerId = json["AWAY_PLAYER_ID"];
+            }
 
-          var awayPlayerSubInd = false;
-          if (row["HOME_PLAYER_SUB_IND"] != System.DBNull.Value)
-          {
-            awayPlayerSubInd = Convert.ToBoolean(row["AWAY_PLAYER_SUB_IND"]);
+            int awaySubPlayerId = -1;
+            if (json["AWAY_SUB_FOR_PLAYER_ID"] != null)
+            {
+              awaySubPlayerId = json["AWAY_SUB_FOR_PLAYER_ID"];
+            }
 
-          }
-          var awayPlayerNumber = -1;
-          if (row["AWAY_PLAYER_NUMBER"] != System.DBNull.Value)
-          {
-            awayPlayerNumber = Convert.ToInt32(row["AWAY_PLAYER_NUMBER"]);
-          }
+            bool awayPlayerSubInd = false;
+            if (json["AWAY_PLAYER_SUB_IND"] != null)
+            {
+              awayPlayerSubInd = json["AWAY_PLAYER_SUB_IND"];
 
-          if (awayTeamId == -1)
-          {
-            Debug.Print(string.Format("The awayTeamId is -1, not sure how to process. awayTeamId:{0}, awayPlayerId:{1}, awaySubPlayerId:{2}, awayPlayerSubInd:{3}, awayPlayerNumber:{4}, gameId:{5}", awayTeamId, awayPlayerId, awaySubPlayerId, awayPlayerSubInd, awayPlayerNumber, gameId));
-          }
-          else if (awayPlayerId == -1)
-          {
-            Debug.Print(string.Format("The awayPlayerId is -1, not sure how to process. awayTeamId:{0}, awayPlayerId:{1}, awaySubPlayerId:{2}, awayPlayerSubInd:{3}, awayPlayerNumber:{4}, gameId:{5}", awayTeamId, awayPlayerId, awaySubPlayerId, awayPlayerSubInd, awayPlayerNumber, gameId));
-          }
-          else if (awayPlayerNumber == -1)
-          {
-            Debug.Print(string.Format("The awayPlayerId is -1, not sure how to process. awayTeamId:{0}, awayPlayerId:{1}, awaySubPlayerId:{2}, awayPlayerSubInd:{3}, awayPlayerNumber:{4}, gameId:{5}", awayTeamId, awayPlayerId, awaySubPlayerId, awayPlayerSubInd, awayPlayerNumber, gameId));
-          }
+            }
 
-          if (awayPlayerSubInd)
-          {
-            playerId = awaySubPlayerId;
-            subbingForPlayerId = awayPlayerId;
-          }
-          else
-          {
-            playerId = awayPlayerId;
-            subbingForPlayerId = null;
-          }
+            int awayPlayerNumber = -1;
+            if (json["AWAY_PLAYER_NUMBER"] != null)
+            {
+              awayPlayerNumber = json["AWAY_PLAYER_NUMBER"];
+            }
 
-          // TODO fix logic to handle when a goalie subs and plays out.
-          isGoalie = false;
-          player = context.Players.Find(playerId);
-          if (player.PreferredPosition == "G")
-          {
-            isGoalie = true;
+            if (awayTeamId == -1)
+            {
+              Debug.Print(string.Format("The awayTeamId is -1, not sure how to process. awayTeamId:{0}, awayPlayerId:{1}, awaySubPlayerId:{2}, awayPlayerSubInd:{3}, awayPlayerNumber:{4}, gameId:{5}", awayTeamId, awayPlayerId, awaySubPlayerId, awayPlayerSubInd, awayPlayerNumber, gameId));
+            }
+            else if (awayPlayerId == -1)
+            {
+              Debug.Print(string.Format("The awayPlayerId is -1, not sure how to process. awayTeamId:{0}, awayPlayerId:{1}, awaySubPlayerId:{2}, awayPlayerSubInd:{3}, awayPlayerNumber:{4}, gameId:{5}", awayTeamId, awayPlayerId, awaySubPlayerId, awayPlayerSubInd, awayPlayerNumber, gameId));
+            }
+            else if (awayPlayerNumber == -1)
+            {
+              Debug.Print(string.Format("The awayPlayerId is -1, not sure how to process. awayTeamId:{0}, awayPlayerId:{1}, awaySubPlayerId:{2}, awayPlayerSubInd:{3}, awayPlayerNumber:{4}, gameId:{5}", awayTeamId, awayPlayerId, awaySubPlayerId, awayPlayerSubInd, awayPlayerNumber, gameId));
+            }
+
+            if (awayPlayerSubInd)
+            {
+              playerId = awaySubPlayerId;
+              subbingForPlayerId = awayPlayerId;
+            }
+            else
+            {
+              playerId = awayPlayerId;
+              subbingForPlayerId = null;
+            }
+
+            // TODO fix logic to handle when a goalie subs and plays out.
+            isGoalie = false;
+            player = context.Players.Find(playerId);
+            if (player != null && player.PreferredPosition == "G")
+            {
+              isGoalie = true;
+            }
+
+            var awayGameTeam = _lo30ContextService.FindGameTeam(gameId, homeTeam: false);
+            gameRoster = new GameRoster(gtid: awayGameTeam.GameTeamId, pn: awayPlayerNumber, g: isGoalie, pid: playerId, sub: awayPlayerSubInd, sfpid: subbingForPlayerId);
+
+            context.GameRosters.Add(gameRoster);
           }
-
-          var awayGameTeam = _lo30ContextService.FindGameTeam(gameId, homeTeam: false);
-          gameRoster = new GameRoster(gtid: awayGameTeam.GameTeamId, pn: awayPlayerNumber, g: isGoalie, pid: playerId, sub: awayPlayerSubInd, sfpid: subbingForPlayerId);
-
-          context.GameRosters.Add(gameRoster);
         }
 
         Debug.Print("Data Group 4: Created GameRosters");
@@ -1181,40 +1163,37 @@ namespace LO30.Data
         Debug.Print("Data Group 4: Creating ScoreSheetEntries");
         last = DateTime.Now;
 
-        var sql = "SELECT * FROM SCORE_SHEET_ENTRY WHERE SEASON_ID = 54 AND GAME_ID >= 3200";
-        var dsView = new DataSet();
-        var adp = new OleDbDataAdapter(sql, connString);
-        adp.Fill(dsView, "AccessData");
-        adp.Dispose();
-        var tbl = dsView.Tables["AccessData"];
+        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "ScoreSheetEntries.json");
+        int count = parsedJson.Count;
 
-        Debug.Print("Access records to process:" + tbl.Rows.Count);
+        Debug.Print("Access records to process:" + count);
 
-        for (var d = 0; d < tbl.Rows.Count; d++)
+        for (var d = 0; d < parsedJson.Count; d++)
         {
           if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
-          var row = tbl.Rows[d];
+          var json = parsedJson[d];
 
           int? assist1 = null;
-          if (row["ASSIST1"] != System.DBNull.Value)
+          if (json["ASSIST1"] != null)
           {
-            assist1 = Convert.ToInt32(row["ASSIST1"]);
+            assist1 = json["ASSIST1"];
           }
 
           int? assist2 = null;
-          if (row["ASSIST2"] != System.DBNull.Value)
+          if (json["ASSIST2"] != null)
           {
-            assist2 = Convert.ToInt32(row["ASSIST2"]);
+            assist2 = json["ASSIST2"];
           }
 
           int? assist3 = null;
-          if (row["ASSIST3"] != System.DBNull.Value)
+          if (json["ASSIST3"] != null)
           {
-            assist3 = Convert.ToInt32(row["ASSIST3"]);
+            assist3 = json["ASSIST3"];
           }
 
           bool homeTeam = true;
-          var team = row["TEAM"].ToString().ToLower();
+          string teamJson = json["TEAM"];
+          string team = teamJson.ToLower();
           if (team == "2" || team == "v" || team == "a" || team == "g")
           {
             homeTeam = false;
@@ -1222,16 +1201,16 @@ namespace LO30.Data
 
           var scoreSheetEntry = new ScoreSheetEntry()
           {
-            ScoreSheetEntryId = Convert.ToInt32(row["SCORE_SHEET_ENTRY_ID"]),
-            GameId = Convert.ToInt32(row["GAME_ID"]),
-            Period = Convert.ToInt32(row["PERIOD"]),
+            ScoreSheetEntryId = json["SCORE_SHEET_ENTRY_ID"],
+            GameId = json["GAME_ID"],
+            Period = json["PERIOD"],
             HomeTeam = homeTeam,
-            Goal = Convert.ToInt32(row["GOAL"]),
+            Goal = json["GOAL"],
             Assist1 = assist1,
             Assist2 = assist2,
             Assist3 = assist3,
-            TimeRemaining = row["TIME_REMAINING"].ToString(),
-            ShortHandedPowerPlay = row["SH_PP"].ToString(),
+            TimeRemaining = json["TIME_REMAINING"],
+            ShortHandedPowerPlay = json["SH_PP"],
           };
 
           context.ScoreSheetEntries.Add(scoreSheetEntry);
@@ -1254,37 +1233,34 @@ namespace LO30.Data
         Debug.Print("Data Group 4: Creating ScoreSheetEntryPenalties");
         last = DateTime.Now;
 
-        var sql = "SELECT * FROM SCORE_SHEET_ENTRY_PENALTY WHERE SEASON_ID = 54 AND GAME_ID >= 3200";
-        var dsView = new DataSet();
-        var adp = new OleDbDataAdapter(sql, connString);
-        adp.Fill(dsView, "AccessData");
-        adp.Dispose();
-        var tbl = dsView.Tables["AccessData"];
+        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "ScoreSheetEntryPenalties.json");
+        int count = parsedJson.Count;
 
-        Debug.Print("Access records to process:" + tbl.Rows.Count);
+        Debug.Print("Access records to process:" + count);
 
-        for (var d = 0; d < tbl.Rows.Count; d++)
+        for (var d = 0; d < parsedJson.Count; d++)
         {
           if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
-          var row = tbl.Rows[d];
+          var json = parsedJson[d];
 
           bool homeTeam = true;
-          var team = row["TEAM"].ToString().ToLower();
+          string teamJson = json["TEAM"];
+          string team = teamJson.ToLower();
           if (team == "2" || team == "v" || team == "a" || team == "g")
           {
             homeTeam = false;
-
           }
+
           var scoreSheetEntryPenalty = new ScoreSheetEntryPenalty()
           {
-            ScoreSheetEntryPenaltyId = Convert.ToInt32(row["SCORE_SHEET_ENTRY_PENALTY_ID"]),
-            GameId = Convert.ToInt32(row["GAME_ID"]),
-            Period = Convert.ToInt32(row["PERIOD"]),
+            ScoreSheetEntryPenaltyId = json["SCORE_SHEET_ENTRY_PENALTY_ID"],
+            GameId = json["GAME_ID"],
+            Period = json["PERIOD"],
             HomeTeam = homeTeam,
-            Player = Convert.ToInt32(row["PLAYER"]),
-            PenaltyCode = row["PENALTY_CODE"].ToString(),
-            TimeRemaining = row["TIME_REMAINING"].ToString(),
-            PenaltyMinutes = Convert.ToInt32(row["PENALTY_MINUTES"])
+            Player = json["PLAYER"],
+            PenaltyCode = json["PENALTY_CODE"],
+            TimeRemaining = json["TIME_REMAINING"],
+            PenaltyMinutes = json["PENALTY_MINUTES"]
           };
 
           context.ScoreSheetEntryPenalties.Add(scoreSheetEntryPenalty);
@@ -1304,7 +1280,21 @@ namespace LO30.Data
       diffFromFirst = DateTime.Now - first;
       Debug.Print("Total TimeToProcess: " + diffFromFirst.ToString());
 
-#endif
+      #region populated via other processes
+      #region 99:GameOutcomes
+      if (context.GameOutcomes.Count() == 0)
+      {
+        // populated via other process
+      }
+      #endregion
+
+      #region 99:TeamStandings
+      if (context.TeamStandings.Count() == 0)
+      {
+        // populated via other process
+      }
+      #endregion
+      #endregion
     }
   }
 }
