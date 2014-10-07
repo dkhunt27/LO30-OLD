@@ -26,64 +26,64 @@ $provide.value("$locale", {
       "PM"
     ],
     "DAY": [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday"
+      "Tshipi",
+      "Mosopulogo",
+      "Labobedi",
+      "Laboraro",
+      "Labone",
+      "Labotlhano",
+      "Matlhatso"
     ],
     "MONTH": [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
+      "Ferikgong",
+      "Tlhakole",
+      "Mopitlo",
+      "Moranang",
+      "Motsheganang",
+      "Seetebosigo",
+      "Phukwi",
+      "Phatwe",
+      "Lwetse",
+      "Diphalane",
+      "Ngwanatsele",
+      "Sedimonthole"
     ],
     "SHORTDAY": [
-      "Sun",
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
-      "Sat"
+      "Tsh",
+      "Mos",
+      "Bed",
+      "Rar",
+      "Ne",
+      "Tla",
+      "Mat"
     ],
     "SHORTMONTH": [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
+      "Fer",
+      "Tlh",
+      "Mop",
+      "Mor",
+      "Mot",
+      "See",
+      "Phu",
+      "Pha",
+      "Lwe",
+      "Dip",
+      "Ngw",
+      "Sed"
     ],
-    "fullDate": "EEEE, MMMM d, y",
-    "longDate": "MMMM d, y",
-    "medium": "MMM d, y h:mm:ss a",
-    "mediumDate": "MMM d, y",
-    "mediumTime": "h:mm:ss a",
-    "short": "M/d/yy h:mm a",
-    "shortDate": "M/d/yy",
-    "shortTime": "h:mm a"
+    "fullDate": "y MMMM d, EEEE",
+    "longDate": "y MMMM d",
+    "medium": "y MMM d HH:mm:ss",
+    "mediumDate": "y MMM d",
+    "mediumTime": "HH:mm:ss",
+    "short": "y-MM-dd HH:mm",
+    "shortDate": "y-MM-dd",
+    "shortTime": "HH:mm"
   },
   "NUMBER_FORMATS": {
-    "CURRENCY_SYM": "$",
-    "DECIMAL_SEP": ".",
-    "GROUP_SEP": ",",
+    "CURRENCY_SYM": "P",
+    "DECIMAL_SEP": ",",
+    "GROUP_SEP": "\u00a0",
     "PATTERNS": [
       {
         "gSize": 3,
@@ -109,7 +109,7 @@ $provide.value("$locale", {
       }
     ]
   },
-  "id": "en-us",
+  "id": "tn-bw",
   "pluralCat": function (n, opt_precision) {  var i = n | 0;  var vf = getVF(n, opt_precision);  if (i == 1 && vf.v == 0) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
 });
 }]);

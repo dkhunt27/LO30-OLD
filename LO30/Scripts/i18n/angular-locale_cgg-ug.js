@@ -26,62 +26,62 @@ $provide.value("$locale", {
       "PM"
     ],
     "DAY": [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday"
+      "Sande",
+      "Orwokubanza",
+      "Orwakabiri",
+      "Orwakashatu",
+      "Orwakana",
+      "Orwakataano",
+      "Orwamukaaga"
     ],
     "MONTH": [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
+      "Okwokubanza",
+      "Okwakabiri",
+      "Okwakashatu",
+      "Okwakana",
+      "Okwakataana",
+      "Okwamukaaga",
+      "Okwamushanju",
+      "Okwamunaana",
+      "Okwamwenda",
+      "Okwaikumi",
+      "Okwaikumi na kumwe",
+      "Okwaikumi na ibiri"
     ],
     "SHORTDAY": [
-      "Sun",
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
-      "Sat"
+      "SAN",
+      "ORK",
+      "OKB",
+      "OKS",
+      "OKN",
+      "OKT",
+      "OMK"
     ],
     "SHORTMONTH": [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
+      "KBZ",
+      "KBR",
+      "KST",
+      "KKN",
+      "KTN",
+      "KMK",
+      "KMS",
+      "KMN",
+      "KMW",
+      "KKM",
+      "KNK",
+      "KNB"
     ],
-    "fullDate": "EEEE, MMMM d, y",
-    "longDate": "MMMM d, y",
-    "medium": "MMM d, y h:mm:ss a",
-    "mediumDate": "MMM d, y",
+    "fullDate": "EEEE, d MMMM y",
+    "longDate": "d MMMM y",
+    "medium": "d MMM y h:mm:ss a",
+    "mediumDate": "d MMM y",
     "mediumTime": "h:mm:ss a",
-    "short": "M/d/yy h:mm a",
-    "shortDate": "M/d/yy",
+    "short": "dd/MM/y h:mm a",
+    "shortDate": "dd/MM/y",
     "shortTime": "h:mm a"
   },
   "NUMBER_FORMATS": {
-    "CURRENCY_SYM": "$",
+    "CURRENCY_SYM": "UGX",
     "DECIMAL_SEP": ".",
     "GROUP_SEP": ",",
     "PATTERNS": [
@@ -109,7 +109,7 @@ $provide.value("$locale", {
       }
     ]
   },
-  "id": "en-us",
+  "id": "cgg-ug",
   "pluralCat": function (n, opt_precision) {  var i = n | 0;  var vf = getVF(n, opt_precision);  if (i == 1 && vf.v == 0) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
 });
 }]);

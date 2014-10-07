@@ -22,66 +22,66 @@ function getVF(n, opt_precision) {
 $provide.value("$locale", {
   "DATETIME_FORMATS": {
     "AMPMS": [
-      "AM",
-      "PM"
+      "KI",
+      "UT"
     ],
     "DAY": [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday"
+      "Kiumia",
+      "Njumatatu",
+      "Njumaine",
+      "Njumatano",
+      "Aramithi",
+      "Njumaa",
+      "NJumamothii"
     ],
     "MONTH": [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
+      "Mweri wa mbere",
+      "Mweri wa ka\u0129ri",
+      "Mweri wa kathat\u0169",
+      "Mweri wa kana",
+      "Mweri wa gatano",
+      "Mweri wa gatantat\u0169",
+      "Mweri wa m\u0169gwanja",
+      "Mweri wa kanana",
+      "Mweri wa kenda",
+      "Mweri wa ik\u0169mi",
+      "Mweri wa ik\u0169mi na \u0169mwe",
+      "Mweri wa ik\u0169mi na Ka\u0129r\u0129"
     ],
     "SHORTDAY": [
-      "Sun",
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
-      "Sat"
+      "Kma",
+      "Tat",
+      "Ine",
+      "Tan",
+      "Arm",
+      "Maa",
+      "NMM"
     ],
     "SHORTMONTH": [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
+      "Mbe",
+      "Kai",
+      "Kat",
+      "Kan",
+      "Gat",
+      "Gan",
+      "Mug",
+      "Knn",
+      "Ken",
+      "Iku",
+      "Imw",
+      "Igi"
     ],
-    "fullDate": "EEEE, MMMM d, y",
-    "longDate": "MMMM d, y",
-    "medium": "MMM d, y h:mm:ss a",
-    "mediumDate": "MMM d, y",
+    "fullDate": "EEEE, d MMMM y",
+    "longDate": "d MMMM y",
+    "medium": "d MMM y h:mm:ss a",
+    "mediumDate": "d MMM y",
     "mediumTime": "h:mm:ss a",
-    "short": "M/d/yy h:mm a",
-    "shortDate": "M/d/yy",
+    "short": "dd/MM/y h:mm a",
+    "shortDate": "dd/MM/y",
     "shortTime": "h:mm a"
   },
   "NUMBER_FORMATS": {
-    "CURRENCY_SYM": "$",
+    "CURRENCY_SYM": "Ksh",
     "DECIMAL_SEP": ".",
     "GROUP_SEP": ",",
     "PATTERNS": [
@@ -109,7 +109,7 @@ $provide.value("$locale", {
       }
     ]
   },
-  "id": "en-us",
+  "id": "ebu-ke",
   "pluralCat": function (n, opt_precision) {  var i = n | 0;  var vf = getVF(n, opt_precision);  if (i == 1 && vf.v == 0) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
 });
 }]);

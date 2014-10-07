@@ -22,68 +22,68 @@ function getVF(n, opt_precision) {
 $provide.value("$locale", {
   "DATETIME_FORMATS": {
     "AMPMS": [
-      "AM",
-      "PM"
+      "a.",
+      "p."
     ],
     "DAY": [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday"
+      "domenie",
+      "lunis",
+      "martars",
+      "miercus",
+      "joibe",
+      "vinars",
+      "sabide"
     ],
     "MONTH": [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
+      "Zen\u00e2r",
+      "Fevr\u00e2r",
+      "Mar\u00e7",
+      "Avr\u00eel",
+      "Mai",
+      "Jugn",
+      "Lui",
+      "Avost",
+      "Setembar",
+      "Otubar",
+      "Novembar",
+      "Dicembar"
     ],
     "SHORTDAY": [
-      "Sun",
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
-      "Sat"
+      "dom",
+      "lun",
+      "mar",
+      "mie",
+      "joi",
+      "vin",
+      "sab"
     ],
     "SHORTMONTH": [
-      "Jan",
-      "Feb",
+      "Zen",
+      "Fev",
       "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
+      "Avr",
+      "Mai",
+      "Jug",
+      "Lui",
+      "Avo",
+      "Set",
+      "Otu",
       "Nov",
-      "Dec"
+      "Dic"
     ],
-    "fullDate": "EEEE, MMMM d, y",
-    "longDate": "MMMM d, y",
-    "medium": "MMM d, y h:mm:ss a",
-    "mediumDate": "MMM d, y",
-    "mediumTime": "h:mm:ss a",
-    "short": "M/d/yy h:mm a",
-    "shortDate": "M/d/yy",
-    "shortTime": "h:mm a"
+    "fullDate": "EEEE d 'di' MMMM 'dal' y",
+    "longDate": "d 'di' MMMM 'dal' y",
+    "medium": "dd/MM/y HH:mm:ss",
+    "mediumDate": "dd/MM/y",
+    "mediumTime": "HH:mm:ss",
+    "short": "dd/MM/yy HH:mm",
+    "shortDate": "dd/MM/yy",
+    "shortTime": "HH:mm"
   },
   "NUMBER_FORMATS": {
-    "CURRENCY_SYM": "$",
-    "DECIMAL_SEP": ".",
-    "GROUP_SEP": ",",
+    "CURRENCY_SYM": "\u20ac",
+    "DECIMAL_SEP": ",",
+    "GROUP_SEP": ".",
     "PATTERNS": [
       {
         "gSize": 3,
@@ -102,14 +102,14 @@ $provide.value("$locale", {
         "maxFrac": 2,
         "minFrac": 2,
         "minInt": 1,
-        "negPre": "\u00a4-",
+        "negPre": "\u00a4\u00a0-",
         "negSuf": "",
-        "posPre": "\u00a4",
+        "posPre": "\u00a4\u00a0",
         "posSuf": ""
       }
     ]
   },
-  "id": "en-us",
+  "id": "fur",
   "pluralCat": function (n, opt_precision) {  var i = n | 0;  var vf = getVF(n, opt_precision);  if (i == 1 && vf.v == 0) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
 });
 }]);

@@ -22,66 +22,66 @@ function getVF(n, opt_precision) {
 $provide.value("$locale", {
   "DATETIME_FORMATS": {
     "AMPMS": [
-      "AM",
-      "PM"
+      "A.M.",
+      "P.M."
     ],
     "DAY": [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday"
+      "Mb\u1ecds\u1ecb \u1ee4ka",
+      "M\u1ecdnde",
+      "Tiuzdee",
+      "Wenezdee",
+      "T\u1ecd\u1ecdzdee",
+      "Fra\u1ecbdee",
+      "Sat\u1ecddee"
     ],
     "MONTH": [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
+      "Jen\u1ee5war\u1ecb",
+      "Febr\u1ee5war\u1ecb",
+      "Maach\u1ecb",
+      "Eprel",
+      "Mee",
+      "Juun",
+      "Jula\u1ecb",
+      "\u1eccg\u1ecd\u1ecdst",
+      "Septemba",
+      "\u1eccktoba",
+      "Novemba",
+      "Disemba"
     ],
     "SHORTDAY": [
-      "Sun",
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
+      "\u1ee4ka",
+      "M\u1ecdn",
+      "Tiu",
+      "Wen",
+      "T\u1ecd\u1ecd",
+      "Fra\u1ecb",
       "Sat"
     ],
     "SHORTMONTH": [
-      "Jan",
+      "Jen",
       "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
+      "Maa",
+      "Epr",
+      "Mee",
+      "Juu",
       "Jul",
-      "Aug",
+      "\u1eccg\u1ecd",
       "Sep",
-      "Oct",
+      "\u1ecckt",
       "Nov",
-      "Dec"
+      "Dis"
     ],
-    "fullDate": "EEEE, MMMM d, y",
-    "longDate": "MMMM d, y",
-    "medium": "MMM d, y h:mm:ss a",
-    "mediumDate": "MMM d, y",
+    "fullDate": "EEEE, d MMMM y",
+    "longDate": "d MMMM y",
+    "medium": "d MMM y h:mm:ss a",
+    "mediumDate": "d MMM y",
     "mediumTime": "h:mm:ss a",
-    "short": "M/d/yy h:mm a",
-    "shortDate": "M/d/yy",
+    "short": "dd/MM/y h:mm a",
+    "shortDate": "dd/MM/y",
     "shortTime": "h:mm a"
   },
   "NUMBER_FORMATS": {
-    "CURRENCY_SYM": "$",
+    "CURRENCY_SYM": "\u20a6",
     "DECIMAL_SEP": ".",
     "GROUP_SEP": ",",
     "PATTERNS": [
@@ -109,7 +109,7 @@ $provide.value("$locale", {
       }
     ]
   },
-  "id": "en-us",
+  "id": "ig-ng",
   "pluralCat": function (n, opt_precision) {  var i = n | 0;  var vf = getVF(n, opt_precision);  if (i == 1 && vf.v == 0) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
 });
 }]);

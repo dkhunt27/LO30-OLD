@@ -76,8 +76,8 @@ $provide.value("$locale", {
     "medium": "MMM d, y h:mm:ss a",
     "mediumDate": "MMM d, y",
     "mediumTime": "h:mm:ss a",
-    "short": "M/d/yy h:mm a",
-    "shortDate": "M/d/yy",
+    "short": "y-MM-dd h:mm a",
+    "shortDate": "y-MM-dd",
     "shortTime": "h:mm a"
   },
   "NUMBER_FORMATS": {
@@ -109,7 +109,7 @@ $provide.value("$locale", {
       }
     ]
   },
-  "id": "en-us",
+  "id": "en-ca",
   "pluralCat": function (n, opt_precision) {  var i = n | 0;  var vf = getVF(n, opt_precision);  if (i == 1 && vf.v == 0) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
 });
 }]);

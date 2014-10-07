@@ -26,64 +26,64 @@ $provide.value("$locale", {
       "PM"
     ],
     "DAY": [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday"
+      "Swondaha",
+      "Musumbuluwo",
+      "\u1e3cavhuvhili",
+      "\u1e3cavhuraru",
+      "\u1e3cavhu\u1e4ba",
+      "\u1e3cavhu\u1e71anu",
+      "Mugivhela"
     ],
     "MONTH": [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
+      "Phando",
+      "Luhuhi",
+      "\u1e70hafamuhwe",
+      "Lambamai",
+      "Shundunthule",
+      "Fulwi",
+      "Fulwana",
+      "\u1e70hangule",
+      "Khubvumedzi",
+      "Tshimedzi",
+      "\u1e3cara",
+      "Nyendavhusiku"
     ],
     "SHORTDAY": [
-      "Sun",
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
-      "Sat"
+      "Swo",
+      "Mus",
+      "Vhi",
+      "Rar",
+      "\u1e4aa",
+      "\u1e70an",
+      "Mug"
     ],
     "SHORTMONTH": [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
+      "Pha",
+      "Luh",
+      "\u1e70hf",
+      "Lam",
+      "Shu",
+      "Lwi",
+      "Lwa",
+      "\u1e70ha",
+      "Khu",
+      "Tsh",
+      "\u1e3car",
+      "Nye"
     ],
-    "fullDate": "EEEE, MMMM d, y",
-    "longDate": "MMMM d, y",
-    "medium": "MMM d, y h:mm:ss a",
-    "mediumDate": "MMM d, y",
-    "mediumTime": "h:mm:ss a",
-    "short": "M/d/yy h:mm a",
-    "shortDate": "M/d/yy",
-    "shortTime": "h:mm a"
+    "fullDate": "y MMMM d, EEEE",
+    "longDate": "y MMMM d",
+    "medium": "y MMM d HH:mm:ss",
+    "mediumDate": "y MMM d",
+    "mediumTime": "HH:mm:ss",
+    "short": "y-MM-dd HH:mm",
+    "shortDate": "y-MM-dd",
+    "shortTime": "HH:mm"
   },
   "NUMBER_FORMATS": {
-    "CURRENCY_SYM": "$",
-    "DECIMAL_SEP": ".",
-    "GROUP_SEP": ",",
+    "CURRENCY_SYM": "R",
+    "DECIMAL_SEP": ",",
+    "GROUP_SEP": "\u00a0",
     "PATTERNS": [
       {
         "gSize": 3,
@@ -109,7 +109,7 @@ $provide.value("$locale", {
       }
     ]
   },
-  "id": "en-us",
+  "id": "ve-za",
   "pluralCat": function (n, opt_precision) {  var i = n | 0;  var vf = getVF(n, opt_precision);  if (i == 1 && vf.v == 0) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
 });
 }]);

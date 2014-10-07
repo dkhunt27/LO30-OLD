@@ -26,62 +26,62 @@ $provide.value("$locale", {
       "PM"
     ],
     "DAY": [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday"
+      "Aneg 1",
+      "Aneg 2",
+      "Aneg 3",
+      "Aneg 4",
+      "Aneg 5",
+      "Aneg 6",
+      "Aneg 7"
     ],
     "MONTH": [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
+      "im\u0259g mbegtug",
+      "imeg \u00e0b\u00f9b\u00ec",
+      "imeg mb\u0259\u014bchubi",
+      "im\u0259g ngw\u0259\u0300t",
+      "im\u0259g fog",
+      "im\u0259g ichiib\u0254d",
+      "im\u0259g \u00e0d\u00f9mb\u0259\u0300\u014b",
+      "im\u0259g ichika",
+      "im\u0259g kud",
+      "im\u0259g t\u00e8si\u02bce",
+      "im\u0259g z\u00f2",
+      "im\u0259g krizmed"
     ],
     "SHORTDAY": [
-      "Sun",
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
-      "Sat"
+      "Aneg 1",
+      "Aneg 2",
+      "Aneg 3",
+      "Aneg 4",
+      "Aneg 5",
+      "Aneg 6",
+      "Aneg 7"
     ],
     "SHORTMONTH": [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
+      "mbegtug",
+      "imeg \u00e0b\u00f9b\u00ec",
+      "imeg mb\u0259\u014bchubi",
+      "im\u0259g ngw\u0259\u0300t",
+      "im\u0259g fog",
+      "im\u0259g ichiib\u0254d",
+      "im\u0259g \u00e0d\u00f9mb\u0259\u0300\u014b",
+      "im\u0259g ichika",
+      "im\u0259g kud",
+      "im\u0259g t\u00e8si\u02bce",
+      "im\u0259g z\u00f2",
+      "im\u0259g krizmed"
     ],
-    "fullDate": "EEEE, MMMM d, y",
-    "longDate": "MMMM d, y",
-    "medium": "MMM d, y h:mm:ss a",
-    "mediumDate": "MMM d, y",
-    "mediumTime": "h:mm:ss a",
-    "short": "M/d/yy h:mm a",
-    "shortDate": "M/d/yy",
-    "shortTime": "h:mm a"
+    "fullDate": "EEEE, y MMMM dd",
+    "longDate": "y MMMM d",
+    "medium": "y MMM d HH:mm:ss",
+    "mediumDate": "y MMM d",
+    "mediumTime": "HH:mm:ss",
+    "short": "y-MM-dd HH:mm",
+    "shortDate": "y-MM-dd",
+    "shortTime": "HH:mm"
   },
   "NUMBER_FORMATS": {
-    "CURRENCY_SYM": "$",
+    "CURRENCY_SYM": "FCFA",
     "DECIMAL_SEP": ".",
     "GROUP_SEP": ",",
     "PATTERNS": [
@@ -102,14 +102,14 @@ $provide.value("$locale", {
         "maxFrac": 2,
         "minFrac": 2,
         "minInt": 1,
-        "negPre": "\u00a4-",
+        "negPre": "\u00a4\u00a0-",
         "negSuf": "",
-        "posPre": "\u00a4",
+        "posPre": "\u00a4\u00a0",
         "posSuf": ""
       }
     ]
   },
-  "id": "en-us",
+  "id": "mgo-cm",
   "pluralCat": function (n, opt_precision) {  var i = n | 0;  var vf = getVF(n, opt_precision);  if (i == 1 && vf.v == 0) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
 });
 }]);

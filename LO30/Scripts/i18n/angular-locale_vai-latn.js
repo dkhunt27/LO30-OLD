@@ -26,62 +26,62 @@ $provide.value("$locale", {
       "PM"
     ],
     "DAY": [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday"
+      "lahadi",
+      "t\u025b\u025bn\u025b\u025b",
+      "talata",
+      "alaba",
+      "aimisa",
+      "aijima",
+      "si\u0253iti"
     ],
     "MONTH": [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
+      "luukao kem\u00e3",
+      "\u0253anda\u0253u",
+      "v\u0254\u0254",
+      "fulu",
+      "goo",
+      "6",
+      "7",
+      "k\u0254nde",
+      "saah",
+      "galo",
+      "kenpkato \u0253olol\u0254",
+      "luukao l\u0254ma"
     ],
     "SHORTDAY": [
-      "Sun",
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
-      "Sat"
+      "lahadi",
+      "t\u025b\u025bn\u025b\u025b",
+      "talata",
+      "alaba",
+      "aimisa",
+      "aijima",
+      "si\u0253iti"
     ],
     "SHORTMONTH": [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
+      "luukao kem\u00e3",
+      "\u0253anda\u0253u",
+      "v\u0254\u0254",
+      "fulu",
+      "goo",
+      "6",
+      "7",
+      "k\u0254nde",
+      "saah",
+      "galo",
+      "kenpkato \u0253olol\u0254",
+      "luukao l\u0254ma"
     ],
-    "fullDate": "EEEE, MMMM d, y",
-    "longDate": "MMMM d, y",
-    "medium": "MMM d, y h:mm:ss a",
-    "mediumDate": "MMM d, y",
+    "fullDate": "EEEE, d MMMM y",
+    "longDate": "d MMMM y",
+    "medium": "d MMM y h:mm:ss a",
+    "mediumDate": "d MMM y",
     "mediumTime": "h:mm:ss a",
-    "short": "M/d/yy h:mm a",
-    "shortDate": "M/d/yy",
+    "short": "dd/MM/y h:mm a",
+    "shortDate": "dd/MM/y",
     "shortTime": "h:mm a"
   },
   "NUMBER_FORMATS": {
-    "CURRENCY_SYM": "$",
+    "CURRENCY_SYM": "\u20ac",
     "DECIMAL_SEP": ".",
     "GROUP_SEP": ",",
     "PATTERNS": [
@@ -109,7 +109,7 @@ $provide.value("$locale", {
       }
     ]
   },
-  "id": "en-us",
+  "id": "vai-latn",
   "pluralCat": function (n, opt_precision) {  var i = n | 0;  var vf = getVF(n, opt_precision);  if (i == 1 && vf.v == 0) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
 });
 }]);

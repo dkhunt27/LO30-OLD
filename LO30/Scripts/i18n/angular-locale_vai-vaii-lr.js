@@ -26,58 +26,58 @@ $provide.value("$locale", {
       "PM"
     ],
     "DAY": [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday"
+      "\ua55e\ua54c\ua535",
+      "\ua5f3\ua5e1\ua609",
+      "\ua55a\ua55e\ua55a",
+      "\ua549\ua55e\ua552",
+      "\ua549\ua524\ua546\ua562",
+      "\ua549\ua524\ua540\ua56e",
+      "\ua53b\ua52c\ua533"
     ],
     "MONTH": [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
+      "\ua5a8\ua56a\ua583 \ua51e\ua56e",
+      "\ua552\ua561\ua59d\ua595",
+      "\ua57e\ua5ba",
+      "\ua5a2\ua595",
+      "\ua591\ua571",
+      "6",
+      "7",
+      "\ua5db\ua515",
+      "\ua562\ua54c",
+      "\ua56d\ua583",
+      "\ua51e\ua60b\ua554\ua57f \ua578\ua583\ua5cf",
+      "\ua5a8\ua56a\ua571 \ua5cf\ua56e"
     ],
     "SHORTDAY": [
-      "Sun",
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
-      "Sat"
+      "\ua55e\ua54c\ua535",
+      "\ua5f3\ua5e1\ua609",
+      "\ua55a\ua55e\ua55a",
+      "\ua549\ua55e\ua552",
+      "\ua549\ua524\ua546\ua562",
+      "\ua549\ua524\ua540\ua56e",
+      "\ua53b\ua52c\ua533"
     ],
     "SHORTMONTH": [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
+      "\ua5a8\ua56a\ua583 \ua51e\ua56e",
+      "\ua552\ua561\ua59d\ua595",
+      "\ua57e\ua5ba",
+      "\ua5a2\ua595",
+      "\ua591\ua571",
+      "6",
+      "7",
+      "\ua5db\ua515",
+      "\ua562\ua54c",
+      "\ua56d\ua583",
+      "\ua51e\ua60b\ua554\ua57f \ua578\ua583\ua5cf",
+      "\ua5a8\ua56a\ua571 \ua5cf\ua56e"
     ],
-    "fullDate": "EEEE, MMMM d, y",
-    "longDate": "MMMM d, y",
-    "medium": "MMM d, y h:mm:ss a",
-    "mediumDate": "MMM d, y",
+    "fullDate": "EEEE, d MMMM y",
+    "longDate": "d MMMM y",
+    "medium": "d MMM y h:mm:ss a",
+    "mediumDate": "d MMM y",
     "mediumTime": "h:mm:ss a",
-    "short": "M/d/yy h:mm a",
-    "shortDate": "M/d/yy",
+    "short": "dd/MM/y h:mm a",
+    "shortDate": "dd/MM/y",
     "shortTime": "h:mm a"
   },
   "NUMBER_FORMATS": {
@@ -109,7 +109,7 @@ $provide.value("$locale", {
       }
     ]
   },
-  "id": "en-us",
+  "id": "vai-vaii-lr",
   "pluralCat": function (n, opt_precision) {  var i = n | 0;  var vf = getVF(n, opt_precision);  if (i == 1 && vf.v == 0) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
 });
 }]);

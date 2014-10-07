@@ -22,39 +22,39 @@ function getVF(n, opt_precision) {
 $provide.value("$locale", {
   "DATETIME_FORMATS": {
     "AMPMS": [
-      "AM",
-      "PM"
+      "\u01c1goagas",
+      "\u01c3uias"
     ],
     "DAY": [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday"
+      "Sontaxtsees",
+      "Mantaxtsees",
+      "Denstaxtsees",
+      "Wunstaxtsees",
+      "Dondertaxtsees",
+      "Fraitaxtsees",
+      "Satertaxtsees"
     ],
     "MONTH": [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
+      "\u01c3Khanni",
+      "\u01c3Khan\u01c0g\u00f4ab",
+      "\u01c0Khuu\u01c1kh\u00e2b",
+      "\u01c3H\u00f4a\u01c2khaib",
+      "\u01c3Khaits\u00e2b",
+      "Gama\u01c0aeb",
+      "\u01c2Khoesaob",
+      "Ao\u01c1khuum\u00fb\u01c1kh\u00e2b",
+      "Tara\u01c0khuum\u00fb\u01c1kh\u00e2b",
+      "\u01c2N\u00fb\u01c1n\u00e2iseb",
+      "\u01c0Hoo\u01c2gaeb",
+      "H\u00f4asore\u01c1kh\u00e2b"
     ],
     "SHORTDAY": [
-      "Sun",
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
+      "Son",
+      "Ma",
+      "De",
+      "Wu",
+      "Do",
+      "Fr",
       "Sat"
     ],
     "SHORTMONTH": [
@@ -71,13 +71,13 @@ $provide.value("$locale", {
       "Nov",
       "Dec"
     ],
-    "fullDate": "EEEE, MMMM d, y",
-    "longDate": "MMMM d, y",
-    "medium": "MMM d, y h:mm:ss a",
-    "mediumDate": "MMM d, y",
+    "fullDate": "EEEE, d MMMM y",
+    "longDate": "d MMMM y",
+    "medium": "d MMM y h:mm:ss a",
+    "mediumDate": "d MMM y",
     "mediumTime": "h:mm:ss a",
-    "short": "M/d/yy h:mm a",
-    "shortDate": "M/d/yy",
+    "short": "dd/MM/y h:mm a",
+    "shortDate": "dd/MM/y",
     "shortTime": "h:mm a"
   },
   "NUMBER_FORMATS": {
@@ -109,7 +109,7 @@ $provide.value("$locale", {
       }
     ]
   },
-  "id": "en-us",
+  "id": "naq",
   "pluralCat": function (n, opt_precision) {  var i = n | 0;  var vf = getVF(n, opt_precision);  if (i == 1 && vf.v == 0) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
 });
 }]);

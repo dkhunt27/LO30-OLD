@@ -22,66 +22,66 @@ function getVF(n, opt_precision) {
 $provide.value("$locale", {
   "DATETIME_FORMATS": {
     "AMPMS": [
-      "AM",
-      "PM"
+      "\u0190nkak\u025bny\u00e1",
+      "\u0190nd\u00e1m\u00e2"
     ],
     "DAY": [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday"
+      "Jumap\u00edl\u00ed",
+      "Jumat\u00e1tu",
+      "Jumane",
+      "Jumat\u00e1n\u0254",
+      "Ala\u00e1misi",
+      "Jum\u00e1a",
+      "Jumam\u00f3si"
     ],
     "MONTH": [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
+      "Oladal\u0289\u0301",
+      "Ar\u00e1t",
+      "\u0186\u025bn\u0268\u0301\u0254\u0268\u014b\u0254k",
+      "Olodoy\u00ed\u00f3r\u00ed\u00ea ink\u00f3k\u00fa\u00e2",
+      "Oloil\u00e9p\u016bny\u012b\u0113 ink\u00f3k\u00fa\u00e2",
+      "K\u00faj\u00fa\u0254r\u0254k",
+      "M\u00f3rus\u00e1sin",
+      "\u0186l\u0254\u0301\u0268\u0301b\u0254\u0301r\u00e1r\u025b",
+      "K\u00fash\u00een",
+      "Olg\u00edsan",
+      "P\u0289sh\u0289\u0301ka",
+      "Nt\u0289\u0301\u014b\u0289\u0301s"
     ],
     "SHORTDAY": [
-      "Sun",
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
-      "Sat"
+      "Jpi",
+      "Jtt",
+      "Jnn",
+      "Jtn",
+      "Alh",
+      "Iju",
+      "Jmo"
     ],
     "SHORTMONTH": [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
+      "Dal",
+      "Ar\u00e1",
+      "\u0186\u025bn",
+      "Doy",
+      "L\u00e9p",
+      "Rok",
+      "S\u00e1s",
+      "B\u0254\u0301r",
+      "K\u00fas",
+      "G\u00eds",
+      "Sh\u0289\u0301",
+      "Nt\u0289\u0301"
     ],
-    "fullDate": "EEEE, MMMM d, y",
-    "longDate": "MMMM d, y",
-    "medium": "MMM d, y h:mm:ss a",
-    "mediumDate": "MMM d, y",
+    "fullDate": "EEEE, d MMMM y",
+    "longDate": "d MMMM y",
+    "medium": "d MMM y h:mm:ss a",
+    "mediumDate": "d MMM y",
     "mediumTime": "h:mm:ss a",
-    "short": "M/d/yy h:mm a",
-    "shortDate": "M/d/yy",
+    "short": "dd/MM/y h:mm a",
+    "shortDate": "dd/MM/y",
     "shortTime": "h:mm a"
   },
   "NUMBER_FORMATS": {
-    "CURRENCY_SYM": "$",
+    "CURRENCY_SYM": "TSh",
     "DECIMAL_SEP": ".",
     "GROUP_SEP": ",",
     "PATTERNS": [
@@ -109,7 +109,7 @@ $provide.value("$locale", {
       }
     ]
   },
-  "id": "en-us",
+  "id": "mas-tz",
   "pluralCat": function (n, opt_precision) {  var i = n | 0;  var vf = getVF(n, opt_precision);  if (i == 1 && vf.v == 0) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
 });
 }]);
