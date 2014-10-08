@@ -122,5 +122,86 @@ namespace LO30.Data
         throw new ArgumentException("Assist3PlayerId cannot also be an Assist#PlayerId for:" + locationKey, "Assist3PlayerId");
       }
     }
+
+    public void SaveObjToJsonFile(dynamic obj, string destPath)
+    {
+      var output = JsonConvert.SerializeObject(obj, Formatting.Indented);
+
+      StringBuilder sb = new StringBuilder();
+      sb.Append(output);
+
+      using (StreamWriter outfile = new StreamWriter(destPath))
+      {
+        outfile.Write(sb.ToString());
+      }
+    }
+
+    public static List<ScoreSheetEntryProcessed> LoadListFromJsonFile(string filePath)
+    {
+      string className = "ScoreSheetEntryProcessed";
+      string functionName = "LoadFromJsonFile";
+      List<ScoreSheetEntry> output = new List<ScoreSheetEntry>();
+
+      Debug.Print(string.Format("{0}: {1} Loading...", functionName, className));
+      var start = DateTime.Now;
+
+      string contents = File.ReadAllText(filePath);
+      dynamic parsedJson = JsonConvert.DeserializeObject(contents);
+      int count = parsedJson.Count;
+      Debug.Print(string.Format("{0}: {1} Count:", functionName, className, count));
+
+      for (var d = 0; d < parsedJson.Count; d++)
+      {
+        if (d > 0 && d % 100 == 0) Debug.Print(string.Format("{0}: {1} Processed:", functionName, className, d));
+
+        var json = parsedJson[d];
+
+        //int? assist1 = null;
+        //if (json["ASSIST1"] != null)
+        //{
+        //  assist1 = json["ASSIST1"];
+        //}
+
+        //int? assist2 = null;
+        //if (json["ASSIST2"] != null)
+        //{
+        //  assist2 = json["ASSIST2"];
+        //}
+
+        //int? assist3 = null;
+        //if (json["ASSIST3"] != null)
+        //{
+        //  assist3 = json["ASSIST3"];
+        //}
+
+        bool homeTeam = true;
+        string teamJson = json["TEAM"];
+        string team = teamJson.ToLower();
+        if (team == "2" || team == "v" || team == "a" || team == "g")
+        {
+          homeTeam = false;
+        }
+
+        output.Add(new ScoreSheetEntry()
+        {
+          ScoreSheetEntryId = json["SCORE_SHEET_ENTRY_ID"],
+          GameId = json["GAME_ID"],
+          Period = json["PERIOD"],
+          HomeTeam = homeTeam,
+          Goal = json["GOAL"],
+          Assist1 = json["ASSIST1"],
+          Assist2 = json["ASSIST2"],
+          Assist3 = json["ASSIST3"],
+          TimeRemaining = json["TIME_REMAINING"],
+          ShortHandedPowerPlay = json["SH_PP"],
+        });
+      }
+
+      Debug.Print(string.Format("{0}: {1} Loaded", functionName, className));
+      var end = DateTime.Now - start;
+      Debug.Print("TimeToProcess: " + end.ToString());
+
+      return output;
+    }
   }
 }

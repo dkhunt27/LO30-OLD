@@ -1157,68 +1157,15 @@ namespace LO30.Data
       }
       #endregion
 
-      #region 4:ScoreSheetEntries
+      #region 4:ScoreSheetEntries...using loadJson
       if (context.ScoreSheetEntries.Count() == 0)
       {
-        Debug.Print("Data Group 4: Creating ScoreSheetEntries");
-        last = DateTime.Now;
+        List<ScoreSheetEntry> scoreSheetEntries = ScoreSheetEntry.LoadListFromJsonFile(folderPath + "ScoreSheetEntries.json");
 
-        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "ScoreSheetEntries.json");
-        int count = parsedJson.Count;
-
-        Debug.Print("Access records to process:" + count);
-
-        for (var d = 0; d < parsedJson.Count; d++)
+        foreach(var scoreSheetEntry in scoreSheetEntries)
         {
-          if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
-          var json = parsedJson[d];
-
-          int? assist1 = null;
-          if (json["ASSIST1"] != null)
-          {
-            assist1 = json["ASSIST1"];
-          }
-
-          int? assist2 = null;
-          if (json["ASSIST2"] != null)
-          {
-            assist2 = json["ASSIST2"];
-          }
-
-          int? assist3 = null;
-          if (json["ASSIST3"] != null)
-          {
-            assist3 = json["ASSIST3"];
-          }
-
-          bool homeTeam = true;
-          string teamJson = json["TEAM"];
-          string team = teamJson.ToLower();
-          if (team == "2" || team == "v" || team == "a" || team == "g")
-          {
-            homeTeam = false;
-          }
-
-          var scoreSheetEntry = new ScoreSheetEntry()
-          {
-            ScoreSheetEntryId = json["SCORE_SHEET_ENTRY_ID"],
-            GameId = json["GAME_ID"],
-            Period = json["PERIOD"],
-            HomeTeam = homeTeam,
-            Goal = json["GOAL"],
-            Assist1 = assist1,
-            Assist2 = assist2,
-            Assist3 = assist3,
-            TimeRemaining = json["TIME_REMAINING"],
-            ShortHandedPowerPlay = json["SH_PP"],
-          };
-
           context.ScoreSheetEntries.Add(scoreSheetEntry);
         }
-
-        Debug.Print("Data Group 4: Created ScoreSheetEntries");
-        diffFromLast = DateTime.Now - last;
-        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
 
         _lo30ContextService.ContextSaveChanges();
         Debug.Print("Data Group 4: Saved ScoreSheetEntries " + context.ScoreSheetEntries.Count());

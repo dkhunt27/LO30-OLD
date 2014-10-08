@@ -133,6 +133,30 @@ namespace LO30.Services.Tests
     }
 
     [TestMethod()]
+    public void ProcessScoreSheetEntriesIntoPlayerGameStats_SeasonId54GameId3227()
+    {
+      List<GameRoster> gameRosters = GameRoster.LoadListFromJsonFile();
+
+      List<ScoreSheetEntryProcessed> scoreSheetEntriesProcessed = ScoreSheetEntryProcessed.LoadListFromJsonFile();
+
+      List<ScoreSheetEntryPenaltyProcessed> scoreSheetEntryPenaltiesProcessed = ScoreSheetEntryPenaltyProcessed.LoadListFromJsonFile();
+
+      var playerGameStats = _playerStatsService.ProcessScoreSheetEntriesIntoPlayerGameStats(scoreSheetEntriesProcessed, scoreSheetEntryPenaltiesProcessed, gameRosters);
+
+      var expected = new List<PlayerStatGame>() 
+      {
+        new PlayerStatGame(pid: 401, gid: 701, sid: 501, stidpf: 201, sub:false, g: 2, a: 1, p: 3, ppg: 0, shg: 2, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 408, gid: 701, sid: 501, stidpf: 201, sub:true, g: 0, a: 2, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 403, gid: 701, sid: 501, stidpf: 201, sub:false, g: 1, a: 2, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
+        new PlayerStatGame(pid: 407, gid: 701, sid: 501, stidpf: 202, sub:true, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 405, gid: 701, sid: 501, stidpf: 202, sub:false, g: 0, a: 2, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 406, gid: 701, sid: 501, stidpf: 202, sub:false, g: 2, a: 0, p: 2, ppg: 2, shg: 0, gwg: 0, pim: 0)
+      };
+
+      AssertAreEqualPlayerStatGameLists(playerGameStats, expected);
+    }
+
+    [TestMethod()]
     public void ProcessPlayerGameStatsIntoPlayerSeasonStatsTest_OnePlayer_OneTeam_OneGame()
     {
       var playerGameStats = new List<PlayerStatGame>()
