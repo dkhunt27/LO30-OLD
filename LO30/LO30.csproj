@@ -214,6 +214,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ScoreSheetEntryController.cs" />
+    <Compile Include="Controllers\NavigationController.cs" />
     <Compile Include="Controllers\WebApi\ForWebGoalieStatsController.cs" />
     <Compile Include="Controllers\WebApi\ForWebPlayerStatsController.cs" />
     <Compile Include="Controllers\WebApi\PlayerStatsSeasonController.cs" />
@@ -231,52 +232,52 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Services\Lo30DataService.cs" />
     <Compile Include="Services\AccessDatabaseService.cs" />
-    <Compile Include="Data\Email.cs" />
-    <Compile Include="Data\EmailType.cs" />
-    <Compile Include="Data\ForWebGoalieStat.cs" />
-    <Compile Include="Data\Game.cs" />
-    <Compile Include="Data\GameScore.cs" />
-    <Compile Include="Data\GameOutcome.cs" />
-    <Compile Include="Data\GameRoster.cs" />
-    <Compile Include="Data\GameTeam.cs" />
+    <Compile Include="Data\Objects\Email.cs" />
+    <Compile Include="Data\Objects\EmailType.cs" />
+    <Compile Include="Data\Objects\ForWebGoalieStat.cs" />
+    <Compile Include="Data\Objects\Game.cs" />
+    <Compile Include="Data\Objects\GameScore.cs" />
+    <Compile Include="Data\Objects\GameOutcome.cs" />
+    <Compile Include="Data\Objects\GameRoster.cs" />
+    <Compile Include="Data\Objects\GameTeam.cs" />
     <Compile Include="Data\Lo30ContextSeed.cs" />
     <Compile Include="Data\Lo30ContextSeedInitializer.cs" />
-    <Compile Include="Data\PhoneType.cs" />
-    <Compile Include="Data\Phone.cs" />
-    <Compile Include="Data\Address.cs" />
-    <Compile Include="Data\Penalty.cs" />
-    <Compile Include="Data\ForWebPlayerStat.cs" />
-    <Compile Include="Data\GoalieStatGame.cs" />
-    <Compile Include="Data\GoalieStatSeasonTeam.cs" />
-    <Compile Include="Data\GoalieStatSeason.cs" />
-    <Compile Include="Data\PlayerStatSeasonTeam.cs" />
-    <Compile Include="Data\PlayerStatSeason.cs" />
-    <Compile Include="Data\PlayerStatGame.cs" />
-    <Compile Include="Data\ScoreSheetEntryPenaltyProcessed.cs" />
-    <Compile Include="Data\ScoreSheetEntryProcessed.cs" />
-    <Compile Include="Data\ScoreSheetEntryPenalty.cs" />
-    <Compile Include="Data\ScoreSheetEntry.cs" />
-    <Compile Include="Data\SponsorEmail.cs" />
-    <Compile Include="Data\PlayerStatus.cs" />
-    <Compile Include="Data\PlayerDraft.cs" />
-    <Compile Include="Data\PlayerRating.cs" />
-    <Compile Include="Data\PlayerEmail.cs" />
-    <Compile Include="Data\PlayerPhone.cs" />
-    <Compile Include="Data\Player.cs" />
-    <Compile Include="Data\SeasonTeam.cs" />
-    <Compile Include="Data\PlayerStatusType.cs" />
-    <Compile Include="Data\SponsorPhone.cs" />
-    <Compile Include="Data\Team.cs" />
-    <Compile Include="Data\TeamRoster.cs" />
-    <Compile Include="Data\Sponsor.cs" />
-    <Compile Include="Data\Season.cs" />
-    <Compile Include="Data\TeamStanding.cs" />
-    <Compile Include="Data\PlayerStatCareer.cs" />
+    <Compile Include="Data\Objects\PhoneType.cs" />
+    <Compile Include="Data\Objects\Phone.cs" />
+    <Compile Include="Data\Objects\Address.cs" />
+    <Compile Include="Data\Objects\Penalty.cs" />
+    <Compile Include="Data\Objects\ForWebPlayerStat.cs" />
+    <Compile Include="Data\Objects\GoalieStatGame.cs" />
+    <Compile Include="Data\Objects\GoalieStatSeasonTeam.cs" />
+    <Compile Include="Data\Objects\GoalieStatSeason.cs" />
+    <Compile Include="Data\Objects\PlayerStatSeasonTeam.cs" />
+    <Compile Include="Data\Objects\PlayerStatSeason.cs" />
+    <Compile Include="Data\Objects\PlayerStatGame.cs" />
+    <Compile Include="Data\Objects\ScoreSheetEntryPenaltyProcessed.cs" />
+    <Compile Include="Data\Objects\ScoreSheetEntryProcessed.cs" />
+    <Compile Include="Data\Objects\ScoreSheetEntryPenalty.cs" />
+    <Compile Include="Data\Objects\ScoreSheetEntry.cs" />
+    <Compile Include="Data\Objects\SponsorEmail.cs" />
+    <Compile Include="Data\Objects\PlayerStatus.cs" />
+    <Compile Include="Data\Objects\PlayerDraft.cs" />
+    <Compile Include="Data\Objects\PlayerRating.cs" />
+    <Compile Include="Data\Objects\PlayerEmail.cs" />
+    <Compile Include="Data\Objects\PlayerPhone.cs" />
+    <Compile Include="Data\Objects\Player.cs" />
+    <Compile Include="Data\Objects\SeasonTeam.cs" />
+    <Compile Include="Data\Objects\PlayerStatusType.cs" />
+    <Compile Include="Data\Objects\SponsorPhone.cs" />
+    <Compile Include="Data\Objects\Team.cs" />
+    <Compile Include="Data\Objects\TeamRoster.cs" />
+    <Compile Include="Data\Objects\Sponsor.cs" />
+    <Compile Include="Data\Objects\Season.cs" />
+    <Compile Include="Data\Objects\TeamStanding.cs" />
+    <Compile Include="Data\Objects\PlayerStatCareer.cs" />
     <Compile Include="Data\ILo30Repository.cs" />
     <Compile Include="Data\Lo30Context.cs" />
     <Compile Include="Data\Lo30MigrationsConfiguration.cs" />
     <Compile Include="Data\Lo30Repository.cs" />
-    <Compile Include="Data\Article.cs" />
+    <Compile Include="Data\Objects\Article.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -294,6 +295,7 @@
   <ItemGroup>
     <Content Include="App_Data\Users.mdb" />
     <Content Include="App_Scripts\articlesIndex.js" />
+    <Content Include="App_Scripts\ScoreSheetEntry\scoreSheetProcessed.js" />
     <Content Include="Content\Template\css\animate.css" />
     <Content Include="Content\Template\css\blog.css" />
     <Content Include="Content\Template\css\color_scheme\blue.css" />
@@ -1231,6 +1233,23 @@
     <Content Include="Data\Access\Statuses.json" />
     <Content Include="Data\Access\TeamRosters.json" />
     <Content Include="Data\Access\Teams.json" />
+    <Content Include="Data\SqlServer\GameOutcomes.json" />
+    <Content Include="Data\SqlServer\GameRosters.json" />
+    <Content Include="Data\SqlServer\Games.json" />
+    <Content Include="Data\SqlServer\GameScores.json" />
+    <Content Include="Data\SqlServer\GameTeams.json" />
+    <Content Include="Data\SqlServer\PlayerRatings.json" />
+    <Content Include="Data\SqlServer\Players.json" />
+    <Content Include="Data\SqlServer\ScoreSheetEntries.json" />
+    <Content Include="Data\SqlServer\ScoreSheetEntriesProcessed.json" />
+    <Content Include="Data\SqlServer\ScoreSheetEntryPenalties.json" />
+    <Content Include="Data\SqlServer\ScoreSheetEntryPenaltiesProcessed.json" />
+    <Content Include="Data\SqlServer\Seasons.json" />
+    <Content Include="Data\SqlServer\SeasonTeams.json" />
+    <Content Include="Data\SqlServer\Sponsors.json" />
+    <Content Include="Data\SqlServer\TeamRosters.json" />
+    <Content Include="Data\SqlServer\Teams.json" />
+    <Content Include="Data\SqlServer\ForWebGoalieStat.json" />
     <None Include="Properties\PublishProfiles\lo30.pubxml" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
@@ -2121,6 +2140,11 @@
     <Content Include="Web.config" />
     <Content Include="Views\ScoreSheetEntry\ScoreSheetEntry.cshtml" />
     <Content Include="Scripts\version.json" />
+    <Content Include="Views\ScoreSheetEntry\ScoreSheetProcessed.cshtml" />
+    <Content Include="Views\ScoreSheetEntry\ScoreSheetEntryAdmin.cshtml" />
+    <Content Include="Views\Navigation\NavAdmin.cshtml" />
+    <Content Include="Views\Navigation\NavPublic.cshtml" />
+    <Content Include="Views\Navigation\NavBoard.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2129,8 +2153,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Scripts\controllers\" />
     <Folder Include="Content\Template\images\demo\revolution_slider\New folder\" />
     <Folder Include="Views\News\" />
+    <Folder Include="Views\ScoreSheetEntry\AngularTemplates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -1,14 +1,9 @@
-﻿using LO30.Services;
+﻿using LO30.Data.Objects;
+using LO30.Services;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity.Migrations;
-using System.Data.Entity.Validation;
-using System.Data.OleDb;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Transactions;
 
 namespace LO30.Data
 {
@@ -16,6 +11,7 @@ namespace LO30.Data
   {
     private Lo30ContextService _lo30ContextService;
     private AccessDatabaseService _accessDatabaseService;
+    private Lo30DataService _lo30DataService;
 
     public Lo30ContextSeed()
     {
@@ -28,6 +24,7 @@ namespace LO30.Data
 
       _lo30ContextService = new Lo30ContextService(context);
       _accessDatabaseService = new AccessDatabaseService();
+      _lo30DataService = new Lo30DataService();
 
       DateTime first = DateTime.Now;
       DateTime last = DateTime.Now;
@@ -1160,7 +1157,7 @@ namespace LO30.Data
       #region 4:ScoreSheetEntries...using loadJson
       if (context.ScoreSheetEntries.Count() == 0)
       {
-        List<ScoreSheetEntry> scoreSheetEntries = ScoreSheetEntry.LoadListFromJsonFile(folderPath + "ScoreSheetEntries.json");
+        List<ScoreSheetEntry> scoreSheetEntries = ScoreSheetEntry.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntries.json");
 
         foreach(var scoreSheetEntry in scoreSheetEntries)
         {

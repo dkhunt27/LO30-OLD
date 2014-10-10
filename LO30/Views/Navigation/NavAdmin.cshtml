@@ -1,0 +1,119 @@
+﻿<!-- Top Nav -->
+<div class="navbar-collapse nav-main-collapse collapse pull-right">
+  <nav class="nav-main mega-menu">
+    <ul class="nav nav-pills nav-main scroll-menu" id="topMain">
+      <li>@Html.ActionLink("Home", "Index", "Home")</li>
+      <li>@Html.ActionLink("Scores", "Index", "Scores")</li>
+      <li id="Standings" class="dropdown">
+        <a class="dropdown-toggle" href="#">
+          Standings <i class="fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li>@Html.ActionLink("Regular Season", "RegularSeason", "Standings")</li>
+          <li>@Html.ActionLink("Playoffs", "Playoffs", "Standings")</li>
+        </ul>
+      </li>
+      <li id="Schedule" class="dropdown">
+        <a class="dropdown-toggle" href="#">
+          Schedule <i class="fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li>@Html.ActionLink("Today", "Today", "Schedule")</li>
+          <li>@Html.ActionLink("Week", "Week", "Schedule")</li>
+          <li>@Html.ActionLink("Month", "Month", "Schedule")</li>
+          <li>@Html.ActionLink("Season", "Season", "Schedule")</li>
+        </ul>
+      </li>
+      <li id="Stats" class="dropdown">
+        <a class="dropdown-toggle" href="#">
+          Stats <i class="fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li>@Html.ActionLink("League Leaders", "LeagueLeaders", "Stats")</li>
+          <li>@Html.ActionLink("Individual", "Individual", "Stats")</li>
+          <li>@Html.ActionLink("Team", "Team", "Stats")</li>
+          <li>@Html.ActionLink("Game By Game", "GameByGame", "Stats")</li>
+          <li class="divider"></li>
+          <li>@Html.ActionLink("Career", "Career", "Stats")</li>
+          <li>@Html.ActionLink("Milestones", "Milestones", "Stats")</li>
+          <li class="divider"></li>
+          <li>@Html.ActionLink("Awards", "Awards", "Stats")</li>
+        </ul>
+      </li>
+      <li id="Players" class="dropdown">
+        <a class="dropdown-toggle" href="#">
+          Players <i class="fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li>@Html.ActionLink("Search", "Search", "Players")</li>
+          <li>@Html.ActionLink("Draft", "Draft", "Players")</li>
+        </ul>
+      </li>
+      <li id="Teams" class="dropdown">
+        <a class="dropdown-toggle" href="#">
+          Teams <i class="fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li>@Html.ActionLink("Bill Brown", "BillBrown", "Teams")</li>
+          <li>@Html.ActionLink("D&G", "D_And_G", "Teams")</li>
+          <li>@Html.ActionLink("DPKZ", "DPKZ", "Teams")</li>
+          <li>@Html.ActionLink("Glover", "Glover", "Teams")</li>
+          <li>@Html.ActionLink("Hunt's Ace", "HuntsAce", "Teams")</li>
+          <li>@Html.ActionLink("LAB/PSI", "LAB_PSI", "Teams")</li>
+          <li>@Html.ActionLink("Villanova", "Villanova", "Teams")</li>
+          <li>@Html.ActionLink("Zaschak", "Zaschak", "Teams")</li>
+        </ul>
+      </li>
+      <li id="AboutUs" class="dropdown">
+        <a class="dropdown-toggle" href="#">
+          <b>About Us</b> <i class="fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li>@Html.ActionLink("Members", "Members", "AboutUs")</li>
+          <li>@Html.ActionLink("Invitees", "Invitees", "AboutUs")</li>
+          <li>@Html.ActionLink("Wait List", "WaitList", "AboutUs")</li>
+          <li class="divider"></li>
+          <li>@Html.ActionLink("Sponsors", "Sponsors", "AboutUs")</li>
+          <li class="divider"></li>
+          <li>@Html.ActionLink("About Us", "Index", "AboutUs")</li>
+          <li>@Html.ActionLink("Rules", "Rules", "AboutUs")</li>
+          <li class="divider"></li>
+          <li>@Html.ActionLink("Services", "Services", "AboutUs")</li>
+          <li class="divider"></li>
+          <li>@Html.ActionLink("Contact Us", "ContactUs", "AboutUs")</li>
+        </ul>
+      </li>
+      <li id="Admin" class="dropdown">
+        <a class="dropdown-toggle" href="#">
+          Admin <i class="fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li>@Html.ActionLink("Game Result", "GameResult", "Admin")</li>
+          <li>@Html.ActionLink("Game Roster", "GameRoster", "Admin")</li>
+          <li>@Html.ActionLink("Game Sheet", "GameSheet", "Admin")</li>
+          <li>@Html.ActionLink("Score Sheet Entry", "ScoreSheetEntry", "ScoreSheetEntry")</li>
+          <li class="divider"></li>
+          <li>@Html.ActionLink("Registration", "Registration", "Admin")</li>
+          <li class="divider"></li>
+          <li>@Html.ActionLink("Roster", "Roster", "Admin")</li>
+          <li>@Html.ActionLink("Draft", "Draft", "Admin")</li>
+          <li>@Html.ActionLink("Schedule", "Schedule", "Admin")</li>
+        </ul>
+      </li>
+
+      <!-- GLOBAL SEARCH -->
+      <li id="Search" class="search">
+        <!-- search form -->
+        <form method="get" action="#" class="input-group pull-right">
+          <input type="text" class="form-control" name="k" id="k" value="" placeholder="Search">
+          <span class="input-group-btn">
+            <button class="btn btn-primary notransition"><i class="fa fa-search"></i></button>
+          </span>
+        </form>
+        <!-- /search form -->
+      </li>
+      <!-- /GLOBAL SEARCH -->
+    </ul>
+  </nav>
+</div>
+<!-- /Top Nav -->

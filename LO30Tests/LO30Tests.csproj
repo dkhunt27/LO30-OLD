@@ -61,10 +61,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Data\SeasonId54GameId3227\GameOutcomes.json" />
+    <None Include="Data\SeasonId54GameId3227\GameRosters.json" />
+    <None Include="Data\SeasonId54GameId3227\Games.json" />
+    <None Include="Data\SeasonId54GameId3227\GameScores.json" />
+    <None Include="Data\SeasonId54GameId3227\GameTeams.json" />
+    <None Include="Data\SeasonId54GameId3227\PlayerRatings.json" />
+    <None Include="Data\SeasonId54GameId3227\Players.json" />
+    <None Include="Data\SeasonId54GameId3227\ScoreSheetEntries.json" />
+    <None Include="Data\SeasonId54GameId3227\ScoreSheetEntriesProcessed.json" />
+    <None Include="Data\SeasonId54GameId3227\ScoreSheetEntryPenalties.json" />
+    <None Include="Data\SeasonId54GameId3227\ScoreSheetEntryPenaltiesProcessed.json" />
+    <None Include="Data\SeasonId54GameId3227\Seasons.json" />
+    <None Include="Data\SeasonId54GameId3227\SeasonTeams.json" />
+    <None Include="Data\SeasonId54GameId3227\Sponsors.json" />
+    <None Include="Data\SeasonId54GameId3227\TeamRosters.json" />
+    <None Include="Data\SeasonId54GameId3227\Teams.json" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\SeasonId54GameId3227\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

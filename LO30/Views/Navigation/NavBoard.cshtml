@@ -1,0 +1,45 @@
+﻿<!-- Top Nav -->
+<div class="navbar-collapse nav-main-collapse collapse pull-right">
+  <nav class="nav-main mega-menu">
+    <ul class="nav nav-pills nav-main scroll-menu" id="topMain">
+      <li>@Html.ActionLink("Home", "Index", "Home")</li>
+      <li id="Standings" class="dropdown">
+        <a class="dropdown-toggle" href="#">
+          Standings <i class="fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li>@Html.ActionLink("Regular Season", "RegularSeason", "Standings")</li>
+          <li>@Html.ActionLink("Playoffs", "Playoffs", "Standings")</li>
+        </ul>
+      </li>
+      <li id="Schedule" class="dropdown">
+        <a class="dropdown-toggle" href="#">
+          Schedule <i class="fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li>@Html.ActionLink("Today", "Today", "Schedule")</li>
+          <li>@Html.ActionLink("Week", "Week", "Schedule")</li>
+          <li>@Html.ActionLink("Month", "Month", "Schedule")</li>
+          <li>@Html.ActionLink("Season", "Season", "Schedule")</li>
+        </ul>
+      </li>
+      <li id="Stats" class="dropdown">
+        <a class="dropdown-toggle" href="#">
+          Stats <i class="fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li>@Html.ActionLink("League Leaders", "LeagueLeaders", "Stats")</li>
+          <li>@Html.ActionLink("Individual", "Individual", "Stats")</li>
+          <li>@Html.ActionLink("Team", "Team", "Stats")</li>
+          <li>@Html.ActionLink("Game By Game", "GameByGame", "Stats")</li>
+          <li class="divider"></li>
+          <li>@Html.ActionLink("Career", "Career", "Stats")</li>
+          <li>@Html.ActionLink("Milestones", "Milestones", "Stats")</li>
+          <li class="divider"></li>
+          <li>@Html.ActionLink("Awards", "Awards", "Stats")</li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</div>
+<!-- /Top Nav -->

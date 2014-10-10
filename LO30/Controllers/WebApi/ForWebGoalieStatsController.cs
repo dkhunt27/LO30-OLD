@@ -1,9 +1,7 @@
 ﻿using LO30.Data;
-using System;
+using LO30.Data.Objects;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace LO30.Controllers
@@ -18,7 +16,7 @@ namespace LO30.Controllers
 
     public IEnumerable<ForWebGoalieStat> Get()
     {
-      List<ForWebGoalieStat> results = _repo.GetGoalieStatsForWeb();
+      IQueryable<ForWebGoalieStat> results = _repo.GetGoalieStatsForWeb();
 
       var goalieStats = results.OrderBy(x => x.GAA).ToList();
 

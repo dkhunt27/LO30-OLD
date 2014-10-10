@@ -1,8 +1,6 @@
-﻿using System;
+﻿using LO30.Data.Objects;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LO30.Data
 {
@@ -14,13 +12,15 @@ namespace LO30.Data
 
     IQueryable<PlayerStatSeason> GetPlayerStatsSeason();
 
-    List<ForWebPlayerStat> GetPlayerStatsForWeb();
+    IQueryable<ForWebPlayerStat> GetPlayerStatsForWeb();
 
-    List<ForWebGoalieStat> GetGoalieStatsForWeb();
+    IQueryable<ForWebGoalieStat> GetGoalieStatsForWeb();
 
     IQueryable<ScoreSheetEntry> GetScoreSheetEntries();
 
     bool Save();
+
+    void SaveTablesToJson();
 
     bool AddArticle(Article newArticle);
 

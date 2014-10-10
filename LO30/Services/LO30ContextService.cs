@@ -1,20 +1,32 @@
 ﻿using LO30.Data;
+using LO30.Data.Objects;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Linq;
-using System.Web;
 
 namespace LO30.Services
 {
+  class ContextTableList
+  {
+    public string QueryBegin { get; set; }
+    public string QueryEnd { get; set; }
+    public string TableName { get; set; }
+    public string FileName { get; set; }
+  }
+
     public class Lo30ContextService
     {
       Lo30Context _ctx;
+      private Lo30DataService _lo30DataService;
+      private string _folderPath;
 
       public Lo30ContextService(Lo30Context ctx)
       {
         _ctx = ctx;
+        _lo30DataService = new Lo30DataService();
+        _folderPath = @"C:\git\LO30\LO30\Data\SqlServer\";
       }
 
       #region SaveOrUpdate functions
@@ -315,6 +327,66 @@ namespace LO30.Services
         return ContextSaveChanges();
       }
 
+      public int SaveOrUpdateForWebGoalieStat(List<ForWebGoalieStat> goalieWebStat)
+      {
+        var saved = 0;
+        foreach (var item in goalieWebStat)
+        {
+          var results = SaveOrUpdateForWebGoalieStat(item);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateForWebGoalieStat(ForWebGoalieStat goalieWebStat)
+      {
+        var found = FindForWebGoalieStat(errorIfNotFound: false, errorIfMoreThanOneFound: true, pid: goalieWebStat.PID, stidpf: goalieWebStat.STIDPF);
+
+        if (found == null)
+        {
+          _ctx.ForWebGoalieStats.Add(goalieWebStat);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(goalieWebStat);
+        }
+
+        return ContextSaveChanges();
+      }
+
+      public int SaveOrUpdateForWebPlayerStat(List<ForWebPlayerStat> playerWebStat)
+      {
+        var saved = 0;
+        foreach (var item in playerWebStat)
+        {
+          var results = SaveOrUpdateForWebPlayerStat(item);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateForWebPlayerStat(ForWebPlayerStat playerWebStat)
+      {
+        var found = FindForWebPlayerStat(errorIfNotFound: false, errorIfMoreThanOneFound: true, pid: playerWebStat.PID, stidpf: playerWebStat.STIDPF);
+
+        if (found == null)
+        {
+          _ctx.ForWebPlayerStats.Add(playerWebStat);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(playerWebStat);
+        }
+
+        return ContextSaveChanges();
+      }
+
       #endregion
 
       #region find functions
@@ -327,7 +399,7 @@ namespace LO30.Services
 
       public List<GameRoster> FindGameRostersWithGameIdsAndGoalie(bool errorIfNotFound, int startingGameId, int endingGameId, bool goalie)
       {
-        var found = _ctx.GameRosters.Where(x => x.GameTeam.GameId >= startingGameId && x.GameTeam.GameId <= endingGameId && x.Goalie == goalie).ToList();
+        var found = _ctx.GameRosters.Include("GameTeam").Where(x => x.GameTeam.GameId >= startingGameId && x.GameTeam.GameId <= endingGameId && x.Goalie == goalie).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
@@ -348,7 +420,7 @@ namespace LO30.Services
 
       public List<GameRoster> FindGameRostersWithGameIds(bool errorIfNotFound, int startingGameId, int endingGameId)
       {
-        var found = _ctx.GameRosters.Where(x => x.GameTeam.GameId >= startingGameId && x.GameTeam.GameId <= endingGameId).ToList();
+        var found = _ctx.GameRosters.Include("GameTeam").Where(x => x.GameTeam.GameId >= startingGameId && x.GameTeam.GameId <= endingGameId).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
@@ -734,6 +806,80 @@ namespace LO30.Services
       }
       #endregion
 
+      #region FindForWebGoalieStat
+      public ForWebGoalieStat FindForWebGoalieStat(int pid, int stidpf)
+      {
+        return FindForWebGoalieStat(errorIfNotFound: true, errorIfMoreThanOneFound: true, pid: pid, stidpf: stidpf);
+      }
+
+      public ForWebGoalieStat FindForWebGoalieStat(bool errorIfNotFound, bool errorIfMoreThanOneFound, int pid, int stidpf)
+      {
+        var found = _ctx.ForWebGoalieStats.Where(x => x.PID == pid && x.STIDPF == stidpf).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find ForWebGoalieStat for" +
+                                                  " PID:" + pid +
+                                                  " STIDPF:" + stidpf
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 ForWebGoalieStat was not found for" +
+                                                  " PID:" + pid +
+                                                  " STIDPF:" + stidpf
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region FindForWebPlayerStat
+      public ForWebPlayerStat FindForWebPlayerStat(int pid, int stidpf)
+      {
+        return FindForWebPlayerStat(errorIfNotFound: true, errorIfMoreThanOneFound: true, pid: pid, stidpf: stidpf);
+      }
+
+      public ForWebPlayerStat FindForWebPlayerStat(bool errorIfNotFound, bool errorIfMoreThanOneFound, int pid, int stidpf)
+      {
+        var found = _ctx.ForWebPlayerStats.Where(x => x.PID == pid && x.STIDPF == stidpf).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find ForWebPlayerStat for" +
+                                                  " PID:" + pid +
+                                                  " STIDPF:" + stidpf
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 ForWebPlayerStat was not found for" +
+                                                  " PID:" + pid +
+                                                  " STIDPF:" + stidpf
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
       #endregion
 
       public int ContextSaveChanges()
@@ -771,6 +917,171 @@ namespace LO30.Services
 
           throw ex;
         }
+      }
+
+
+      public void SaveTablesToJson()
+      {
+        DateTime first = DateTime.Now;
+        DateTime last = DateTime.Now;
+        TimeSpan diffFromFirst = new TimeSpan();
+
+        //Address
+        //Article
+        //Email
+        //EmailType
+
+        _lo30DataService.ToJsonToFile(_ctx.ForWebGoalieStats
+                                           .Where(x => x.SID == 54).ToList(),
+                                     _folderPath + "ForWebGoalieStat.json");
+        _lo30DataService.ToJsonToFile(_ctx.ForWebPlayerStats
+                                            .Where(x => x.SID == 54).ToList(),
+                                      _folderPath + "ForWebPlayerStats.json");
+
+        _lo30DataService.ToJsonToFile(_ctx.Games
+                                            .Include("Season")
+                                            .Where(x => x.SeasonId == 54).ToList(), 
+                                      _folderPath + "Games.json");
+        _lo30DataService.ToJsonToFile(_ctx.GameOutcomes
+                                            .Include("GameTeam")
+                                            .Include("GameTeam.Game")
+                                            .Include("GameTeam.Game.Season")
+                                            .Include("GameTeam.SeasonTeam")
+                                            .Include("GameTeam.SeasonTeam.Season")
+                                            .Include("GameTeam.SeasonTeam.Team")
+                                            .Include("GameTeam.SeasonTeam.Team.Coach")
+                                            .Include("GameTeam.SeasonTeam.Team.Sponsor")
+                                            .Where(x => x.GameTeam.SeasonTeam.SeasonId == 54).ToList(), 
+                                      _folderPath + "GameOutcomes.json");
+        _lo30DataService.ToJsonToFile(_ctx.GameRosters
+                                            .Include("GameTeam")
+                                            .Include("GameTeam.Game")
+                                            .Include("GameTeam.Game.Season")
+                                            .Include("GameTeam.SeasonTeam")
+                                            .Include("GameTeam.SeasonTeam.Season")
+                                            .Include("GameTeam.SeasonTeam.Team")
+                                            .Include("GameTeam.SeasonTeam.Team.Coach")
+                                            .Include("GameTeam.SeasonTeam.Team.Sponsor")
+                                            .Where(x => x.GameTeam.SeasonTeam.SeasonId == 54).ToList(),
+                                      _folderPath + "GameRosters.json");
+        _lo30DataService.ToJsonToFile(_ctx.GameScores
+                                            .Include("GameTeam")
+                                            .Include("GameTeam.Game")
+                                            .Include("GameTeam.Game.Season")
+                                            .Include("GameTeam.SeasonTeam")
+                                            .Include("GameTeam.SeasonTeam.Season")
+                                            .Include("GameTeam.SeasonTeam.Team")
+                                            .Include("GameTeam.SeasonTeam.Team.Coach")
+                                            .Include("GameTeam.SeasonTeam.Team.Sponsor")
+                                            .Where(x => x.GameTeam.SeasonTeam.SeasonId == 54).ToList(),
+                                      _folderPath + "GameScores.json");
+        _lo30DataService.ToJsonToFile(_ctx.GameTeams
+                                            .Include("Game")
+                                            .Include("Game.Season")
+                                            .Include("SeasonTeam")
+                                            .Include("SeasonTeam.Season")
+                                            .Include("SeasonTeam.Team")
+                                            .Include("SeasonTeam.Team.Coach")
+                                            .Include("SeasonTeam.Team.Sponsor")
+                                            .Where(x => x.SeasonTeam.SeasonId == 54).ToList(),
+                                      _folderPath + "GameTeams.json");
+
+        //GoalieStatGame
+        //GoalieStatSeason
+        //GoalieStatSeasonTeam
+        //Penalty
+        //Phone
+        //PhoneType
+
+        _lo30DataService.ToJsonToFile(_ctx.Players.ToList(),
+                                     _folderPath + "Players.json");
+
+        // PlayerDraft
+        // PlayerEmail
+        // PlayerPhone
+
+        _lo30DataService.ToJsonToFile(_ctx.PlayerRatings
+                                            .Include("Season")
+                                            .Include("Player")
+                                            .Where(x => x.Season.SeasonId == 54).ToList(),
+                                      _folderPath + "PlayerRatings.json");
+
+        //PlayerStatCareer
+        //PlayerStatGame
+        //PlayerStatSeason
+        //PlayerStatSeasonTeam
+        //PlayerStatus
+        //PlayerStatusType
+
+        _lo30DataService.ToJsonToFile(_ctx.ScoreSheetEntries
+                                            .Include("Game")
+                                            .Include("Game.Season")
+                                            .Where(x => x.Game.Season.SeasonId == 54).ToList(),
+                                      _folderPath + "ScoreSheetEntries.json");
+
+        _lo30DataService.ToJsonToFile(_ctx.ScoreSheetEntryPenalties
+                                            .Include("Game")
+                                            .Include("Game.Season")
+                                            .Where(x => x.Game.Season.SeasonId == 54).ToList(),
+                                      _folderPath + "ScoreSheetEntryPenalties.json");
+
+        _lo30DataService.ToJsonToFile(_ctx.ScoreSheetEntriesProcessed
+                                            .Include("Game")
+                                            .Include("Game.Season")
+                                            .Include("GoalPlayer")
+                                            .Include("Assist1Player")
+                                            .Include("Assist2Player")
+                                            .Include("Assist3Player")
+                                            .Where(x => x.Game.Season.SeasonId == 54).ToList(),
+                                      _folderPath + "ScoreSheetEntriesProcessed.json");
+
+        _lo30DataService.ToJsonToFile(_ctx.ScoreSheetEntryPenaltiesProcessed
+                                            .Include("Game")
+                                            .Include("Game.Season")
+                                            .Include("Player")
+                                            .Include("Penalty")
+                                            .Where(x => x.Game.Season.SeasonId == 54).ToList(),
+                                      _folderPath + "ScoreSheetEntryPenaltiesProcessed.json");
+
+        _lo30DataService.ToJsonToFile(_ctx.Seasons
+                                            .Where(x => x.SeasonId == 54).ToList(),
+                                      _folderPath + "Seasons.json");
+
+        _lo30DataService.ToJsonToFile(_ctx.SeasonTeams
+                                            .Include("Season")
+                                            .Include("Team")
+                                            .Include("Team.Coach")
+                                            .Include("Team.Sponsor")
+                                            .Where(x => x.Season.SeasonId == 54).ToList(),
+                                      _folderPath + "SeasonTeams.json");
+
+        _lo30DataService.ToJsonToFile(_ctx.Sponsors.ToList(),
+                                     _folderPath + "Sponsors.json");
+
+        //SponsorEmail
+        //SponsorPhone
+
+        _lo30DataService.ToJsonToFile(_ctx.Teams
+                                            .Include("Coach")
+                                            .Include("Sponsor")
+                                            .ToList(),
+                                      _folderPath + "Teams.json");
+
+        _lo30DataService.ToJsonToFile(_ctx.TeamRosters
+                                            .Include("SeasonTeam")
+                                            .Include("SeasonTeam.Season")
+                                            .Include("SeasonTeam.Team")
+                                            .Include("SeasonTeam.Team.Coach")
+                                            .Include("SeasonTeam.Team.Sponsor")
+                                            .Include("Player")
+                                            .Where(x => x.SeasonTeam.SeasonId == 54).ToList(),
+                                      _folderPath + "TeamRosters.json");
+
+        //TeamStanding
+
+        diffFromFirst = DateTime.Now - first;
+        Debug.Print("Total TimeToProcess: " + diffFromFirst.ToString());
+
       }
     }
 }

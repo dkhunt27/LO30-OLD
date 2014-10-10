@@ -1,9 +1,8 @@
-﻿using LO30.Data;
+﻿using LO30.Data.Objects;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Web;
 
 namespace LO30.Services
 {
@@ -22,17 +21,7 @@ namespace LO30.Services
           var gameId = gameRoster.GameTeam.GameId;
           var seasonTeamId = gameRoster.GameTeam.SeasonTeamId;
           var sub = gameRoster.Sub;
-
-          int playerId;
-          if (gameRoster.SubbingForPlayerId == null)
-          {
-            playerId = gameRoster.PlayerId;
-          }
-          else
-          {
-            // if there is a sub, use him
-            playerId = Convert.ToInt32(gameRoster.SubbingForPlayerId);
-          }
+          var playerId = gameRoster.PlayerId;
 
           if (gameRoster.GameTeam.SeasonTeam == null || gameRoster.GameTeam.SeasonTeam.SeasonId == null)
           {
@@ -225,6 +214,56 @@ namespace LO30.Services
       return playerSeasonStats;
     }
 
+    public List<ForWebPlayerStat> ProcessPlayerSeasonTeamStatsIntoForWebPlayerStats(List<PlayerStatSeasonTeam> playerSeasonTeamStats, List<PlayerRating> playerRatings)
+    {
+      var newData = new List<ForWebPlayerStat>();
+
+      foreach (var item in playerSeasonTeamStats)
+      {
+        var ratings = playerRatings.Where(x => x.SeasonId == item.SeasonId && x.PlayerId == item.PlayerId).FirstOrDefault();
+
+        var line = 0;
+        if (ratings != null)
+        {
+          line = ratings.Line;
+        }
+
+        var playerName = item.Player.FirstName + " " + item.Player.LastName;
+        if (!string.IsNullOrWhiteSpace(item.Player.Suffix))
+        {
+          playerName = playerName + " " + item.Player.Suffix;
+        }
+
+        var stat = new ForWebPlayerStat()
+        {
+          PID = item.PlayerId,
+          STIDPF = item.SeasonTeamIdPlayingFor,
+          SID = item.SeasonId,
+          Player = playerName,
+          Team = item.SeasonTeamPlayingFor.Team.TeamLongName,
+          Sub = item.Sub == true ? "Y" : "N",
+          Pos = item.Player.PreferredPosition,
+          Line = line,
+          GP = item.Games,
+          G = item.Goals,
+          A = item.Assists,
+          P = item.Points,
+          PPG = item.PowerPlayGoals,
+          SHG = item.ShortHandedGoals,
+          GWG = item.GameWinningGoals,
+          PIM = item.PenaltyMinutes
+        };
+
+        if (stat.PID == 0 && stat.SID == 0 && stat.STIDPF == 0)
+        {
+          Debug.Print(string.Format("ProcessPlayerSeasonTeamStatsIntoForWebPlayerStats: Warning ForWebPlayerStat has ids of 0,0,0 Player:{0}, Team:{1}, Sub:{2}", stat.Player, stat.Team, stat.Sub));
+        }
+        newData.Add(stat);
+      }
+
+      return newData;
+    }
+    
     public List<GoalieStatGame> ProcessScoreSheetEntriesIntoGoalieGameStats(List<GameOutcome> gameOutcomes, List<GameRoster> gameRostersGoalies)
     {
       var goalieGameStats = new List<GoalieStatGame>();
@@ -373,5 +412,37 @@ namespace LO30.Services
 
       return goalieSeasonStats;
     }
+
+    public List<ForWebGoalieStat> ProcessPlayerSeasonTeamStatsIntoForWebGoalieStats(List<GoalieStatSeasonTeam> goalieSeasonTeamStats)
+    {
+      var newData = new List<ForWebGoalieStat>();
+
+      foreach (var item in goalieSeasonTeamStats)
+      {
+        var playerName = item.Player.FirstName + " " + item.Player.LastName;
+        if (!string.IsNullOrWhiteSpace(item.Player.Suffix))
+        {
+          playerName = playerName + " " + item.Player.Suffix;
+        }
+
+        newData.Add(new ForWebGoalieStat()
+        {
+          PID = item.PlayerId,
+          STIDPF = item.SeasonTeamIdPlayingFor,
+          SID = item.SeasonId,
+          Player = playerName,
+          Team = item.SeasonTeamPlayingFor.Team.TeamLongName,
+          Sub = item.Sub == true ? "Y" : "N",
+          GP = item.Games,
+          GA = item.GoalsAgainst,
+          GAA = item.GoalsAgainstAverage,
+          SO = item.Shutouts,
+          W = item.Wins
+        });
+      }
+
+      return newData;
+    }
+    
   }
 }

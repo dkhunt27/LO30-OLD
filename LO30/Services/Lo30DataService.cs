@@ -1,38 +1,17 @@
-﻿using LO30.Services;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity.Migrations;
-using System.Data.Entity.Validation;
-using System.Data.OleDb;
-using System.Diagnostics;
+﻿using Newtonsoft.Json;
 using System.IO;
-using System.Linq;
+using System.Runtime.Serialization.Json;
 using System.Text;
-using System.Transactions;
 
 namespace LO30.Services
 {
-  class TableList
-  {
-    public string QueryBegin { get; set; }
-    public string QueryEnd { get; set; }
-    public string TableName { get; set; }
-    public string FileName { get; set; }
-  }
-
   public class Lo30DataService
   {
-    private string _folderPath;
-    private string _connString;
-
     public Lo30DataService()
     {
-      _folderPath = "C:\\git\\LO30\\LO30\\Data\\Json\\";
     }
 
-    public void ToJson<T>(T obj, string destPath)
+    public void ToJsonNewtonsoft(dynamic obj, string destPath)
     {
       var output = JsonConvert.SerializeObject(obj, Formatting.Indented);
 
@@ -45,11 +24,49 @@ namespace LO30.Services
       }
     }
 
-    public T FromJson<T>(string srcPath)
+    public T FromJsonNewtonsoft<T>(string srcPath)
     {
       string contents = File.ReadAllText(srcPath);
       T parsedJson = (T)JsonConvert.DeserializeObject(contents);
       return parsedJson;
     }
+
+    public void ToJsonToFile<T>(T obj, string destPath)
+    {
+      string json = ToJson<T>(obj);
+
+      StringBuilder sb = new StringBuilder();
+      sb.Append(json);
+
+      using (StreamWriter outfile = new StreamWriter(destPath))
+      {
+        outfile.Write(sb.ToString());
+      }
+    }
+
+    public string ToJson<T>(T obj)
+    {
+      DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(T));
+      MemoryStream ms = new MemoryStream();
+      ser.WriteObject(ms, obj);
+      string jsonString = Encoding.UTF8.GetString(ms.ToArray());
+      ms.Close();
+      return jsonString;
+    }
+
+    public T FromJsonFromFile<T>(string srcPath)
+    {
+      string contents = File.ReadAllText(srcPath);
+      return FromJson<T>(contents);
+    }
+
+    public T FromJson<T>(string jsonString)
+    {
+      DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
+      MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(jsonString));
+      T obj = (T)serializer.ReadObject(ms);
+      return obj;
+    }
   }
 }
+

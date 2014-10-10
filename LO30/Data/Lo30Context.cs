@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LO30.Data.Objects;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
@@ -15,7 +16,6 @@ namespace LO30.Data
       this.Configuration.LazyLoadingEnabled = false;
       this.Configuration.ProxyCreationEnabled = false;
 
-
       //Database.SetInitializer(new LO30ContextSeedInitializer());
       Database.SetInitializer(new MigrateDatabaseToLatestVersion<Lo30Context, Lo30MigrationsConfiguration>());
     }
@@ -28,7 +28,10 @@ namespace LO30.Data
     public DbSet<Address> Addresses { get; set; }
     public DbSet<Email> Emails { get; set; }
     public DbSet<EmailType> EmailTypes { get; set; }
-    
+
+    public DbSet<ForWebGoalieStat> ForWebGoalieStats { get; set; }
+    public DbSet<ForWebPlayerStat> ForWebPlayerStats { get; set; }
+
     public DbSet<Game> Games { get; set; }
     public DbSet<GameOutcome> GameOutcomes { get; set; }
     public DbSet<GameRoster> GameRosters { get; set; }
