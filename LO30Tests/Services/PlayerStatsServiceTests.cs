@@ -350,6 +350,116 @@ namespace LO30.Services.Tests
       AssertAreEqualPlayerStatSeasonTeamLists(expected, playerSeasonTeamStatsPartial);
     }
 
+    [TestMethod()]
+    public void ProcessGameOutcomesIntoGoalieGameStats_NoGameOutcomes_NoSubs()
+    {
+      GameTeam gt101 = new GameTeam(gid: 701, ht: true, stid: 201) { SeasonTeam = new SeasonTeam(stid: 201, sid: 501, tid: 601) };
+      GameTeam gt102 = new GameTeam(gid: 701, ht: false, stid: 202) { SeasonTeam = new SeasonTeam(stid: 202, sid: 501, tid: 601) };
+
+      List<GameRoster> gameRosters = new List<GameRoster>()
+      {
+        new GameRoster(grid: 1, gtid: 101, pn: 1, g:true, pid: 401, sub: false, sfpid: null){GameTeam = gt101},
+        new GameRoster(grid: 1, gtid: 102, pn: 30, g:true, pid: 402, sub: false, sfpid: null){GameTeam = gt102},
+      };
+
+      List<GameOutcome> gameOutcomes = new List<GameOutcome>()
+      {
+      };
+
+      var goalieGameStats = _playerStatsService.ProcessGameOutcomesIntoGoalieGameStats(gameOutcomes, gameRosters);
+
+      var expected = new List<GoalieStatGame>() 
+      {
+        new GoalieStatGame(pid: 401, gid: 701, sid: 501, stidpf: 201, sub: false, ga: 0, so: 0, w: 0),
+        new GoalieStatGame(pid: 402, gid: 701, sid: 501, stidpf: 202, sub: false, ga: 0, so: 0, w: 0)
+      };
+
+      AssertAreEqualGoalieStatGameLists(expected, goalieGameStats);
+    }
+
+    [TestMethod()]
+    public void ProcessGameOutcomesIntoGoalieGameStats_NoGameOutcomes_WithSubs()
+    {
+      GameTeam gt101 = new GameTeam(gid: 701, ht: true, stid: 201) { SeasonTeam = new SeasonTeam(stid: 201, sid: 501, tid: 601) };
+      GameTeam gt102 = new GameTeam(gid: 701, ht: false, stid: 202) { SeasonTeam = new SeasonTeam(stid: 202, sid: 501, tid: 601) };
+
+      List<GameRoster> gameRosters = new List<GameRoster>()
+      {
+        new GameRoster(grid: 1, gtid: 101, pn: 1, g:true, pid: 401, sub: false, sfpid: null){GameTeam = gt101},
+        new GameRoster(grid: 1, gtid: 102, pn: 30, g:true, pid: 408, sub: true, sfpid: 402){GameTeam = gt102},
+      };
+
+      List<GameOutcome> gameOutcomes = new List<GameOutcome>()
+      {
+      };
+
+
+      var goalieGameStats = _playerStatsService.ProcessGameOutcomesIntoGoalieGameStats(gameOutcomes, gameRosters);
+
+      var expected = new List<GoalieStatGame>() 
+      {
+        new GoalieStatGame(pid: 401, gid: 701, sid: 501, stidpf: 201, sub: false, ga: 0, so: 0, w: 0),
+        new GoalieStatGame(pid: 408, gid: 701, sid: 501, stidpf: 202, sub: true, ga: 0, so: 0, w: 0)
+      };
+
+      AssertAreEqualGoalieStatGameLists(expected, goalieGameStats);
+    }
+
+    [TestMethod()]
+    public void ProcessGameOutcomesIntoGoalieGameStats_OneScoreSheets_WithSubs()
+    {
+      GameTeam gt101 = new GameTeam(gid:701, ht: true, stid:201){SeasonTeam = new SeasonTeam(stid:201, sid:501, tid:601)};
+      GameTeam gt102 = new GameTeam(gid:701, ht: false, stid:202){SeasonTeam = new SeasonTeam(stid:202, sid:501, tid:601)};
+
+      List<GameRoster> gameRosters = new List<GameRoster>()
+      {
+        new GameRoster(grid: 1, gtid: 101, pn: 1, g:true, pid: 401, sub: false, sfpid: null){GameTeam = gt101},
+        new GameRoster(grid: 1, gtid: 102, pn: 30, g:true, pid: 408, sub: true, sfpid: 402){GameTeam = gt102},
+      };
+
+      List<GameOutcome> gameOutcomes = new List<GameOutcome>()
+      {
+        new GameOutcome(gtid: 101, res: "W", gf: 4, ga: 2, pim: 2, over: false){GameTeam = gt101},
+        new GameOutcome(gtid: 102, res: "L", gf: 2, ga: 4, pim: 2, over: false){GameTeam = gt102}
+      };
+
+      var goalieGameStats = _playerStatsService.ProcessGameOutcomesIntoGoalieGameStats(gameOutcomes, gameRosters);
+
+      var expected = new List<GoalieStatGame>() 
+      {
+        new GoalieStatGame(pid: 401, gid: 701, sid: 501, stidpf: 201, sub: false, ga: 2, so: 0, w: 1),
+        new GoalieStatGame(pid: 408, gid: 701, sid: 501, stidpf: 202, sub: true, ga: 4, so: 0, w: 0)
+      };
+
+      AssertAreEqualGoalieStatGameLists(expected, goalieGameStats);
+    }
+
+    [TestMethod()]
+    public void ProcessGameOutcomesIntoGoalieGameStats_SeasonId54GameId3227()
+    {
+      string folderPath = @"C:\git\LO30\LO30Tests\Data\SeasonId54GameId3227\";
+
+      List<GameRoster> gameRosters = _lo30DataService.FromJsonFromFile<List<GameRoster>>(folderPath + "GameRosters.json");
+      List<GameOutcome> gameOutcomes = _lo30DataService.FromJsonFromFile<List<GameOutcome>>(folderPath + "GameOutcomes.json");
+
+      var goalieGameStats = _playerStatsService.ProcessGameOutcomesIntoGoalieGameStats(gameOutcomes, gameRosters);
+
+      var goalieGameStatsPartial = goalieGameStats.Where(x => x.PlayerId == 634 || x.PlayerId == 619 || x.PlayerId == 81).ToList();
+
+      var expected = new List<GoalieStatGame>() 
+      {
+        new GoalieStatGame(pid: 81, gid: 3201, sid: 54, stidpf: 311, sub: true, ga: 4, so: 0, w: 0),
+        new GoalieStatGame(pid: 619, gid: 3202, sid: 54, stidpf: 313, sub: false, ga: 3, so: 0, w: 0),
+        new GoalieStatGame(pid: 619, gid: 3206, sid: 54, stidpf: 313, sub: false, ga: 1, so: 0, w: 0),
+        new GoalieStatGame(pid: 619, gid: 3208, sid: 54, stidpf: 313, sub: false, ga: 2, so: 0, w: 0),
+        new GoalieStatGame(pid: 619, gid: 3214, sid: 54, stidpf: 313, sub: false, ga: 4, so: 0, w: 0),
+        new GoalieStatGame(pid: 619, gid: 3221, sid: 54, stidpf: 313, sub: false, ga: 2, so: 0, w: 1),
+        new GoalieStatGame(pid: 619, gid: 3225, sid: 54, stidpf: 313, sub: false, ga: 4, so: 0, w: 0)
+      };
+
+      AssertAreEqualGoalieStatGameLists(expected, goalieGameStatsPartial);
+    }
+
     #region Asserts
     private void AssertAreEqualPlayerStatGameLists(List<PlayerStatGame> expected, List<PlayerStatGame> actual)
     {
@@ -441,7 +551,6 @@ namespace LO30.Services.Tests
       }
     }
 
-
     private void AssertAreEqualPlayerStatSeasonTeamItem(PlayerStatSeasonTeam expected, PlayerStatSeasonTeam actual, string locationKey)
     {
       Assert.AreEqual(expected.SeasonId, actual.SeasonId, "SeasonId key: " + locationKey);
@@ -455,6 +564,54 @@ namespace LO30.Services.Tests
       Assert.AreEqual(expected.GameWinningGoals, actual.GameWinningGoals, "GameWinningGoals key: " + locationKey);
       Assert.AreEqual(expected.PenaltyMinutes, actual.PenaltyMinutes, "PenaltyMinutes key: " + locationKey);
       
+    }
+
+    private void AssertAreEqualGoalieStatGameLists(List<GoalieStatGame> expected, List<GoalieStatGame> actual)
+    {
+
+      Assert.AreEqual(expected.Count, actual.Count, "Count");
+      for (var e = 0; e < expected.Count; e++)
+      {
+        var actualMatch = actual.Where(x => x.PlayerId == expected[e].PlayerId &&
+                                          x.GameId == expected[e].GameId)
+                                .FirstOrDefault();
+
+        var locationKey = string.Format("pid: {0}, gid: {1}",
+                                    expected[e].PlayerId,
+                                    expected[e].GameId);
+
+        Assert.IsNotNull(actualMatch, "actualMatch key: " + locationKey);
+        AssertAreEqualGoalieStatGameItem(expected[e], actualMatch, locationKey);
+      }
+    }
+
+    private void AssertAreEqualGoalieStatGameListsPartial(List<GoalieStatGame> expected, List<GoalieStatGame> actual, int expectedCount)
+    {
+
+      Assert.AreEqual(expectedCount, actual.Count, "Count");
+      for (var e = 0; e < expected.Count; e++)
+      {
+        var actualMatch = actual.Where(x => x.PlayerId == expected[e].PlayerId &&
+                                          x.GameId == expected[e].GameId)
+                                .FirstOrDefault();
+
+        var locationKey = string.Format("pid: {0}, gid: {1}",
+                                    expected[e].PlayerId,
+                                    expected[e].GameId);
+
+        Assert.IsNotNull(actualMatch, "actualMatch key: " + locationKey);
+        AssertAreEqualGoalieStatGameItem(expected[e], actualMatch, locationKey);
+      }
+    }
+
+    private void AssertAreEqualGoalieStatGameItem(GoalieStatGame expected, GoalieStatGame actual, string locationKey)
+    {
+      Assert.AreEqual(expected.SeasonId, actual.SeasonId, "SeasonId key: " + locationKey);
+      Assert.AreEqual(expected.SeasonTeamIdPlayingFor, actual.SeasonTeamIdPlayingFor, "SeasonTeamIdPlayingFor key: " + locationKey);
+      Assert.AreEqual(expected.Sub, actual.Sub, "Sub key: " + locationKey);
+      Assert.AreEqual(expected.GoalsAgainst, actual.GoalsAgainst, "GoalsAgainst key: " + locationKey);
+      Assert.AreEqual(expected.Shutouts, actual.Shutouts, "Shutouts key: " + locationKey);
+      Assert.AreEqual(expected.Wins, actual.Wins, "Wins key: " + locationKey);
     }
     #endregion
   }

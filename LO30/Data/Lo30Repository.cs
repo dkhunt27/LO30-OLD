@@ -462,24 +462,20 @@ namespace LO30.Data
       try
       {
         var gameRosters = _contextService.FindGameRostersWithGameIds(startingGameId, endingGameId);
-        //var gameRostersGoalies = _contextService.FindGameRostersWithGameIdsAndGoalie(startingGameId, endingGameId, goalie: true);
+        var gameRostersGoalies = _contextService.FindGameRostersWithGameIdsAndGoalie(startingGameId, endingGameId, goalie: true);
         var gameOutcomes = _contextService.FindGameOutcomesWithGameIds(startingGameId, endingGameId);
         var ratings = _ctx.PlayerRatings.ToList();
 
-
         var scoreSheetEntriesProcessed = _ctx.ScoreSheetEntriesProcessed.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
         var scoreSheetEntryPenaltiesProcessed = _ctx.ScoreSheetEntryPenaltiesProcessed.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
-
 
         var playerGameStats = _playerStatsService.ProcessScoreSheetEntriesIntoPlayerGameStats(scoreSheetEntriesProcessed, scoreSheetEntryPenaltiesProcessed, gameRosters);
         var playerSeasonTeamStats = _playerStatsService.ProcessPlayerGameStatsIntoPlayerSeasonTeamStats(playerGameStats);
         var playerSeasonStats = _playerStatsService.ProcessPlayerSeasonTeamStatsIntoPlayerSeasonStats(playerSeasonTeamStats);
 
-
-
-        // var goalieGameStats = _playerStatsService.ProcessScoreSheetEntriesIntoGoalieGameStats(gameOutcomes, gameRostersGoalies);
-        //var goalieSeasonTeamStats = _playerStatsService.ProcessGoalieGameStatsIntoGoalieSeasonTeamStats(goalieGameStats);
-        //var goalieSeasonStats = _playerStatsService.ProcessGoalieSeasonTeamStatsIntoGoalieSeasonStats(goalieSeasonTeamStats);
+        var goalieGameStats = _playerStatsService.ProcessGameOutcomesIntoGoalieGameStats(gameOutcomes, gameRostersGoalies);
+        var goalieSeasonTeamStats = _playerStatsService.ProcessGoalieGameStatsIntoGoalieSeasonTeamStats(goalieGameStats);
+        var goalieSeasonStats = _playerStatsService.ProcessGoalieSeasonTeamStatsIntoGoalieSeasonStats(goalieSeasonTeamStats);
 
         var savedStatsGame = _contextService.SaveOrUpdatePlayerStatGame(playerGameStats);
         Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsGame:" + savedStatsGame);
@@ -490,14 +486,14 @@ namespace LO30.Data
         var savedStatsSeason = _contextService.SaveOrUpdatePlayerStatSeason(playerSeasonStats);
         Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsSeason:" + savedStatsSeason);
 
-        //var savedStatsGameGoalie = _contextService.SaveOrUpdateGoalieStatGame(goalieGameStats);
-        //Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsGameGoalie:" + savedStatsGameGoalie);
+        var savedStatsGameGoalie = _contextService.SaveOrUpdateGoalieStatGame(goalieGameStats);
+        Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsGameGoalie:" + savedStatsGameGoalie);
 
-        //var savedStatsSeasonTeamGoalie = _contextService.SaveOrUpdateGoalieStatSeasonTeam(goalieSeasonTeamStats);
-        //Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsSeasonTeamGoalie:" + savedStatsSeasonTeamGoalie);
+        var savedStatsSeasonTeamGoalie = _contextService.SaveOrUpdateGoalieStatSeasonTeam(goalieSeasonTeamStats);
+        Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsSeasonTeamGoalie:" + savedStatsSeasonTeamGoalie);
 
-        //var savedStatsSeasonGoalie = _contextService.SaveOrUpdateGoalieStatSeason(goalieSeasonStats);
-        //Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsSeasonGoalie:" + savedStatsSeasonGoalie);
+        var savedStatsSeasonGoalie = _contextService.SaveOrUpdateGoalieStatSeason(goalieSeasonStats);
+        Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsSeasonGoalie:" + savedStatsSeasonGoalie);
 
         return (savedStatsGame + savedStatsSeasonTeam + savedStatsSeason) > 0;
       }
@@ -514,18 +510,29 @@ namespace LO30.Data
       try
       {
         var ratings = _ctx.PlayerRatings.ToList();
-        var seasonStatsForWeb = _ctx.PlayerStatsSeasonTeam
-                                .Include("season")
-                                .Include("player")
-                                .Include("seasonTeamPlayingFor")
-                                .Include("seasonTeamPlayingFor.team")
-                                .ToList();
+        var seasonPlayerStatsForWeb = _ctx.PlayerStatsSeasonTeam
+                                           .Include("season")
+                                           .Include("player")
+                                           .Include("seasonTeamPlayingFor")
+                                           .Include("seasonTeamPlayingFor.team")
+                                           .ToList();
 
-        var playerWebStats = _playerStatsService.ProcessPlayerSeasonTeamStatsIntoForWebPlayerStats(seasonStatsForWeb, ratings);
+        var seasonGoalieStatsForWeb = _ctx.GoalieStatsSeasonTeam
+                                            .Include("season")
+                                            .Include("player")
+                                            .Include("seasonTeamPlayingFor")
+                                            .Include("seasonTeamPlayingFor.team")
+                                            .ToList();
+
+        var playerWebStats = _playerStatsService.ProcessPlayerSeasonTeamStatsIntoForWebPlayerStats(seasonPlayerStatsForWeb, ratings);
         var savedWebPlayerStats = _contextService.SaveOrUpdateForWebPlayerStat(playerWebStats);
         Debug.Print("ProcessPlayerStatsIntoWebStats: savedWebPlayerStats:" + savedWebPlayerStats);
 
-        return (savedWebPlayerStats > 0);
+        var goalieWebStats = _playerStatsService.ProcessPlayerSeasonTeamStatsIntoForWebGoalieStats(seasonGoalieStatsForWeb);
+        var savedGoaliePlayerStats = _contextService.SaveOrUpdateForWebGoalieStat(goalieWebStats);
+        Debug.Print("ProcessPlayerSeasonTeamStatsIntoForWebGoalieStats: savedGoaliePlayerStats:" + savedGoaliePlayerStats);
+
+        return ((savedWebPlayerStats + savedGoaliePlayerStats) > 0);
       }
       catch (Exception ex)
       {

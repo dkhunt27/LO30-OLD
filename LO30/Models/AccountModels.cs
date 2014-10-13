@@ -11,7 +11,7 @@ namespace LO30.Models
   public class UsersContext : DbContext
   {
     public UsersContext()
-      : base("DefaultConnection")
+      : base("LO30UsersDB")
     {
     }
 

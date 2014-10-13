@@ -264,7 +264,7 @@ namespace LO30.Services
       return newData;
     }
     
-    public List<GoalieStatGame> ProcessScoreSheetEntriesIntoGoalieGameStats(List<GameOutcome> gameOutcomes, List<GameRoster> gameRostersGoalies)
+    public List<GoalieStatGame> ProcessGameOutcomesIntoGoalieGameStats(List<GameOutcome> gameOutcomes, List<GameRoster> gameRostersGoalies)
     {
       var goalieGameStats = new List<GoalieStatGame>();
 
@@ -277,18 +277,7 @@ namespace LO30.Services
           var gameId = gameRoster.GameTeam.GameId;
           var seasonTeamId = gameRoster.GameTeam.SeasonTeamId;
           var sub = gameRoster.Sub;
-
-          int playerId;
-          if (gameRoster.SubbingForPlayerId == null)
-          {
-            playerId = gameRoster.PlayerId;
-          }
-          else
-          {
-            // if there is a sub, use him
-            playerId = Convert.ToInt32(gameRoster.SubbingForPlayerId);
-          }
-
+          var playerId = gameRoster.PlayerId;
 
           if (gameRoster.GameTeam.SeasonTeam == null || gameRoster.GameTeam.SeasonTeam.SeasonId == null)
           {
@@ -305,11 +294,20 @@ namespace LO30.Services
             throw new ArgumentNullException("gameRosterGoalies", "Every GameRoster must have 1 and only 1 goalie GameId:" + gameId + " SeasonTeamId:" + seasonTeamId + " Goalie Count:" + check.Count);
           }
 
+          // get score sheet entries for this player, for this game...if exists...if he had no points or pim, it won't exist
+          int goalAgainst = 0;
+          int shutOuts = 0;
+          int wins = 0;
+
           var gameOutcome = gameOutcomes.Where(x => x.GameTeam.GameId == gameId && x.GameTeam.SeasonTeamId == seasonTeamId).FirstOrDefault();
 
-          if (gameOutcome == null)
+          if (gameOutcome != null)
           {
-            throw new ArgumentNullException("gameOutcome", "gameOutcome not found for gameId:" + gameId + " seasonTeamId:" + seasonTeamId);
+            //throw new ArgumentNullException("gameOutcome", "gameOutcome not found for gameId:" + gameId + " seasonTeamId:" + seasonTeamId);
+
+            goalAgainst = gameOutcome.GoalsAgainst;
+            shutOuts = gameOutcome.GoalsAgainst == 0 ? 1 : 0;
+            wins = gameOutcome.Outcome == "W" ? 1 : 0;
           }
 
           goalieGameStats.Add(new GoalieStatGame(
@@ -320,9 +318,9 @@ namespace LO30.Services
                                         stidpf: seasonTeamId,
                                         sub: sub,
 
-                                        ga: gameOutcome.GoalsAgainst,
-                                        so: gameOutcome.GoalsAgainst == 0 ? 1 : 0,
-                                        w: gameOutcome.Outcome == "W" ? 1 : 0
+                                        ga: goalAgainst,
+                                        so: shutOuts,
+                                        w: wins
                                         )
                                 );
         }

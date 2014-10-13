@@ -11,17 +11,29 @@ namespace LO30.Controllers
 {
   public class NavigationController : Controller
   {
+    public NavigationController()
+    {
+    }
 
     [ChildActionOnly]
     public ActionResult Menu()
     {
-      if (Roles.IsUserInRole("admin"))
+
+      try
       {
-        return PartialView("NavAdmin");
+        if (Roles.IsUserInRole("admin"))
+        {
+          return PartialView("NavAdmin");
+        }
+        else if (Roles.IsUserInRole("board"))
+        {
+          return PartialView("NavBoard");
+        }
       } 
-      else if (Roles.IsUserInRole("board"))
+      catch (Exception ex)
       {
-        return PartialView("NavBoard");
+        System.Diagnostics.Debug.Print("Could not determine the user role, defaulting to public.");
+        ErrorHandlingService.PrintFullErrorMessage(ex);
       }
 
       return PartialView("NavPublic");

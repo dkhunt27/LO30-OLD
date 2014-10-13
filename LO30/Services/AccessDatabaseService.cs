@@ -82,20 +82,20 @@ namespace LO30.Services
 
       List<AccessTableList> accessTables = new List<AccessTableList>()
       {
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="GAME", FileName="Games"},
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="GAME_ROSTER", FileName="GameRosters"},
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="PENALTY_DETAIL", FileName="PenaltyDetails"},
+        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54", TableName="GAME", FileName="Games"},
+        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54", TableName="GAME_ROSTER", FileName="GameRosters"},
+        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54", TableName="PENALTY_DETAIL", FileName="PenaltyDetails"},
         new AccessTableList(){QueryBegin="SELECT PLAYER_ID, PLAYER_FIRST_NAME, PLAYER_LAST_NAME, PLAYER_SUFFIX, PLAYER_POSITION, SHOOTS FROM", QueryEnd="", TableName="PLAYER", FileName="Players"},
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="PLAYER_RATING", FileName="PlayerRatings"},
+        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54", TableName="PLAYER_RATING", FileName="PlayerRatings"},
         new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="PLAYER_STATUS", FileName="PlayerStatuses"},
         new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="REF_PENALTY", FileName="Penalties"},
         new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="REF_SEASON", FileName="Seasons"},
         new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="REF_STATUS", FileName="Statuses"},
         new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="SCORE_SHEET_ENTRY", FileName="ScoreSheetEntries"},
         new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="SCORE_SHEET_ENTRY_PENALTY", FileName="ScoreSheetEntryPenalties"},
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="SCORING_DETAIL", FileName="ScoringDetails"},
+        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54", TableName="SCORING_DETAIL", FileName="ScoringDetails"},
         new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="TEAM", FileName="Teams"},
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="", TableName="TEAM_ROSTER", FileName="Team_Rosters"}
+        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54", TableName="TEAM_ROSTER", FileName="Team_Rosters"}
       };
 
       foreach (var table in accessTables)

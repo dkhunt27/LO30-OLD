@@ -589,12 +589,16 @@ namespace LO30.Data
 
           switch (position.ToLower()) 
           {
+            case "f":
             case "forward":
               positionMapped = "F";
               break;
+            case "d":
             case "defense":
               positionMapped = "D";
               break;
+            case "g":
+            case "goal":
             case "goalie":
               positionMapped = "G";
               break;
