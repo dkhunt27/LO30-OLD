@@ -140,7 +140,7 @@
     "PLAYER_FIRST_NAME": "Mike",
     "PLAYER_LAST_NAME": "Berger",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -268,7 +268,7 @@
     "PLAYER_FIRST_NAME": "Ron",
     "PLAYER_LAST_NAME": "Marshall",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -388,7 +388,7 @@
     "PLAYER_FIRST_NAME": "John",
     "PLAYER_LAST_NAME": "Camillo",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": "L"
   },
   {
@@ -516,7 +516,7 @@
     "PLAYER_FIRST_NAME": "Todd",
     "PLAYER_LAST_NAME": "Humecky",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -644,7 +644,7 @@
     "PLAYER_FIRST_NAME": "Ron",
     "PLAYER_LAST_NAME": "Gabon",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -772,7 +772,7 @@
     "PLAYER_FIRST_NAME": "Tom",
     "PLAYER_LAST_NAME": "Pacion",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -1140,7 +1140,7 @@
     "PLAYER_FIRST_NAME": "Mike",
     "PLAYER_LAST_NAME": "Guider",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -1172,7 +1172,7 @@
     "PLAYER_FIRST_NAME": "Len",
     "PLAYER_LAST_NAME": "Singer",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -1196,7 +1196,7 @@
     "PLAYER_FIRST_NAME": "Ted",
     "PLAYER_LAST_NAME": "Truckenbrodt",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -1204,7 +1204,7 @@
     "PLAYER_FIRST_NAME": "Pat",
     "PLAYER_LAST_NAME": "Collins",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": "L"
   },
   {
@@ -1244,7 +1244,7 @@
     "PLAYER_FIRST_NAME": "Steve",
     "PLAYER_LAST_NAME": "Roth",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": "L"
   },
   {
@@ -1260,7 +1260,7 @@
     "PLAYER_FIRST_NAME": "Doug",
     "PLAYER_LAST_NAME": "Plisko",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": "L"
   },
   {
@@ -1276,7 +1276,7 @@
     "PLAYER_FIRST_NAME": "Todd",
     "PLAYER_LAST_NAME": "Hovarter",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": "R"
   },
   {
@@ -1484,7 +1484,7 @@
     "PLAYER_FIRST_NAME": "Mark",
     "PLAYER_LAST_NAME": "_",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -1732,7 +1732,7 @@
     "PLAYER_FIRST_NAME": "Harry",
     "PLAYER_LAST_NAME": "Johnson",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -1740,7 +1740,7 @@
     "PLAYER_FIRST_NAME": "Graham",
     "PLAYER_LAST_NAME": "Board",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -1748,7 +1748,7 @@
     "PLAYER_FIRST_NAME": "Gene",
     "PLAYER_LAST_NAME": "Villenueve",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -1756,7 +1756,7 @@
     "PLAYER_FIRST_NAME": "John",
     "PLAYER_LAST_NAME": "Blanchard",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -1764,7 +1764,7 @@
     "PLAYER_FIRST_NAME": "Ed",
     "PLAYER_LAST_NAME": "Soulliere",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -1804,7 +1804,7 @@
     "PLAYER_FIRST_NAME": "Jim",
     "PLAYER_LAST_NAME": "Herron",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -2068,7 +2068,7 @@
     "PLAYER_FIRST_NAME": "Jeff",
     "PLAYER_LAST_NAME": "Knipp",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -2100,7 +2100,7 @@
     "PLAYER_FIRST_NAME": "Mike",
     "PLAYER_LAST_NAME": "Morris",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -2172,7 +2172,7 @@
     "PLAYER_FIRST_NAME": "Frank",
     "PLAYER_LAST_NAME": "Farren",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -2244,7 +2244,7 @@
     "PLAYER_FIRST_NAME": "Jim",
     "PLAYER_LAST_NAME": "Rosenau",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -2596,7 +2596,7 @@
     "PLAYER_FIRST_NAME": "Dave",
     "PLAYER_LAST_NAME": "Brumm",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -2740,7 +2740,7 @@
     "PLAYER_FIRST_NAME": "Dick",
     "PLAYER_LAST_NAME": "Bonnville",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -2812,7 +2812,7 @@
     "PLAYER_FIRST_NAME": "Paul",
     "PLAYER_LAST_NAME": "Carlsen",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -2916,7 +2916,7 @@
     "PLAYER_FIRST_NAME": "Bob",
     "PLAYER_LAST_NAME": "Maroudis",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -3204,7 +3204,7 @@
     "PLAYER_FIRST_NAME": null,
     "PLAYER_LAST_NAME": "Mourodis",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -3228,7 +3228,7 @@
     "PLAYER_FIRST_NAME": "Doug",
     "PLAYER_LAST_NAME": "Imlach",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -3700,7 +3700,7 @@
     "PLAYER_FIRST_NAME": "_",
     "PLAYER_LAST_NAME": "Down",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -3812,7 +3812,7 @@
     "PLAYER_FIRST_NAME": "_",
     "PLAYER_LAST_NAME": "Cheany",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -3900,7 +3900,7 @@
     "PLAYER_FIRST_NAME": "Phil",
     "PLAYER_LAST_NAME": "Beyer",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -3908,7 +3908,7 @@
     "PLAYER_FIRST_NAME": "Larry",
     "PLAYER_LAST_NAME": "Tilford",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -4268,7 +4268,7 @@
     "PLAYER_FIRST_NAME": "_",
     "PLAYER_LAST_NAME": "Standish",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -4276,7 +4276,7 @@
     "PLAYER_FIRST_NAME": "Ralph",
     "PLAYER_LAST_NAME": "Rochon",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -4284,7 +4284,7 @@
     "PLAYER_FIRST_NAME": "_",
     "PLAYER_LAST_NAME": "Deschene",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -4292,7 +4292,7 @@
     "PLAYER_FIRST_NAME": "Butch",
     "PLAYER_LAST_NAME": "Green",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -4548,7 +4548,7 @@
     "PLAYER_FIRST_NAME": "Mark",
     "PLAYER_LAST_NAME": "Radwan",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": "L"
   },
   {
@@ -4668,7 +4668,7 @@
     "PLAYER_FIRST_NAME": "Brad",
     "PLAYER_LAST_NAME": "Villa",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -4788,7 +4788,7 @@
     "PLAYER_FIRST_NAME": "Tony",
     "PLAYER_LAST_NAME": "Brosky",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -5060,7 +5060,7 @@
     "PLAYER_FIRST_NAME": "Bob",
     "PLAYER_LAST_NAME": "White",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -5140,7 +5140,7 @@
     "PLAYER_FIRST_NAME": "Mark",
     "PLAYER_LAST_NAME": "Felker",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -5172,7 +5172,7 @@
     "PLAYER_FIRST_NAME": "Scott",
     "PLAYER_LAST_NAME": "Fassett",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -5220,7 +5220,7 @@
     "PLAYER_FIRST_NAME": "Lenny",
     "PLAYER_LAST_NAME": "Domanke",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -5300,7 +5300,7 @@
     "PLAYER_FIRST_NAME": "Louie",
     "PLAYER_LAST_NAME": "Preston",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -5532,7 +5532,7 @@
     "PLAYER_FIRST_NAME": "Michael",
     "PLAYER_LAST_NAME": "Lada",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -5540,7 +5540,7 @@
     "PLAYER_FIRST_NAME": "Mike",
     "PLAYER_LAST_NAME": "Morton",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -5780,7 +5780,7 @@
     "PLAYER_FIRST_NAME": "Deion",
     "PLAYER_LAST_NAME": "Humecky",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   },
   {
@@ -5844,7 +5844,7 @@
     "PLAYER_FIRST_NAME": "Lenny",
     "PLAYER_LAST_NAME": "Constance",
     "PLAYER_SUFFIX": null,
-    "PLAYER_POSITION": "Goal",
+    "PLAYER_POSITION": "Goalie",
     "SHOOTS": null
   }
 ]

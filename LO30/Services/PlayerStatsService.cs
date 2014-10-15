@@ -22,6 +22,8 @@ namespace LO30.Services
           var seasonTeamId = gameRoster.GameTeam.SeasonTeamId;
           var sub = gameRoster.Sub;
           var playerId = gameRoster.PlayerId;
+          var line = gameRoster.Line;
+          var position = gameRoster.Position;
 
           if (gameRoster.GameTeam.SeasonTeam == null || gameRoster.GameTeam.SeasonTeam.SeasonId == null)
           {
@@ -99,6 +101,8 @@ namespace LO30.Services
 
                                         sid: seasonId,
                                         stidpf: seasonTeamId,
+                                        line: line,
+                                        pos: position,
                                         sub: sub,
 
                                         g: goals,
@@ -127,13 +131,15 @@ namespace LO30.Services
       var playerSeasonTeamStats = new List<PlayerStatSeasonTeam>();
 
       var summedStats = playerGameStats
-              .GroupBy(x => new { x.PlayerId, x.SeasonId, x.Sub, x.SeasonTeamIdPlayingFor })
+              .GroupBy(x => new { x.PlayerId, x.SeasonId, x.Sub, x.SeasonTeamIdPlayingFor, x.Line, x.Position })
               .Select(grp => new
               {
                 PlayerId = grp.Key.PlayerId,
                 SeasonId = grp.Key.SeasonId,
                 Sub = grp.Key.Sub,
                 SeasonTeamIdPlayingFor = grp.Key.SeasonTeamIdPlayingFor,
+                Line = grp.Key.Line,
+                Position = grp.Key.Position,
 
                 Games = grp.Count(),
                 Goals = grp.Sum(x => x.Goals),
@@ -153,6 +159,9 @@ namespace LO30.Services
                                     sid: stat.SeasonId,
                                     sub: stat.Sub,
                                     stidpf: stat.SeasonTeamIdPlayingFor,
+                                    line: stat.Line,
+                                    pos: stat.Position,
+
 
                                     games: stat.Games,
                                     g: stat.Goals,
@@ -220,14 +229,6 @@ namespace LO30.Services
 
       foreach (var item in playerSeasonTeamStats)
       {
-        var ratings = playerRatings.Where(x => x.SeasonId == item.SeasonId && x.PlayerId == item.PlayerId).FirstOrDefault();
-
-        var line = 0;
-        if (ratings != null)
-        {
-          line = ratings.Line;
-        }
-
         var playerName = item.Player.FirstName + " " + item.Player.LastName;
         if (!string.IsNullOrWhiteSpace(item.Player.Suffix))
         {
@@ -242,8 +243,8 @@ namespace LO30.Services
           Player = playerName,
           Team = item.SeasonTeamPlayingFor.Team.TeamLongName,
           Sub = item.Sub == true ? "Y" : "N",
-          Pos = item.Player.PreferredPosition,
-          Line = line,
+          Pos = item.Position,
+          Line = item.Line,
           GP = item.Games,
           G = item.Goals,
           A = item.Assists,

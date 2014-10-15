@@ -16,10 +16,16 @@ namespace LO30.Data.Objects
     public int PlayerId { get; set; }
 
     [Required]
-    public int DraftRound { get; set; }
+    public int Round { get; set; }
 
     [Required]
-    public int DraftOrder { get; set; }
+    public int Order { get; set; }
+
+    [Required]
+    public string Position { get; set; }
+
+    [Required]
+    public int Line { get; set; }
 
     [Required]
     public bool Special { get; set; }

@@ -580,6 +580,78 @@ namespace LO30.Services
       }
       #endregion
 
+      #region FindPlayer
+      public Player FindPlayer(int playerId)
+      {
+        return FindPlayer(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId);
+      }
+
+      public Player FindPlayer(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId)
+      {
+        var found = _ctx.Players.Where(x => x.PlayerId == playerId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find Player for" +
+                                                  " PlayerId:" + playerId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 Player was not found for" +
+                                                  " PlayerId:" + playerId
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+      
+      #region FindPlayerDraft
+      public PlayerDraft FindPlayerDraft(int seasonId, int playerId)
+      {
+        return FindPlayerDraft(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonId: seasonId, playerId: playerId);
+      }
+
+      public PlayerDraft FindPlayerDraft(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonId, int playerId)
+      {
+        var found = _ctx.PlayerDrafts.Where(x => x.SeasonId == seasonId && x.PlayerId == playerId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find PlayerDraft for" +
+                                                  " seasonId:" + seasonId +
+                                                  " PlayerId:" + playerId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 PlayerDraft was not found for" +
+                                                  " SeasonId:" + seasonId +
+                                                  " PlayerId:" + playerId
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
       #region FindPlayerStatGame
       public PlayerStatGame FindPlayerStatGame(int playerId, int gameId)
       {
@@ -679,6 +751,43 @@ namespace LO30.Services
                                                   " PlayerId:" + playerId +
                                                   " SeasonId:" + seasonId +
                                                   " Sub:" + sub
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region FindPlayerRating
+      public PlayerRating FindPlayerRating(int seasonId, int playerId)
+      {
+        return FindPlayerRating(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonId: seasonId, playerId: playerId);
+      }
+
+      public PlayerRating FindPlayerRating(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonId, int playerId)
+      {
+        var found = _ctx.PlayerRatings.Where(x => x.SeasonId == seasonId && x.PlayerId == playerId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find PlayerRatings for" +
+                                                  " seasonId:" + seasonId +
+                                                  " PlayerId:" + playerId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 PlayerRatings was not found for" +
+                                                  " seasonId:" + seasonId +
+                                                  " PlayerId:" + playerId
                                           );
         }
 
@@ -866,6 +975,78 @@ namespace LO30.Services
           throw new ArgumentNullException("found", "More than 1 ForWebPlayerStat was not found for" +
                                                   " PID:" + pid +
                                                   " STIDPF:" + stidpf
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region FindSeasonTeam
+      public SeasonTeam FindSeasonTeam(int seasonTeamId)
+      {
+        return FindSeasonTeam(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonTeamId: seasonTeamId);
+      }
+
+      public SeasonTeam FindSeasonTeam(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonTeamId)
+      {
+        var found = _ctx.SeasonTeams.Where(x => x.SeasonTeamId == seasonTeamId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find SeasonTeam for" +
+                                                  " SeasonTeamId:" + seasonTeamId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 SeasonTeam was not found for" +
+                                                  " SeasonTeamId:" + seasonTeamId 
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region FindTeamRoster
+      public TeamRoster FindTeamRoster(int seasonTeamId, int playerId)
+      {
+        return FindTeamRoster(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonTeamId: seasonTeamId, playerId: playerId);
+      }
+
+      public TeamRoster FindTeamRoster(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonTeamId, int playerId)
+      {
+        var found = _ctx.TeamRosters.Where(x => x.SeasonTeamId == seasonTeamId && x.PlayerId == playerId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find TeamRoster for" +
+                                                  " SeasonTeamId:" + seasonTeamId +
+                                                  " PlayerId:" + playerId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 TeamRoster was not found for" +
+                                                  " SeasonTeamId:" + seasonTeamId +
+                                                  " PlayerId:" + playerId
                                           );
         }
 

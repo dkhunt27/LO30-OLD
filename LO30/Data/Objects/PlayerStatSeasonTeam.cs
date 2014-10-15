@@ -19,6 +19,12 @@ namespace LO30.Data.Objects
     public int SeasonId { get; set; }
 
     [Required]
+    public int Line { get; set; }
+
+    [Required]
+    public string Position { get; set; }
+
+    [Required]
     public bool Sub { get; set; }
 
     [Required]
@@ -56,12 +62,14 @@ namespace LO30.Data.Objects
     {
     }
 
-    public PlayerStatSeasonTeam(int pid, int stidpf, int sid, bool sub, int games, int g, int a, int p, int ppg, int shg, int gwg, int pim)
+    public PlayerStatSeasonTeam(int pid, int stidpf, int sid, int line, string pos, bool sub, int games, int g, int a, int p, int ppg, int shg, int gwg, int pim)
     {
       this.PlayerId = pid;
       this.SeasonTeamIdPlayingFor = stidpf;
 
       this.SeasonId = sid;
+      this.Line = line;
+      this.Position = pos;
       this.Sub = sub;
 
       this.Games = games;
@@ -112,6 +120,11 @@ namespace LO30.Data.Objects
       if (this.GameWinningGoals > this.Games)
       {
         throw new ArgumentException("GameWinningGoals must be less than or equal to Games for:" + locationKey, "GameWinningGoals");
+      }
+
+      if (this.Position != "G" && this.Position != "D" && this.Position != "F")
+      {
+        throw new ArgumentException("Position('" + this.Position + "') must be 'G', 'D', or 'F' for:" + locationKey, "Position");
       }
     }
   }

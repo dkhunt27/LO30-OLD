@@ -22,6 +22,12 @@ namespace LO30.Data.Objects
     public int PlayerNumber { get; set; }
 
     [Required]
+    public int Line { get; set; }
+
+    [Required]
+    public string Position { get; set; }
+
+    [Required]
     public bool Goalie { get; set; }
 
     [Required, ForeignKey("Player")]
@@ -41,26 +47,31 @@ namespace LO30.Data.Objects
     {
     }
 
-    public GameRoster(int gtid, int pn, bool g, int pid, bool sub, int? sfpid)
+    public GameRoster(int gtid, int pn, int line, string pos, bool g, int pid, bool sub, int? sfpid)
     {
       this.GameTeamId = gtid;
       this.PlayerNumber = pn;
 
+      this.Line = line;
+      this.Position = pos;
       this.Goalie = g;
       this.PlayerId = pid;
       this.Sub = sub;
       this.SubbingForPlayerId = sfpid;
 
+
       Validate();
     }
 
-    public GameRoster(int grid, int gtid, int pn, bool g, int pid, bool sub, int? sfpid)
+    public GameRoster(int grid, int gtid, int pn, int line, string pos, bool g, int pid, bool sub, int? sfpid)
     {
       this.GameRosterId = grid;
 
       this.GameTeamId = gtid;
       this.PlayerNumber = pn;
 
+      this.Line = line;
+      this.Position = pos;
       this.Goalie = g;
       this.PlayerId = pid;
       this.Sub = sub;
@@ -84,6 +95,16 @@ namespace LO30.Data.Objects
       if (this.Sub == false && this.SubbingForPlayerId != null)
       {
         throw new ArgumentException("If Sub is false, SubbingForPlayerId must not be populated for:" + locationKey, "SubbingForPlayerId");
+      }
+
+      if (this.Position != "G" && this.Position != "D" && this.Position != "F")
+      {
+        throw new ArgumentException("Position('" + this.Position + "') must be 'G', 'D', or 'F' for:" + locationKey, "Position");
+      }
+
+      if (this.Position == "G" && this.Goalie != true)
+      {
+        throw new ArgumentException("If Position = 'G', Goalie must be true:" + locationKey, "Goalie");
       }
     }
   }

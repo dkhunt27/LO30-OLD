@@ -51,12 +51,6 @@ namespace LO30.Data
       }
       #endregion
 
-      #region 0:PlayerDrafts
-      if (context.PlayerDrafts.Count() == 0)
-      {
-      }
-      #endregion
-
       #region 0:PlayerEmails
       if (context.PlayerEmails.Count() == 0)
       {
@@ -532,7 +526,6 @@ namespace LO30.Data
 
         context.Players.Add(player);
 
-        dynamic parsedJsonPR = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "PlayerRatings.json");
         dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "Players.json");
         int count = parsedJson.Count;
 
@@ -555,36 +548,11 @@ namespace LO30.Data
           };
 
           string position, positionMapped;
+          position = json["PLAYER_POSITION"];
 
-          // update the position to match the drafted position
-          string draftRound = null;
-          foreach (var playerRating in parsedJsonPR)
+          if (string.IsNullOrWhiteSpace(position))
           {
-            if (playerRating["PLAYER_ID"] == playerId)
-            {
-              draftRound = playerRating["PLAYER_DRAFT_ROUND"];
-              break;
-            }
-          }
-
-          string draftPosition = null;
-          if (draftRound != null)
-          {
-            draftPosition = draftRound.Substring(1);
-          }
-
-          if (!string.IsNullOrWhiteSpace(draftPosition))
-          {
-            position = draftPosition;
-          }
-          else
-          {
-            position = json["PLAYER_POSITION"];
-
-            if (string.IsNullOrWhiteSpace(position))
-            {
-              position = "X";
-            }
+            position = "X";
           }
 
           switch (position.ToLower()) 
@@ -606,10 +574,6 @@ namespace LO30.Data
               positionMapped = "X";
               break;
           }
-
-
-
-
 
           string shoots, shootsMapped;
           shoots = json["SHOOTS"];
@@ -864,52 +828,6 @@ namespace LO30.Data
       }
       #endregion
 
-      #region 3:TeamRosters
-      if (context.TeamRosters.Count() == 0)
-      {
-        Debug.Print("Data Group 3: Creating TeamRosters");
-        last = DateTime.Now;
-
-        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "TeamRosters.json");
-        int count = parsedJson.Count;
-
-        Debug.Print("Access records to process:" + count);
-
-        for (var d = 0; d < parsedJson.Count; d++)
-        {
-          if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
-          var json = parsedJson[d];
-
-          var playoff = json["PLAYOFF_SEASON_IND"];
-
-          var playerNumber = -1;
-          if (json["TEAM_ID"] != null)
-          {
-            playerNumber = json["TEAM_ID"];
-          }
-
-          var teamRoster = new TeamRoster()
-          {
-            SeasonTeamId = json["TEAM_ID"],
-            PlayerId = json["PLAYER_ID"],
-            Playoff = playoff,
-            PlayerNumber = playerNumber
-          };
-
-          context.TeamRosters.Add(teamRoster);
-        }
-
-        Debug.Print("Data Group 3: Created TeamRosters");
-        diffFromLast = DateTime.Now - last;
-        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-
-        _lo30ContextService.ContextSaveChanges();
-        Debug.Print("Data Group 3: Saved TeamRosters " + context.TeamRosters.Count());
-        diffFromLast = DateTime.Now - last;
-        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-      }
-      #endregion
-
       #region 3:PlayerRatings
       if (context.PlayerRatings.Count() == 0)
       {
@@ -936,7 +854,7 @@ namespace LO30.Data
 
           int ratingPrimary = -1;
           int ratingSecondary = -1;
-          if (ratingParts.Length > 0) 
+          if (ratingParts.Length > 0)
           {
             ratingPrimary = Convert.ToInt32(ratingParts[0]);
             ratingSecondary = 0;
@@ -984,7 +902,222 @@ namespace LO30.Data
       }
       #endregion
 
-      #region 4:GameRosters...dependency on GameTeams and Players
+      #region 3:PlayerDrafts
+      if (context.PlayerDrafts.Count() == 0)
+      {
+        Debug.Print("Data Group 3: Creating PlayerDrafts");
+        last = DateTime.Now;
+
+        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "PlayerRatings.json");
+        int count = parsedJson.Count;
+
+        Debug.Print("Access records to process:" + count);
+
+        for (var d = 0; d < parsedJson.Count; d++)
+        {
+          if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
+          var json = parsedJson[d];
+
+          int seasonId = json["SEASON_ID"];
+          int playerId = json["PLAYER_ID"];
+
+          string draftRound = "";
+          string position = "";
+          if (json["PLAYER_DRAFT_ROUND"] != null)
+          {
+            draftRound = json["PLAYER_DRAFT_ROUND"];
+          }
+
+          int round = -1;
+          int line = -1;
+
+          switch (draftRound.ToLower())
+          {
+            case "g":
+            case "1g":
+            case "2g":
+            case "3g":
+            case "4g":
+            case "5g":
+            case "6g":
+            case "7g":
+            case "8g":
+              position = "G";
+              line = 1;
+              round = 1;
+              break;
+            case "1d":
+              position = "D";
+              line = 1;
+              round = 2;
+              break;
+            case "2d":
+              position = "D";
+              line = 1;
+              round = 5;
+              break;
+            case "3d":
+              position = "D";
+              line = 2;
+              round = 8;
+              break;
+            case "4d":
+              position = "D";
+              line = 2;
+              round = 11;
+              break;
+            case "5d":
+              position = "D";
+              line = 3;
+              break;
+            case "6d":
+              position = "D";
+              line = 3;
+              round = 14;
+              break;
+            case "1f":
+              position = "F";
+              line = 1;
+              round = 3;
+              break;
+            case "2f":
+              position = "F";
+              line = 1;
+              round = 4;
+              break;
+            case "3f":
+              position = "F";
+              line = 1;
+              round = 6;
+              break;
+            case "4f":
+              position = "F";
+              line = 2;
+              round = 7;
+              break;
+            case "5f":
+              position = "F";
+              line = 2;
+              round = 9;
+              break;
+            case "6f":
+              position = "F";
+              line = 2;
+              round = 10;
+              break;
+            case "7f":
+              position = "F";
+              line = 3;
+              round = 12;
+              break;
+            case "8f":
+              position = "F";
+              line = 3;
+              round = 13;
+              break;
+            case "9f":
+              position = "F";
+              line = 3;
+              round = 15;
+              break;
+          }
+          if (playerId == 545 || playerId == 512 || playerId == 426 || playerId == 432 || playerId == 381 || playerId == 282)
+          {
+            // skip these players...they do not exist in the players table
+          }
+          else
+          {
+            var playerDraft = new PlayerDraft()
+            {
+              SeasonId = seasonId,
+              PlayerId = playerId,
+              Round = round,
+              Order = -1,
+              Position = position,
+              Line = line,
+              Special = false
+            };
+
+            context.PlayerDrafts.Add(playerDraft);
+          }
+        }
+
+        Debug.Print("Data Group 3: Created PlayerDrafts");
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+
+        _lo30ContextService.ContextSaveChanges();
+        Debug.Print("Data Group 3: Saved PlayerDrafts " + context.PlayerDrafts.Count());
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+      }
+      #endregion
+
+      #region 3:TeamRosters...dependency on SeasonTeam (context) and PlayerDrafts (context)
+      if (context.TeamRosters.Count() == 0)
+      {
+        Debug.Print("Data Group 3: Creating TeamRosters");
+        last = DateTime.Now;
+
+        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "TeamRosters.json");
+        int count = parsedJson.Count;
+
+        Debug.Print("Access records to process:" + count);
+
+        for (var d = 0; d < parsedJson.Count; d++)
+        {
+          if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
+          var json = parsedJson[d];
+
+          int seasonId = json["SEASON_ID"];
+
+          // ONLY PROCESS THIS YEARS...TODO implement position/draft lookup for other years
+          if (seasonId == 54)
+          {
+
+            int teamId = json["TEAM_ID"];
+            int playerId = json["PLAYER_ID"];
+            var playoff = json["PLAYOFF_SEASON_IND"];
+
+            var playerNumber = -1;
+            if (json["PLAYER_NUMBER"] != null)
+            {
+              playerNumber = json["PLAYER_NUMBER"];
+            }
+
+            // based on the draft spot, determine team roster line and position
+            var seasonTeam = _lo30ContextService.FindSeasonTeam(teamId);
+            var playerDraft = _lo30ContextService.FindPlayerDraft(seasonTeam.SeasonId, playerId);
+
+            int line = playerDraft.Line;
+            string position = playerDraft.Position;
+
+            var teamRoster = new TeamRoster()
+            {
+              SeasonTeamId = teamId,
+              PlayerId = playerId,
+              Playoff = playoff,
+              Line = line,
+              Position = position,
+              PlayerNumber = playerNumber
+            };
+
+            context.TeamRosters.Add(teamRoster);
+          }
+        }
+
+        Debug.Print("Data Group 3: Created TeamRosters");
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+
+        _lo30ContextService.ContextSaveChanges();
+        Debug.Print("Data Group 3: Saved TeamRosters " + context.TeamRosters.Count());
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+      }
+      #endregion
+
+      #region 4:GameRosters...dependency on GameTeams and TeamRoster (context)
       if (context.GameRosters.Count() == 0)
       {
         Debug.Print("Data Group 4: Creating GameRosters");
@@ -1002,6 +1135,9 @@ namespace LO30.Data
 
           int seasonId = json["SEASON_ID"];
           int gameId = json["GAME_ID"];
+
+          var homeGameTeam = _lo30ContextService.FindGameTeam(gameId, homeTeam: true);
+          var awayGameTeam = _lo30ContextService.FindGameTeam(gameId, homeTeam: false);
 
           // ONLY PROCESS THIS YEARS...TODO speed up to process historic data
           if (seasonId == 54 && gameId >= 3200)
@@ -1028,7 +1164,6 @@ namespace LO30.Data
             if (json["HOME_PLAYER_SUB_IND"] != null)
             {
               homePlayerSubInd = json["HOME_PLAYER_SUB_IND"];
-
             }
 
             int homePlayerNumber = -1;
@@ -1050,6 +1185,11 @@ namespace LO30.Data
               Debug.Print(string.Format("The homePlayerId is -1, not sure how to process. homeTeamId:{0}, homePlayerId:{1}, homeSubPlayerId:{2}, homePlayerSubInd:{3}, homePlayerNumber:{4}, gameId:{5}", homeTeamId, homePlayerId, homeSubPlayerId, homePlayerSubInd, homePlayerNumber, gameId));
             }
 
+            // set the line and position equal to the players drafted / set line position from the team roster
+            var homeTeamRoster = _lo30ContextService.FindTeamRoster(homeTeamId, homePlayerId);
+            int homePlayerLine = homeTeamRoster.Line;
+            string homePlayerPosition = homeTeamRoster.Position;
+
             int playerId;
             int? subbingForPlayerId;
 
@@ -1064,16 +1204,13 @@ namespace LO30.Data
               subbingForPlayerId = null;
             }
 
-            // TODO fix logic to handle when a goalie subs and plays out.
             bool isGoalie = false;
-            var player = context.Players.Find(playerId);
-            if (player != null && player.PreferredPosition == "G")
+            if (homeTeamRoster.Position == "G")
             {
               isGoalie = true;
             }
 
-            var homeGameTeam = _lo30ContextService.FindGameTeam(gameId, homeTeam: true);
-            var gameRoster = new GameRoster(gtid: homeGameTeam.GameTeamId, pn: homePlayerNumber, g: isGoalie, pid: playerId, sub: homePlayerSubInd, sfpid: subbingForPlayerId);
+            var gameRoster = new GameRoster(gtid: homeGameTeam.GameTeamId, pn: homePlayerNumber, line: homePlayerLine, pos: homePlayerPosition, g: isGoalie, pid: playerId, sub: homePlayerSubInd, sfpid: subbingForPlayerId);
 
             context.GameRosters.Add(gameRoster);
 
@@ -1132,16 +1269,18 @@ namespace LO30.Data
               subbingForPlayerId = null;
             }
 
-            // TODO fix logic to handle when a goalie subs and plays out.
+            // set the line and position equal to the players drafted / set line position from the team roster
+            var awayTeamRoster = _lo30ContextService.FindTeamRoster(homeTeamId, homePlayerId);
+            int awayPlayerLine = homeTeamRoster.Line;
+            string awayPlayerPosition = homeTeamRoster.Position;
+
             isGoalie = false;
-            player = context.Players.Find(playerId);
-            if (player != null && player.PreferredPosition == "G")
+            if (awayTeamRoster.Position == "G")
             {
               isGoalie = true;
             }
 
-            var awayGameTeam = _lo30ContextService.FindGameTeam(gameId, homeTeam: false);
-            gameRoster = new GameRoster(gtid: awayGameTeam.GameTeamId, pn: awayPlayerNumber, g: isGoalie, pid: playerId, sub: awayPlayerSubInd, sfpid: subbingForPlayerId);
+            gameRoster = new GameRoster(gtid: awayGameTeam.GameTeamId, pn: awayPlayerNumber, line: awayPlayerLine, pos: awayPlayerPosition, g: isGoalie, pid: playerId, sub: awayPlayerSubInd, sfpid: subbingForPlayerId);
 
             context.GameRosters.Add(gameRoster);
           }

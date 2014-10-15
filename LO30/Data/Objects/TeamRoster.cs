@@ -18,6 +18,12 @@ namespace LO30.Data.Objects
     [Required, Key, Column(Order = 2)]
     public bool Playoff { get; set; }
 
+    [Required]
+    public int Line { get; set; }
+
+    [Required]
+    public string Position { get; set; }
+
     public int? PlayerNumber { get; set; }
 
     public virtual SeasonTeam SeasonTeam { get; set; }
