@@ -17,7 +17,6 @@ namespace LO30.Controllers
     private AccessDatabaseService _accessDbService;
     private Lo30DataService _lo30DataService;
     private string _redirectToPage;
-    private DataProcessingModel _dataProcessingModel;
 
     public AdminController(Lo30Repository repo)
     {
@@ -25,8 +24,6 @@ namespace LO30.Controllers
       _lo30DataService = new Lo30DataService();
       _repo = repo;
       _redirectToPage = "/Admin/DataProcessing";
-
-      _dataProcessingModel = new DataProcessingModel();
     }
     public ActionResult GameResult()
     {

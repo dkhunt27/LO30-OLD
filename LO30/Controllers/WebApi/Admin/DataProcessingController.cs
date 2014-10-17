@@ -1,4 +1,5 @@
-﻿using LO30.Data;
+﻿using LO30.Areas.AdminDataProcessing;
+using LO30.Data;
 using LO30.Data.Objects;
 using LO30.Models;
 using LO30.Services;
@@ -15,9 +16,14 @@ namespace LO30.Controllers.Admin
   public class DataProcessingController : ApiController
   {
     private ILo30Repository _repo;
-    public DataProcessingController(ILo30Repository repo)
+    private AccessDatabaseService _accessDbService;
+    private Lo30ContextService _contextService;
+
+    public DataProcessingController(ILo30Repository repo, Lo30Context context)
     {
       _repo = repo;
+      _accessDbService = new AccessDatabaseService();
+      _contextService = new Lo30ContextService(context);
     }
 
     public HttpResponseMessage Get()
@@ -30,128 +36,88 @@ namespace LO30.Controllers.Admin
       return Request.CreateResponse(HttpStatusCode.NotImplemented);
     }
 
-    public HttpResponseMessage Post([FromBody]DataProcessingModel model)
+    public HttpResponseMessage Post([FromBody]AdminDataProcessingModel model)
     {
-      int results = -1;
+      ProcessingResult results = new ProcessingResult();
       switch (model.action)
       {
         case "ProcessScoreSheetEntries":
-          results = DoWorkProcessScoreSheetEntries(model);
+          results = _repo.ProcessScoreSheetEntries(model.startingGameId, model.endingGameId);
+          break;
+        case "ProcessScoreSheetEntriesIntoGameResults":
+          results = _repo.ProcessScoreSheetEntriesIntoGameResults(model.startingGameId, model.endingGameId);
+          break;
+        case "ProcessGameResultsIntoTeamStandings":
+          results = _repo.ProcessGameResultsIntoTeamStandings(model.seasonId, model.playoff, model.startingGameId, model.endingGameId);
+          break;
+        case "ProcessScoreSheetEntriesIntoPlayerStats":
+          results = _repo.ProcessScoreSheetEntriesIntoPlayerStats(model.startingGameId, model.endingGameId);
+          break;
+        case "ProcessPlayerStatsIntoWebStats":
+          results = _repo.ProcessPlayerStatsIntoWebStats();
+          break;
+        case "ProcessAll":
+          ProcessingResult result1, result2, result3, result4, result5;
+          
+          result1 = _repo.ProcessScoreSheetEntries(model.startingGameId, model.endingGameId);
+          results.error = result1.error;
+          results.toProcess = result1.toProcess;
+          results.modified = result1.modified;
+
+          if (string.IsNullOrWhiteSpace(results.error))
+          {
+            result2 = _repo.ProcessScoreSheetEntriesIntoGameResults(model.startingGameId, model.endingGameId);
+            results.error = result2.error;
+            results.toProcess += result2.toProcess;
+            results.modified += result2.modified;
+          }
+
+          if (string.IsNullOrWhiteSpace(results.error))
+          {
+            result3 = _repo.ProcessGameResultsIntoTeamStandings(model.seasonId, model.playoff, model.startingGameId, model.endingGameId);
+            results.error = result3.error;
+            results.toProcess += result3.toProcess;
+            results.modified += result3.modified;
+          }
+
+          if (string.IsNullOrWhiteSpace(results.error))
+          {
+            result4 = _repo.ProcessScoreSheetEntriesIntoPlayerStats(model.startingGameId, model.endingGameId);
+            results.error = result4.error;
+            results.toProcess += result4.toProcess;
+            results.modified += result4.modified;
+          }
+
+          if (string.IsNullOrWhiteSpace(results.error))
+          {
+            result5 = _repo.ProcessPlayerStatsIntoWebStats();
+            results.error = result5.error;
+            results.toProcess += result5.toProcess;
+            results.modified += result5.modified;
+          }
+
+          break;
+        case "AccessDbToJson":
+          results = _accessDbService.SaveTablesToJson();
+          break;
+        case "LoadScoreSheetEntriesFromAccessDbToJson":
+          results = _contextService.LoadScoreSheetEntriesFromAccessDBJson();
+
+          if (string.IsNullOrWhiteSpace(results.error))
+          {
+            result1 = _contextService.LoadScoreSheetEntryPenaltiesFromAccessDBJson();
+            results.error = result1.error;
+            results.toProcess += result1.toProcess;
+            results.modified += result1.modified;
+          }
+
           break;
         default:
-          return Request.CreateResponse(HttpStatusCode.BadRequest, "The model.Action (" + model.action + ") is not implemented!");
+          results = new ProcessingResult() { toProcess = -2, modified = -2, time = "n/a", error = "The model.Action (" + model.action + ") is not implemented!" };
+          break;
       }
 
-      if (results < 0)
-      {
-        return Request.CreateResponse(HttpStatusCode.BadRequest, "Error occurred during processing. Consult log for details");
-      }
-      else
-      {
-        return Request.CreateResponse(HttpStatusCode.Created, new {results = results});
-      }
-    }
-
-
-    // do the actual work
-    private int DoWorkProcessScoreSheetEntries(DataProcessingModel model)
-    {
-      int results = -1;
-      try
-      {
-        DateTime last = DateTime.Now;
-        TimeSpan diffFromLast = new TimeSpan();
-
-        Debug.Print("ScoreSheetEntries processing...");
-        last = DateTime.Now;
-        results = _repo.ProcessScoreSheetEntries(model.startingGameId, model.endingGameId);
-        Debug.Print("ScoreSheetEntries processed");
-        diffFromLast = DateTime.Now - last;
-        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-      } 
-      catch (Exception ex)
-      {
-        ErrorHandlingService.PrintFullErrorMessage(ex);
-        results = -2;
-      }
-
-      return results;
-    }
-
-    private void DoWorkProcessScoreSheetEntriesIntoGameResults(DataProcessingModel model)
-    {
-      DateTime last = DateTime.Now;
-      TimeSpan diffFromLast = new TimeSpan();
-
-      Debug.Print("ScoreSheetEntries into GameResults processing...");
-      last = DateTime.Now;
-      var results = _repo.ProcessScoreSheetEntriesIntoGameResults(model.startingGameId, model.endingGameId);
-      Debug.Print("ScoreSheetEntries into GameResults processed");
-      diffFromLast = DateTime.Now - last;
-      Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-
-      return;
-    }
-
-    private void DoWorkProcessGameResultsIntoTeamStandings(DataProcessingModel model)
-    {
-      DateTime last = DateTime.Now;
-      TimeSpan diffFromLast = new TimeSpan();
-
-      Debug.Print("GameResults into TeamStandings processing...");
-      last = DateTime.Now;
-      var results = _repo.ProcessGameResultsIntoTeamStandings(model.seasonId, model.playoff, model.startingGameId, model.endingGameId);
-      Debug.Print("GameResults into TeamStandings processed");
-      diffFromLast = DateTime.Now - last;
-      Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-
-      return;
-    }
-
-    private void DoWorkProcessScoreSheetEntriesIntoPlayerStats(DataProcessingModel model)
-    {
-      DateTime last = DateTime.Now;
-      TimeSpan diffFromLast = new TimeSpan();
-
-      Debug.Print("ScoreSheetEntries into PlayerStats processing...");
-      last = DateTime.Now;
-      var results = _repo.ProcessScoreSheetEntriesIntoPlayerStats(model.startingGameId, model.endingGameId);
-      Debug.Print("ScoreSheetEntries into PlayerStats processed");
-      diffFromLast = DateTime.Now - last;
-      Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-
-      return;
-    }
-
-    private void DoWorkProcessPlayerStatsIntoWebStats(DataProcessingModel model)
-    {
-      DateTime last = DateTime.Now;
-      TimeSpan diffFromLast = new TimeSpan();
-
-      Debug.Print("PlayerStats into WebStats processing...");
-      last = DateTime.Now;
-      var results = _repo.ProcessPlayerStatsIntoWebStats();
-      Debug.Print("PlayerStats into WebStats processed");
-      diffFromLast = DateTime.Now - last;
-      Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-
-      return;
-    }
-
-    private void DoWorkProcessAll(DataProcessingModel model)
-    {
-      DateTime first = DateTime.Now;
-      TimeSpan diffFromFirst = new TimeSpan();
-
-      DoWorkProcessScoreSheetEntries(model);
-      DoWorkProcessScoreSheetEntriesIntoGameResults(model);
-      DoWorkProcessGameResultsIntoTeamStandings(model);
-      DoWorkProcessScoreSheetEntriesIntoPlayerStats(model);
-
-      diffFromFirst = DateTime.Now - first;
-      Debug.Print("Total TimeToProcess: " + diffFromFirst.ToString());
-
-      return;
+      return Request.CreateResponse(HttpStatusCode.Accepted, new { results = results });
     }
   }
 }

@@ -1301,64 +1301,19 @@ namespace LO30.Data
       if (context.ScoreSheetEntries.Count() == 0)
       {
         List<ScoreSheetEntry> scoreSheetEntries = ScoreSheetEntry.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntries.json");
-
-        foreach(var scoreSheetEntry in scoreSheetEntries)
-        {
-          context.ScoreSheetEntries.Add(scoreSheetEntry);
-        }
-
-        _lo30ContextService.ContextSaveChanges();
+        _lo30ContextService.SaveOrUpdateForScoreSheetEntry(scoreSheetEntries);
         Debug.Print("Data Group 4: Saved ScoreSheetEntries " + context.ScoreSheetEntries.Count());
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
       }
       #endregion
 
-      #region 4:ScoreSheetEntryPenalties
+      #region 4:ScoreSheetEntryPenalties...using loadJson
       if (context.ScoreSheetEntryPenalties.Count() == 0)
       {
-        Debug.Print("Data Group 4: Creating ScoreSheetEntryPenalties");
-        last = DateTime.Now;
-
-        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "ScoreSheetEntryPenalties.json");
-        int count = parsedJson.Count;
-
-        Debug.Print("Access records to process:" + count);
-
-        for (var d = 0; d < parsedJson.Count; d++)
-        {
-          if (d % 100 == 0) { Debug.Print("Access records processed:" + d); }
-          var json = parsedJson[d];
-
-          bool homeTeam = true;
-          string teamJson = json["TEAM"];
-          string team = teamJson.ToLower();
-          if (team == "2" || team == "v" || team == "a" || team == "g")
-          {
-            homeTeam = false;
-          }
-
-          var scoreSheetEntryPenalty = new ScoreSheetEntryPenalty()
-          {
-            ScoreSheetEntryPenaltyId = json["SCORE_SHEET_ENTRY_PENALTY_ID"],
-            GameId = json["GAME_ID"],
-            Period = json["PERIOD"],
-            HomeTeam = homeTeam,
-            Player = json["PLAYER"],
-            PenaltyCode = json["PENALTY_CODE"],
-            TimeRemaining = json["TIME_REMAINING"],
-            PenaltyMinutes = json["PENALTY_MINUTES"]
-          };
-
-          context.ScoreSheetEntryPenalties.Add(scoreSheetEntryPenalty);
-        }
-
-        Debug.Print("Data Group 4: Created ScoreSheetEntryPenalties");
-        diffFromLast = DateTime.Now - last;
-        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
-
-        _lo30ContextService.ContextSaveChanges();
-        Debug.Print("Data Group 4: Saved ScoreSheetEntryPenalties " + context.ScoreSheetEntryPenalties.Count());
+        List<ScoreSheetEntryPenalty> scoreSheetEntryPenalties = ScoreSheetEntryPenalty.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntryPenalties.json");
+        _lo30ContextService.SaveOrUpdateForScoreSheetEntryPenalty(scoreSheetEntryPenalties);
+        Debug.Print("Data Group 4: Saved ScoreSheetEntryPenalties " + context.ScoreSheetEntries.Count());
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
       }

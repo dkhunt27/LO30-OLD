@@ -24,16 +24,16 @@ namespace LO30.Data
 
     bool AddArticle(Article newArticle);
 
-    int ProcessScoreSheetEntries(int startingGameId, int endingGameId);
+    ProcessingResult ProcessScoreSheetEntries(int startingGameId, int endingGameId);
 
-    bool ProcessScoreSheetEntryPenalties(int startingGameId, int endingGameId);
+    ProcessingResult ProcessScoreSheetEntryPenalties(int startingGameId, int endingGameId);
 
-    int ProcessScoreSheetEntriesIntoGameResults(int startingGameId, int endingGameId);
+    ProcessingResult ProcessScoreSheetEntriesIntoGameResults(int startingGameId, int endingGameId);
 
-    int ProcessGameResultsIntoTeamStandings(int seasonId, bool playoff, int startingGameId, int endingGameId);
+    ProcessingResult ProcessGameResultsIntoTeamStandings(int seasonId, bool playoff, int startingGameId, int endingGameId);
 
-    int ProcessScoreSheetEntriesIntoPlayerStats(int startingGameId, int endingGameId);
+    ProcessingResult ProcessScoreSheetEntriesIntoPlayerStats(int startingGameId, int endingGameId);
 
-    int ProcessPlayerStatsIntoWebStats();
+    ProcessingResult ProcessPlayerStatsIntoWebStats();
   }
 }

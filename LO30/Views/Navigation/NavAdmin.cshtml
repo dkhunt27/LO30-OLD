@@ -88,18 +88,18 @@
           Admin <i class="fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
-          <li>@Html.ActionLink("Game Result", "GameResult", "Admin")</li>
-          <li>@Html.ActionLink("Game Roster", "GameRoster", "Admin")</li>
-          <li>@Html.ActionLink("Game Sheet", "GameSheet", "Admin")</li>
-          <li>@Html.ActionLink("Score Sheet Entry", "ScoreSheetEntry", "ScoreSheetEntry")</li>
+          <li>@Html.ActionLink("Game Result", "GameResult", "Admin", new { area = "" })</li>
+          <li>@Html.ActionLink("Game Roster", "GameRoster", "Admin", new { area = "" })</li>
+          <li>@Html.ActionLink("Game Sheet", "GameSheet", "Admin", new { area = "" })</li>
+          <li>@Html.ActionLink("Score Sheet Entry", "ScoreSheetEntry", "ScoreSheetEntry", new { area = "" })</li>
           <li class="divider"></li>
-          <li>@Html.ActionLink("Data Processing", "DataProcessing", "Admin")</li>
+          <li>@Html.ActionLink("Data Processing", "Index", "AdminDataProcessing", new { area = "AdminDataProcessing" })</li>
           <li class="divider"></li>
-          <li>@Html.ActionLink("Registration", "Registration", "Admin")</li>
+          <li>@Html.ActionLink("Registration", "Registration", "Admin", new { area = "" })</li>
           <li class="divider"></li>
-          <li>@Html.ActionLink("Roster", "Roster", "Admin")</li>
-          <li>@Html.ActionLink("Draft", "Draft", "Admin")</li>
-          <li>@Html.ActionLink("Schedule", "Schedule", "Admin")</li>
+          <li>@Html.ActionLink("Roster", "Roster", "Admin", new { area = "" })</li>
+          <li>@Html.ActionLink("Draft", "Draft", "Admin", new { area = "" })</li>
+          <li>@Html.ActionLink("Schedule", "Schedule", "Admin", new { area = "" })</li>
         </ul>
       </li>
 

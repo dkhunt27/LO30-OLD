@@ -109,19 +109,47 @@ namespace LO30.Data
       }
     }
 
-    public bool ProcessScoreSheetEntryPenalties(int startingGameId, int endingGameId)
+    public ProcessingResult ProcessScoreSheetEntryPenalties(int startingGameId, int endingGameId)
     {
-      return false;
+      var result = new ProcessingResult();
+
+      DateTime last = DateTime.Now;
+      TimeSpan diffFromLast = new TimeSpan();
+
+      try
+      {
+        result.toProcess = -1;
+        result.modified = -1;
+        result.error = "Not implemented";
+      }
+      catch (Exception ex)
+      {
+        result.modified = -2;
+        result.error = ex.Message;
+
+        ErrorHandlingService.PrintFullErrorMessage(ex);
+      }
+
+      diffFromLast = DateTime.Now - last;
+      result.time = diffFromLast.ToString();
+      return result;
     }
 
-    public int ProcessScoreSheetEntries(int startingGameId, int endingGameId)
+    public ProcessingResult ProcessScoreSheetEntries(int startingGameId, int endingGameId)
     {
+      var result = new ProcessingResult();
+
+      DateTime last = DateTime.Now;
+      TimeSpan diffFromLast = new TimeSpan();
+
       try
       {
         var scoreSheetEntries = _ctx.ScoreSheetEntries
                                       .Include("Game")
                                       .Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId)
                                       .ToList();
+
+        result.toProcess = scoreSheetEntries.Count;
 
         // loop through each game
         var savedScoreSheetEntries = 0;
@@ -196,24 +224,39 @@ namespace LO30.Data
           savedScoreSheetEntries = savedScoreSheetEntries + results;
         };
 
-        return savedScoreSheetEntries;
+        result.modified = savedScoreSheetEntries;
       }
       catch (Exception ex)
       {
+        result.modified = -2;
+        result.error = ex.Message;
+
         ErrorHandlingService.PrintFullErrorMessage(ex);
-        throw ex;
       }
+
+      diffFromLast = DateTime.Now - last;
+      result.time = diffFromLast.ToString();
+      return result;
     }
 
-    public int ProcessScoreSheetEntriesIntoGameResults(int startingGameId, int endingGameId)
+    public ProcessingResult ProcessScoreSheetEntriesIntoGameResults(int startingGameId, int endingGameId)
     {
+      var result = new ProcessingResult();
+
+      DateTime last = DateTime.Now;
+      TimeSpan diffFromLast = new TimeSpan();
+
       try
       {
         // get list of game entries for these games (use game just in case there was no score sheet entries...0-0 game with no penalty minutes)
         var games = _ctx.Games.Where(s => s.GameId >= startingGameId && s.GameId <= endingGameId).ToList();
 
+        result.toProcess = games.Count;
+
         // get a list of periods
         var periods = new int[] { 1, 2, 3, 4 };
+
+        var modifiedCount = 0;
 
         // loop through each game
         for (var g = 0; g < games.Count; g++)
@@ -348,7 +391,7 @@ namespace LO30.Data
                                         over: false
                                         );
 
-          _contextService.SaveOrUpdateGameOutcome(homeGameOutcome);
+          modifiedCount += _contextService.SaveOrUpdateGameOutcome(homeGameOutcome);
 
           var awayGameOutcome = new GameOutcome(
                                         gtid: awayGameTeam.GameTeamId,
@@ -359,26 +402,41 @@ namespace LO30.Data
                                         over: false
                                         );
 
-          _contextService.SaveOrUpdateGameOutcome(awayGameOutcome);
+          modifiedCount += _contextService.SaveOrUpdateGameOutcome(awayGameOutcome);
           #endregion
         }
 
-        return _ctx.SaveChanges();
+        Debug.Print("ProcessScoreSheetEntriesIntoGameResults: savedGameOutcomes:" + modifiedCount);
+
+        result.modified = modifiedCount;
       }
       catch (Exception ex)
       {
+        result.modified = -2;
+        result.error = ex.Message;
+
         ErrorHandlingService.PrintFullErrorMessage(ex);
-        throw ex;
       }
+
+      diffFromLast = DateTime.Now - last;
+      result.time = diffFromLast.ToString();
+      return result;
     }
 
     // TODO, remove playoff input and determine it from the gameIds
-    public int ProcessGameResultsIntoTeamStandings(int seasonId, bool playoffs, int startingGameId, int endingGameId)
+    public ProcessingResult ProcessGameResultsIntoTeamStandings(int seasonId, bool playoffs, int startingGameId, int endingGameId)
     {
+      var result = new ProcessingResult();
+
+      DateTime last = DateTime.Now;
+      TimeSpan diffFromLast = new TimeSpan();
+
       try
       {
         // get every team just in case they do not have a game result yet
         var seasonTeams = _ctx.SeasonTeams.Where(st => st.SeasonId == seasonId).ToList();
+
+        result.toProcess = seasonTeams.Count;
 
         // loop through each team and calculate their standings data
         for (var t = 0; t < seasonTeams.Count; t++)
@@ -448,17 +506,29 @@ namespace LO30.Data
           var rank = x + 1;
           _contextService.SaveTeamStanding(s.SeasonTeamId, s.Playoff, rank, s.Games, s.Wins, s.Losses, s.Ties, s.Points, s.GoalsFor, s.GoalsAgainst, s.PenaltyMinutes);
         }
-        return _ctx.SaveChanges();
+
+        result.modified = _ctx.SaveChanges();
       }
       catch (Exception ex)
       {
+        result.modified = -2;
+        result.error = ex.Message;
+
         ErrorHandlingService.PrintFullErrorMessage(ex);
-        throw ex;
       }
+
+      diffFromLast = DateTime.Now - last;
+      result.time = diffFromLast.ToString();
+      return result;
     }
 
-    public int ProcessScoreSheetEntriesIntoPlayerStats(int startingGameId, int endingGameId)
+    public ProcessingResult ProcessScoreSheetEntriesIntoPlayerStats(int startingGameId, int endingGameId)
     {
+      var result = new ProcessingResult();
+
+      DateTime last = DateTime.Now;
+      TimeSpan diffFromLast = new TimeSpan();
+
       try
       {
         var gameRosters = _contextService.FindGameRostersWithGameIds(startingGameId, endingGameId);
@@ -468,6 +538,8 @@ namespace LO30.Data
 
         var scoreSheetEntriesProcessed = _ctx.ScoreSheetEntriesProcessed.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
         var scoreSheetEntryPenaltiesProcessed = _ctx.ScoreSheetEntryPenaltiesProcessed.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
+
+        result.toProcess = scoreSheetEntriesProcessed.Count + scoreSheetEntryPenaltiesProcessed.Count;
 
         var playerGameStats = _playerStatsService.ProcessScoreSheetEntriesIntoPlayerGameStats(scoreSheetEntriesProcessed, scoreSheetEntryPenaltiesProcessed, gameRosters);
         var playerSeasonTeamStats = _playerStatsService.ProcessPlayerGameStatsIntoPlayerSeasonTeamStats(playerGameStats);
@@ -495,18 +567,28 @@ namespace LO30.Data
         var savedStatsSeasonGoalie = _contextService.SaveOrUpdateGoalieStatSeason(goalieSeasonStats);
         Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsSeasonGoalie:" + savedStatsSeasonGoalie);
 
-        return (savedStatsGame + savedStatsSeasonTeam + savedStatsSeason);
+        result.modified = (savedStatsGame + savedStatsSeasonTeam + savedStatsSeason);
       }
       catch (Exception ex)
       {
+        result.modified = -2;
+        result.error = ex.Message;
+
         ErrorHandlingService.PrintFullErrorMessage(ex);
-        throw ex;
       }
+
+      diffFromLast = DateTime.Now - last;
+      result.time = diffFromLast.ToString();
+      return result;
     }
 
-    public int ProcessPlayerStatsIntoWebStats()
+    public ProcessingResult ProcessPlayerStatsIntoWebStats()
     {
-      // after the PlayerSeasonTeamStats have been saved...streamline the data for the web
+      var result = new ProcessingResult();
+
+      DateTime last = DateTime.Now;
+      TimeSpan diffFromLast = new TimeSpan();
+
       try
       {
         var ratings = _ctx.PlayerRatings.ToList();
@@ -524,6 +606,8 @@ namespace LO30.Data
                                             .Include("seasonTeamPlayingFor.team")
                                             .ToList();
 
+        result.toProcess = seasonPlayerStatsForWeb.Count + seasonGoalieStatsForWeb.Count;
+
         var playerWebStats = _playerStatsService.ProcessPlayerSeasonTeamStatsIntoForWebPlayerStats(seasonPlayerStatsForWeb, ratings);
         var savedWebPlayerStats = _contextService.SaveOrUpdateForWebPlayerStat(playerWebStats);
         Debug.Print("ProcessPlayerStatsIntoWebStats: savedWebPlayerStats:" + savedWebPlayerStats);
@@ -532,13 +616,19 @@ namespace LO30.Data
         var savedGoaliePlayerStats = _contextService.SaveOrUpdateForWebGoalieStat(goalieWebStats);
         Debug.Print("ProcessPlayerSeasonTeamStatsIntoForWebGoalieStats: savedGoaliePlayerStats:" + savedGoaliePlayerStats);
 
-        return (savedWebPlayerStats + savedGoaliePlayerStats);
+        result.modified = (savedWebPlayerStats + savedGoaliePlayerStats);
       }
       catch (Exception ex)
       {
+        result.modified = -2;
+        result.error = ex.Message;
+
         ErrorHandlingService.PrintFullErrorMessage(ex);
-        throw ex;
       }
+
+      diffFromLast = DateTime.Now - last;
+      result.time = diffFromLast.ToString();
+      return result;
     }
 
     public int? convertPlayerNumberIntoPlayer(ICollection<GameRoster> gameRoster, int? playerNumber)

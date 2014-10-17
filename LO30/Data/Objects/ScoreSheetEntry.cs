@@ -44,7 +44,7 @@ namespace LO30.Data.Objects
     public static List<ScoreSheetEntry> LoadListFromAccessDbJsonFile(string filePath)
     {
       string className = "ScoreSheetEntry";
-      string functionName = "LoadFromJsonFile";
+      string functionName = "LoadListFromAccessDbJsonFile";
       List<ScoreSheetEntry> output = new List<ScoreSheetEntry>();
 
       Debug.Print(string.Format("{0}: {1} Loading...", functionName, className));

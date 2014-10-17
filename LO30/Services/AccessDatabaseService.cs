@@ -1,4 +1,5 @@
-﻿using LO30.Services;
+﻿using LO30.Data.Objects;
+using LO30.Services;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -53,8 +54,10 @@ namespace LO30.Services
       return parsedJson;
     }
 
-    public void ProcessAccessTableToJsonFile(string queryBegin, string queryEnd, string table, string file)
+    public ProcessingResult ProcessAccessTableToJsonFile(string queryBegin, string queryEnd, string table, string file)
     {
+      var result = new ProcessingResult();
+
       Debug.Print("ProcessAccessTableToJsonFile: Processing " + table);
       var last = DateTime.Now;
 
@@ -65,15 +68,25 @@ namespace LO30.Services
       adp.Dispose();
       var tbl = dsView.Tables["AccessData"];
 
+      result.toProcess = tbl.Rows.Count;
+
       SaveObjToJsonFile(tbl, _folderPath + file + ".json");
+
+      result.modified = tbl.Rows.Count;
 
       Debug.Print("ProcessAccessTableToJsonFile: Processed " + table);
       var diffFromLast = DateTime.Now - last;
       Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+
+      return result;
     }
 
-    public void SaveTablesToJson()
+    public ProcessingResult SaveTablesToJson()
     {
+      var results = new ProcessingResult();
+      results.toProcess = 0;
+      results.modified = 0;
+
       DateTime first = DateTime.Now;
       DateTime last = DateTime.Now;
       TimeSpan diffFromFirst = new TimeSpan();
@@ -100,12 +113,23 @@ namespace LO30.Services
 
       foreach (var table in accessTables)
       {
-        ProcessAccessTableToJsonFile(table.QueryBegin, table.QueryEnd, table.TableName, table.FileName);
+        var result = ProcessAccessTableToJsonFile(table.QueryBegin, table.QueryEnd, table.TableName, table.FileName);
+
+        results.error = result.error;
+        results.toProcess += result.toProcess;
+        results.modified += result.modified;
+
+        if (!string.IsNullOrWhiteSpace(result.error))
+        {
+          break;
+        }
       }
 
       diffFromFirst = DateTime.Now - first;
       Debug.Print("Total TimeToProcess: " + diffFromFirst.ToString());
+      results.time = diffFromFirst.ToString();
 
+      return results;
     }
   }
 }

@@ -1,0 +1,14 @@
+﻿@{
+  ViewBag.Title = "LO30 | Admin | DataProcessing";
+  ViewBag.InitModule = "ngAdminDataProcessingModule";
+}
+@section Scripts {
+  @Scripts.Render("~/App_Scripts/AdminDataProcessingAngular.js")
+}
+<div id="wrapper">
+  <hgroup class="title">
+    <h1>@ViewBag.Title</h1>
+  </hgroup>
+
+  <div ng-view=""></div>
+</div>

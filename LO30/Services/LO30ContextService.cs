@@ -387,6 +387,66 @@ namespace LO30.Services
         return ContextSaveChanges();
       }
 
+      public int SaveOrUpdateForScoreSheetEntry(List<ScoreSheetEntry> scoreSheetEntry)
+      {
+        var saved = 0;
+        foreach (var item in scoreSheetEntry)
+        {
+          var results = SaveOrUpdateForScoreSheetEntry(item);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateForScoreSheetEntry(ScoreSheetEntry scoreSheetEntry)
+      {
+        var found = FindScoreSheetEntry(errorIfNotFound: false, errorIfMoreThanOneFound: true, scoreSheetEntryId: scoreSheetEntry.ScoreSheetEntryId);
+
+        if (found == null)
+        {
+          _ctx.ScoreSheetEntries.Add(scoreSheetEntry);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(scoreSheetEntry);
+        }
+
+        return ContextSaveChanges();
+      }
+
+      public int SaveOrUpdateForScoreSheetEntryPenalty(List<ScoreSheetEntryPenalty> scoreSheetEntryPenalty)
+      {
+        var saved = 0;
+        foreach (var item in scoreSheetEntryPenalty)
+        {
+          var results = SaveOrUpdateForScoreSheetEntryPenalty(item);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateForScoreSheetEntryPenalty(ScoreSheetEntryPenalty scoreSheetEntryPenalty)
+      {
+        var found = FindScoreSheetEntry(errorIfNotFound: false, errorIfMoreThanOneFound: true, scoreSheetEntryId: scoreSheetEntryPenalty.ScoreSheetEntryPenaltyId);
+
+        if (found == null)
+        {
+          _ctx.ScoreSheetEntryPenalties.Add(scoreSheetEntryPenalty);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(scoreSheetEntryPenalty);
+        }
+
+        return ContextSaveChanges();
+      }
+
       #endregion
 
       #region find functions
@@ -399,7 +459,7 @@ namespace LO30.Services
 
       public List<GameRoster> FindGameRostersWithGameIdsAndGoalie(bool errorIfNotFound, int startingGameId, int endingGameId, bool goalie)
       {
-        var found = _ctx.GameRosters.Include("GameTeam").Where(x => x.GameTeam.GameId >= startingGameId && x.GameTeam.GameId <= endingGameId && x.Goalie == goalie).ToList();
+        var found = _ctx.GameRosters.Include("GameTeam").Include("GameTeam.SeasonTeam").Where(x => x.GameTeam.GameId >= startingGameId && x.GameTeam.GameId <= endingGameId && x.Goalie == goalie).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
@@ -420,7 +480,7 @@ namespace LO30.Services
 
       public List<GameRoster> FindGameRostersWithGameIds(bool errorIfNotFound, int startingGameId, int endingGameId)
       {
-        var found = _ctx.GameRosters.Include("GameTeam").Where(x => x.GameTeam.GameId >= startingGameId && x.GameTeam.GameId <= endingGameId).ToList();
+        var found = _ctx.GameRosters.Include("GameTeam").Include("GameTeam.SeasonTeam").Where(x => x.GameTeam.GameId >= startingGameId && x.GameTeam.GameId <= endingGameId).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
@@ -440,7 +500,7 @@ namespace LO30.Services
 
       public GameRoster FindGameRosterWithGameRosterId(bool errorIfNotFound, bool errorIfMoreThanOneFound, int gameRosterId)
       {
-        var found = _ctx.GameRosters.Where(x => x.GameRosterId == gameRosterId).ToList();
+        var found = _ctx.GameRosters.Include("GameTeam").Include("GameTeam.SeasonTeam").Where(x => x.GameRosterId == gameRosterId).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
@@ -1061,6 +1121,76 @@ namespace LO30.Services
       }
       #endregion
 
+      #region FindScoreSheetEntry
+      public ScoreSheetEntry FindScoreSheetEntry(int scoreSheetEntryId)
+      {
+        return FindScoreSheetEntry(errorIfNotFound: true, errorIfMoreThanOneFound: true, scoreSheetEntryId: scoreSheetEntryId);
+      }
+
+      public ScoreSheetEntry FindScoreSheetEntry(bool errorIfNotFound, bool errorIfMoreThanOneFound, int scoreSheetEntryId)
+      {
+        var found = _ctx.ScoreSheetEntries.Where(x => x.ScoreSheetEntryId == scoreSheetEntryId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find ScoreSheetEntry for" +
+                                                  " scoreSheetEntryId:" + scoreSheetEntryId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 ScoreSheetEntry was not found for" +
+                                                  " scoreSheetEntryId:" + scoreSheetEntryId
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region FindScoreSheetEntryPenalty
+      public ScoreSheetEntryPenalty FindScoreSheetEntryPenalty(int scoreSheetEntryPenaltyId)
+      {
+        return FindScoreSheetEntryPenalty(errorIfNotFound: true, errorIfMoreThanOneFound: true, scoreSheetEntryPenaltyId: scoreSheetEntryPenaltyId);
+      }
+
+      public ScoreSheetEntryPenalty FindScoreSheetEntryPenalty(bool errorIfNotFound, bool errorIfMoreThanOneFound, int scoreSheetEntryPenaltyId)
+      {
+        var found = _ctx.ScoreSheetEntryPenalties.Where(x => x.ScoreSheetEntryPenaltyId == scoreSheetEntryPenaltyId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find ScoreSheetEntryPenalty for" +
+                                                  " scoreSheetEntryPenaltyId:" + scoreSheetEntryPenaltyId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 ScoreSheetEntryPenalty was not found for" +
+                                                  " scoreSheetEntryPenaltyId:" + scoreSheetEntryPenaltyId
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
       #endregion
 
       public int ContextSaveChanges()
@@ -1263,6 +1393,46 @@ namespace LO30.Services
         diffFromFirst = DateTime.Now - first;
         Debug.Print("Total TimeToProcess: " + diffFromFirst.ToString());
 
+      }
+
+      public ProcessingResult LoadScoreSheetEntriesFromAccessDBJson()
+      {
+        var results = new ProcessingResult();
+
+        var folderPath = @"C:\git\LO30\LO30\Data\Access\";
+
+        DateTime last = DateTime.Now;
+        TimeSpan diffFromLast = new TimeSpan();
+
+        List<ScoreSheetEntry> scoreSheetEntries = ScoreSheetEntry.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntries.json");
+        results.toProcess = scoreSheetEntries.Count;
+        results.modified = SaveOrUpdateForScoreSheetEntry(scoreSheetEntries);
+        Debug.Print("Data Group 4: Saved ScoreSheetEntries " + _ctx.ScoreSheetEntries.Count());
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+        results.time = diffFromLast.ToString();
+
+        return results;
+      }
+
+      public ProcessingResult LoadScoreSheetEntryPenaltiesFromAccessDBJson()
+      {
+        var results = new ProcessingResult();
+
+        var folderPath = @"C:\git\LO30\LO30\Data\Access\";
+
+        DateTime last = DateTime.Now;
+        TimeSpan diffFromLast = new TimeSpan();
+
+        List<ScoreSheetEntryPenalty> scoreSheetEntryPenalties = ScoreSheetEntryPenalty.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntryPenalties.json");
+        results.toProcess = scoreSheetEntryPenalties.Count;
+        results.modified = SaveOrUpdateForScoreSheetEntryPenalty(scoreSheetEntryPenalties);
+        Debug.Print("Data Group 4: Saved ScoreSheetEntryPenalties " + _ctx.ScoreSheetEntryPenalties.Count());
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+        results.time = diffFromLast.ToString();
+
+        return results;
       }
     }
 }

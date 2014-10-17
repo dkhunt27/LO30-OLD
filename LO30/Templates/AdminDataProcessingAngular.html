@@ -1,0 +1,237 @@
+﻿<div>
+  <fieldset>
+    <legend>Inputs</legend>
+
+    <dl class="dl-horizontal">
+      <dt>Season Id</dt>
+      <dd>
+        <input ng-model="dataModel.seasonId">
+      </dd>
+
+      <dt>
+        <label>Playoffs?</label>
+      </dt>
+      <dd>
+        <input ng-model="dataModel.playoff">
+      </dd>
+
+      <dt>
+        <label>Starting GameId</label>
+      </dt>
+      <dd>
+        <input ng-model="dataModel.startingGameId">
+      </dd>
+
+      <dt>
+        <label>Ending GameId</label>
+      </dt>
+      <dd>
+        <input ng-model="dataModel.endingGameId">
+      </dd>
+    </dl>
+
+    <table class="table table-bordered table-condensed">
+      <thead>
+        <tr>
+          <td>Step</td>
+          <td>Description</td>
+          <td>Action</td>
+          <td>To Process</td>
+          <td>Added/Updated</td>
+          <td>Time</td>
+          <td>Error</td>
+        </tr>
+      </thead>
+      <tr>
+        <td>0</td>
+        <td>
+          Save AccessDb To Json
+        </td>
+        <td>
+          <button class="btn" ng-click="accessDbToJson()">Ok</button>
+        </td>
+        <td>
+          {{processCount.accessDbToJson.toProcess}}
+        </td>
+        <td>
+          {{processCount.accessDbToJson.modified}}
+        </td>
+        <td>
+          {{processCount.accessDbToJson.time}}
+        </td>
+        <td>
+          {{processCount.accessDbToJson.error}}
+        </td>
+      </tr>
+      <tr>
+        <td>0</td>
+        <td>
+          Load ScoreSheetEntries From AccessDbToJson
+        </td>
+        <td>
+          <button class="btn" ng-click="loadScoreSheetEntriesFromAccessDbToJson()">Ok</button>
+        </td>
+        <td>
+          {{processCount.loadScoreSheetEntriesFromAccessDbToJson.toProcess}}
+        </td>
+        <td>
+          {{processCount.loadScoreSheetEntriesFromAccessDbToJson.modified}}
+        </td>
+        <td>
+          {{processCount.loadScoreSheetEntriesFromAccessDbToJson.time}}
+        </td>
+        <td>
+          {{processCount.loadScoreSheetEntriesFromAccessDbToJson.error}}
+        </td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>
+          Save Process All
+        </td>
+        <td>
+          <button class="btn" ng-click="processAll()">Ok</button>
+        </td>
+        <td>
+          {{processCount.processAll.toProcess}}
+        </td>
+        <td>
+          {{processCount.processAll.modified}}
+        </td>
+        <td>
+          {{processCount.processAll.time}}
+        </td>
+        <td>
+          {{processCount.processAll.error}}
+        </td>
+      </tr>
+      <tr>
+        <td>1a</td>
+        <td>
+          Process ScoreSheetEntries
+        </td>
+        <td>
+          <button class="btn" ng-click="processScoreSheetEntries()">Ok</button>
+        </td>
+        <td>
+          {{processCount.processScoreSheetEntries.toProcess}}
+        </td>
+        <td>
+          {{processCount.processScoreSheetEntries.modified}}
+        </td>
+        <td>
+          {{processCount.processScoreSheetEntries.time}}
+        </td>
+        <td>
+          {{processCount.processScoreSheetEntries.error}}
+        </td>
+      </tr>
+      <tr>
+        <td>1b</td>
+        <td>
+          Process ScoreSheetEntries Into GameResults
+        </td>
+        <td>
+          <button class="btn" ng-click="processScoreSheetEntriesIntoGameResults()">Ok</button>
+        </td>
+        <td>
+          {{processCount.processScoreSheetEntriesIntoGameResults.toProcess}}
+        </td>
+        <td>
+          {{processCount.processScoreSheetEntriesIntoGameResults.modified}}
+        </td>
+        <td>
+          {{processCount.processScoreSheetEntriesIntoGameResults.time}}
+        </td>
+        <td>
+          {{processCount.processScoreSheetEntriesIntoGameResults.error}}
+        </td>
+      </tr>
+      <tr>
+        <td>1c</td>
+        <td>
+          Process GameResults Into TeamStandings
+        </td>
+        <td>
+          <button class="btn" ng-click="processGameResultsIntoTeamStandings()">Ok</button>
+        </td>
+        <td>
+          {{processCount.processGameResultsIntoTeamStandings.toProcess}}
+        </td>
+        <td>
+          {{processCount.processGameResultsIntoTeamStandings.modified}}
+        </td>
+        <td>
+          {{processCount.processGameResultsIntoTeamStandings.time}}
+        </td>
+        <td>
+          {{processCount.processGameResultsIntoTeamStandings.error}}
+        </td>
+      </tr>
+      <tr>
+        <td>1d</td>
+        <td>
+          Process ScoreSheetEntries Into PlayerStats
+        </td>
+        <td>
+          <button class="btn" ng-click="processScoreSheetEntriesIntoPlayerStats()">Ok</button>
+        </td>
+        <td>
+          {{processCount.processScoreSheetEntriesIntoPlayerStats.toProcess}}
+        </td>
+        <td>
+          {{processCount.processScoreSheetEntriesIntoPlayerStats.modified}}
+        </td>
+        <td>
+          {{processCount.processScoreSheetEntriesIntoPlayerStats.time}}
+        </td>
+        <td>
+          {{processCount.processScoreSheetEntriesIntoPlayerStats.error}}
+        </td>
+      </tr>
+      <tr>
+        <td>1e</td>
+        <td>
+          Process PlayerStats Into WebStats
+        </td>
+        <td>
+          <button class="btn" ng-click="processPlayerStatsIntoWebStats()">Ok</button>
+        </td>
+        <td>
+          {{processCount.processPlayerStatsIntoWebStats.toProcess}}
+        </td>
+        <td>
+          {{processCount.processPlayerStatsIntoWebStats.modified}}
+        </td>
+        <td>
+          {{processCount.processPlayerStatsIntoWebStats.time}}
+        </td>
+        <td>
+          {{processCount.processPlayerStatsIntoWebStats.error}}
+        </td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>
+          Save Context To Json
+        </td>
+        <td>
+          <button class="btn" ng-click="contextToJson()">Ok</button>
+        </td>
+        <td>
+          {{processCount.contextToJson.toProcess}}
+        </td>
+        <td>
+          {{processCount.contextToJson.modified}}
+        </td>
+        <td>
+          {{processCount.contextToJson.time}}
+        </td>
+        <td>
+          {{processCount.contextToJson.error}}
+        </td>
+      </tr>
+    </table>
+
+  </fieldset>
+</div>
