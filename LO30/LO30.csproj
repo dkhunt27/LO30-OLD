@@ -213,8 +213,11 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Attributes\HtmlFormSubmitActionAttribute.cs" />
+    <Compile Include="Controllers\Admin\DataProcessing\DataProcessingController.cs" />
     <Compile Include="Controllers\ScoreSheetEntryController.cs" />
     <Compile Include="Controllers\NavigationController.cs" />
+    <Compile Include="Controllers\WebApi\Admin\DataProcessingController.cs" />
     <Compile Include="Controllers\WebApi\ForWebGoalieStatsController.cs" />
     <Compile Include="Controllers\WebApi\ForWebPlayerStatsController.cs" />
     <Compile Include="Controllers\WebApi\PlayerStatsSeasonController.cs" />
@@ -230,6 +233,8 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AboutUsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Models\AdminModels.cs" />
+    <Compile Include="Models\Admin\DataProcessing\DataProcessingModel.cs" />
     <Compile Include="Services\Lo30DataService.cs" />
     <Compile Include="Services\AccessDatabaseService.cs" />
     <Compile Include="Data\Objects\Email.cs" />
@@ -1162,6 +1167,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="App_Scripts\dataProcessingController.js" />
     <Content Include="favicon.ico" />
     <Compile Include="Formatters\BrowserJsonFormatter.cs" />
     <Content Include="Global.asax" />
@@ -2074,6 +2080,7 @@
     <Content Include="Images\orderedList7.png" />
     <Content Include="Images\orderedList8.png" />
     <Content Include="Images\orderedList9.png" />
+    <Content Include="Templates\dataProcessing.html" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
@@ -2145,6 +2152,7 @@
     <Content Include="Views\Navigation\NavAdmin.cshtml" />
     <Content Include="Views\Navigation\NavPublic.cshtml" />
     <Content Include="Views\Navigation\NavBoard.cshtml" />
+    <Content Include="Views\Admin\DataProcessing.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2155,6 +2163,7 @@
   <ItemGroup>
     <Folder Include="App_Scripts\controllers\" />
     <Folder Include="Content\Template\images\demo\revolution_slider\New folder\" />
+    <Folder Include="Views\Admin\DataProcessing\" />
     <Folder Include="Views\News\" />
     <Folder Include="Views\ScoreSheetEntry\AngularTemplates\" />
   </ItemGroup>

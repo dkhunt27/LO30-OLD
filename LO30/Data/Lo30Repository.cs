@@ -114,7 +114,7 @@ namespace LO30.Data
       return false;
     }
 
-    public bool ProcessScoreSheetEntries(int startingGameId, int endingGameId)
+    public int ProcessScoreSheetEntries(int startingGameId, int endingGameId)
     {
       try
       {
@@ -196,7 +196,7 @@ namespace LO30.Data
           savedScoreSheetEntries = savedScoreSheetEntries + results;
         };
 
-        return savedScoreSheetEntries > 0;
+        return savedScoreSheetEntries;
       }
       catch (Exception ex)
       {
@@ -205,7 +205,7 @@ namespace LO30.Data
       }
     }
 
-    public bool ProcessScoreSheetEntriesIntoGameResults(int startingGameId, int endingGameId)
+    public int ProcessScoreSheetEntriesIntoGameResults(int startingGameId, int endingGameId)
     {
       try
       {
@@ -363,7 +363,7 @@ namespace LO30.Data
           #endregion
         }
 
-        return _ctx.SaveChanges() > 0;
+        return _ctx.SaveChanges();
       }
       catch (Exception ex)
       {
@@ -373,7 +373,7 @@ namespace LO30.Data
     }
 
     // TODO, remove playoff input and determine it from the gameIds
-    public bool ProcessGameResultsIntoTeamStandings(int seasonId, bool playoffs, int startingGameId, int endingGameId)
+    public int ProcessGameResultsIntoTeamStandings(int seasonId, bool playoffs, int startingGameId, int endingGameId)
     {
       try
       {
@@ -448,7 +448,7 @@ namespace LO30.Data
           var rank = x + 1;
           _contextService.SaveTeamStanding(s.SeasonTeamId, s.Playoff, rank, s.Games, s.Wins, s.Losses, s.Ties, s.Points, s.GoalsFor, s.GoalsAgainst, s.PenaltyMinutes);
         }
-        return _ctx.SaveChanges() > 0;
+        return _ctx.SaveChanges();
       }
       catch (Exception ex)
       {
@@ -457,7 +457,7 @@ namespace LO30.Data
       }
     }
 
-    public bool ProcessScoreSheetEntriesIntoPlayerStats(int startingGameId, int endingGameId)
+    public int ProcessScoreSheetEntriesIntoPlayerStats(int startingGameId, int endingGameId)
     {
       try
       {
@@ -495,7 +495,7 @@ namespace LO30.Data
         var savedStatsSeasonGoalie = _contextService.SaveOrUpdateGoalieStatSeason(goalieSeasonStats);
         Debug.Print("ProcessScoreSheetEntriesIntoPlayerStats: savedStatsSeasonGoalie:" + savedStatsSeasonGoalie);
 
-        return (savedStatsGame + savedStatsSeasonTeam + savedStatsSeason) > 0;
+        return (savedStatsGame + savedStatsSeasonTeam + savedStatsSeason);
       }
       catch (Exception ex)
       {
@@ -504,7 +504,7 @@ namespace LO30.Data
       }
     }
 
-    public bool ProcessPlayerStatsIntoWebStats()
+    public int ProcessPlayerStatsIntoWebStats()
     {
       // after the PlayerSeasonTeamStats have been saved...streamline the data for the web
       try
@@ -532,7 +532,7 @@ namespace LO30.Data
         var savedGoaliePlayerStats = _contextService.SaveOrUpdateForWebGoalieStat(goalieWebStats);
         Debug.Print("ProcessPlayerSeasonTeamStatsIntoForWebGoalieStats: savedGoaliePlayerStats:" + savedGoaliePlayerStats);
 
-        return ((savedWebPlayerStats + savedGoaliePlayerStats) > 0);
+        return (savedWebPlayerStats + savedGoaliePlayerStats);
       }
       catch (Exception ex)
       {
