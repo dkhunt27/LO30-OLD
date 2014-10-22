@@ -258,7 +258,7 @@ header#topNav button.btn-mobile {
 header#topNav li.quick-cart .quick-cart-content {
 	background-color:#333;
 }
-@media (max-width: 990px) {
+@media (max-width: 1200px) {
 	header#topNav div.nav-main-collapse {
 		background-color:#333;
 	}

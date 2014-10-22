@@ -25,7 +25,7 @@ namespace LO30.Data.Objects
     public bool HomeTeam { get; set; }
 
     [Required]
-    public int Player { get; set; }
+    public string Player { get; set; }
 
     [Required, MaxLength(3)]
     public string PenaltyCode { get; set; }

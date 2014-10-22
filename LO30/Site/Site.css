@@ -1,1 +1,31 @@
-﻿
+﻿.navbar-default {
+background-color: #1980B6;
+border-color: #1980B6;
+}
+
+.navbar-default .navbar-brand {
+color: aliceblue;
+}
+
+.navbar-default .navbar-nav>li>a {
+color: aliceblue;
+}
+
+.navbar-default .navbar-toggle {
+border-color: #1980B6;
+color: #1980B6;
+}
+
+header#topNav a.logo {
+color: #1980B6;
+font-size: 30px;
+padding-top: 10px;
+padding-left: 15px;
+padding-right: 15px;
+padding-bottom: 10px;
+line-height: 20px;
+}
+
+header#topNav nav ul.nav-main li a {
+color: #1980B6;
+}

@@ -741,6 +741,20 @@ border-color:rgb(255, 214, 88);
 border-style:none;
 }
 
+.tp-caption.medium_darkblue {
+font-size:21px;
+line-height:26px;
+font-weight:300;
+font-family:"Open Sans";
+color:rgb(52, 73, 94);
+text-decoration:none;
+background-color:transparent;
+padding:0px;
+border-width:0px;
+border-color:rgb(255, 214, 88);
+border-style:none;
+}
+
 .tp-caption.medium_bg_darkblue {
 font-size:20px;
 line-height:20px;
@@ -750,6 +764,20 @@ color:rgb(255, 255, 255);
 text-decoration:none;
 background-color:rgb(52, 73, 94);
 padding:10px;
+border-width:0px;
+border-color:rgb(255, 214, 88);
+border-style:none;
+}
+
+.tp-caption.small_bg_darkblue {
+font-size:17px;
+line-height:28px;
+font-weight:300;
+font-family:"Open Sans";
+color:rgb(255, 255, 255);
+text-decoration:none;
+background-color:rgb(52, 73, 94);
+padding:0px;
 border-width:0px;
 border-color:rgb(255, 214, 88);
 border-style:none;

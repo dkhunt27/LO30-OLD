@@ -21,6 +21,9 @@ namespace LO30.Controllers
 
       try
       {
+#if DEBUG
+        return PartialView("NavAdmin");
+#else
         if (Roles.IsUserInRole("admin"))
         {
           return PartialView("NavAdmin");
@@ -29,6 +32,7 @@ namespace LO30.Controllers
         {
           return PartialView("NavBoard");
         }
+#endif
       } 
       catch (Exception ex)
       {

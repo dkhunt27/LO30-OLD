@@ -52,7 +52,7 @@ header#topNav nav ul.nav-main ul.dropdown-menu li:hover > a {
 header#topNav button.btn-mobile {
 	background-color:#444444;
 }	
-@media (max-width: 990px) {
+@media (max-width: 1200px) {
 	header#topNav div.nav-main-collapse {
 		background-color:#333;
 	}

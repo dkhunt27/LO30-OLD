@@ -207,6 +207,10 @@
   <ItemGroup>
     <Content Include="App_Code\OleDbMembershipProvider.cs" />
     <Content Include="App_Code\OleDbRoleProvider.cs" />
+    <Content Include="App_Scripts\ScoreSheetAngular.js" />
+    <Content Include="App_Scripts\AdminDataProcessingAngular - Copy.min.js">
+      <DependentUpon>ScoreSheetAngular.js</DependentUpon>
+    </Content>
     <Content Include="App_Scripts\AdminDataProcessingAngular.min.js">
       <DependentUpon>AdminDataProcessingAngular.js</DependentUpon>
     </Content>
@@ -219,6 +223,9 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\AdminDataProcessing\AdminDataProcessingAreaRegistration.cs" />
     <Compile Include="Areas\AdminDataProcessing\AdminDataProcessingController.cs" />
+    <Compile Include="Areas\ScoreSheet\ScoreSheetModels.cs" />
+    <Compile Include="Areas\ScoreSheet\ScoreSheetController.cs" />
+    <Compile Include="Areas\ScoreSheet\ScoreSheetAreaRegistration.cs" />
     <Compile Include="Attributes\HtmlFormSubmitActionAttribute.cs" />
     <Compile Include="Controllers\ScoreSheetEntryController.cs" />
     <Compile Include="Controllers\NavigationController.cs" />
@@ -241,7 +248,7 @@
     <Compile Include="Data\Objects\ProcessingResult.cs" />
     <Compile Include="Models\AdminModels.cs" />
     <Compile Include="Areas\AdminDataProcessing\AdminDataProcessingModels.cs" />
-    <Compile Include="Services\Lo30DataService.cs" />
+    <Compile Include="Services\Lo30DataSerializationService.cs" />
     <Compile Include="Services\AccessDatabaseService.cs" />
     <Compile Include="Data\Objects\Email.cs" />
     <Compile Include="Data\Objects\EmailType.cs" />
@@ -300,12 +307,63 @@
     <Compile Include="Services\MailService.cs" />
     <Compile Include="Services\Lo30ContextService.cs" />
     <Compile Include="Services\ErrorHandlingService.cs" />
-    <Compile Include="Services\PlayerStatsService.cs" />
+    <Compile Include="Services\Lo30DataService.cs" />
     <Compile Include="Services\MockMailService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Users.mdb" />
     <Content Include="App_Scripts\articlesIndex.js" />
+    <Content Include="Images\1971_daly.jpg" />
+    <Content Include="Images\1971_daly_300px.jpg" />
+    <Content Include="Images\1975_bracon.jpg" />
+    <Content Include="Images\1975_bracon_300px.jpg" />
+    <Content Include="Images\1983_little_bills.jpg" />
+    <Content Include="Images\1983_little_bills_300px.jpg" />
+    <Content Include="Images\1995_bakewell_grace.jpg" />
+    <Content Include="Images\1995_bakewell_grace_400px.jpg" />
+    <Content Include="Images\1996_looney.jpg" />
+    <Content Include="Images\2002_d_and_g.jpg" />
+    <Content Include="Images\2002_d_and_g_300px.jpg" />
+    <Content Include="Images\2006_elenich.jpg" />
+    <Content Include="Images\2006_elenich_400px.jpg" />
+    <Content Include="Images\2006_green.jpg" />
+    <Content Include="Images\2006_green_400px.jpg" />
+    <Content Include="Images\2006_keller.jpg" />
+    <Content Include="Images\2006_keller_400px.jpg" />
+    <Content Include="Images\2006_walters.jpg" />
+    <Content Include="Images\2006_walters_400px.jpg" />
+    <Content Include="Images\2007_hunts_ace.jpg" />
+    <Content Include="Images\2007_hunts_ace_300px.jpg" />
+    <Content Include="Images\2010_lab.jpg" />
+    <Content Include="Images\2011_daly.jpg" />
+    <Content Include="Images\2011_dg.jpg" />
+    <Content Include="Images\2011_dpkz.jpg" />
+    <Content Include="Images\2011_glover.jpg" />
+    <Content Include="Images\2011_hunts.jpg" />
+    <Content Include="Images\2011_lab.jpg" />
+    <Content Include="Images\2011_lab_300px.jpg" />
+    <Content Include="Images\2011_psi.jpg" />
+    <Content Include="Images\2011_zaschak.jpg" />
+    <Content Include="Images\eddie-edgar-building1.jpg" />
+    <Content Include="Images\eddie-edgar-building2.jpg" />
+    <Content Include="Images\eddie-edgar-ice1.jpg" />
+    <Content Include="Images\eddie-edgar-ice2.jpg" />
+    <Content Include="Images\eddie-edgar-ice3.jpg" />
+    <Content Include="Images\eddie-edgar-ice4.jpg" />
+    <Content Include="Images\eddie-edgar-sm.jpg" />
+    <Content Include="Images\hockey_accessories_main.jpg" />
+    <Content Include="Images\LO30TraditionCollage.png" />
+    <Content Include="Images\over30_logo_40px.gif" />
+    <Content Include="Images\photo.JPG" />
+    <Content Include="Images\sponsor_cbs.jpg" />
+    <Content Include="Images\sponsor_daly.jpg" />
+    <Content Include="Images\sponsor_dg.jpg" />
+    <Content Include="Images\sponsor_hunt.jpg" />
+    <Content Include="Images\sponsor_lab.jpg" />
+    <Content Include="Images\sponsor_lasalle.jpg" />
+    <Content Include="Images\sponsor_stante.jpg" />
+    <Content Include="Images\sponsor_zas_ent.jpg" />
+    <Content Include="Images\th.jpg" />
     <Content Include="Site\Template\css\animate.css" />
     <Content Include="Site\Template\css\blog.css" />
     <Content Include="Site\Template\css\color_scheme\blue.css" />
@@ -1212,6 +1270,10 @@
     <Content Include="App_Scripts\AdminDataProcessingAngular.min.js.map">
       <DependentUpon>AdminDataProcessingAngular.min.js</DependentUpon>
     </Content>
+    <Content Include="Areas\ScoreSheet\ScoreSheet.Index.cshtml" />
+    <Content Include="App_Scripts\AdminDataProcessingAngular - Copy.min.js.map">
+      <DependentUpon>AdminDataProcessingAngular - Copy.min.js</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\lo30.pubxml" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
@@ -2020,6 +2082,7 @@
     <Content Include="Scripts\slider_revolution.min.js">
       <DependentUpon>slider_revolution.js</DependentUpon>
     </Content>
+    <Content Include="Templates\ScoreSheetAngular.html" />
     <Content Include="Templates\articlesView.html" />
     <Content Include="Site\Site.css" />
     <Content Include="Scripts\_references.js" />
@@ -2050,7 +2113,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_Layout-New.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Scripts\scripts.min.js.map">
       <DependentUpon>scripts.min.js</DependentUpon>
@@ -2109,6 +2172,9 @@
     <Content Include="Views\Navigation\NavPublic.cshtml" />
     <Content Include="Views\Navigation\NavBoard.cshtml" />
     <Content Include="Areas\AdminDataProcessing\AdminDataProcessing.Index.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Navigation\NavAdmin-OldNavBar.cshtml" />
+    <Content Include="Views\Home\News.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

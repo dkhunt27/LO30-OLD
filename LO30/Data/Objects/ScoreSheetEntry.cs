@@ -25,13 +25,13 @@ namespace LO30.Data.Objects
     public bool HomeTeam { get; set; }
 
     [Required]
-    public int Goal { get; set; }
+    public string Goal { get; set; }
 
-    public int? Assist1 { get; set; }
+    public string Assist1 { get; set; }
 
-    public int? Assist2 { get; set; }
+    public string Assist2 { get; set; }
 
-    public int? Assist3 { get; set; }
+    public string Assist3 { get; set; }
 
     [Required, MaxLength(5)]
     public string TimeRemaining { get; set; }

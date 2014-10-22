@@ -39,10 +39,20 @@ namespace LO30.Controllers.Admin
     public HttpResponseMessage Post([FromBody]AdminDataProcessingModel model)
     {
       ProcessingResult results = new ProcessingResult();
+      ProcessingResult result1, result2, result3, result4, result5;
+
       switch (model.action)
       {
         case "ProcessScoreSheetEntries":
           results = _repo.ProcessScoreSheetEntries(model.startingGameId, model.endingGameId);
+
+          if (string.IsNullOrWhiteSpace(results.error))
+          {
+            result2 = _repo.ProcessScoreSheetEntryPenalties(model.startingGameId, model.endingGameId);
+            results.error = result2.error;
+            results.toProcess += result2.toProcess;
+            results.modified += result2.modified;
+          }
           break;
         case "ProcessScoreSheetEntriesIntoGameResults":
           results = _repo.ProcessScoreSheetEntriesIntoGameResults(model.startingGameId, model.endingGameId);
@@ -56,9 +66,7 @@ namespace LO30.Controllers.Admin
         case "ProcessPlayerStatsIntoWebStats":
           results = _repo.ProcessPlayerStatsIntoWebStats();
           break;
-        case "ProcessAll":
-          ProcessingResult result1, result2, result3, result4, result5;
-          
+        case "ProcessAll":          
           result1 = _repo.ProcessScoreSheetEntries(model.startingGameId, model.endingGameId);
           results.error = result1.error;
           results.toProcess = result1.toProcess;

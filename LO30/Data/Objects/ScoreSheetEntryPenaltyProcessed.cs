@@ -32,12 +32,54 @@ namespace LO30.Data.Objects
 
     [Required, MaxLength(5)]
     public string TimeRemaining { get; set; }
-    
+
     [Required]
     public int PenaltyMinutes { get; set; }
 
     public virtual Game Game { get; set; }
     public virtual Player Player { get; set; }
     public virtual Penalty Penalty { get; set; }
+
+    public ScoreSheetEntryPenaltyProcessed()
+    {
+    }
+
+    public ScoreSheetEntryPenaltyProcessed(int ssepid, int gid, int per, bool ht, string time, int playid, int penid, int pim)
+    {
+      this.ScoreSheetEntryPenaltyId = ssepid;
+
+      this.GameId = gid;
+      this.Period = per;
+      this.HomeTeam = ht;
+      this.TimeRemaining = time;
+
+      this.PlayerId = playid;
+      this.PenaltyId = penid;
+      this.PenaltyMinutes = pim;
+
+      Validate();
+    }
+
+    private void Validate()
+    {
+      var locationKey = string.Format("ssepid: {0}, gid: {1}",
+                            this.ScoreSheetEntryPenaltyId,
+                            this.GameId);
+
+      if (this.Period < 1)
+      {
+        throw new ArgumentException("Period cannot be less than 1 for:" + locationKey, "Period");
+      }
+
+      if (this.Period > 4)
+      {
+        throw new ArgumentException("Period cannot be more than 4 for:" + locationKey, "Period");
+      }
+
+      if (this.PenaltyMinutes < 2)
+      {
+        throw new ArgumentException("PenaltyMinutes cannot be less than 2 for:" + locationKey, "PenaltyMinutes");
+      }
+    }
   }
 }

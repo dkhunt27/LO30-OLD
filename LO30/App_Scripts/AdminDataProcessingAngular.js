@@ -27,7 +27,7 @@ ngModule.controller('adminDataProcessingController', ['$scope', 'adminDataProces
     seasonId: 54,
     playoff: false,
     startingGameId: 3200,
-    endingGameId: 3227
+    endingGameId: 3241
   };
 
   var defaultCount = {

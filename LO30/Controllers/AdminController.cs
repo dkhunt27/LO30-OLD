@@ -15,13 +15,13 @@ namespace LO30.Controllers
   {
     private Lo30Repository _repo;
     private AccessDatabaseService _accessDbService;
-    private Lo30DataService _lo30DataService;
+    private Lo30DataSerializationService _lo30DataService;
     private string _redirectToPage;
 
     public AdminController(Lo30Repository repo)
     {
       _accessDbService = new AccessDatabaseService();
-      _lo30DataService = new Lo30DataService();
+      _lo30DataService = new Lo30DataSerializationService();
       _repo = repo;
       _redirectToPage = "/Admin/DataProcessing";
     }

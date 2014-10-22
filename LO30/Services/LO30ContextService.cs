@@ -19,429 +19,381 @@ namespace LO30.Services
     public class Lo30ContextService
     {
       Lo30Context _ctx;
-      private Lo30DataService _lo30DataService;
+      private Lo30DataSerializationService _lo30DataService;
       private string _folderPath;
 
       public Lo30ContextService(Lo30Context ctx)
       {
         _ctx = ctx;
-        _lo30DataService = new Lo30DataService();
+        _lo30DataService = new Lo30DataSerializationService();
         _folderPath = @"C:\git\LO30\LO30\Data\SqlServer\";
       }
 
       #region SaveOrUpdate functions
 
-      public int SaveTeamStanding(int seasonTeamId, bool playoff, int rank, int games, int wins, int losses, int ties, int points, int goalsFor, int goalsAgainst, int penaltyMinutes)
+      #region SaveOrUpdate-ForWebGoalieStat
+      public int SaveOrUpdateForWebGoalieStat(List<ForWebGoalieStat> listToSave)
       {
-        var teamStanding = new TeamStanding()
+        var saved = 0;
+        foreach (var toSave in listToSave)
         {
-          SeasonTeamId = seasonTeamId,
-          Playoff = playoff,
-          Rank = rank,
-          Games = games,
-          Wins = wins,
-          Losses = losses,
-          Ties = ties,
-          Points = points,
-          GoalsFor = goalsFor,
-          GoalsAgainst = goalsAgainst,
-          PenaltyMinutes = penaltyMinutes
-        };
+          var results = SaveOrUpdateForWebGoalieStat(toSave);
+          saved = saved + results;
+        }
 
-        var found = _ctx.TeamStandings.Find(teamStanding.SeasonTeamId, teamStanding.Playoff);
+        return saved;
+      }
+
+      public int SaveOrUpdateForWebGoalieStat(ForWebGoalieStat toSave)
+      {
+        ForWebGoalieStat found = FindForWebGoalieStat(errorIfNotFound: false, errorIfMoreThanOneFound: true, pid: toSave.PID, stidpf: toSave.STIDPF);
 
         if (found == null)
         {
-          found = _ctx.TeamStandings.Add(teamStanding);
+          _ctx.ForWebGoalieStats.Add(toSave);
         }
         else
         {
           var entry = _ctx.Entry(found);
           entry.OriginalValues.SetValues(found);
-          entry.CurrentValues.SetValues(teamStanding);
+          entry.CurrentValues.SetValues(toSave);
         }
 
         return ContextSaveChanges();
       }
+      #endregion
 
-      public int SaveOrUpdateGameScore(GameScore gameScore)
+      #region SaveOrUpdate-ForWebPlayerStat
+      public int SaveOrUpdateForWebPlayerStat(List<ForWebPlayerStat> listToSave)
       {
-        var found = _ctx.GameScores.Where(x => x.GameTeamId == gameScore.GameTeamId && x.Period == gameScore.Period).FirstOrDefault();
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateForWebPlayerStat(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateForWebPlayerStat(ForWebPlayerStat toSave)
+      {
+        ForWebPlayerStat found = FindForWebPlayerStat(errorIfNotFound: false, errorIfMoreThanOneFound: true, pid: toSave.PID, stidpf: toSave.STIDPF);
 
         if (found == null)
         {
-          found = _ctx.GameScores.Add(gameScore);
+          _ctx.ForWebPlayerStats.Add(toSave);
         }
         else
         {
-          // set the primary key if 0
-          if (gameScore.GameScoreId == 0)
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
+      #region SaveOrUpdate-GameOutcome
+      public int SaveOrUpdateGameOutcome(List<GameOutcome> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateGameOutcome(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateGameOutcome(GameOutcome toSave)
+      {
+        GameOutcome found = FindGameOutcome(errorIfNotFound: false, errorIfMoreThanOneFound: true, gameTeamId: toSave.GameTeamId);
+
+        if (found == null)
+        {
+          _ctx.GameOutcomes.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
+      #region SaveOrUpdate-GameRoster
+      public int SaveOrUpdateGameRoster(List<GameRoster> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateGameRoster(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateGameRoster(GameRoster toSave)
+      {
+        GameRoster found = FindGameRoster(errorIfNotFound: false, errorIfMoreThanOneFound: true, gameRosterId: toSave.GameRosterId);
+
+        if (found == null)
+        {
+          _ctx.GameRosters.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
+      #region SaveOrUpdate-GameScore
+      public int SaveOrUpdateGameScore(List<GameScore> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateGameScore(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateGameScore(GameScore toSave)
+      {
+        GameScore found;
+
+        // lookup by PK, if it exists
+        if (toSave.GameScoreId > 0)
+        {
+          found = FindGameScore(errorIfNotFound: false, errorIfMoreThanOneFound: true, gameScoreId: toSave.GameScoreId);
+        }
+        else
+        {
+          // lookup by PK2
+          found = FindGameScoreByPK2(errorIfNotFound: false, errorIfMoreThanOneFound: true, gameTeamId: toSave.GameTeamId, period: toSave.Period);
+
+          // if found, set missing PK
+          if (found != null)
           {
-            gameScore.GameScoreId = found.GameScoreId;
+            toSave.GameScoreId = found.GameScoreId;
           }
-
-          var entry = _ctx.Entry(found);
-          entry.OriginalValues.SetValues(found);
-          entry.CurrentValues.SetValues(gameScore);
         }
-
-        return ContextSaveChanges();
-      }
-
-      public int SaveOrUpdateGameOutcome(GameOutcome gameOutcome)
-      {
-        var found = _ctx.GameOutcomes.Where(x => x.GameTeamId == gameOutcome.GameTeamId).FirstOrDefault();
 
         if (found == null)
         {
-          found = _ctx.GameOutcomes.Add(gameOutcome);
+          _ctx.GameScores.Add(toSave);
         }
         else
         {
           var entry = _ctx.Entry(found);
           entry.OriginalValues.SetValues(found);
-          entry.CurrentValues.SetValues(gameOutcome);
+          entry.CurrentValues.SetValues(toSave);
         }
 
         return ContextSaveChanges();
       }
+      #endregion
 
-      public int SaveScoreSheetEntryProcessed(int scoreSheetEntryId, int gameId, int period, bool homeTeam, int goalPlayerId, int? assist1PlayerId, int? assist2PlayerId, int? assist3PlayerId, string timeRemaining, bool shortHandedGoal, bool powerPlayGoal, bool gameWinningGoal)
-      {
-        var scoreSheetEntryProcessed = new ScoreSheetEntryProcessed(
-                                              sseid: scoreSheetEntryId,
-
-                                              gid: gameId,
-                                              per: period,
-                                              ht: homeTeam,
-                                              time: timeRemaining,
-
-                                              gpid: goalPlayerId,
-                                              a1pid: assist1PlayerId,
-                                              a2pid: assist2PlayerId,
-                                              a3pid: assist3PlayerId,
-          
-                                              shg: shortHandedGoal,
-                                              ppg: powerPlayGoal,
-                                              gwg: gameWinningGoal
-                                            );
-
-        return SaveScoreSheetEntryProcessed(scoreSheetEntryProcessed);
-      }
-
-      public int SaveScoreSheetEntryProcessed(ScoreSheetEntryProcessed scoreSheetEntryProcessed)
-      {
-        var found = _ctx.ScoreSheetEntriesProcessed.Find(scoreSheetEntryProcessed.ScoreSheetEntryId);
-
-        if (found == null)
-        {
-          found = _ctx.ScoreSheetEntriesProcessed.Add(scoreSheetEntryProcessed);
-        }
-        else
-        {
-          var entry = _ctx.Entry(found);
-          entry.OriginalValues.SetValues(found);
-          entry.CurrentValues.SetValues(scoreSheetEntryProcessed);
-        }
-
-        return ContextSaveChanges();
-      }
-
-      public int SaveOrUpdatePlayerStatGame(List<PlayerStatGame> playerStatGame)
+      #region SaveOrUpdate-GameTeam
+      public int SaveOrUpdateGameTeam(List<GameTeam> listToSave)
       {
         var saved = 0;
-        foreach (var item in playerStatGame)
+        foreach (var toSave in listToSave)
         {
-          var results = SaveOrUpdatePlayerStatGame(item);
+          var results = SaveOrUpdateGameTeam(toSave);
           saved = saved + results;
         }
 
         return saved;
       }
 
-      public int SaveOrUpdatePlayerStatGame(PlayerStatGame playerStatGame)
+      public int SaveOrUpdateGameTeam(GameTeam toSave)
       {
-        var found = FindPlayerStatGame(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: playerStatGame.PlayerId, gameId: playerStatGame.GameId);
+        GameTeam found = FindGameTeam(errorIfNotFound: false, errorIfMoreThanOneFound: true, gameId: toSave.GameId, homeTeam: toSave.HomeTeam);
 
         if (found == null)
         {
-          found = _ctx.PlayerStatsGame.Add(playerStatGame);
+          _ctx.GameTeams.Add(toSave);
         }
         else
         {
           var entry = _ctx.Entry(found);
           entry.OriginalValues.SetValues(found);
-          entry.CurrentValues.SetValues(playerStatGame);
+          entry.CurrentValues.SetValues(toSave);
         }
 
         return ContextSaveChanges();
       }
+      #endregion
 
-      public int SaveOrUpdatePlayerStatSeasonTeam(List<PlayerStatSeasonTeam> playerStatSeasonTeam)
+      #region SaveOrUpdate-GoalieStatGame
+      public int SaveOrUpdateGoalieStatGame(List<GoalieStatGame> listToSave)
       {
         var saved = 0;
-        foreach (var item in playerStatSeasonTeam)
+        foreach (var toSave in listToSave)
         {
-          var results = SaveOrUpdatePlayerStatSeasonTeam(item);
+          var results = SaveOrUpdateGoalieStatGame(toSave);
           saved = saved + results;
         }
 
         return saved;
       }
 
-      public int SaveOrUpdatePlayerStatSeasonTeam(PlayerStatSeasonTeam playerStatSeasonTeam)
+      public int SaveOrUpdateGoalieStatGame(GoalieStatGame toSave)
       {
-        var found = FindPlayerStatSeasonTeam(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: playerStatSeasonTeam.PlayerId, seasonTeamIdPlayingFor: playerStatSeasonTeam.SeasonTeamIdPlayingFor);
+        GoalieStatGame found = FindGoalieStatGame(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: toSave.PlayerId, gameId: toSave.GameId);
 
         if (found == null)
         {
-          found = _ctx.PlayerStatsSeasonTeam.Add(playerStatSeasonTeam);
+          _ctx.GoalieStatsGame.Add(toSave);
         }
         else
         {
           var entry = _ctx.Entry(found);
           entry.OriginalValues.SetValues(found);
-          entry.CurrentValues.SetValues(playerStatSeasonTeam);
+          entry.CurrentValues.SetValues(toSave);
         }
 
         return ContextSaveChanges();
       }
+      #endregion
 
-      public int SaveOrUpdatePlayerStatSeason(List<PlayerStatSeason> playerStatSeason)
+      #region SaveOrUpdate-GoalieStatSeason
+      public int SaveOrUpdateGoalieStatSeason(List<GoalieStatSeason> listToSave)
       {
         var saved = 0;
-        foreach (var item in playerStatSeason)
+        foreach (var toSave in listToSave)
         {
-          var results = SaveOrUpdatePlayerStatSeason(item);
+          var results = SaveOrUpdateGoalieStatSeason(toSave);
           saved = saved + results;
         }
 
         return saved;
       }
 
-      public int SaveOrUpdatePlayerStatSeason(PlayerStatSeason playerStatSeason)
+      public int SaveOrUpdateGoalieStatSeason(GoalieStatSeason toSave)
       {
-        var found = FindPlayerStatSeason(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: playerStatSeason.PlayerId, seasonId: playerStatSeason.SeasonId, sub: playerStatSeason.Sub);
+        GoalieStatSeason found = FindGoalieStatSeason(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: toSave.PlayerId, seasonId: toSave.SeasonId, sub: toSave.Sub);
 
         if (found == null)
         {
-          found = _ctx.PlayerStatsSeason.Add(playerStatSeason);
+          _ctx.GoalieStatsSeason.Add(toSave);
         }
         else
         {
           var entry = _ctx.Entry(found);
           entry.OriginalValues.SetValues(found);
-          entry.CurrentValues.SetValues(playerStatSeason);
+          entry.CurrentValues.SetValues(toSave);
         }
 
         return ContextSaveChanges();
       }
+      #endregion
 
-      public int SaveOrUpdateGoalieStatGame(List<GoalieStatGame> goalieStatGame)
+      #region SaveOrUpdate-GoalieStatSeasonTeam
+      public int SaveOrUpdateGoalieStatSeasonTeam(List<GoalieStatSeasonTeam> listToSave)
       {
         var saved = 0;
-        foreach (var item in goalieStatGame)
+        foreach (var toSave in listToSave)
         {
-          var results = SaveOrUpdateGoalieStatGame(item);
+          var results = SaveOrUpdateGoalieStatSeasonTeam(toSave);
           saved = saved + results;
         }
 
         return saved;
       }
 
-      public int SaveOrUpdateGoalieStatGame(GoalieStatGame goalieStatGame)
+      public int SaveOrUpdateGoalieStatSeasonTeam(GoalieStatSeasonTeam toSave)
       {
-        var found = FindGoalieStatGame(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: goalieStatGame.PlayerId, gameId: goalieStatGame.GameId);
+        GoalieStatSeasonTeam found = FindGoalieStatSeasonTeam(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: toSave.PlayerId, seasonTeamIdPlayingFor: toSave.SeasonTeamIdPlayingFor);
 
         if (found == null)
         {
-          _ctx.GoalieStatsGame.Add(goalieStatGame);
+          _ctx.GoalieStatsSeasonTeam.Add(toSave);
         }
         else
         {
           var entry = _ctx.Entry(found);
           entry.OriginalValues.SetValues(found);
-          entry.CurrentValues.SetValues(goalieStatGame);
+          entry.CurrentValues.SetValues(toSave);
         }
 
         return ContextSaveChanges();
       }
+      #endregion
 
-      public int SaveOrUpdateGoalieStatSeasonTeam(List<GoalieStatSeasonTeam> goalieStatSeasonTeam)
+      #region SaveOrUpdate-Player
+      public int SaveOrUpdatePlayer(List<Player> listToSave)
       {
         var saved = 0;
-        foreach (var item in goalieStatSeasonTeam)
+        foreach (var toSave in listToSave)
         {
-          var results = SaveOrUpdateGoalieStatSeasonTeam(item);
+          var results = SaveOrUpdatePlayer(toSave);
           saved = saved + results;
         }
 
         return saved;
       }
 
-      public int SaveOrUpdateGoalieStatSeasonTeam(GoalieStatSeasonTeam goalieStatSeasonTeam)
+      public int SaveOrUpdatePlayer(Player toSave)
       {
-        var found = FindGoalieStatSeasonTeam(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: goalieStatSeasonTeam.PlayerId, seasonTeamIdPlayingFor: goalieStatSeasonTeam.SeasonTeamIdPlayingFor);
+        Player found = FindPlayer(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: toSave.PlayerId);
 
         if (found == null)
         {
-          _ctx.GoalieStatsSeasonTeam.Add(goalieStatSeasonTeam);
+          found = _ctx.Players.Add(toSave);
         }
         else
         {
           var entry = _ctx.Entry(found);
           entry.OriginalValues.SetValues(found);
-          entry.CurrentValues.SetValues(goalieStatSeasonTeam);
+          entry.CurrentValues.SetValues(toSave);
         }
 
         return ContextSaveChanges();
       }
+      #endregion
 
-      public int SaveOrUpdateGoalieStatSeason(List<GoalieStatSeason> goalieStatSeason)
+      #region SaveOrUpdate-PlayerDraft
+      public int SaveOrUpdatePlayerDraft(List<PlayerDraft> listToSave)
       {
         var saved = 0;
-        foreach (var item in goalieStatSeason)
+        foreach (var toSave in listToSave)
         {
-          var results = SaveOrUpdateGoalieStatSeason(item);
+          var results = SaveOrUpdatePlayerDraft(toSave);
           saved = saved + results;
         }
 
         return saved;
       }
 
-      public int SaveOrUpdateGoalieStatSeason(GoalieStatSeason goalieStatSeason)
+      public int SaveOrUpdatePlayerDraft(PlayerDraft toSave)
       {
-        var found = FindGoalieStatSeason(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: goalieStatSeason.PlayerId, seasonId: goalieStatSeason.SeasonId, sub: goalieStatSeason.Sub);
+        PlayerDraft found = FindPlayerDraft(errorIfNotFound: false, errorIfMoreThanOneFound: true, seasonId: toSave.SeasonId, playerId: toSave.PlayerId);
 
         if (found == null)
         {
-          _ctx.GoalieStatsSeason.Add(goalieStatSeason);
+          found = _ctx.PlayerDrafts.Add(toSave);
         }
         else
         {
           var entry = _ctx.Entry(found);
           entry.OriginalValues.SetValues(found);
-          entry.CurrentValues.SetValues(goalieStatSeason);
-        }
-
-        return ContextSaveChanges();
-      }
-
-      public int SaveOrUpdateForWebGoalieStat(List<ForWebGoalieStat> goalieWebStat)
-      {
-        var saved = 0;
-        foreach (var item in goalieWebStat)
-        {
-          var results = SaveOrUpdateForWebGoalieStat(item);
-          saved = saved + results;
-        }
-
-        return saved;
-      }
-
-      public int SaveOrUpdateForWebGoalieStat(ForWebGoalieStat goalieWebStat)
-      {
-        var found = FindForWebGoalieStat(errorIfNotFound: false, errorIfMoreThanOneFound: true, pid: goalieWebStat.PID, stidpf: goalieWebStat.STIDPF);
-
-        if (found == null)
-        {
-          _ctx.ForWebGoalieStats.Add(goalieWebStat);
-        }
-        else
-        {
-          var entry = _ctx.Entry(found);
-          entry.OriginalValues.SetValues(found);
-          entry.CurrentValues.SetValues(goalieWebStat);
-        }
-
-        return ContextSaveChanges();
-      }
-
-      public int SaveOrUpdateForWebPlayerStat(List<ForWebPlayerStat> playerWebStat)
-      {
-        var saved = 0;
-        foreach (var item in playerWebStat)
-        {
-          var results = SaveOrUpdateForWebPlayerStat(item);
-          saved = saved + results;
-        }
-
-        return saved;
-      }
-
-      public int SaveOrUpdateForWebPlayerStat(ForWebPlayerStat playerWebStat)
-      {
-        var found = FindForWebPlayerStat(errorIfNotFound: false, errorIfMoreThanOneFound: true, pid: playerWebStat.PID, stidpf: playerWebStat.STIDPF);
-
-        if (found == null)
-        {
-          _ctx.ForWebPlayerStats.Add(playerWebStat);
-        }
-        else
-        {
-          var entry = _ctx.Entry(found);
-          entry.OriginalValues.SetValues(found);
-          entry.CurrentValues.SetValues(playerWebStat);
-        }
-
-        return ContextSaveChanges();
-      }
-
-      public int SaveOrUpdateForScoreSheetEntry(List<ScoreSheetEntry> scoreSheetEntry)
-      {
-        var saved = 0;
-        foreach (var item in scoreSheetEntry)
-        {
-          var results = SaveOrUpdateForScoreSheetEntry(item);
-          saved = saved + results;
-        }
-
-        return saved;
-      }
-
-      public int SaveOrUpdateForScoreSheetEntry(ScoreSheetEntry scoreSheetEntry)
-      {
-        var found = FindScoreSheetEntry(errorIfNotFound: false, errorIfMoreThanOneFound: true, scoreSheetEntryId: scoreSheetEntry.ScoreSheetEntryId);
-
-        if (found == null)
-        {
-          _ctx.ScoreSheetEntries.Add(scoreSheetEntry);
-        }
-        else
-        {
-          var entry = _ctx.Entry(found);
-          entry.OriginalValues.SetValues(found);
-          entry.CurrentValues.SetValues(scoreSheetEntry);
-        }
-
-        return ContextSaveChanges();
-      }
-
-      public int SaveOrUpdateForScoreSheetEntryPenalty(List<ScoreSheetEntryPenalty> scoreSheetEntryPenalty)
-      {
-        var saved = 0;
-        foreach (var item in scoreSheetEntryPenalty)
-        {
-          var results = SaveOrUpdateForScoreSheetEntryPenalty(item);
-          saved = saved + results;
-        }
-
-        return saved;
-      }
-
-      public int SaveOrUpdateForScoreSheetEntryPenalty(ScoreSheetEntryPenalty scoreSheetEntryPenalty)
-      {
-        var found = FindScoreSheetEntry(errorIfNotFound: false, errorIfMoreThanOneFound: true, scoreSheetEntryId: scoreSheetEntryPenalty.ScoreSheetEntryPenaltyId);
-
-        if (found == null)
-        {
-          _ctx.ScoreSheetEntryPenalties.Add(scoreSheetEntryPenalty);
-        }
-        else
-        {
-          var entry = _ctx.Entry(found);
-          entry.OriginalValues.SetValues(found);
-          entry.CurrentValues.SetValues(scoreSheetEntryPenalty);
+          entry.CurrentValues.SetValues(toSave);
         }
 
         return ContextSaveChanges();
@@ -449,70 +401,386 @@ namespace LO30.Services
 
       #endregion
 
+      #region SaveOrUpdate-PlayerRating
+      public int SaveOrUpdatePlayerRating(List<PlayerRating> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdatePlayerRating(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdatePlayerRating(PlayerRating toSave)
+      {
+        PlayerRating found = FindPlayerRating(errorIfNotFound: false, errorIfMoreThanOneFound: true, seasonId: toSave.SeasonId, playerId: toSave.PlayerId);
+
+        if (found == null)
+        {
+          found = _ctx.PlayerRatings.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+
+      #endregion
+
+      #region SaveOrUpdate-PlayerStatGame
+      public int SaveOrUpdatePlayerStatGame(List<PlayerStatGame> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdatePlayerStatGame(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdatePlayerStatGame(PlayerStatGame toSave)
+      {
+        PlayerStatGame found = FindPlayerStatGame(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: toSave.PlayerId, gameId: toSave.GameId);
+
+        if (found == null)
+        {
+          found = _ctx.PlayerStatsGame.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
+      #region SaveOrUpdate-PlayerStatSeason
+      public int SaveOrUpdatePlayerStatSeason(List<PlayerStatSeason> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdatePlayerStatSeason(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdatePlayerStatSeason(PlayerStatSeason toSave)
+      {
+        PlayerStatSeason found = FindPlayerStatSeason(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: toSave.PlayerId, seasonId: toSave.SeasonId, sub: toSave.Sub);
+
+        if (found == null)
+        {
+          found = _ctx.PlayerStatsSeason.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
+      #region SaveOrUpdate-PlayerStatSeasonTeam
+      public int SaveOrUpdatePlayerStatSeasonTeam(List<PlayerStatSeasonTeam> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdatePlayerStatSeasonTeam(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdatePlayerStatSeasonTeam(PlayerStatSeasonTeam toSave)
+      {
+        PlayerStatSeasonTeam found = FindPlayerStatSeasonTeam(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: toSave.PlayerId, seasonTeamIdPlayingFor: toSave.SeasonTeamIdPlayingFor);
+
+        if (found == null)
+        {
+          found = _ctx.PlayerStatsSeasonTeam.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
+      #region SaveOrUpdate-ScoreSheetEntry
+      public int SaveOrUpdateScoreSheetEntry(List<ScoreSheetEntry> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateScoreSheetEntry(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateScoreSheetEntry(ScoreSheetEntry toSave)
+      {
+        ScoreSheetEntry found = FindScoreSheetEntry(errorIfNotFound: false, errorIfMoreThanOneFound: true, scoreSheetEntryId: toSave.ScoreSheetEntryId);
+
+        if (found == null)
+        {
+          _ctx.ScoreSheetEntries.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
+      #region SaveOrUpdate-ScoreSheetEntryPenalty
+      public int SaveOrUpdateScoreSheetEntryPenalty(List<ScoreSheetEntryPenalty> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateScoreSheetEntryPenalty(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateScoreSheetEntryPenalty(ScoreSheetEntryPenalty toSave)
+      {
+        ScoreSheetEntryPenalty found = FindScoreSheetEntryPenalty(errorIfNotFound: false, errorIfMoreThanOneFound: true, scoreSheetEntryPenaltyId: toSave.ScoreSheetEntryPenaltyId);
+
+        if (found == null)
+        {
+          _ctx.ScoreSheetEntryPenalties.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
+      #region SaveOrUpdate-ScoreSheetEntryProcessed
+      public int SaveOrUpdateScoreSheetEntryProcessed(List<ScoreSheetEntryProcessed> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateScoreSheetEntryProcessed(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateScoreSheetEntryProcessed(ScoreSheetEntryProcessed toSave)
+      {
+        ScoreSheetEntryProcessed found = FindScoreSheetEntryProcessed(errorIfNotFound: false, errorIfMoreThanOneFound: true, scoreSheetEntryId: toSave.ScoreSheetEntryId);
+
+        if (found == null)
+        {
+          found = _ctx.ScoreSheetEntriesProcessed.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
+      #region SaveOrUpdate-ScoreSheetEntryPenaltyProcessed
+      public int SaveOrUpdateScoreSheetEntryPenaltyProcessed(List<ScoreSheetEntryPenaltyProcessed> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateScoreSheetEntryPenaltyProcessed(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateScoreSheetEntryPenaltyProcessed(ScoreSheetEntryPenaltyProcessed toSave)
+      {
+        ScoreSheetEntryPenaltyProcessed found = FindScoreSheetEntryPenaltyProcessed(errorIfNotFound: false, errorIfMoreThanOneFound: true, scoreSheetEntryPenaltyId: toSave.ScoreSheetEntryPenaltyId);
+
+        if (found == null)
+        {
+          _ctx.ScoreSheetEntryPenaltiesProcessed.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
+      #region SaveOrUpdate-SeasonTeam
+      public int SaveOrUpdateSeasonTeam(List<SeasonTeam> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateSeasonTeam(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateSeasonTeam(SeasonTeam toSave)
+      {
+        SeasonTeam found = FindSeasonTeam(errorIfNotFound: false, errorIfMoreThanOneFound: true, seasonTeamId: toSave.SeasonTeamId);
+
+        if (found == null)
+        {
+          _ctx.SeasonTeams.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
+      #region SaveOrUpdate-TeamRoster
+      public int SaveOrUpdateTeamRoster(List<TeamRoster> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateTeamRoster(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateTeamRoster(TeamRoster toSave)
+      {
+        TeamRoster found = FindTeamRoster(errorIfNotFound: false, errorIfMoreThanOneFound: true, seasonTeamId: toSave.SeasonTeamId, playerId: toSave.PlayerId);
+
+        if (found == null)
+        {
+          _ctx.TeamRosters.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
+      #region SaveOrUpdate-TeamStanding
+      public int SaveOrUpdateTeamStanding(List<TeamStanding> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateTeamStanding(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateTeamStanding(TeamStanding toSave)
+      {
+        TeamStanding found = FindTeamStanding(errorIfNotFound: false, errorIfMoreThanOneFound: true, seasonTeamId: toSave.SeasonTeamId, playoff: toSave.Playoff);
+
+        if (found == null)
+        {
+          _ctx.TeamStandings.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
+      #endregion
+
       #region find functions
 
-      #region FindGameRosters
-      public List<GameRoster> FindGameRostersWithGameIdsAndGoalie(int startingGameId, int endingGameId, bool goalie)
+      #region Find-ForWebGoalieStat
+      public ForWebGoalieStat FindForWebGoalieStat(int pid, int stidpf)
       {
-        return FindGameRostersWithGameIdsAndGoalie(errorIfNotFound: true, startingGameId: startingGameId, endingGameId: endingGameId, goalie: goalie);
+        return FindForWebGoalieStat(errorIfNotFound: true, errorIfMoreThanOneFound: true, pid: pid, stidpf: stidpf);
       }
 
-      public List<GameRoster> FindGameRostersWithGameIdsAndGoalie(bool errorIfNotFound, int startingGameId, int endingGameId, bool goalie)
+      public ForWebGoalieStat FindForWebGoalieStat(bool errorIfNotFound, bool errorIfMoreThanOneFound, int pid, int stidpf)
       {
-        var found = _ctx.GameRosters.Include("GameTeam").Include("GameTeam.SeasonTeam").Where(x => x.GameTeam.GameId >= startingGameId && x.GameTeam.GameId <= endingGameId && x.Goalie == goalie).ToList();
+        var found = _ctx.ForWebGoalieStats.Where(x => x.PID == pid && x.STIDPF == stidpf).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
-          throw new ArgumentNullException("found", "Could not find GameRosters for" +
-                                                  " GameTeam.GameId (starting):" + startingGameId +
-                                                  " GameTeam.GameId (ending):" + endingGameId +
-                                                  " Goalie:" + goalie
-                                          );
-        }
-
-        return found;
-      }
-
-      public List<GameRoster> FindGameRostersWithGameIds(int startingGameId, int endingGameId)
-      {
-        return FindGameRostersWithGameIds(errorIfNotFound: true, startingGameId: startingGameId, endingGameId: endingGameId);
-      }
-
-      public List<GameRoster> FindGameRostersWithGameIds(bool errorIfNotFound, int startingGameId, int endingGameId)
-      {
-        var found = _ctx.GameRosters.Include("GameTeam").Include("GameTeam.SeasonTeam").Where(x => x.GameTeam.GameId >= startingGameId && x.GameTeam.GameId <= endingGameId).ToList();
-
-        if (errorIfNotFound == true && found.Count < 1)
-        {
-          throw new ArgumentNullException("found", "Could not find GameRosters for" +
-                                                  " GameTeam.GameId (starting):" + startingGameId +
-                                                  " GameTeam.GameId (ending):" + endingGameId
-                                          );
-        }
-
-        return found;
-      }
-
-      public GameRoster FindGameRosterWithGameRosterId(int gameRosterId)
-      {
-        return FindGameRosterWithGameRosterId(errorIfNotFound: true, errorIfMoreThanOneFound: true, gameRosterId: gameRosterId);
-      }
-
-      public GameRoster FindGameRosterWithGameRosterId(bool errorIfNotFound, bool errorIfMoreThanOneFound, int gameRosterId)
-      {
-        var found = _ctx.GameRosters.Include("GameTeam").Include("GameTeam.SeasonTeam").Where(x => x.GameRosterId == gameRosterId).ToList();
-
-        if (errorIfNotFound == true && found.Count < 1)
-        {
-          throw new ArgumentNullException("found", "Could not find GameRoster for" +
-                                                  " GameRosterId:" + gameRosterId
+          throw new ArgumentNullException("found", "Could not find ForWebGoalieStat for" +
+                                                  " PID:" + pid +
+                                                  " STIDPF:" + stidpf
                                           );
         }
 
         if (errorIfMoreThanOneFound == true && found.Count > 1)
         {
-          throw new ArgumentNullException("found", "More than 1 GameRoster was not found for" +
-                                                  " GameRosterId:" + gameRosterId
+          throw new ArgumentNullException("found", "More than 1 ForWebGoalieStat was not found for" +
+                                                  " PID:" + pid +
+                                                  " STIDPF:" + stidpf
                                           );
         }
 
@@ -527,7 +795,44 @@ namespace LO30.Services
       }
       #endregion
 
-      #region FindGameOutcome
+      #region Find-ForWebPlayerStat
+      public ForWebPlayerStat FindForWebPlayerStat(int pid, int stidpf)
+      {
+        return FindForWebPlayerStat(errorIfNotFound: true, errorIfMoreThanOneFound: true, pid: pid, stidpf: stidpf);
+      }
+
+      public ForWebPlayerStat FindForWebPlayerStat(bool errorIfNotFound, bool errorIfMoreThanOneFound, int pid, int stidpf)
+      {
+        var found = _ctx.ForWebPlayerStats.Where(x => x.PID == pid && x.STIDPF == stidpf).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find ForWebPlayerStat for" +
+                                                  " PID:" + pid +
+                                                  " STIDPF:" + stidpf
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 ForWebPlayerStat was not found for" +
+                                                  " PID:" + pid +
+                                                  " STIDPF:" + stidpf
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region Find-GameOutcome (addtl finds)
       public List<GameOutcome> FindGameOutcomesWithGameIdsAndTeamId(int startingGameId, int endingGameId, int seasonTeamId)
       {
         return FindGameOutcomesWithGameIdsAndTeamId(errorIfNotFound: true, startingGameId: startingGameId, endingGameId: endingGameId, seasonTeamId: seasonTeamId);
@@ -569,26 +874,26 @@ namespace LO30.Services
         return found;
       }
 
-      public GameOutcome FindGameOutcomeWithGameTimeId(int gameTimeId)
+      public GameOutcome FindGameOutcome(int gameTeamId)
       {
-        return FindGameOutcomeWithGameTimeId(errorIfNotFound: true, errorIfMoreThanOneFound: true, gameTimeId: gameTimeId);
+        return FindGameOutcome(errorIfNotFound: true, errorIfMoreThanOneFound: true, gameTeamId: gameTeamId);
       }
 
-      public GameOutcome FindGameOutcomeWithGameTimeId(bool errorIfNotFound, bool errorIfMoreThanOneFound, int gameTimeId)
+      public GameOutcome FindGameOutcome(bool errorIfNotFound, bool errorIfMoreThanOneFound, int gameTeamId)
       {
-        var found = _ctx.GameOutcomes.Where(x => x.GameTeamId == gameTimeId).ToList();
+        var found = _ctx.GameOutcomes.Where(x => x.GameTeamId == gameTeamId).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
           throw new ArgumentNullException("found", "Could not find GameOutcome for" +
-                                                  " GameTeamId:" + gameTimeId
+                                                  " GameTeamId:" + gameTeamId
                                           );
         }
 
         if (errorIfMoreThanOneFound == true && found.Count > 1)
         {
           throw new ArgumentNullException("found", "More than 1 GameOutcome was not found for" +
-                                                  " GameTeamId:" + gameTimeId
+                                                  " GameTeamId:" + gameTeamId
                                           );
         }
 
@@ -603,7 +908,187 @@ namespace LO30.Services
       }
       #endregion
 
-      #region FindGameTeam
+      #region Find-GameRosters  (addtl finds)
+      public List<GameRoster> FindGameRostersWithGameIdsAndGoalie(int startingGameId, int endingGameId, bool goalie)
+      {
+        return FindGameRostersWithGameIdsAndGoalie(errorIfNotFound: true, startingGameId: startingGameId, endingGameId: endingGameId, goalie: goalie);
+      }
+
+      public List<GameRoster> FindGameRostersWithGameIdsAndGoalie(bool errorIfNotFound, int startingGameId, int endingGameId, bool goalie)
+      {
+        var found = _ctx.GameRosters.Include("GameTeam").Include("GameTeam.SeasonTeam").Where(x => x.GameTeam.GameId >= startingGameId && x.GameTeam.GameId <= endingGameId && x.Goalie == goalie).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find GameRosters for" +
+                                                  " GameTeam.GameId (starting):" + startingGameId +
+                                                  " GameTeam.GameId (ending):" + endingGameId +
+                                                  " Goalie:" + goalie
+                                          );
+        }
+
+        return found;
+      }
+
+      public List<GameRoster> FindGameRostersWithGameIds(int startingGameId, int endingGameId)
+      {
+        return FindGameRostersWithGameIds(errorIfNotFound: true, startingGameId: startingGameId, endingGameId: endingGameId);
+      }
+
+      public List<GameRoster> FindGameRostersWithGameIds(bool errorIfNotFound, int startingGameId, int endingGameId)
+      {
+        var found = _ctx.GameRosters.Include("GameTeam").Include("GameTeam.SeasonTeam").Where(x => x.GameTeam.GameId >= startingGameId && x.GameTeam.GameId <= endingGameId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find GameRosters for" +
+                                                  " GameTeam.GameId (starting):" + startingGameId +
+                                                  " GameTeam.GameId (ending):" + endingGameId
+                                          );
+        }
+
+        return found;
+      }
+
+      public GameRoster FindGameRosterByPK2(int gameTeamId, string playerNumber)
+      {
+        return FindGameRosterByPK2(errorIfNotFound: true, errorIfMoreThanOneFound: true, gameTeamId: gameTeamId, playerNumber: playerNumber);
+      }
+
+      public GameRoster FindGameRosterByPK2(bool errorIfNotFound, bool errorIfMoreThanOneFound, int gameTeamId, string playerNumber)
+      {
+        var found = _ctx.GameRosters.Where(x => x.GameTeamId == gameTeamId && x.PlayerNumber == playerNumber).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find GameRoster for" +
+                                                  " GameTeamId:" + gameTeamId +
+                                                  " PlayerNumber:" + playerNumber
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 GameRoster was not found for" +
+                                                  " GameTeamId:" + gameTeamId +
+                                                  " PlayerNumber:" + playerNumber
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+
+      public GameRoster FindGameRoster(int gameRosterId)
+      {
+        return FindGameRoster(errorIfNotFound: true, errorIfMoreThanOneFound: true, gameRosterId: gameRosterId);
+      }
+
+      public GameRoster FindGameRoster(bool errorIfNotFound, bool errorIfMoreThanOneFound, int gameRosterId)
+      {
+        var found = _ctx.GameRosters.Where(x => x.GameRosterId == gameRosterId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find GameRoster for" +
+                                                  " GameRosterId:" + gameRosterId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 GameRoster was not found for" +
+                                                  " GameRosterId:" + gameRosterId
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region Find-GameScore
+      public GameScore FindGameScoreByPK2(int gameTeamId, int period)
+      {
+        return FindGameScoreByPK2(errorIfNotFound: true, errorIfMoreThanOneFound: true, gameTeamId: gameTeamId, period: period);
+      }
+
+      public GameScore FindGameScoreByPK2(bool errorIfNotFound, bool errorIfMoreThanOneFound, int gameTeamId, int period)
+      {
+        var found = _ctx.GameScores.Where(x => x.GameTeamId == gameTeamId && x.Period == period).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find GameScore for" +
+                                                  " GameTeamId:" + gameTeamId +
+                                                  " Period:" + period 
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 GameScore was not found for" +
+                                                  " GameTeamId:" + gameTeamId +
+                                                  " Period:" + period 
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      public GameScore FindGameScore(int gameScoreId)
+      {
+        return FindGameScore(errorIfNotFound: true, errorIfMoreThanOneFound: true, gameScoreId: gameScoreId);
+      }
+
+      public GameScore FindGameScore(bool errorIfNotFound, bool errorIfMoreThanOneFound, int gameScoreId)
+      {
+        var found = _ctx.GameScores.Where(x => x.GameScoreId == gameScoreId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find GameScore for" +
+                                                  " GameScoreId:" + gameScoreId 
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 GameScore was not found for" +
+                                                  " GameScoreId:" + gameScoreId 
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region Find-GameTeam
       public GameTeam FindGameTeam(int gameId, bool homeTeam)
       {
         return FindGameTeam(errorIfNotFound: true, errorIfMoreThanOneFound: true, gameId: gameId, homeTeam: homeTeam);
@@ -640,229 +1125,7 @@ namespace LO30.Services
       }
       #endregion
 
-      #region FindPlayer
-      public Player FindPlayer(int playerId)
-      {
-        return FindPlayer(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId);
-      }
-
-      public Player FindPlayer(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId)
-      {
-        var found = _ctx.Players.Where(x => x.PlayerId == playerId).ToList();
-
-        if (errorIfNotFound == true && found.Count < 1)
-        {
-          throw new ArgumentNullException("found", "Could not find Player for" +
-                                                  " PlayerId:" + playerId
-                                          );
-        }
-
-        if (errorIfMoreThanOneFound == true && found.Count > 1)
-        {
-          throw new ArgumentNullException("found", "More than 1 Player was not found for" +
-                                                  " PlayerId:" + playerId
-                                          );
-        }
-
-        if (found.Count == 1)
-        {
-          return found[0];
-        }
-        else
-        {
-          return null;
-        }
-      }
-      #endregion
-      
-      #region FindPlayerDraft
-      public PlayerDraft FindPlayerDraft(int seasonId, int playerId)
-      {
-        return FindPlayerDraft(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonId: seasonId, playerId: playerId);
-      }
-
-      public PlayerDraft FindPlayerDraft(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonId, int playerId)
-      {
-        var found = _ctx.PlayerDrafts.Where(x => x.SeasonId == seasonId && x.PlayerId == playerId).ToList();
-
-        if (errorIfNotFound == true && found.Count < 1)
-        {
-          throw new ArgumentNullException("found", "Could not find PlayerDraft for" +
-                                                  " seasonId:" + seasonId +
-                                                  " PlayerId:" + playerId
-                                          );
-        }
-
-        if (errorIfMoreThanOneFound == true && found.Count > 1)
-        {
-          throw new ArgumentNullException("found", "More than 1 PlayerDraft was not found for" +
-                                                  " SeasonId:" + seasonId +
-                                                  " PlayerId:" + playerId
-                                          );
-        }
-
-        if (found.Count == 1)
-        {
-          return found[0];
-        }
-        else
-        {
-          return null;
-        }
-      }
-      #endregion
-
-      #region FindPlayerStatGame
-      public PlayerStatGame FindPlayerStatGame(int playerId, int gameId)
-      {
-        return FindPlayerStatGame(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId, gameId: gameId);
-      }
-
-      public PlayerStatGame FindPlayerStatGame(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId, int gameId)
-      {
-        var found = _ctx.PlayerStatsGame.Where(x => x.PlayerId == playerId && x.GameId == gameId).ToList();
-
-        if (errorIfNotFound == true && found.Count < 1)
-        {
-          throw new ArgumentNullException("found", "Could not find PlayerStatGame for" +
-                                                  " PlayerId:" + playerId +
-                                                  " GameId:" + gameId
-                                          );
-        }
-
-        if (errorIfMoreThanOneFound == true && found.Count > 1)
-        {
-          throw new ArgumentNullException("found", "More than 1 PlayerStatGame was not found for" +
-                                                  " PlayerId:" + playerId +
-                                                  " GameId:" + gameId
-                                          );
-        }
-
-        if (found.Count == 1)
-        {
-          return found[0];
-        } 
-        else
-        {
-          return null;
-        }
-      }
-      #endregion
-
-      #region FindPlayerStatSeasonTeam
-      public PlayerStatSeasonTeam FindPlayerStatSeasonTeam(int playerId, int seasonTeamIdPlayingFor)
-      {
-        return FindPlayerStatSeasonTeam(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId, seasonTeamIdPlayingFor: seasonTeamIdPlayingFor);
-      }
-
-      public PlayerStatSeasonTeam FindPlayerStatSeasonTeam(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId, int seasonTeamIdPlayingFor)
-      {
-        var found = _ctx.PlayerStatsSeasonTeam.Where(x => x.PlayerId == playerId && x.SeasonTeamIdPlayingFor == seasonTeamIdPlayingFor).ToList();
-
-        if (errorIfNotFound == true && found.Count < 1)
-        {
-          throw new ArgumentNullException("found", "Could not find PlayerStatsSeasonTeam for" +
-                                                  " PlayerId:" + playerId +
-                                                  " SeasonTeamIdPlayingFor:" + seasonTeamIdPlayingFor
-                                          );
-        }
-
-        if (errorIfMoreThanOneFound == true && found.Count > 1)
-        {
-          throw new ArgumentNullException("found", "More than 1 PlayerStatsSeasonTeam was not found for" +
-                                                  " PlayerId:" + playerId +
-                                                  " SeasonTeamIdPlayingFor:" + seasonTeamIdPlayingFor
-                                          );
-        }
-
-        if (found.Count == 1)
-        {
-          return found[0];
-        }
-        else
-        {
-          return null;
-        }
-      }
-      #endregion
-
-      #region FindPlayerStatSeason
-      public PlayerStatSeason FindPlayerStatSeason(int playerId, int seasonId, bool sub)
-      {
-        return FindPlayerStatSeason(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId, seasonId: seasonId, sub: sub);
-      }
-
-      public PlayerStatSeason FindPlayerStatSeason(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId, int seasonId, bool sub)
-      {
-        var found = _ctx.PlayerStatsSeason.Where(x => x.PlayerId == playerId && x.SeasonId == seasonId && x.Sub == sub).ToList();
-
-        if (errorIfNotFound == true && found.Count < 1)
-        {
-          throw new ArgumentNullException("found", "Could not find PlayerStatsSeason for" +
-                                                  " PlayerId:" + playerId +
-                                                  " SeasonId:" + seasonId +
-                                                  " Sub:" + sub
-                                          );
-        }
-
-        if (errorIfMoreThanOneFound == true && found.Count > 1)
-        {
-          throw new ArgumentNullException("found", "More than 1 PlayerStatsSeason was not found for" +
-                                                  " PlayerId:" + playerId +
-                                                  " SeasonId:" + seasonId +
-                                                  " Sub:" + sub
-                                          );
-        }
-
-        if (found.Count == 1)
-        {
-          return found[0];
-        }
-        else
-        {
-          return null;
-        }
-      }
-      #endregion
-
-      #region FindPlayerRating
-      public PlayerRating FindPlayerRating(int seasonId, int playerId)
-      {
-        return FindPlayerRating(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonId: seasonId, playerId: playerId);
-      }
-
-      public PlayerRating FindPlayerRating(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonId, int playerId)
-      {
-        var found = _ctx.PlayerRatings.Where(x => x.SeasonId == seasonId && x.PlayerId == playerId).ToList();
-
-        if (errorIfNotFound == true && found.Count < 1)
-        {
-          throw new ArgumentNullException("found", "Could not find PlayerRatings for" +
-                                                  " seasonId:" + seasonId +
-                                                  " PlayerId:" + playerId
-                                          );
-        }
-
-        if (errorIfMoreThanOneFound == true && found.Count > 1)
-        {
-          throw new ArgumentNullException("found", "More than 1 PlayerRatings was not found for" +
-                                                  " seasonId:" + seasonId +
-                                                  " PlayerId:" + playerId
-                                          );
-        }
-
-        if (found.Count == 1)
-        {
-          return found[0];
-        }
-        else
-        {
-          return null;
-        }
-      }
-      #endregion
-
-      #region FindGoalieStatGame
+      #region Find-GoalieStatGame
       public GoalieStatGame FindGoalieStatGame(int playerId, int gameId)
       {
         return FindGoalieStatGame(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId, gameId: gameId);
@@ -899,44 +1162,7 @@ namespace LO30.Services
       }
       #endregion
 
-      #region FindGoalieStatSeasonTeam
-      public GoalieStatSeasonTeam FindGoalieStatSeasonTeam(int playerId, int seasonTeamIdPlayingFor)
-      {
-        return FindGoalieStatSeasonTeam(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId, seasonTeamIdPlayingFor: seasonTeamIdPlayingFor);
-      }
-
-      public GoalieStatSeasonTeam FindGoalieStatSeasonTeam(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId, int seasonTeamIdPlayingFor)
-      {
-        var found = _ctx.GoalieStatsSeasonTeam.Where(x => x.PlayerId == playerId && x.SeasonTeamIdPlayingFor == seasonTeamIdPlayingFor).ToList();
-
-        if (errorIfNotFound == true && found.Count < 1)
-        {
-          throw new ArgumentNullException("found", "Could not find GoalieStatSeasonTeam for" +
-                                                  " PlayerId:" + playerId +
-                                                  " SeasonTeamIdPlayingFor:" + seasonTeamIdPlayingFor
-                                          );
-        }
-
-        if (errorIfMoreThanOneFound == true && found.Count > 1)
-        {
-          throw new ArgumentNullException("found", "More than 1 GoalieStatSeasonTeam was not found for" +
-                                                  " PlayerId:" + playerId +
-                                                  " SeasonTeamIdPlayingFor:" + seasonTeamIdPlayingFor
-                                          );
-        }
-
-        if (found.Count == 1)
-        {
-          return found[0];
-        }
-        else
-        {
-          return null;
-        }
-      }
-      #endregion
-
-      #region FindGoalieStatSeason
+      #region Find-GoalieStatSeason
       public GoalieStatSeason FindGoalieStatSeason(int playerId, int seasonId, bool sub)
       {
         return FindGoalieStatSeason(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId, seasonId: seasonId, sub: sub);
@@ -975,29 +1201,29 @@ namespace LO30.Services
       }
       #endregion
 
-      #region FindForWebGoalieStat
-      public ForWebGoalieStat FindForWebGoalieStat(int pid, int stidpf)
+      #region Find-GoalieStatSeasonTeam
+      public GoalieStatSeasonTeam FindGoalieStatSeasonTeam(int playerId, int seasonTeamIdPlayingFor)
       {
-        return FindForWebGoalieStat(errorIfNotFound: true, errorIfMoreThanOneFound: true, pid: pid, stidpf: stidpf);
+        return FindGoalieStatSeasonTeam(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId, seasonTeamIdPlayingFor: seasonTeamIdPlayingFor);
       }
 
-      public ForWebGoalieStat FindForWebGoalieStat(bool errorIfNotFound, bool errorIfMoreThanOneFound, int pid, int stidpf)
+      public GoalieStatSeasonTeam FindGoalieStatSeasonTeam(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId, int seasonTeamIdPlayingFor)
       {
-        var found = _ctx.ForWebGoalieStats.Where(x => x.PID == pid && x.STIDPF == stidpf).ToList();
+        var found = _ctx.GoalieStatsSeasonTeam.Where(x => x.PlayerId == playerId && x.SeasonTeamIdPlayingFor == seasonTeamIdPlayingFor).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
-          throw new ArgumentNullException("found", "Could not find ForWebGoalieStat for" +
-                                                  " PID:" + pid +
-                                                  " STIDPF:" + stidpf
+          throw new ArgumentNullException("found", "Could not find GoalieStatSeasonTeam for" +
+                                                  " PlayerId:" + playerId +
+                                                  " SeasonTeamIdPlayingFor:" + seasonTeamIdPlayingFor
                                           );
         }
 
         if (errorIfMoreThanOneFound == true && found.Count > 1)
         {
-          throw new ArgumentNullException("found", "More than 1 ForWebGoalieStat was not found for" +
-                                                  " PID:" + pid +
-                                                  " STIDPF:" + stidpf
+          throw new ArgumentNullException("found", "More than 1 GoalieStatSeasonTeam was not found for" +
+                                                  " PlayerId:" + playerId +
+                                                  " SeasonTeamIdPlayingFor:" + seasonTeamIdPlayingFor
                                           );
         }
 
@@ -1012,29 +1238,64 @@ namespace LO30.Services
       }
       #endregion
 
-      #region FindForWebPlayerStat
-      public ForWebPlayerStat FindForWebPlayerStat(int pid, int stidpf)
+      #region Find-Player
+      public Player FindPlayer(int playerId)
       {
-        return FindForWebPlayerStat(errorIfNotFound: true, errorIfMoreThanOneFound: true, pid: pid, stidpf: stidpf);
+        return FindPlayer(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId);
       }
 
-      public ForWebPlayerStat FindForWebPlayerStat(bool errorIfNotFound, bool errorIfMoreThanOneFound, int pid, int stidpf)
+      public Player FindPlayer(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId)
       {
-        var found = _ctx.ForWebPlayerStats.Where(x => x.PID == pid && x.STIDPF == stidpf).ToList();
+        var found = _ctx.Players.Where(x => x.PlayerId == playerId).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
-          throw new ArgumentNullException("found", "Could not find ForWebPlayerStat for" +
-                                                  " PID:" + pid +
-                                                  " STIDPF:" + stidpf
+          throw new ArgumentNullException("found", "Could not find Player for" +
+                                                  " PlayerId:" + playerId
                                           );
         }
 
         if (errorIfMoreThanOneFound == true && found.Count > 1)
         {
-          throw new ArgumentNullException("found", "More than 1 ForWebPlayerStat was not found for" +
-                                                  " PID:" + pid +
-                                                  " STIDPF:" + stidpf
+          throw new ArgumentNullException("found", "More than 1 Player was not found for" +
+                                                  " PlayerId:" + playerId
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+      
+      #region Find-PlayerDraft
+      public PlayerDraft FindPlayerDraft(int seasonId, int playerId)
+      {
+        return FindPlayerDraft(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonId: seasonId, playerId: playerId);
+      }
+
+      public PlayerDraft FindPlayerDraft(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonId, int playerId)
+      {
+        var found = _ctx.PlayerDrafts.Where(x => x.SeasonId == seasonId && x.PlayerId == playerId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find PlayerDraft for" +
+                                                  " seasonId:" + seasonId +
+                                                  " PlayerId:" + playerId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 PlayerDraft was not found for" +
+                                                  " SeasonId:" + seasonId +
+                                                  " PlayerId:" + playerId
                                           );
         }
 
@@ -1049,7 +1310,297 @@ namespace LO30.Services
       }
       #endregion
 
-      #region FindSeasonTeam
+      #region Find-PlayerRating
+      public PlayerRating FindPlayerRating(int seasonId, int playerId)
+      {
+        return FindPlayerRating(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonId: seasonId, playerId: playerId);
+      }
+
+      public PlayerRating FindPlayerRating(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonId, int playerId)
+      {
+        var found = _ctx.PlayerRatings.Where(x => x.SeasonId == seasonId && x.PlayerId == playerId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find PlayerRatings for" +
+                                                  " seasonId:" + seasonId +
+                                                  " PlayerId:" + playerId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 PlayerRatings was not found for" +
+                                                  " seasonId:" + seasonId +
+                                                  " PlayerId:" + playerId
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region Find-PlayerStatGame
+      public PlayerStatGame FindPlayerStatGame(int playerId, int gameId)
+      {
+        return FindPlayerStatGame(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId, gameId: gameId);
+      }
+
+      public PlayerStatGame FindPlayerStatGame(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId, int gameId)
+      {
+        var found = _ctx.PlayerStatsGame.Where(x => x.PlayerId == playerId && x.GameId == gameId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find PlayerStatGame for" +
+                                                  " PlayerId:" + playerId +
+                                                  " GameId:" + gameId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 PlayerStatGame was not found for" +
+                                                  " PlayerId:" + playerId +
+                                                  " GameId:" + gameId
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        } 
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region Find-PlayerStatSeason
+      public PlayerStatSeason FindPlayerStatSeason(int playerId, int seasonId, bool sub)
+      {
+        return FindPlayerStatSeason(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId, seasonId: seasonId, sub: sub);
+      }
+
+      public PlayerStatSeason FindPlayerStatSeason(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId, int seasonId, bool sub)
+      {
+        var found = _ctx.PlayerStatsSeason.Where(x => x.PlayerId == playerId && x.SeasonId == seasonId && x.Sub == sub).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find PlayerStatsSeason for" +
+                                                  " PlayerId:" + playerId +
+                                                  " SeasonId:" + seasonId +
+                                                  " Sub:" + sub
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 PlayerStatsSeason was not found for" +
+                                                  " PlayerId:" + playerId +
+                                                  " SeasonId:" + seasonId +
+                                                  " Sub:" + sub
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region Find-PlayerStatSeasonTeam
+      public PlayerStatSeasonTeam FindPlayerStatSeasonTeam(int playerId, int seasonTeamIdPlayingFor)
+      {
+        return FindPlayerStatSeasonTeam(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId, seasonTeamIdPlayingFor: seasonTeamIdPlayingFor);
+      }
+
+      public PlayerStatSeasonTeam FindPlayerStatSeasonTeam(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId, int seasonTeamIdPlayingFor)
+      {
+        var found = _ctx.PlayerStatsSeasonTeam.Where(x => x.PlayerId == playerId && x.SeasonTeamIdPlayingFor == seasonTeamIdPlayingFor).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find PlayerStatsSeasonTeam for" +
+                                                  " PlayerId:" + playerId +
+                                                  " SeasonTeamIdPlayingFor:" + seasonTeamIdPlayingFor
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 PlayerStatsSeasonTeam was not found for" +
+                                                  " PlayerId:" + playerId +
+                                                  " SeasonTeamIdPlayingFor:" + seasonTeamIdPlayingFor
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region Find-ScoreSheetEntry
+      public ScoreSheetEntry FindScoreSheetEntry(int scoreSheetEntryId)
+      {
+        return FindScoreSheetEntry(errorIfNotFound: true, errorIfMoreThanOneFound: true, scoreSheetEntryId: scoreSheetEntryId);
+      }
+
+      public ScoreSheetEntry FindScoreSheetEntry(bool errorIfNotFound, bool errorIfMoreThanOneFound, int scoreSheetEntryId)
+      {
+        var found = _ctx.ScoreSheetEntries.Where(x => x.ScoreSheetEntryId == scoreSheetEntryId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find ScoreSheetEntry for" +
+                                                  " scoreSheetEntryId:" + scoreSheetEntryId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 ScoreSheetEntry was not found for" +
+                                                  " scoreSheetEntryId:" + scoreSheetEntryId
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region Find-ScoreSheetEntryPenalty
+      public ScoreSheetEntryPenalty FindScoreSheetEntryPenalty(int scoreSheetEntryPenaltyId)
+      {
+        return FindScoreSheetEntryPenalty(errorIfNotFound: true, errorIfMoreThanOneFound: true, scoreSheetEntryPenaltyId: scoreSheetEntryPenaltyId);
+      }
+
+      public ScoreSheetEntryPenalty FindScoreSheetEntryPenalty(bool errorIfNotFound, bool errorIfMoreThanOneFound, int scoreSheetEntryPenaltyId)
+      {
+        var found = _ctx.ScoreSheetEntryPenalties.Where(x => x.ScoreSheetEntryPenaltyId == scoreSheetEntryPenaltyId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find ScoreSheetEntryPenalty for" +
+                                                  " scoreSheetEntryPenaltyId:" + scoreSheetEntryPenaltyId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 ScoreSheetEntryPenalty was not found for" +
+                                                  " scoreSheetEntryPenaltyId:" + scoreSheetEntryPenaltyId
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region Find-ScoreSheetEntryProcessed
+      public ScoreSheetEntryProcessed FindScoreSheetEntryProcessed(int scoreSheetEntryId)
+      {
+        return FindScoreSheetEntryProcessed(errorIfNotFound: true, errorIfMoreThanOneFound: true, scoreSheetEntryId: scoreSheetEntryId);
+      }
+
+      public ScoreSheetEntryProcessed FindScoreSheetEntryProcessed(bool errorIfNotFound, bool errorIfMoreThanOneFound, int scoreSheetEntryId)
+      {
+        var found = _ctx.ScoreSheetEntriesProcessed.Where(x => x.ScoreSheetEntryId == scoreSheetEntryId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find ScoreSheetEntryProcessed for" +
+                                                  " scoreSheetEntryId:" + scoreSheetEntryId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 ScoreSheetEntryProcessed was not found for" +
+                                                  " scoreSheetEntryId:" + scoreSheetEntryId
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region Find-ScoreSheetEntryPenaltyProcessed
+      public ScoreSheetEntryPenaltyProcessed FindScoreSheetEntryPenaltyProcessed(int scoreSheetEntryPenaltyId)
+      {
+        return FindScoreSheetEntryPenaltyProcessed(errorIfNotFound: true, errorIfMoreThanOneFound: true, scoreSheetEntryPenaltyId: scoreSheetEntryPenaltyId);
+      }
+
+      public ScoreSheetEntryPenaltyProcessed FindScoreSheetEntryPenaltyProcessed(bool errorIfNotFound, bool errorIfMoreThanOneFound, int scoreSheetEntryPenaltyId)
+      {
+        var found = _ctx.ScoreSheetEntryPenaltiesProcessed.Where(x => x.ScoreSheetEntryPenaltyId == scoreSheetEntryPenaltyId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find ScoreSheetEntryPenaltyProcessed for" +
+                                                  " scoreSheetEntryPenaltyId:" + scoreSheetEntryPenaltyId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 ScoreSheetEntryPenaltyProcessed was not found for" +
+                                                  " scoreSheetEntryPenaltyId:" + scoreSheetEntryPenaltyId
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region Find-SeasonTeam
       public SeasonTeam FindSeasonTeam(int seasonTeamId)
       {
         return FindSeasonTeam(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonTeamId: seasonTeamId);
@@ -1084,7 +1635,7 @@ namespace LO30.Services
       }
       #endregion
 
-      #region FindTeamRoster
+      #region Find-TeamRoster
       public TeamRoster FindTeamRoster(int seasonTeamId, int playerId)
       {
         return FindTeamRoster(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonTeamId: seasonTeamId, playerId: playerId);
@@ -1121,62 +1672,29 @@ namespace LO30.Services
       }
       #endregion
 
-      #region FindScoreSheetEntry
-      public ScoreSheetEntry FindScoreSheetEntry(int scoreSheetEntryId)
+      #region Find-TeamStanding
+      public TeamStanding FindTeamStanding(int seasonTeamId, bool playoff)
       {
-        return FindScoreSheetEntry(errorIfNotFound: true, errorIfMoreThanOneFound: true, scoreSheetEntryId: scoreSheetEntryId);
+        return FindTeamStanding(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonTeamId: seasonTeamId, playoff: playoff);
       }
 
-      public ScoreSheetEntry FindScoreSheetEntry(bool errorIfNotFound, bool errorIfMoreThanOneFound, int scoreSheetEntryId)
+      public TeamStanding FindTeamStanding(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonTeamId, bool playoff)
       {
-        var found = _ctx.ScoreSheetEntries.Where(x => x.ScoreSheetEntryId == scoreSheetEntryId).ToList();
+        var found = _ctx.TeamStandings.Where(x => x.SeasonTeamId == seasonTeamId && x.Playoff == playoff).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
-          throw new ArgumentNullException("found", "Could not find ScoreSheetEntry for" +
-                                                  " scoreSheetEntryId:" + scoreSheetEntryId
+          throw new ArgumentNullException("found", "Could not find TeamStanding for" +
+                                                  " SeasonTeamId:" + seasonTeamId +
+                                                  " Playoff:" + playoff
                                           );
         }
 
         if (errorIfMoreThanOneFound == true && found.Count > 1)
         {
-          throw new ArgumentNullException("found", "More than 1 ScoreSheetEntry was not found for" +
-                                                  " scoreSheetEntryId:" + scoreSheetEntryId
-                                          );
-        }
-
-        if (found.Count == 1)
-        {
-          return found[0];
-        }
-        else
-        {
-          return null;
-        }
-      }
-      #endregion
-
-      #region FindScoreSheetEntryPenalty
-      public ScoreSheetEntryPenalty FindScoreSheetEntryPenalty(int scoreSheetEntryPenaltyId)
-      {
-        return FindScoreSheetEntryPenalty(errorIfNotFound: true, errorIfMoreThanOneFound: true, scoreSheetEntryPenaltyId: scoreSheetEntryPenaltyId);
-      }
-
-      public ScoreSheetEntryPenalty FindScoreSheetEntryPenalty(bool errorIfNotFound, bool errorIfMoreThanOneFound, int scoreSheetEntryPenaltyId)
-      {
-        var found = _ctx.ScoreSheetEntryPenalties.Where(x => x.ScoreSheetEntryPenaltyId == scoreSheetEntryPenaltyId).ToList();
-
-        if (errorIfNotFound == true && found.Count < 1)
-        {
-          throw new ArgumentNullException("found", "Could not find ScoreSheetEntryPenalty for" +
-                                                  " scoreSheetEntryPenaltyId:" + scoreSheetEntryPenaltyId
-                                          );
-        }
-
-        if (errorIfMoreThanOneFound == true && found.Count > 1)
-        {
-          throw new ArgumentNullException("found", "More than 1 ScoreSheetEntryPenalty was not found for" +
-                                                  " scoreSheetEntryPenaltyId:" + scoreSheetEntryPenaltyId
+          throw new ArgumentNullException("found", "More than 1 TeamStanding was not found for" +
+                                                  " SeasonTeamId:" + seasonTeamId +
+                                                  " Playoff:" + playoff
                                           );
         }
 
@@ -1406,7 +1924,7 @@ namespace LO30.Services
 
         List<ScoreSheetEntry> scoreSheetEntries = ScoreSheetEntry.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntries.json");
         results.toProcess = scoreSheetEntries.Count;
-        results.modified = SaveOrUpdateForScoreSheetEntry(scoreSheetEntries);
+        results.modified = SaveOrUpdateScoreSheetEntry(scoreSheetEntries);
         Debug.Print("Data Group 4: Saved ScoreSheetEntries " + _ctx.ScoreSheetEntries.Count());
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
@@ -1426,7 +1944,7 @@ namespace LO30.Services
 
         List<ScoreSheetEntryPenalty> scoreSheetEntryPenalties = ScoreSheetEntryPenalty.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntryPenalties.json");
         results.toProcess = scoreSheetEntryPenalties.Count;
-        results.modified = SaveOrUpdateForScoreSheetEntryPenalty(scoreSheetEntryPenalties);
+        results.modified = SaveOrUpdateScoreSheetEntryPenalty(scoreSheetEntryPenalties);
         Debug.Print("Data Group 4: Saved ScoreSheetEntryPenalties " + _ctx.ScoreSheetEntryPenalties.Count());
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());

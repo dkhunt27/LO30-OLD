@@ -11,7 +11,7 @@ namespace LO30.Data
   {
     private Lo30ContextService _lo30ContextService;
     private AccessDatabaseService _accessDatabaseService;
-    private Lo30DataService _lo30DataService;
+    private Lo30DataSerializationService _lo30DataService;
 
     public Lo30ContextSeed()
     {
@@ -24,7 +24,7 @@ namespace LO30.Data
 
       _lo30ContextService = new Lo30ContextService(context);
       _accessDatabaseService = new AccessDatabaseService();
-      _lo30DataService = new Lo30DataService();
+      _lo30DataService = new Lo30DataSerializationService();
 
       DateTime first = DateTime.Now;
       DateTime last = DateTime.Now;
@@ -1136,8 +1136,8 @@ namespace LO30.Data
           int seasonId = json["SEASON_ID"];
           int gameId = json["GAME_ID"];
 
-          var homeGameTeam = _lo30ContextService.FindGameTeam(gameId, homeTeam: true);
-          var awayGameTeam = _lo30ContextService.FindGameTeam(gameId, homeTeam: false);
+          var homeGameTeamId = _lo30ContextService.FindGameTeam(gameId, homeTeam: true).GameTeamId;
+          var awayGameTeamId = _lo30ContextService.FindGameTeam(gameId, homeTeam: false).GameTeamId;
 
           // ONLY PROCESS THIS YEARS...TODO speed up to process historic data
           if (seasonId == 54 && gameId >= 3200)
@@ -1210,7 +1210,17 @@ namespace LO30.Data
               isGoalie = true;
             }
 
-            var gameRoster = new GameRoster(gtid: homeGameTeam.GameTeamId, pn: homePlayerNumber, line: homePlayerLine, pos: homePlayerPosition, g: isGoalie, pid: playerId, sub: homePlayerSubInd, sfpid: subbingForPlayerId);
+            var gameRoster = new GameRoster(gtid: homeGameTeamId, pn: homePlayerNumber.ToString(), line: homePlayerLine, pos: homePlayerPosition, g: isGoalie, pid: playerId, sub: homePlayerSubInd, sfpid: subbingForPlayerId);
+
+            // make sure this gameRoster doesn't have any PK issues.
+            // since PK is auto assigned, just check PK2
+            var pkError = _lo30ContextService.FindGameRosterByPK2(false, false, gameRoster.GameTeamId, gameRoster.PlayerNumber);
+
+            if (pkError != null)
+            {
+              // this insert will cause a PK error
+              throw new ArgumentException("The GameRoster will cause a PK2 error. " + gameRoster);
+            }
 
             context.GameRosters.Add(gameRoster);
 
@@ -1280,7 +1290,17 @@ namespace LO30.Data
               isGoalie = true;
             }
 
-            gameRoster = new GameRoster(gtid: awayGameTeam.GameTeamId, pn: awayPlayerNumber, line: awayPlayerLine, pos: awayPlayerPosition, g: isGoalie, pid: playerId, sub: awayPlayerSubInd, sfpid: subbingForPlayerId);
+            gameRoster = new GameRoster(gtid: awayGameTeamId, pn: awayPlayerNumber.ToString(), line: awayPlayerLine, pos: awayPlayerPosition, g: isGoalie, pid: playerId, sub: awayPlayerSubInd, sfpid: subbingForPlayerId);
+
+            // make sure this gameRoster doesn't have any PK issues.
+            // since PK is auto assigned, just check PK2
+            pkError = _lo30ContextService.FindGameRosterByPK2(false, false, gameRoster.GameTeamId, gameRoster.PlayerNumber);
+
+            if (pkError != null)
+            {
+              // this insert will cause a PK error
+              throw new ArgumentException("The GameRoster will cause a PK2 error. " + gameRoster);
+            }
 
             context.GameRosters.Add(gameRoster);
           }
@@ -1301,7 +1321,7 @@ namespace LO30.Data
       if (context.ScoreSheetEntries.Count() == 0)
       {
         List<ScoreSheetEntry> scoreSheetEntries = ScoreSheetEntry.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntries.json");
-        _lo30ContextService.SaveOrUpdateForScoreSheetEntry(scoreSheetEntries);
+        _lo30ContextService.SaveOrUpdateScoreSheetEntry(scoreSheetEntries);
         Debug.Print("Data Group 4: Saved ScoreSheetEntries " + context.ScoreSheetEntries.Count());
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
@@ -1312,7 +1332,7 @@ namespace LO30.Data
       if (context.ScoreSheetEntryPenalties.Count() == 0)
       {
         List<ScoreSheetEntryPenalty> scoreSheetEntryPenalties = ScoreSheetEntryPenalty.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntryPenalties.json");
-        _lo30ContextService.SaveOrUpdateForScoreSheetEntryPenalty(scoreSheetEntryPenalties);
+        _lo30ContextService.SaveOrUpdateScoreSheetEntryPenalty(scoreSheetEntryPenalties);
         Debug.Print("Data Group 4: Saved ScoreSheetEntryPenalties " + context.ScoreSheetEntries.Count());
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());

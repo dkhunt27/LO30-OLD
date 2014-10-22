@@ -36,6 +36,7 @@ website:   	http://www.themepunch.com
 .tp-hide-revslider,.tp-caption.tp-hidden-caption	{	visibility:hidden !important; display:none !important;}
 
 .tp-caption { z-index:1;}
+
 .tp-caption.big_white{
 			position: absolute;
 			color: #fff;

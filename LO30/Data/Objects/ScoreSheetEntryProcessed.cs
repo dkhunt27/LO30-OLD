@@ -97,25 +97,26 @@ namespace LO30.Data.Objects
         throw new ArgumentException("Period cannot be more than 4 for:" + locationKey, "Period");
       }
 
-      if (this.GoalPlayerId == this.Assist1PlayerId || this.GoalPlayerId == this.Assist2PlayerId || this.GoalPlayerId == this.Assist3PlayerId)
+      if ((this.GoalPlayerId != null && this.GoalPlayerId != 0) && (this.GoalPlayerId == this.Assist1PlayerId || this.GoalPlayerId == this.Assist2PlayerId || this.GoalPlayerId == this.Assist3PlayerId))
       {
         throw new ArgumentException("GoalPlayerId cannot also be an Assist#PlayerId for:" + locationKey, "GoalPlayerId");
       }
 
-      if (this.Assist1PlayerId != null && (this.Assist1PlayerId == this.Assist2PlayerId || this.Assist1PlayerId == this.Assist3PlayerId))
+      if ((this.Assist1PlayerId != null && this.Assist1PlayerId != 0) && (this.Assist1PlayerId == this.Assist2PlayerId || this.Assist1PlayerId == this.Assist3PlayerId))
       {
         throw new ArgumentException("Assist1PlayerId cannot also be an Assist#PlayerId for:" + locationKey, "Assist1PlayerId");
       }
 
-      if (this.Assist2PlayerId != null && (this.Assist2PlayerId == this.Assist1PlayerId || this.Assist2PlayerId == this.Assist3PlayerId))
+      if ((this.Assist2PlayerId != null && this.Assist2PlayerId != 0) && (this.Assist2PlayerId == this.Assist1PlayerId || this.Assist2PlayerId == this.Assist3PlayerId))
       {
         throw new ArgumentException("Assist2PlayerId cannot also be an Assist#PlayerId for:" + locationKey, "Assist2PlayerId");
       }
 
-      if (this.Assist3PlayerId != null && (this.Assist3PlayerId == this.Assist1PlayerId || this.Assist3PlayerId == this.Assist2PlayerId))
-      {
-        throw new ArgumentException("Assist3PlayerId cannot also be an Assist#PlayerId for:" + locationKey, "Assist3PlayerId");
-      }
+      // Can't happen, covered by other 2 assist checks
+      //if ((this.Assist3PlayerId != null && this.Assist3PlayerId != 0) && (this.Assist3PlayerId == this.Assist1PlayerId || this.Assist3PlayerId == this.Assist2PlayerId))
+      //{
+      //  throw new ArgumentException("Assist3PlayerId cannot also be an Assist#PlayerId for:" + locationKey, "Assist3PlayerId");
+      //}
     }
   }
 }

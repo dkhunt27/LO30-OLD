@@ -18,8 +18,8 @@ namespace LO30.Data.Objects
     [Required, ForeignKey("GameTeam"), Index("PK2", 1, IsUnique = true)]
     public int GameTeamId { get; set; }
 
-    [Required, Index("PK2", 2, IsUnique = true)]
-    public int PlayerNumber { get; set; }
+    [Required, Index("PK2", 2, IsUnique = true), MaxLength(3)]
+    public string PlayerNumber { get; set; }
 
     [Required]
     public int Line { get; set; }
@@ -47,23 +47,22 @@ namespace LO30.Data.Objects
     {
     }
 
-    public GameRoster(int gtid, int pn, int line, string pos, bool g, int pid, bool sub, int? sfpid)
+    public GameRoster(int gtid, int pn, int line, string pos, bool g, int pid, bool sub, int? sfpid):
+      this(0, gtid, pn, line, pos, g, pid, sub, sfpid)
     {
-      this.GameTeamId = gtid;
-      this.PlayerNumber = pn;
-
-      this.Line = line;
-      this.Position = pos;
-      this.Goalie = g;
-      this.PlayerId = pid;
-      this.Sub = sub;
-      this.SubbingForPlayerId = sfpid;
-
-
-      Validate();
     }
 
-    public GameRoster(int grid, int gtid, int pn, int line, string pos, bool g, int pid, bool sub, int? sfpid)
+    public GameRoster(int grid, int gtid, int pn, int line, string pos, bool g, int pid, bool sub, int? sfpid) :
+      this(grid, gtid, pn.ToString(), line, pos, g, pid, sub, sfpid)
+    {
+
+    }
+    public GameRoster(int gtid, string pn, int line, string pos, bool g, int pid, bool sub, int? sfpid):
+      this(0, gtid, pn, line, pos, g, pid, sub, sfpid)
+    {
+    }
+
+    public GameRoster(int grid, int gtid, string pn, int line, string pos, bool g, int pid, bool sub, int? sfpid)
     {
       this.GameRosterId = grid;
 
