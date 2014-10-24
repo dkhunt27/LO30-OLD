@@ -1136,8 +1136,8 @@ namespace LO30.Data
           int seasonId = json["SEASON_ID"];
           int gameId = json["GAME_ID"];
 
-          var homeGameTeamId = _lo30ContextService.FindGameTeam(gameId, homeTeam: true).GameTeamId;
-          var awayGameTeamId = _lo30ContextService.FindGameTeam(gameId, homeTeam: false).GameTeamId;
+          var homeGameTeamId = _lo30ContextService.FindGameTeamByPK2(gameId, homeTeam: true).GameTeamId;
+          var awayGameTeamId = _lo30ContextService.FindGameTeamByPK2(gameId, homeTeam: false).GameTeamId;
 
           // ONLY PROCESS THIS YEARS...TODO speed up to process historic data
           if (seasonId == 54 && gameId >= 3200)

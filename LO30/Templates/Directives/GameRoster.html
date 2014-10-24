@@ -1,0 +1,20 @@
+﻿<div>
+    <table class="table table-condensed table-striped">
+      <thead>
+
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in gameRoster">
+          <td>{{item.GameTeam.HomeTeam}}</td>
+          <td>{{item.GameTeam.SeasonTeam.Team.TeamShortName}}</td>
+          <td>{{item.Goalie}}</td>
+          <td>{{item.Line}}</td>
+          <td>{{item.PlayerId}}</td>
+          <td>{{item.PlayerNumber}}</td>
+          <td>{{item.Position}}</td>
+          <td>{{item.Sub}}</td>
+          <td>{{item.SubbingForPlayerId}}</td>
+        </tr>
+      </tbody>
+    </table>
+</div>

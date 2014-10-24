@@ -333,7 +333,7 @@ header#topNav nav ul.nav-main li a {
 	background: none;
 	font-style: normal;
 	line-height: 20px;
-	color: #9C9C9C;
+	color: #1980B6; /*lo30 was #9C9C9C */
 	font-weight: 100;
 	position: relative;
 	font-size: 1.1em;
@@ -394,13 +394,18 @@ header#topNav li a i.fa {
 		color:#fff;
 	}
 	header#topNav a.logo {
-		color:#333;
+    color: #1980B6;  /*lo30 was #333*/
 		text-decoration:none;
-		font-size:35px;
+		font-size:30px;   /*lo30 was 35px*/
 		display:inline-block;
 		height:60px; line-height:50px;
 		font-weight:600;
 		letter-spacing:-2px;
+    /*padding-top: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 10px;
+    line-height: 20px;*/
 	}
 	header#topNav button.btn-mobile {
 		color:#fff;

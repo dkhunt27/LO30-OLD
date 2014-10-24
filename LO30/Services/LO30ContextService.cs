@@ -95,6 +95,38 @@ namespace LO30.Services
       }
       #endregion
 
+      #region SaveOrUpdate-Game
+      public int SaveOrUpdateGame(List<Game> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateGame(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateGame(Game toSave)
+      {
+        Game found = FindGame(errorIfNotFound: false, errorIfMoreThanOneFound: true, gameId: toSave.GameId);
+
+        if (found == null)
+        {
+          _ctx.Games.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
       #region SaveOrUpdate-GameOutcome
       public int SaveOrUpdateGameOutcome(List<GameOutcome> listToSave)
       {
@@ -223,7 +255,24 @@ namespace LO30.Services
 
       public int SaveOrUpdateGameTeam(GameTeam toSave)
       {
-        GameTeam found = FindGameTeam(errorIfNotFound: false, errorIfMoreThanOneFound: true, gameId: toSave.GameId, homeTeam: toSave.HomeTeam);
+        GameTeam found;
+
+        // lookup by PK, if it exists
+        if (toSave.GameTeamId > 0)
+        {
+          found = FindGameTeam(errorIfNotFound: false, errorIfMoreThanOneFound: true, gameTeamId: toSave.GameTeamId);
+        }
+        else
+        {
+          // lookup by PK2
+          found = FindGameTeamByPK2(errorIfNotFound: false, errorIfMoreThanOneFound: true, gameId: toSave.GameId, homeTeam: toSave.HomeTeam);
+
+          // if found, set missing PK
+          if (found != null)
+          {
+            toSave.GameTeamId = found.GameTeamId;
+          }
+        }
 
         if (found == null)
         {
@@ -832,6 +881,43 @@ namespace LO30.Services
       }
       #endregion
 
+      #region Find-Game
+      public Game FindGame(int gameId)
+      {
+        return FindGame(errorIfNotFound: true, errorIfMoreThanOneFound: true, gameId: gameId);
+      }
+
+      public Game FindGame(bool errorIfNotFound, bool errorIfMoreThanOneFound, int gameId)
+      {
+        var found = _ctx.Games
+                          .Include("Season")
+                          .Where(x => x.GameId == gameId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find Game for" +
+                                                  " GameId:" + gameId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 Game was not found for" +
+                                                  " GameId:" + gameId
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
       #region Find-GameOutcome (addtl finds)
       public List<GameOutcome> FindGameOutcomesWithGameIdsAndTeamId(int startingGameId, int endingGameId, int seasonTeamId)
       {
@@ -916,7 +1002,19 @@ namespace LO30.Services
 
       public List<GameRoster> FindGameRostersWithGameIdsAndGoalie(bool errorIfNotFound, int startingGameId, int endingGameId, bool goalie)
       {
-        var found = _ctx.GameRosters.Include("GameTeam").Include("GameTeam.SeasonTeam").Where(x => x.GameTeam.GameId >= startingGameId && x.GameTeam.GameId <= endingGameId && x.Goalie == goalie).ToList();
+        var found = _ctx.GameRosters
+                          .Include("GameTeam")
+                          .Include("GameTeam.Game")
+                          .Include("GameTeam.Game.Season")              
+                          .Include("GameTeam.SeasonTeam")
+                          .Include("GameTeam.SeasonTeam.Season")
+                          .Include("GameTeam.SeasonTeam.Team")
+                          .Include("GameTeam.SeasonTeam.Team.Coach")
+                          .Include("GameTeam.SeasonTeam.Team.Sponsor")
+
+                          .Include("Player")
+                          .Include("SubbingForPlayer")
+                          .Where(x => x.GameTeam.GameId >= startingGameId && x.GameTeam.GameId <= endingGameId && x.Goalie == goalie).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
@@ -937,7 +1035,19 @@ namespace LO30.Services
 
       public List<GameRoster> FindGameRostersWithGameIds(bool errorIfNotFound, int startingGameId, int endingGameId)
       {
-        var found = _ctx.GameRosters.Include("GameTeam").Include("GameTeam.SeasonTeam").Where(x => x.GameTeam.GameId >= startingGameId && x.GameTeam.GameId <= endingGameId).ToList();
+        var found = _ctx.GameRosters
+                          .Include("GameTeam")
+                          .Include("GameTeam.Game")
+                          .Include("GameTeam.Game.Season")
+                          .Include("GameTeam.SeasonTeam")
+                          .Include("GameTeam.SeasonTeam.Season")
+                          .Include("GameTeam.SeasonTeam.Team")
+                          .Include("GameTeam.SeasonTeam.Team.Coach")
+                          .Include("GameTeam.SeasonTeam.Team.Sponsor")
+
+                          .Include("Player")
+                          .Include("SubbingForPlayer")
+                          .Where(x => x.GameTeam.GameId >= startingGameId && x.GameTeam.GameId <= endingGameId).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
@@ -957,7 +1067,19 @@ namespace LO30.Services
 
       public GameRoster FindGameRosterByPK2(bool errorIfNotFound, bool errorIfMoreThanOneFound, int gameTeamId, string playerNumber)
       {
-        var found = _ctx.GameRosters.Where(x => x.GameTeamId == gameTeamId && x.PlayerNumber == playerNumber).ToList();
+        var found = _ctx.GameRosters
+                          .Include("GameTeam")
+                          .Include("GameTeam.Game")
+                          .Include("GameTeam.Game.Season")
+                          .Include("GameTeam.SeasonTeam")
+                          .Include("GameTeam.SeasonTeam.Season")
+                          .Include("GameTeam.SeasonTeam.Team")
+                          .Include("GameTeam.SeasonTeam.Team.Coach")
+                          .Include("GameTeam.SeasonTeam.Team.Sponsor")
+
+                          .Include("Player")
+                          .Include("SubbingForPlayer")
+                          .Where(x => x.GameTeamId == gameTeamId && x.PlayerNumber == playerNumber).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
@@ -992,7 +1114,19 @@ namespace LO30.Services
 
       public GameRoster FindGameRoster(bool errorIfNotFound, bool errorIfMoreThanOneFound, int gameRosterId)
       {
-        var found = _ctx.GameRosters.Where(x => x.GameRosterId == gameRosterId).ToList();
+        var found = _ctx.GameRosters
+                          .Include("GameTeam")
+                          .Include("GameTeam.Game")
+                          .Include("GameTeam.Game.Season")
+                          .Include("GameTeam.SeasonTeam")
+                          .Include("GameTeam.SeasonTeam.Season")
+                          .Include("GameTeam.SeasonTeam.Team")
+                          .Include("GameTeam.SeasonTeam.Team.Coach")
+                          .Include("GameTeam.SeasonTeam.Team.Sponsor")
+
+                          .Include("Player")
+                          .Include("SubbingForPlayer")
+                          .Where(x => x.GameRosterId == gameRosterId).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
@@ -1089,14 +1223,23 @@ namespace LO30.Services
       #endregion
 
       #region Find-GameTeam
-      public GameTeam FindGameTeam(int gameId, bool homeTeam)
+      public GameTeam FindGameTeamByPK2(int gameId, bool homeTeam)
       {
-        return FindGameTeam(errorIfNotFound: true, errorIfMoreThanOneFound: true, gameId: gameId, homeTeam: homeTeam);
+        return FindGameTeamByPK2(errorIfNotFound: true, errorIfMoreThanOneFound: true, gameId: gameId, homeTeam: homeTeam);
       }
 
-      public GameTeam FindGameTeam(bool errorIfNotFound, bool errorIfMoreThanOneFound, int gameId, bool homeTeam)
+      public GameTeam FindGameTeamByPK2(bool errorIfNotFound, bool errorIfMoreThanOneFound, int gameId, bool homeTeam)
       {
-        var found = _ctx.GameTeams.Where(x => x.GameId == gameId && x.HomeTeam == homeTeam).ToList();
+        var found = _ctx.GameTeams
+                          .Include("Game")
+                          .Include("Game.Season")
+
+                          .Include("SeasonTeam")
+                          .Include("SeasonTeam.Season")
+                          .Include("SeasonTeam.Team")
+                          .Include("SeasonTeam.Team.Coach")
+                          .Include("SeasonTeam.Team.Sponsor")
+                          .Where(x => x.GameId == gameId && x.HomeTeam == homeTeam).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
@@ -1111,6 +1254,48 @@ namespace LO30.Services
           throw new ArgumentNullException("found", "More than 1 GameTeam was not found for" +
                                                   " GameId:" + gameId +
                                                   " HomeTeam:" + homeTeam
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+
+      public GameTeam FindGameTeam(int gameTeamId)
+      {
+        return FindGameTeam(errorIfNotFound: true, errorIfMoreThanOneFound: true, gameTeamId: gameTeamId);
+      }
+
+      public GameTeam FindGameTeam(bool errorIfNotFound, bool errorIfMoreThanOneFound, int gameTeamId)
+      {
+        var found = _ctx.GameTeams
+                          .Include("Game")
+                          .Include("Game.Season")
+
+                          .Include("SeasonTeam")
+                          .Include("SeasonTeam.Season")
+                          .Include("SeasonTeam.Team")
+                          .Include("SeasonTeam.Team.Coach")
+                          .Include("SeasonTeam.Team.Sponsor")
+                          .Where(x => x.GameTeamId == gameTeamId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find GameTeam for" +
+                                                  " GameTeamId:" + gameTeamId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 GameTeam was not found for" +
+                                                  " GameTeamId:" + gameTeamId
                                           );
         }
 
@@ -1762,7 +1947,7 @@ namespace LO30.Services
 
         _lo30DataService.ToJsonToFile(_ctx.ForWebGoalieStats
                                            .Where(x => x.SID == 54).ToList(),
-                                     _folderPath + "ForWebGoalieStat.json");
+                                     _folderPath + "ForWebGoalieStats.json");
         _lo30DataService.ToJsonToFile(_ctx.ForWebPlayerStats
                                             .Where(x => x.SID == 54).ToList(),
                                       _folderPath + "ForWebPlayerStats.json");

@@ -16,7 +16,7 @@ namespace LO30.Controllers
 
     public IEnumerable<ForWebGoalieStat> Get()
     {
-      IQueryable<ForWebGoalieStat> results = _repo.GetGoalieStatsForWeb();
+      List<ForWebGoalieStat> results = _repo.GetGoalieStatsForWeb();
 
       var goalieStats = results.OrderBy(x => x.GAA).ToList();
 

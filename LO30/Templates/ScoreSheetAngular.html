@@ -1,9 +1,23 @@
-﻿<div>
-  <h3>
+﻿<div> 
+  <h3> HI
     <div>Game</div>
     <div>Id: {{data.game.GameId}}</div>
     <div>Date: {{data.game.GameDateTime}}</div>
     <div>Type: {{data.game.Season.SeasonName}} {{data.game.Playoff == true ? "Playoff Game" : "Regular Season Game"}}</div>
   </h3>
 
+  <div>
+    <accordion close-others="true">
+      <accordion-group heading="Home Team Roster">
+        <lo30-game-roster game-id="data.gameIdSelected" home-team=true />
+      </accordion-group>
+      <accordion-group heading="Away Team Roster">
+        <lo30-game-roster game-id="data.gameIdSelected" home-team=false />
+      </accordion-group>
+      <accordion-group heading="Scoring">
+      </accordion-group>
+      <accordion-group heading="Penalties">
+      </accordion-group>
+    </accordian>
+  </div>
 </div>

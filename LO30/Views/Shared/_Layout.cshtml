@@ -22,6 +22,7 @@
   <!-- CORE CSS -->
   <link href="~/Site/Template/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
   <link href="~/Site/Template/css/font-awesome.css" rel="stylesheet" type="text/css" />
+  <link href="~/Content/toaster.css" rel="stylesheet" type="text/css" />
   <link href="~/Site/Template/plugins/owl-carousel/owl.carousel.css" rel="stylesheet" type="text/css" />
   <link href="~/Site/Template/plugins/owl-carousel/owl.theme.css" rel="stylesheet" type="text/css" />
   <link href="~/Site/Template/plugins/owl-carousel/owl.transitions.css" rel="stylesheet" type="text/css" />
@@ -44,25 +45,25 @@
   <!-- app overrides-->
   <link href="~/Site/Site.css" rel="stylesheet" />
 </head>
-<body class="boxed pattern1">
+<body class="boxed pattern1" ng-app="lo30NgApp" ng-controller="rootController">
   <!-- Available classes for body: boxed , pattern1...pattern10 . Background Image - example add: data-background="~/Site/Template/images/boxed_background/1.jpg"  -->
   <!-- TOP NAV -->
   <header id="topNav">
     <div class="container">
-        <!-- Mobile Menu Button -->
-        <button class="btn btn-mobile" data-toggle="collapse" data-target=".nav-main-collapse">
-            <i class="fa fa-bars"></i>
-          </button>
-        <!-- Logo text or image -->
-        <a class="logo" href="/">
-          &nbsp;&nbsp;Livonia Over 30 Hockey
-        </a>
+      <!-- Mobile Menu Button -->
+      <button class="btn btn-mobile" data-toggle="collapse" data-target=".nav-main-collapse">
+        <i class="fa fa-bars"></i>
+      </button>
+      <!-- Logo text or image -->
+      <a class="logo" href="/">
+        &nbsp;&nbsp;Livonia Over 30 Hockey
+      </a>
 
-        <!-- Top Nav -->
-        @Html.Action("Menu", "Navigation", new { area = "" })
-        <!-- /Top Nav -->
+      <!-- Top Nav -->
+      @Html.Action("Menu", "Navigation", new { area = "" })
+      <!-- /Top Nav -->
 
-      </div>
+    </div>
   </header>
 
   <span id="header_shadow"></span>
@@ -70,7 +71,7 @@
   <div id="body">
     @RenderSection("featured", required: false)
     <!-- WRAPPER -->
-    <div id="wrapper">
+    <div id="wrapper" ng-app="lo30NgApp">
       @RenderBody()
     </div>
     <!-- /WRAPPER -->
@@ -78,6 +79,11 @@
 
   <!-- FOOTER -->
   <footer>
+    <pre>$location.path() = {{$location.path()}}</pre>
+    <pre>$route.current.templateUrl = {{$route.current.templateUrl}}</pre>
+    <pre>$route.current.params = {{$route.current.params}}</pre>
+    <pre>$route.current.scope.name = {{$route.current.scope.name}}</pre>
+    <pre>$routeParams = {{$routeParams}}</pre>
 
     <!-- copyright , scrollTo Top -->
     <div class="footer-bar">
@@ -98,8 +104,12 @@
   <script type="text/javascript" src="~/Site/Template/plugins/masonry.js"></script>
 
   <script type="text/javascript" src="~/Scripts/angular.min.js"></script>
+  <script type="text/javascript" src="~/Scripts/angular-animate.min.js"></script>
   <script type="text/javascript" src="~/Scripts/angular-route.min.js"></script>
   <script type="text/javascript" src="~/Scripts/angular-resource.min.js"></script>
+  <script type="text/javascript" src="~/Scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
+  <script type="text/javascript" src="~/Scripts/toaster.js"></script>
+  <script type="text/javascript" src="~/Scripts/underscore.js"></script>
 
   <script type="text/javascript" src="~/Site/Template/plugins/bootstrap/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="~/Site/Template/plugins/magnific-popup/jquery.magnific-popup.min.js"></script>
@@ -115,8 +125,27 @@
   <script type="text/javascript" src="~/Site/Template/plugins/revolution-slider/js/jquery.themepunch.plugins.min.js"></script>
   <script type="text/javascript" src="~/Site/Template/plugins/revolution-slider/js/jquery.themepunch.revolution.min.js"></script>
   <script type="text/javascript" src="~/Scripts/slider_revolution.js"></script>
-
   <script type="text/javascript" src="~/Scripts/scripts.js"></script>
+
+  <!-- Ng App -->
+  <script src="~/App_Scripts/Lo30App.js"></script>
+
+  <!-- Controllers -->
+  <script src="~/App_Scripts/Controllers/ScoreSheetController.js"></script>
+  <script src="~/App_Scripts/Controllers/AdminDataProcessingController.js"></script>
+  <script src="~/App_Scripts/Controllers/RootController.js"></script>
+  <script src="~/App_Scripts/Controllers/NewsController.js"></script>
+
+  <!-- Directives -->
+  <script src="~/App_Scripts/Directives/GameRoster.js"></script>
+
+  <!-- Services -->
+  <script src="~/App_Scripts/Services/AdminDataProcessingService.js"></script>
+  <script src="~/App_Scripts/Services/AlertService.js"></script>
+  <script src="~/App_Scripts/Services/DataServiceGames.js"></script>
+  <script src="~/App_Scripts/Services/DataServiceGameRosters.js"></script>
+  <script src="~/App_Scripts/Services/NewsService.js"></script>
+  <script src="~/App_Scripts/Services/ScoreSheetService.js"></script>
 
   <!-- Google Analytics: Change UA-XXXXX-X to be your site's ID. Go to http://www.google.com/analytics/ for more information. -->
   <!--<script>

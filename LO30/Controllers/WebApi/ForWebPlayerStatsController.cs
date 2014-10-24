@@ -16,8 +16,7 @@ namespace LO30.Controllers
 
     public IEnumerable<ForWebPlayerStat> Get()
     {
-      IQueryable<ForWebPlayerStat> results = _repo.GetPlayerStatsForWeb();
-
+      var results = _repo.GetPlayerStatsForWeb();
       var playerStats = results.OrderByDescending(x => x.P).ToList();
 
       return playerStats;

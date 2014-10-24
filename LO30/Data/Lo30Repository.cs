@@ -47,34 +47,109 @@ namespace LO30.Data
       }
     }
 
-    public IQueryable<ScoreSheetEntry> GetScoreSheetEntries()
+    #region Data Services
+    public List<Game> GetGames()
     {
-      return _ctx.ScoreSheetEntries;
+      return _ctx.Games
+                    .Include("Season")
+                    .ToList();
     }
 
-    public IQueryable<Article> GetArticles()
+    public Game GetGameByGameId(int gameId)
     {
-      return _ctx.Articles;
+      return _contextService.FindGame(gameId);
     }
 
-    public IQueryable<TeamStanding> GetTeamStandings()
+    public List<GameTeam> GetGameTeams()
     {
-      return _ctx.TeamStandings.Include("seasonTeam").Include("seasonTeam.team");
+      return _ctx.GameTeams
+                    .Include("Game")
+                    .Include("Game.Season")
+
+                    .Include("SeasonTeam")
+                    .Include("SeasonTeam.Season")
+                    .Include("SeasonTeam.Team")
+                    .Include("SeasonTeam.Team.Coach")
+                    .Include("SeasonTeam.Team.Sponsor")
+                    .ToList();
     }
 
-    public IQueryable<PlayerStatSeason> GetPlayerStatsSeason()
+    public GameTeam GetGameTeamByGameTeamId(int gameTeamId)
     {
-      return _ctx.PlayerStatsSeason.Include("season").Include("player").Include("seasonTeamPlayingFor").Include("seasonTeamPlayingFor.team");
+      return _contextService.FindGameTeam(gameTeamId);
     }
 
-    public IQueryable<ForWebPlayerStat> GetPlayerStatsForWeb()
+    public GameTeam GetGameTeamByGameIdAndHomeTeam(int gameTeamId, bool homeTeam)
     {
-      return _ctx.ForWebPlayerStats;
+      return _contextService.FindGameTeamByPK2(gameTeamId, homeTeam);
     }
 
-    public IQueryable<ForWebGoalieStat> GetGoalieStatsForWeb()
+    public List<GameRoster> GetGameRosters()
     {
-      return _ctx.ForWebGoalieStats;
+      return _ctx.GameRosters
+                    .Include("GameTeam")
+                    .Include("GameTeam.Game")
+                    .Include("GameTeam.Game.Season")
+                    .Include("GameTeam.SeasonTeam")
+                    .Include("GameTeam.SeasonTeam.Season")
+                    .Include("GameTeam.SeasonTeam.Team")
+                    .Include("GameTeam.SeasonTeam.Team.Coach")
+                    .Include("GameTeam.SeasonTeam.Team.Sponsor")
+
+                    .Include("Player")
+                    .Include("SubbingForPlayer")
+                    .ToList();
+    }
+
+    public List<GameRoster> GetGameRostersByGameId(int gameId)
+    {
+      return GetGameRosters().Where(x => x.GameTeam.GameId == gameId).ToList();
+    }
+
+    public List<GameRoster> GetGameRostersByGameIdAndHomeTeam(int gameId, bool homeTeam)
+    {
+      return GetGameRosters().Where(x => x.GameTeam.GameId == gameId && x.GameTeam.HomeTeam == homeTeam).ToList();
+    }
+
+    public GameRoster GetGameRosterByGameRosterId(int gameRosterId)
+    {
+      return _contextService.FindGameRoster(gameRosterId);
+    }
+
+    public GameRoster GetGameRosterByGameTeamIdAndPlayerNumber(int gameTeamId, string playerNumber)
+    {
+      return _contextService.FindGameRosterByPK2(gameTeamId, playerNumber);
+    }
+    #endregion
+
+    public List<ScoreSheetEntry> GetScoreSheetEntries()
+    {
+      return _ctx.ScoreSheetEntries.ToList();
+    }
+
+    public List<Article> GetArticles()
+    {
+      return _ctx.Articles.ToList();
+    }
+
+    public List<TeamStanding> GetTeamStandings()
+    {
+      return _ctx.TeamStandings.Include("seasonTeam").Include("seasonTeam.team").ToList();
+    }
+
+    public List<PlayerStatSeason> GetPlayerStatsSeason()
+    {
+      return _ctx.PlayerStatsSeason.Include("season").Include("player").Include("seasonTeamPlayingFor").Include("seasonTeamPlayingFor.team").ToList();
+    }
+
+    public List<ForWebPlayerStat> GetPlayerStatsForWeb()
+    {
+      return _ctx.ForWebPlayerStats.ToList();
+    }
+
+    public List<ForWebGoalieStat> GetGoalieStatsForWeb()
+    {
+      return _ctx.ForWebGoalieStats.ToList();
     }
 
     public bool Save()
@@ -643,6 +718,7 @@ namespace LO30.Data
       result.time = diffFromLast.ToString();
       return result;
     }
+
 
 
   }

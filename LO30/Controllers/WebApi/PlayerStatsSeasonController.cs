@@ -16,7 +16,7 @@ namespace LO30.Controllers
 
     public IEnumerable<PlayerStatSeason> Get()
     {
-      IQueryable<PlayerStatSeason> results = _repo.GetPlayerStatsSeason();
+      var results = _repo.GetPlayerStatsSeason();
 
       var playerStats = results.OrderByDescending(x => x.Points).ToList();
 

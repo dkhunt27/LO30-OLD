@@ -6,17 +6,32 @@ namespace LO30.Data
 {
   public interface ILo30Repository
   {
-    IQueryable<Article> GetArticles();
+    #region Data Services
+    List<Game> GetGames();
+    Game GetGameByGameId(int gameId);
 
-    IQueryable<TeamStanding> GetTeamStandings();
+    List<GameTeam> GetGameTeams();
+    GameTeam GetGameTeamByGameTeamId(int gameTeamId);
+    GameTeam GetGameTeamByGameIdAndHomeTeam(int gameId, bool homeTeam);
 
-    IQueryable<PlayerStatSeason> GetPlayerStatsSeason();
+    List<GameRoster> GetGameRosters();
+    List<GameRoster> GetGameRostersByGameId(int GameId);
+    List<GameRoster> GetGameRostersByGameIdAndHomeTeam(int GameId, bool homeTeam);
+    GameRoster GetGameRosterByGameRosterId(int gameRosterId);
+    GameRoster GetGameRosterByGameTeamIdAndPlayerNumber(int gameTeamId, string playerNumber);
+    #endregion
 
-    IQueryable<ForWebPlayerStat> GetPlayerStatsForWeb();
+    List<Article> GetArticles();
 
-    IQueryable<ForWebGoalieStat> GetGoalieStatsForWeb();
+    List<TeamStanding> GetTeamStandings();
 
-    IQueryable<ScoreSheetEntry> GetScoreSheetEntries();
+    List<PlayerStatSeason> GetPlayerStatsSeason();
+
+    List<ForWebPlayerStat> GetPlayerStatsForWeb();
+
+    List<ForWebGoalieStat> GetGoalieStatsForWeb();
+
+    List<ScoreSheetEntry> GetScoreSheetEntries();
 
     bool Save();
 

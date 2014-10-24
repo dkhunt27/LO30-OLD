@@ -19,6 +19,18 @@ namespace LO30
         new CamelCasePropertyNamesContractResolver();
 
       config.Routes.MapHttpRoute(
+          name: "ApiGameRosters",
+          routeTemplate: "api/v1/gamerosters/{gameId}",
+          defaults: new { controller = "GameRosters", gameId = RouteParameter.Optional }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiGameRosters",
+          routeTemplate: "api/v1/gamerosters/{gameId}",
+          defaults: new { controller = "GameRosters", gameId = RouteParameter.Optional }
+      );
+
+      config.Routes.MapHttpRoute(
           name: "DefaultApi",
           routeTemplate: "api/v1/{controller}/{id}",
           defaults: new { id = RouteParameter.Optional }

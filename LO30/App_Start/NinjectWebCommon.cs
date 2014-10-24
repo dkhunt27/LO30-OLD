@@ -75,7 +75,7 @@ namespace LO30
 
       kernel.Bind<Lo30Context>().To<Lo30Context>().InRequestScope();
 
-      kernel.Bind<ILo30Repository>().To<Lo30Repository>().InRequestScope();
+      kernel.Bind<ILo30Repository>().To<Lo30RepositoryMock>().InRequestScope();
 
       kernel.Bind<Lo30ContextService>().To<Lo30ContextService>().InRequestScope();
     }

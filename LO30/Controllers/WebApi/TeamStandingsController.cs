@@ -16,8 +16,7 @@ namespace LO30.Controllers
 
     public IEnumerable<TeamStanding> Get()
     {
-      IQueryable<TeamStanding> results = _repo.GetTeamStandings();
-
+      var results = _repo.GetTeamStandings();
       var standings = results.OrderBy(t => t.Rank).ToList();
 
       return standings;

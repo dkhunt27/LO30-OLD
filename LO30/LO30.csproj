@@ -207,13 +207,17 @@
   <ItemGroup>
     <Content Include="App_Code\OleDbMembershipProvider.cs" />
     <Content Include="App_Code\OleDbRoleProvider.cs" />
-    <Content Include="App_Scripts\ScoreSheetAngular.js" />
-    <Content Include="App_Scripts\AdminDataProcessingAngular - Copy.min.js">
-      <DependentUpon>ScoreSheetAngular.js</DependentUpon>
-    </Content>
-    <Content Include="App_Scripts\AdminDataProcessingAngular.min.js">
-      <DependentUpon>AdminDataProcessingAngular.js</DependentUpon>
-    </Content>
+    <Content Include="App_Scripts\Controllers\AdminDataProcessingController.js" />
+    <Content Include="App_Scripts\Controllers\NewsController.js" />
+    <Content Include="App_Scripts\Controllers\RootController.js" />
+    <Content Include="App_Scripts\Directives\GameRoster.js" />
+    <Content Include="App_Scripts\Lo30App.js" />
+    <Content Include="App_Scripts\Controllers\ScoreSheetController.js" />
+    <Content Include="App_Scripts\Services\AdminDataProcessingService.js" />
+    <Content Include="App_Scripts\Services\AlertService.js" />
+    <Content Include="App_Scripts\Services\DataServiceGameRosters.js" />
+    <Content Include="App_Scripts\Services\DataServiceGames.js" />
+    <Content Include="App_Scripts\Services\ScoreSheetService.js" />
     <Content Include="App_Start\CSharpRazorViewEngine.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -230,6 +234,8 @@
     <Compile Include="Controllers\ScoreSheetEntryController.cs" />
     <Compile Include="Controllers\NavigationController.cs" />
     <Compile Include="Controllers\WebApi\Admin\DataProcessingController.cs" />
+    <Compile Include="Controllers\WebApi\Data\GameRostersController.cs" />
+    <Compile Include="Controllers\WebApi\Data\GamesController.cs" />
     <Compile Include="Controllers\WebApi\ForWebGoalieStatsController.cs" />
     <Compile Include="Controllers\WebApi\ForWebPlayerStatsController.cs" />
     <Compile Include="Controllers\WebApi\PlayerStatsSeasonController.cs" />
@@ -245,6 +251,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AboutUsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Data\Lo30RepositoryMock.cs" />
     <Compile Include="Data\Objects\ProcessingResult.cs" />
     <Compile Include="Models\AdminModels.cs" />
     <Compile Include="Areas\AdminDataProcessing\AdminDataProcessingModels.cs" />
@@ -312,7 +319,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Users.mdb" />
-    <Content Include="App_Scripts\articlesIndex.js" />
+    <Content Include="App_Scripts\Services\NewsService.js" />
+    <Content Include="Content\toaster.css" />
     <Content Include="Images\1971_daly.jpg" />
     <Content Include="Images\1971_daly_300px.jpg" />
     <Content Include="Images\1975_bracon.jpg" />
@@ -364,6 +372,15 @@
     <Content Include="Images\sponsor_stante.jpg" />
     <Content Include="Images\sponsor_zas_ent.jpg" />
     <Content Include="Images\th.jpg" />
+    <Content Include="Scripts\angular-ui-router.js" />
+    <Content Include="Scripts\angular-ui-router.min.js" />
+    <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.js" />
+    <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.min.js" />
+    <Content Include="Scripts\angular-ui\ui-bootstrap.js" />
+    <Content Include="Scripts\angular-ui\ui-bootstrap.min.js" />
+    <Content Include="Scripts\toaster.js" />
+    <Content Include="Scripts\underscore.js" />
+    <Content Include="Scripts\underscore.min.js" />
     <Content Include="Site\Template\css\animate.css" />
     <Content Include="Site\Template\css\blog.css" />
     <Content Include="Site\Template\css\color_scheme\blue.css" />
@@ -1176,7 +1193,6 @@
     <Content Include="Site\Template\plugins\superslides\src\pagination.js" />
     <Content Include="Site\Template\plugins\superslides\src\plugin.js" />
     <Content Include="Site\Template\plugins\superslides\src\setup.js" />
-    <Content Include="App_Scripts\AdminDataProcessingAngular.js" />
     <Content Include="favicon.ico" />
     <Compile Include="Formatters\BrowserJsonFormatter.cs" />
     <Content Include="Global.asax" />
@@ -1264,16 +1280,10 @@
     <Content Include="Data\SqlServer\Sponsors.json" />
     <Content Include="Data\SqlServer\TeamRosters.json" />
     <Content Include="Data\SqlServer\Teams.json" />
-    <Content Include="Data\SqlServer\ForWebGoalieStat.json" />
+    <Content Include="Data\SqlServer\ForWebGoalieStats.json" />
     <Content Include="Areas\Web.config" />
     <Content Include="Areas\_ViewStart.cshtml" />
-    <Content Include="App_Scripts\AdminDataProcessingAngular.min.js.map">
-      <DependentUpon>AdminDataProcessingAngular.min.js</DependentUpon>
-    </Content>
     <Content Include="Areas\ScoreSheet\ScoreSheet.Index.cshtml" />
-    <Content Include="App_Scripts\AdminDataProcessingAngular - Copy.min.js.map">
-      <DependentUpon>AdminDataProcessingAngular - Copy.min.js</DependentUpon>
-    </Content>
     <None Include="Properties\PublishProfiles\lo30.pubxml" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
@@ -2082,6 +2092,7 @@
     <Content Include="Scripts\slider_revolution.min.js">
       <DependentUpon>slider_revolution.js</DependentUpon>
     </Content>
+    <Content Include="Templates\Directives\GameRoster.html" />
     <Content Include="Templates\ScoreSheetAngular.html" />
     <Content Include="Templates\articlesView.html" />
     <Content Include="Site\Site.css" />
@@ -2164,10 +2175,7 @@
     <Content Include="Views\Scores\Index.cshtml" />
     <Content Include="Views\AboutUs\Services.cshtml" />
     <Content Include="Web.config" />
-    <Content Include="Views\ScoreSheetEntry\ScoreSheetEntry.cshtml" />
     <Content Include="Scripts\version.json" />
-    <Content Include="Views\ScoreSheetEntry\ScoreSheetProcessed.cshtml" />
-    <Content Include="Views\ScoreSheetEntry\ScoreSheetEntryAdmin.cshtml" />
     <Content Include="Views\Navigation\NavAdmin.cshtml" />
     <Content Include="Views\Navigation\NavPublic.cshtml" />
     <Content Include="Views\Navigation\NavBoard.cshtml" />
@@ -2175,6 +2183,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Navigation\NavAdmin-OldNavBar.cshtml" />
     <Content Include="Views\Home\News.cshtml" />
+    <Content Include="Scripts\underscore.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2183,11 +2192,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\" />
     <Folder Include="Site\Template\images\demo\revolution_slider\New folder\" />
     <Folder Include="Views\Admin\DataProcessing\" />
     <Folder Include="Views\News\" />
-    <Folder Include="Views\ScoreSheetEntry\AngularTemplates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
