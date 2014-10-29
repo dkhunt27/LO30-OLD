@@ -1,23 +1,43 @@
-﻿<div> 
-  <h3> HI
+﻿<div>
+  <h3>
+    <div ng-hide="requests.gamesLoaded">Loading games...</div>
+    <div ng-show="requests.gamesLoaded">Please select a game</div>
+  </h3>
+  <h3 ng-show="user.selectedGameId">
     <div>Game</div>
-    <div>Id: {{data.game.GameId}}</div>
-    <div>Date: {{data.game.GameDateTime}}</div>
-    <div>Type: {{data.game.Season.SeasonName}} {{data.game.Playoff == true ? "Playoff Game" : "Regular Season Game"}}</div>
+    <div>Id: {{data.gameSelected.gameId}}</div>
+    <div>Date: {{data.gameSelected.gameDateTime}}</div>
+    <div>Type: {{data.gameSelected.season.seasonName}} {{data.gameSelected.playoff == true ? "Playoff Game" : "Regular Season Game"}}</div>
   </h3>
 
   <div>
     <accordion close-others="true">
-      <accordion-group heading="Home Team Roster">
-        <lo30-game-roster game-id="data.gameIdSelected" home-team=true />
+      <accordion-group ng-hide="requests.gameRosterHomeLoaded" heading="Select a game to load the Home Team Roster">
       </accordion-group>
-      <accordion-group heading="Away Team Roster">
-        <lo30-game-roster game-id="data.gameIdSelected" home-team=false />
+      <accordion-group ng-hide="requests.gameRosterAwayLoaded" heading="Select a game to load the Away Team Roster">
       </accordion-group>
-      <accordion-group heading="Scoring">
+      <accordion-group ng-show="requests.gameRosterHomeLoaded">
+        <accordion-heading>
+          Home Team Roster: <b>{{data.homeTeamName}}</b>
+        </accordion-heading>
+        <lo30-game-roster game-roster="data.gameRosterHome" home-team=true />
       </accordion-group>
-      <accordion-group heading="Penalties">
+      <accordion-group ng-show="requests.gameRosterAwayLoaded">
+        <accordion-heading>
+          Away Team Roster: <b>{{data.awayTeamName}}</b>
+        </accordion-heading>
+        <lo30-game-roster game-roster="data.gameRosterAway" home-team=false />
       </accordion-group>
-    </accordian>
+      <accordion-group>
+        <accordion-heading>
+          Scoring Detail: <b>{{data.homeTeamName}}:{{data.homeTeamScore}}</b> <b>{{data.awayTeamName}}:{{data.awayTeamScore}}</b>
+        </accordion-heading>
+      </accordion-group>
+      <accordion-group>
+        <accordion-heading>
+          Penalty Detail: <b>{{data.homeTeamName}}:{{data.homeTeamPims}} mins</b> <b>{{data.awayTeamName}}:{{data.awayTeamPims}} mins</b>
+        </accordion-heading>
+      </accordion-group>
+      </accordian>
   </div>
 </div>

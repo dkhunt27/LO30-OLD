@@ -12,34 +12,51 @@
             <li>@Html.ActionLink("Playoffs", "Playoffs", "Standings")</li>
           </ul>
         </li>*@
-
-      <li id="Schedule" class="dropdown">
-        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-          Schedule <i class="fa fa-angle-down"></i>
+      <li id="Standings" class="dropdown">
+        <a class="dropdown-toggle" href="#">
+          Standings <i class="fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu" role="menu">
-          <li>@Html.ActionLink("Today", "Today", "Schedule")</li>
-          <li>@Html.ActionLink("Week", "Week", "Schedule")</li>
-          <li>@Html.ActionLink("Month", "Month", "Schedule")</li>
-          <li>@Html.ActionLink("Season", "Season", "Schedule")</li>
+          <li><a href="Ng/#/Standings/RegularSeason">Regular Season</a></li>
+          <li><a href="Ng/#/Standings/Playoffs">Playoffs</a></li>
         </ul>
       </li>
+      @*<li id="Schedule" class="dropdown">
+    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+      Schedule <i class="fa fa-angle-down"></i>
+    </a>
+    <ul class="dropdown-menu" role="menu">
+      <li>@Html.ActionLink("Today", "Today", "Schedule")</li>
+      <li>@Html.ActionLink("Week", "Week", "Schedule")</li>
+      <li>@Html.ActionLink("Month", "Month", "Schedule")</li>
+      <li>@Html.ActionLink("Season", "Season", "Schedule")</li>
+    </ul>
+  </li>*@
       <li id="Stats" class="dropdown">
-        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+        <a class="dropdown-toggle" href="#">
           Stats <i class="fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu" role="menu">
-          <li>@Html.ActionLink("League Leaders", "LeagueLeaders", "Stats")</li>
-          <li>@Html.ActionLink("Individual", "Individual", "Stats")</li>
-          <li>@Html.ActionLink("Team", "Team", "Stats")</li>
-          <li>@Html.ActionLink("Game By Game", "GameByGame", "Stats")</li>
-          <li class="divider"></li>
-          <li>@Html.ActionLink("Career", "Career", "Stats")</li>
-          <li>@Html.ActionLink("Milestones", "Milestones", "Stats")</li>
-          <li class="divider"></li>
-          <li>@Html.ActionLink("Awards", "Awards", "Stats")</li>
+          <li><a href="Ng/#/Stats/Players">Players</a></li>
+          <li><a href="Ng/#/Stats/Goalies">Goalies</a></li>
         </ul>
       </li>
+      @*<li id="Stats" class="dropdown">
+    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+      Stats <i class="fa fa-angle-down"></i>
+    </a>
+    <ul class="dropdown-menu" role="menu">
+      <li>@Html.ActionLink("League Leaders", "LeagueLeaders", "Stats")</li>
+      <li>@Html.ActionLink("Individual", "Individual", "Stats")</li>
+      <li>@Html.ActionLink("Team", "Team", "Stats")</li>
+      <li>@Html.ActionLink("Game By Game", "GameByGame", "Stats")</li>
+      <li class="divider"></li>
+      <li>@Html.ActionLink("Career", "Career", "Stats")</li>
+      <li>@Html.ActionLink("Milestones", "Milestones", "Stats")</li>
+      <li class="divider"></li>
+      <li>@Html.ActionLink("Awards", "Awards", "Stats")</li>
+    </ul>
+  </li>*@
       <li id="Players" class="dropdown">
         <a class="dropdown-toggle" href="#" data-toggle="dropdown">
           Players <i class="fa fa-angle-down"></i>

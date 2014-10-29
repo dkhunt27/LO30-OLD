@@ -31,17 +31,5 @@ namespace LO30.Controllers
       var results = _repo.GetGameRostersByGameIdAndHomeTeam(gameId, homeTeam);
       return results.OrderByDescending(x => x.GameTeam.GameId).ToList();
     }
-
-    public GameRoster GetByGameRosterId(int gameRosterId)
-    {
-      var result = _repo.GetGameRosterByGameRosterId(gameRosterId);
-      return result;
-    }
-
-    public GameRoster GetGameRosterByGameTeamIdAndPlayerNumber(int gameTeamId, string playerNumber)
-    {
-      var result = _repo.GetGameRosterByGameTeamIdAndPlayerNumber(gameTeamId, playerNumber);
-      return result;
-    }
   }
 }

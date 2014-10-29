@@ -26,21 +26,21 @@ namespace LO30
       bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                   "~/Scripts/modernizr-*"));
 
-      bundles.Add(new StyleBundle("~/Site/css").Include("~/Site/site.css"));
+      bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
 
-      bundles.Add(new StyleBundle("~/Site/themes/base/css").Include(
-                  "~/Site/themes/base/jquery.ui.core.css",
-                  "~/Site/themes/base/jquery.ui.resizable.css",
-                  "~/Site/themes/base/jquery.ui.selectable.css",
-                  "~/Site/themes/base/jquery.ui.accordion.css",
-                  "~/Site/themes/base/jquery.ui.autocomplete.css",
-                  "~/Site/themes/base/jquery.ui.button.css",
-                  "~/Site/themes/base/jquery.ui.dialog.css",
-                  "~/Site/themes/base/jquery.ui.slider.css",
-                  "~/Site/themes/base/jquery.ui.tabs.css",
-                  "~/Site/themes/base/jquery.ui.datepicker.css",
-                  "~/Site/themes/base/jquery.ui.progressbar.css",
-                  "~/Site/themes/base/jquery.ui.theme.css"));*/
+      bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
+                  "~/Content/themes/base/jquery.ui.core.css",
+                  "~/Content/themes/base/jquery.ui.resizable.css",
+                  "~/Content/themes/base/jquery.ui.selectable.css",
+                  "~/Content/themes/base/jquery.ui.accordion.css",
+                  "~/Content/themes/base/jquery.ui.autocomplete.css",
+                  "~/Content/themes/base/jquery.ui.button.css",
+                  "~/Content/themes/base/jquery.ui.dialog.css",
+                  "~/Content/themes/base/jquery.ui.slider.css",
+                  "~/Content/themes/base/jquery.ui.tabs.css",
+                  "~/Content/themes/base/jquery.ui.datepicker.css",
+                  "~/Content/themes/base/jquery.ui.progressbar.css",
+                  "~/Content/themes/base/jquery.ui.theme.css"));*/
     }
   }
 }

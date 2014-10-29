@@ -4,9 +4,10 @@
 lo30NgApp.controller('scoreSheetController',
   [
     '$scope',
-    'dataServiceGames',
     'alertService',
-    function ($scope, dataServiceGames, alertService) {
+    'dataServiceGames',
+    'dataServiceGameRosters',
+    function ($scope, alertService, dataServiceGames, dataServiceGameRosters) {
 
       var alertTitleDataRetrievalSuccessful = "Data Retrieval Successful";
       var alertTitleDataRetrievalUnsuccessful = "Data Retrieval Unsuccessful";
@@ -15,134 +16,124 @@ lo30NgApp.controller('scoreSheetController',
       var alertMessage;
 
 
+      $scope.initializeScopeVariables = function () {
+        $scope.data = {
+          games: [],
+          gameIdSelected: -1,
+          gameSelected: {},
+          homeTeamName: "",
+          homeTeamScore: 0,
+          homeTeamPims: 0,
+          awayTeamName: "",
+          awayTeamScore: 0,
+          awayTeamPims: 0,
+          gameRosterHome: [],
+          gameRosterAway: []
+        };
 
-      $scope.data = {
-        games: [],
-        gameRosters: [],
+        $scope.requests = {
+          gamesLoaded: false,
+          gameRosterHomeLoaded: false,
+          gameRosterAwayLoaded: false
+        };
 
-        game: {}
+        $scope.user = {
+          selectedGameId: false
+        };
       }
 
-      $scope.data.game = { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 };
 
-      $scope.data.gameRosters = [
-      {
-        "GameRosterId": 315,
-        "GameTeam": {
-          "Game": {
-            "GameDateTime": "\/Date(1410125400000-0400)\/",
-            "GameId": 3200,
-            "Location": "not set",
-            "Playoff": false,
-            "Season": {
-              "EndDate": null,
-              "IsCurrentSeason": true,
-              "SeasonId": 54,
-              "SeasonName": "2014 - 2015",
-              "StartDate": null
-            },
-            "SeasonId": 54
-          },
-          "GameId": 3200,
-          "GameTeamId": 9,
-          "HomeTeam": true,
-          "SeasonTeam": {
-            "Season": {
-              "EndDate": null,
-              "IsCurrentSeason": true,
-              "SeasonId": 54,
-              "SeasonName": "2014 - 2015",
-              "StartDate": null
-            },
-            "SeasonId": 54,
-            "SeasonTeamId": 308,
-            "Team": {
-              "Coach": null,
-              "CoachId": null,
-              "Sponsor": null,
-              "SponsorId": null,
-              "TeamId": 317,
-              "TeamLongName": "Bill Brown Auto Clinic",
-              "TeamShortName": "Bill Brown"
-            },
-            "TeamId": 317
-          },
-          "SeasonTeamId": 308
-        },
-        "GameTeamId": 9,
-        "Goalie": false,
-        "Line": 1,
-        "Player": null,
-        "PlayerId": 20,
-        "PlayerNumber": 9,
-        "Position": "F",
-        "Sub": false,
-        "SubbingForPlayer": null,
-        "SubbingForPlayerId": null
-      },
-     { "GameRosterId": 316, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 10, "HomeTeam": false, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 314, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 323, "TeamLongName": "Villanova Construction", "TeamShortName": "Villanova" }, "TeamId": 323 }, "SeasonTeamId": 314 }, "GameTeamId": 10, "Goalie": false, "Line": 1, "Player": null, "PlayerId": 4, "PlayerNumber": 9, "Position": "F", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 317, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 9, "HomeTeam": true, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 308, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 317, "TeamLongName": "Bill Brown Auto Clinic", "TeamShortName": "Bill Brown" }, "TeamId": 317 }, "SeasonTeamId": 308 }, "GameTeamId": 9, "Goalie": false, "Line": 2, "Player": null, "PlayerId": 652, "PlayerNumber": 8, "Position": "D", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 318, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 10, "HomeTeam": false, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 314, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 323, "TeamLongName": "Villanova Construction", "TeamShortName": "Villanova" }, "TeamId": 323 }, "SeasonTeamId": 314 }, "GameTeamId": 10, "Goalie": false, "Line": 2, "Player": null, "PlayerId": 23, "PlayerNumber": 6, "Position": "D", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 319, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 9, "HomeTeam": true, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 308, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 317, "TeamLongName": "Bill Brown Auto Clinic", "TeamShortName": "Bill Brown" }, "TeamId": 317 }, "SeasonTeamId": 308 }, "GameTeamId": 9, "Goalie": false, "Line": 1, "Player": null, "PlayerId": 593, "PlayerNumber": 7, "Position": "F", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 320, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 10, "HomeTeam": false, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 314, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 323, "TeamLongName": "Villanova Construction", "TeamShortName": "Villanova" }, "TeamId": 323 }, "SeasonTeamId": 314 }, "GameTeamId": 10, "Goalie": false, "Line": 1, "Player": null, "PlayerId": 52, "PlayerNumber": 21, "Position": "F", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 321, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 9, "HomeTeam": true, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 308, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 317, "TeamLongName": "Bill Brown Auto Clinic", "TeamShortName": "Bill Brown" }, "TeamId": 317 }, "SeasonTeamId": 308 }, "GameTeamId": 9, "Goalie": false, "Line": 1, "Player": null, "PlayerId": 618, "PlayerNumber": 10, "Position": "F", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 322, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 10, "HomeTeam": false, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 314, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 323, "TeamLongName": "Villanova Construction", "TeamShortName": "Villanova" }, "TeamId": 323 }, "SeasonTeamId": 314 }, "GameTeamId": 10, "Goalie": false, "Line": 1, "Player": null, "PlayerId": 53, "PlayerNumber": 11, "Position": "F", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 323, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 9, "HomeTeam": true, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 308, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 317, "TeamLongName": "Bill Brown Auto Clinic", "TeamShortName": "Bill Brown" }, "TeamId": 317 }, "SeasonTeamId": 308 }, "GameTeamId": 9, "Goalie": false, "Line": 2, "Player": null, "PlayerId": 658, "PlayerNumber": 6, "Position": "F", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 324, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 10, "HomeTeam": false, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 314, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 323, "TeamLongName": "Villanova Construction", "TeamShortName": "Villanova" }, "TeamId": 323 }, "SeasonTeamId": 314 }, "GameTeamId": 10, "Goalie": false, "Line": 2, "Player": null, "PlayerId": 42, "PlayerNumber": 27, "Position": "F", "Sub": true, "SubbingForPlayer": null, "SubbingForPlayerId": 73 },
-     { "GameRosterId": 325, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 9, "HomeTeam": true, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 308, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 317, "TeamLongName": "Bill Brown Auto Clinic", "TeamShortName": "Bill Brown" }, "TeamId": 317 }, "SeasonTeamId": 308 }, "GameTeamId": 9, "Goalie": false, "Line": 3, "Player": null, "PlayerId": 716, "PlayerNumber": 18, "Position": "D", "Sub": true, "SubbingForPlayer": null, "SubbingForPlayerId": 663 },
-     { "GameRosterId": 326, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 10, "HomeTeam": false, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 314, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 323, "TeamLongName": "Villanova Construction", "TeamShortName": "Villanova" }, "TeamId": 323 }, "SeasonTeamId": 314 }, "GameTeamId": 10, "Goalie": false, "Line": 3, "Player": null, "PlayerId": 77, "PlayerNumber": 3, "Position": "D", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 327, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 9, "HomeTeam": true, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 308, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 317, "TeamLongName": "Bill Brown Auto Clinic", "TeamShortName": "Bill Brown" }, "TeamId": 317 }, "SeasonTeamId": 308 }, "GameTeamId": 9, "Goalie": false, "Line": 2, "Player": null, "PlayerId": 70, "PlayerNumber": 22, "Position": "F", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 328, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 10, "HomeTeam": false, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 314, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 323, "TeamLongName": "Villanova Construction", "TeamShortName": "Villanova" }, "TeamId": 323 }, "SeasonTeamId": 314 }, "GameTeamId": 10, "Goalie": false, "Line": 2, "Player": null, "PlayerId": 114, "PlayerNumber": 15, "Position": "F", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 329, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 9, "HomeTeam": true, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 308, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 317, "TeamLongName": "Bill Brown Auto Clinic", "TeamShortName": "Bill Brown" }, "TeamId": 317 }, "SeasonTeamId": 308 }, "GameTeamId": 9, "Goalie": false, "Line": 1, "Player": null, "PlayerId": 206, "PlayerNumber": 20, "Position": "D", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 330, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 10, "HomeTeam": false, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 314, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 323, "TeamLongName": "Villanova Construction", "TeamShortName": "Villanova" }, "TeamId": 323 }, "SeasonTeamId": 314 }, "GameTeamId": 10, "Goalie": false, "Line": 1, "Player": null, "PlayerId": 173, "PlayerNumber": 19, "Position": "D", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 331, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 9, "HomeTeam": true, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 308, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 317, "TeamLongName": "Bill Brown Auto Clinic", "TeamShortName": "Bill Brown" }, "TeamId": 317 }, "SeasonTeamId": 308 }, "GameTeamId": 9, "Goalie": false, "Line": 3, "Player": null, "PlayerId": 162, "PlayerNumber": 3, "Position": "D", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 332, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 10, "HomeTeam": false, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 314, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 323, "TeamLongName": "Villanova Construction", "TeamShortName": "Villanova" }, "TeamId": 323 }, "SeasonTeamId": 314 }, "GameTeamId": 10, "Goalie": false, "Line": 3, "Player": null, "PlayerId": 184, "PlayerNumber": 7, "Position": "D", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 333, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 9, "HomeTeam": true, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 308, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 317, "TeamLongName": "Bill Brown Auto Clinic", "TeamShortName": "Bill Brown" }, "TeamId": 317 }, "SeasonTeamId": 308 }, "GameTeamId": 9, "Goalie": false, "Line": 2, "Player": null, "PlayerId": 55, "PlayerNumber": 2, "Position": "D", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 334, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 10, "HomeTeam": false, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 314, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 323, "TeamLongName": "Villanova Construction", "TeamShortName": "Villanova" }, "TeamId": 323 }, "SeasonTeamId": 314 }, "GameTeamId": 10, "Goalie": false, "Line": 2, "Player": null, "PlayerId": 201, "PlayerNumber": 10, "Position": "D", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 335, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 9, "HomeTeam": true, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 308, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 317, "TeamLongName": "Bill Brown Auto Clinic", "TeamShortName": "Bill Brown" }, "TeamId": 317 }, "SeasonTeamId": 308 }, "GameTeamId": 9, "Goalie": false, "Line": 2, "Player": null, "PlayerId": 662, "PlayerNumber": 17, "Position": "F", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 336, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 10, "HomeTeam": false, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 314, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 323, "TeamLongName": "Villanova Construction", "TeamShortName": "Villanova" }, "TeamId": 323 }, "SeasonTeamId": 314 }, "GameTeamId": 10, "Goalie": false, "Line": 2, "Player": null, "PlayerId": 583, "PlayerNumber": 17, "Position": "F", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 337, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 9, "HomeTeam": true, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 308, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 317, "TeamLongName": "Bill Brown Auto Clinic", "TeamShortName": "Bill Brown" }, "TeamId": 317 }, "SeasonTeamId": 308 }, "GameTeamId": 9, "Goalie": false, "Line": 3, "Player": null, "PlayerId": 45, "PlayerNumber": 14, "Position": "F", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 338, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 10, "HomeTeam": false, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 314, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 323, "TeamLongName": "Villanova Construction", "TeamShortName": "Villanova" }, "TeamId": 323 }, "SeasonTeamId": 314 }, "GameTeamId": 10, "Goalie": false, "Line": 3, "Player": null, "PlayerId": 605, "PlayerNumber": 22, "Position": "F", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 339, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 9, "HomeTeam": true, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 308, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 317, "TeamLongName": "Bill Brown Auto Clinic", "TeamShortName": "Bill Brown" }, "TeamId": 317 }, "SeasonTeamId": 308 }, "GameTeamId": 9, "Goalie": false, "Line": 3, "Player": null, "PlayerId": 576, "PlayerNumber": 12, "Position": "F", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 340, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 10, "HomeTeam": false, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 314, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 323, "TeamLongName": "Villanova Construction", "TeamShortName": "Villanova" }, "TeamId": 323 }, "SeasonTeamId": 314 }, "GameTeamId": 10, "Goalie": false, "Line": 3, "Player": null, "PlayerId": 644, "PlayerNumber": 23, "Position": "F", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 341, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 9, "HomeTeam": true, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 308, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 317, "TeamLongName": "Bill Brown Auto Clinic", "TeamShortName": "Bill Brown" }, "TeamId": 317 }, "SeasonTeamId": 308 }, "GameTeamId": 9, "Goalie": false, "Line": 3, "Player": null, "PlayerId": 621, "PlayerNumber": 4, "Position": "F", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 342, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 10, "HomeTeam": false, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 314, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 323, "TeamLongName": "Villanova Construction", "TeamShortName": "Villanova" }, "TeamId": 323 }, "SeasonTeamId": 314 }, "GameTeamId": 10, "Goalie": false, "Line": 3, "Player": null, "PlayerId": 659, "PlayerNumber": 12, "Position": "F", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 343, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 9, "HomeTeam": true, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 308, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 317, "TeamLongName": "Bill Brown Auto Clinic", "TeamShortName": "Bill Brown" }, "TeamId": 317 }, "SeasonTeamId": 308 }, "GameTeamId": 9, "Goalie": false, "Line": 1, "Player": null, "PlayerId": 677, "PlayerNumber": 5, "Position": "D", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 344, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 10, "HomeTeam": false, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 314, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 323, "TeamLongName": "Villanova Construction", "TeamShortName": "Villanova" }, "TeamId": 323 }, "SeasonTeamId": 314 }, "GameTeamId": 10, "Goalie": false, "Line": 1, "Player": null, "PlayerId": 734, "PlayerNumber": 2, "Position": "D", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 345, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 9, "HomeTeam": true, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 308, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 317, "TeamLongName": "Bill Brown Auto Clinic", "TeamShortName": "Bill Brown" }, "TeamId": 317 }, "SeasonTeamId": 308 }, "GameTeamId": 9, "Goalie": true, "Line": 1, "Player": null, "PlayerId": 678, "PlayerNumber": 30, "Position": "G", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null },
-     { "GameRosterId": 346, "GameTeam": { "Game": { "GameDateTime": "\/Date(1410125400000-0400)\/", "GameId": 3200, "Location": "not set", "Playoff": false, "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54 }, "GameId": 3200, "GameTeamId": 10, "HomeTeam": false, "SeasonTeam": { "Season": { "EndDate": null, "IsCurrentSeason": true, "SeasonId": 54, "SeasonName": "2014 - 2015", "StartDate": null }, "SeasonId": 54, "SeasonTeamId": 314, "Team": { "Coach": null, "CoachId": null, "Sponsor": null, "SponsorId": null, "TeamId": 323, "TeamLongName": "Villanova Construction", "TeamShortName": "Villanova" }, "TeamId": 323 }, "SeasonTeamId": 314 }, "GameTeamId": 10, "Goalie": true, "Line": 1, "Player": null, "PlayerId": 749, "PlayerNumber": 1, "Position": "G", "Sub": false, "SubbingForPlayer": null, "SubbingForPlayerId": null }
-      ];
+      $scope.getGameRosters = function (gameId, homeTeam) {
+        var retrievedType, gameRostersLoaded, gameRosters, teamName;
 
+        if (homeTeam) {
+          gameRostersLoaded = 'gameRosterHomeLoaded';
+          gameRosters = 'gameRosterHome';
+          retrievedType = "Home GameRoster";
+          teamName = "homeTeamName";
+        } else {
+          gameRostersLoaded = 'gameRosterAwayLoaded';
+          gameRosters = 'gameRosterAway';
+          retrievedType = "Away GameRoster";
+          teamName = "awayTeamName";
+        }
 
+        $scope.requests[gameRostersLoaded] = false;
+        $scope.data[gameRosters] = [];
+        $scope.data[teamName] = "";
 
-      $scope.activate = function () {
-        $scope.data.homeGameRoster = _.filter($scope.data.gameRosters, function (item) { return item.GameTeam.HomeTeam == true; });
-        $scope.data.awayGameRoster = _.filter($scope.data.gameRosters, function (item) { return item.GameTeam.HomeTeam == false; });
+        dataServiceGameRosters.getGameRostersByGameIdAndHomeTeam(gameId, homeTeam).$promise.then(
+          function (result) {
+            // service call on success
+            if (result && result.length && result.length > 0) {
 
-        // get games
-        var retrievedType = "games";
+              angular.forEach(result, function (item, index) {
+                $scope.data[gameRosters].push(item);
+
+                if (index === 0) {
+                  $scope.data[teamName] = item.gameTeam.seasonTeam.team.teamShortName;
+                }
+              });
+
+              $scope.requests[gameRostersLoaded] = true;
+
+              alertMessage = _.template(alertMessageTemplateRetrievalSuccessful)({ retrievedType: retrievedType, retrievedLength: $scope.data[gameRosters].length });
+              alertService.info(alertMessage, alertTitleDataRetrievalSuccessful);
+            } else {
+              // results not successful
+              alertMessage = _.template(alertMessageTemplateRetrievalUnsuccessful)({ retrievedType: retrievedType, retrievedError: result.reason });
+              alertService.error(alertMessage, alertTitleDataRetrievalUnsuccessful);
+            }
+          }
+        );
+      };
+
+      $scope.getGames = function () {
+        var retrievedType = "Games";
+
+        $scope.initializeScopeVariables();
+
         dataServiceGames.getGames().$promise.then(
           function (result) {
             // service call on success
             if (result && result.length && result.length > 0) {
 
-              angular.forEach(result, function(item) {
+              angular.forEach(result, function (item) {
                 $scope.data.games.push(item);
               });
 
-              $scope.data.gamesLoaded = true;
+              $scope.requests.gamesLoaded = true;
 
-              alertMessage = _.template(alertMessageTemplateRetrievalSuccessful)({retrievedType: retrievedType, retrievedLength: $scope.data.games.length });
+              alertMessage = _.template(alertMessageTemplateRetrievalSuccessful)({ retrievedType: retrievedType, retrievedLength: $scope.data.games.length });
               alertService.info(alertMessage, alertTitleDataRetrievalSuccessful);
+
+
+              // TODO MOVE THIS TO A USER INPUT
+              $scope.user.selectedGameId = true;
+              $scope.data.gameIdSelected = 3200;
+              $scope.data.gameSelected = _.find($scope.data.games, function (item) { return item.gameId === $scope.data.gameIdSelected });
+
             } else {
               // results not successful
-              alertMessage = _.template(alertMessageTemplateRetrievalUnsuccessful)({retrievedType: retrievedType, retrievedError: result.reason});
+              alertMessage = _.template(alertMessageTemplateRetrievalUnsuccessful)({ retrievedType: retrievedType, retrievedError: result.reason });
               alertService.error(alertMessage, alertTitleDataRetrievalUnsuccessful);
             }
           }
         );
+      };
 
-        $scope.data.gameIdSelected = 3200;
+      $scope.setWatches = function () {
+        $scope.$watch('data.gameIdSelected', function (val) {
+          if (val) {
+            $scope.getGameRosters($scope.data.gameIdSelected, true);
+            $scope.getGameRosters($scope.data.gameIdSelected, false);
+          }
+        }, true);
+      }
+
+      $scope.activate = function () {
+        $scope.setWatches();
+        $scope.getGames();
       };
 
       $scope.activate();

@@ -20,14 +20,20 @@ namespace LO30
 
       config.Routes.MapHttpRoute(
           name: "ApiGameRosters",
-          routeTemplate: "api/v1/gamerosters/{gameId}",
-          defaults: new { controller = "GameRosters", gameId = RouteParameter.Optional }
+          routeTemplate: "api/v1/gamerosters/{gameId}/{homeTeam}",
+          defaults: new { controller = "GameRosters", gameId = RouteParameter.Optional, homeTeam = RouteParameter.Optional }
       );
 
       config.Routes.MapHttpRoute(
-          name: "ApiGameRosters",
-          routeTemplate: "api/v1/gamerosters/{gameId}",
-          defaults: new { controller = "GameRosters", gameId = RouteParameter.Optional }
+          name: "ApiGameRosters1",
+          routeTemplate: "api/v1/gameroster/{gameRosterId}",
+          defaults: new { controller = "GameRoster"}
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiGameRosters2",
+          routeTemplate: "api/v1/gameroster/{gameTeamId}/{playerNumber}",
+          defaults: new { controller = "GameRoster"}
       );
 
       config.Routes.MapHttpRoute(

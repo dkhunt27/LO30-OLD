@@ -1,0 +1,273 @@
+<div>
+  <h4>2014 - 2015 Regular Season - Player Statistics</h4>
+  <h6>Thru Oct. 16</h6>
+
+  <table>
+    <tr>
+      <td align="center" colspan="3">
+        <div class="col-xs-12">
+          <div class="input-group">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-search"></span>
+            </div>
+            <input class="form-control" id="search-text" name="searchText" ng-model="searchText" type="text" focus="" required="" ng-keyup="$event.keyCode == 13 ? navigateToOfferDetailsExecution(searchText) : null" placeholder="SEARCH ANY FIELD">
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-remove" ng-click="removeSearch()"></span>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <td align="center" colspan="3">
+        <div class="col-xs-12">
+          <div class="btn-group btn-group-xs btn-group-justified">
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary disabled">Teams:</button>
+            </div>
+            <div data-ng-repeat="team in teams" class="btn-group">
+              <button type="button" class="btn" ng-click="filterByTeam(team)"
+                      ng-class="{'btn-default':team !== selectedTeam, 'btn-primary':team === selectedTeam}">
+                {{team}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <td align="center">
+        <div class="col-xs-12">
+          <div class="btn-group btn-group-xs btn-group-justified">
+            <div class="btn-group">
+              <button type="button" class="btn btn-danger disabled">Pos:</button>
+            </div>
+            <div data-ng-repeat="position in positions" class="btn-group">
+              <button type="button" class="btn" ng-click="filterByPosition(position)"
+                      ng-class="{'btn-default':position !== selectedPosition, 'btn-danger':position === selectedPosition}">
+                {{position}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td align="center">
+        <div class="col-xs-12">
+          <div class="btn-group btn-group-xs btn-group-justified">
+            <div class="btn-group">
+              <button type="button" class="btn btn-warning disabled">Line:</button>
+            </div>
+            <div data-ng-repeat="line in lines" class="btn-group">
+              <button type="button" class="btn" ng-click="filterByLine(line)"
+                      ng-class="{'btn-default':line !== selectedLine, 'btn-warning':line === selectedLine}">
+                {{line}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td align="center">
+        <div class="col-xs-12">
+          <div class="btn-group btn-group-xs btn-group-justified">
+            <div class="btn-group">
+              <button type="button" class="btn btn-success disabled">Subs:</button>
+            </div>
+            <div data-ng-repeat="sub in subs" class="btn-group">
+              <button type="button" class="btn" ng-click="filterBySub(sub)"
+                      ng-class="{'btn-default':sub !== selectedSub, 'btn-success':sub === selectedSub}">
+                {{sub}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+
+  <table class="table table-condensed table-bordered table-striped table-dk-blue">
+    <thead>
+      <tr>
+        <td>Rank</td>
+        <td ng-click="sortAscFirst('team')">
+          <span class="pointer">Team</span>
+          <span class="pull-right">
+            <span class="glyphicon" style="color:white"
+                  ng-class="{
+                      'glyphicon-sort':sortOn !== 'team',
+                      'glyphicon-sort-by-alphabet':sortOn === 'team' && !sortDirection,
+                      'glyphicon-sort-by-alphabet-alt':sortOn === 'team' && sortDirection
+                    }">
+            </span>
+          </span>
+        </td>
+        <td ng-click="sortAscFirst('player')">
+          <span class="pointer">Player</span>
+          <span class="pull-right">
+            <span class="glyphicon" style="color:white"
+                  ng-class="{
+                      'glyphicon-sort':sortOn !== 'player',
+                      'glyphicon-sort-by-alphabet':sortOn === 'player' && !sortDirection,
+                      'glyphicon-sort-by-alphabet-alt':sortOn === 'player' && sortDirection
+                    }">
+            </span>
+          </span>
+        </td>
+        <td ng-click="sortAscFirst('pos')">
+          <span class="pointer">Position</span>
+          <span class="pull-right">
+            <span class="glyphicon" style="color:white"
+                  ng-class="{
+                      'glyphicon-sort':sortOn !== 'pos',
+                      'glyphicon-sort-by-alphabet':sortOn === 'pos' && !sortDirection,
+                      'glyphicon-sort-by-alphabet-alt':sortOn === 'pos' && sortDirection
+                    }">
+            </span>
+          </span>
+        </td>
+        <td ng-click="sortAscFirst('line')">
+          <span class="pointer">Line</span>
+          <span class="pull-right">
+            <span class="glyphicon" style="color:white"
+                  ng-class="{
+                      'glyphicon-sort':sortOn !== 'line',
+                      'glyphicon-sort-by-order':sortOn === 'line' && !sortDirection,
+                      'glyphicon-sort-by-order-alt':sortOn === 'line' && sortDirection
+                    }">
+            </span>
+          </span>
+        </td>
+        <td ng-click="sortDescFirst('gp')">
+          <span class="pointer">GP</span>
+          <span class="pull-right">
+            <span class="glyphicon" style="color:white"
+                  ng-class="{
+                      'glyphicon-sort':sortOn !== 'gp',
+                      'glyphicon-sort-by-order':sortOn === 'gp' && !sortDirection,
+                      'glyphicon-sort-by-order-alt':sortOn === 'gp' && sortDirection
+                    }">
+            </span>
+          </span>
+        </td>
+        <td ng-click="sortDescFirst('g')">
+          <span class="pointer">Goals</span>
+          <span class="pull-right">
+            <span class="glyphicon" style="color:white"
+                  ng-class="{
+                      'glyphicon-sort':sortOn !== 'g',
+                      'glyphicon-sort-by-order':sortOn === 'g' && !sortDirection,
+                      'glyphicon-sort-by-order-alt':sortOn === 'g' && sortDirection
+                    }">
+            </span>
+          </span>
+        </td>
+        <td ng-click="sortDescFirst('a')">
+          <span class="pointer">Assists</span>
+          <span class="pull-right">
+            <span class="glyphicon" style="color:white"
+                  ng-class="{
+                      'glyphicon-sort':sortOn !== 'a',
+                      'glyphicon-sort-by-order':sortOn === 'a' && !sortDirection,
+                      'glyphicon-sort-by-order-alt':sortOn === 'a' && sortDirection
+                    }">
+            </span>
+          </span>
+        </td>
+        <td ng-click="sortDescFirst('p')">
+          <span class="pointer">Points</span>
+          <span class="pull-right">
+            <span class="glyphicon" style="color:white"
+                  ng-class="{
+                      'glyphicon-sort':sortOn !== 'p',
+                      'glyphicon-sort-by-order':sortOn === 'p' && !sortDirection,
+                      'glyphicon-sort-by-order-alt':sortOn === 'p' && sortDirection
+                    }">
+            </span>
+          </span>
+        </td>
+        <td ng-click="sortDescFirst('pim')">
+          <span class="pointer">PIM</span>
+          <span class="pull-right">
+            <span class="glyphicon" style="color:white"
+                  ng-class="{
+                      'glyphicon-sort':sortOn !== 'pim',
+                      'glyphicon-sort-by-order':sortOn === 'pim' && !sortDirection,
+                      'glyphicon-sort-by-order-alt':sortOn === 'pim' && sortDirection
+                    }">
+            </span>
+          </span>
+        </td>
+        <td ng-click="sortDescFirst('ppg')">
+          <span class="pointer">PPG</span>
+          <span class="pull-right">
+            <span class="glyphicon" style="color:white"
+                  ng-class="{
+                      'glyphicon-sort':sortOn !== 'ppg',
+                      'glyphicon-sort-by-order':sortOn === 'ppg' && !sortDirection,
+                      'glyphicon-sort-by-order-alt':sortOn === 'ppg' && sortDirection
+                    }">
+            </span>
+          </span>
+        </td>
+        <td ng-click="sortDescFirst('shg')">
+          <span class="pointer">SHG</span>
+          <span class="pull-right">
+            <span class="glyphicon" style="color:white"
+                  ng-class="{
+                      'glyphicon-sort':sortOn !== 'shg',
+                      'glyphicon-sort-by-order':sortOn === 'shg' && !sortDirection,
+                      'glyphicon-sort-by-order-alt':sortOn === 'shg' && sortDirection
+                    }">
+            </span>
+          </span>
+        </td>
+        <td ng-click="sortDescFirst('gwg')">
+          <span class="pointer">GWG</span>
+          <span class="pull-right">
+            <span class="glyphicon" style="color:white"
+                  ng-class="{
+                      'glyphicon-sort':sortOn !== 'gwg',
+                      'glyphicon-sort-by-order':sortOn === 'gwg' && !sortDirection,
+                      'glyphicon-sort-by-order-alt':sortOn === 'gwg' && sortDirection
+                    }">
+            </span>
+          </span>
+        </td>
+        <td ng-click="sortAscFirst('sub')">
+          <span class="pointer">Sub</span>
+          <span class="pull-right">
+            <span class="glyphicon" style="color:white"
+                  ng-class="{
+                      'glyphicon-sort':sortOn !== 'sub',
+                      'glyphicon-sort-by-alphabet':sortOn === 'sub' && !sortDirection,
+                      'glyphicon-sort-by-alphabet-alt':sortOn === 'sub' && sortDirection
+                    }">
+            </span>
+          </span>
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in playerStats | filterize:searchText | orderBy:sortOn:sortDirection">
+        <td>{{$index+1}}</td>
+        <td ng-class="{'td-info':sortOn === 'team' }">{{item.team}}</td>
+        <td ng-class="{'td-info':sortOn === 'player' }">{{item.player}}</td>
+        <td ng-class="{'td-info':sortOn === 'pos' }">{{item.pos}}</td>
+        <td ng-class="{'td-info':sortOn === 'line' }">{{item.line}}</td>
+        <td ng-class="{'td-info':sortOn === 'gp'}">{{item.gp}}</td>
+        <td ng-class="{'td-info':sortOn === 'g'}">{{item.g}}</td>
+        <td ng-class="{'td-info':sortOn === 'a' }">{{item.a}}</td>
+        <td ng-class="{'td-info':sortOn === 'p' }">{{item.p}}</td>
+        <td ng-class="{'td-info':sortOn === 'pim' }">{{item.pim}}</td>
+        <td ng-class="{'td-info':sortOn === 'ppg' }">{{item.ppg}}</td>
+        <td ng-class="{'td-info':sortOn === 'shg' }">{{item.shg}}</td>
+        <td ng-class="{'td-info':sortOn === 'gwg' }">{{item.gwg}}</td>
+        <td ng-class="{'td-info':sortOn === 'sub'}">{{item.sub}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
