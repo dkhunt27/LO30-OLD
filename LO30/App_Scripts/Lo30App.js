@@ -22,6 +22,10 @@ lo30NgApp.config(
         controller: "standingsRegularSeasonController",
         templateUrl: "/Templates/Standings/RegularSeason.html"
       });
+      $routeProvider.when("/Standings/Playoffs", {
+        controller: "standingsPlayoffsController",
+        templateUrl: "/Templates/Standings/Playoffs.html"
+      });
       $routeProvider.when("/Stats/Players", {
         controller: "statsPlayersController",
         templateUrl: "/Templates/Stats/Players.html"

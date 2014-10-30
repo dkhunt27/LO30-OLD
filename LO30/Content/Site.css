@@ -16,6 +16,10 @@ border-color: #1980B6;
 color: #1980B6;
 }
 
+.table-dk-blue > thead {
+font-weight: 700;
+}
+
 .table-dk-blue > thead > tr > td {
 color: #fff;
 background-color: #1980B6;
@@ -26,6 +30,13 @@ background-color: #1980B6;
 
 .table-dk-blue > tbody > tr:hover > td,
 .table-dk-blue > tbody > tr:hover > th {
-  background-color: lightblue;
+  background-color: rgba(25,128,182,0.5);
+  font-weight: 700;
+}
+
+td.td-sorted-by {
+  /*background-color: #d9edf7 !important;*/
+  /*color: #fff;*/
+  background-color: rgba(25,128,182,0.5) !important;
   font-weight: 700;
 }

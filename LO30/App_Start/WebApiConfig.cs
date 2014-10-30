@@ -15,30 +15,37 @@ namespace LO30
     {
 
       var jsonFormatter = config.Formatters.OfType<JsonMediaTypeFormatter>().First();
-      jsonFormatter.SerializerSettings.ContractResolver =
-        new CamelCasePropertyNamesContractResolver();
+      jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+      var constApisUrl = "api/v1";
 
       config.Routes.MapHttpRoute(
           name: "ApiGameRosters",
-          routeTemplate: "api/v1/gamerosters/{gameId}/{homeTeam}",
+          routeTemplate: constApisUrl + "/gamerosters/{gameId}/{homeTeam}",
           defaults: new { controller = "GameRosters", gameId = RouteParameter.Optional, homeTeam = RouteParameter.Optional }
       );
 
       config.Routes.MapHttpRoute(
           name: "ApiGameRosters1",
-          routeTemplate: "api/v1/gameroster/{gameRosterId}",
+          routeTemplate: constApisUrl + "/gameroster/{gameRosterId}",
           defaults: new { controller = "GameRoster"}
       );
 
       config.Routes.MapHttpRoute(
           name: "ApiGameRosters2",
-          routeTemplate: "api/v1/gameroster/{gameTeamId}/{playerNumber}",
+          routeTemplate: constApisUrl + "/gameroster/{gameTeamId}/{playerNumber}",
           defaults: new { controller = "GameRoster"}
       );
 
       config.Routes.MapHttpRoute(
+          name: "ApiGames",
+          routeTemplate: constApisUrl + "/games/{gameId}/",
+          defaults: new { controller = "Games", gameId = RouteParameter.Optional }
+      );
+
+      config.Routes.MapHttpRoute(
           name: "DefaultApi",
-          routeTemplate: "api/v1/{controller}/{id}",
+          routeTemplate: constApisUrl + "/{controller}/{id}",
           defaults: new { id = RouteParameter.Optional }
       );
 

@@ -208,6 +208,7 @@
     <Content Include="App_Code\OleDbMembershipProvider.cs" />
     <Content Include="App_Code\OleDbRoleProvider.cs" />
     <Content Include="App_Scripts\Controllers\AdminDataProcessingController.js" />
+    <Content Include="App_Scripts\Controllers\StandingsPlayoffsController.js" />
     <Content Include="App_Scripts\Controllers\StatsGoaliesController.js" />
     <Content Include="App_Scripts\Controllers\NewsController.js" />
     <Content Include="App_Scripts\Controllers\StatsPlayersController.js" />
@@ -221,7 +222,9 @@
     <Content Include="App_Scripts\Controllers\ScoreSheetController.js" />
     <Content Include="App_Scripts\Services\AdminDataProcessingService.js" />
     <Content Include="App_Scripts\Services\AlertService.js" />
+    <Content Include="App_Scripts\Services\DataServiceForWebPlayerStats.js" />
     <Content Include="App_Scripts\Services\DataServiceGameRosters.js" />
+    <Content Include="App_Scripts\Services\DataServiceForWebGoalieStats.js" />
     <Content Include="App_Scripts\Services\DataServiceGames.js" />
     <Content Include="App_Scripts\Services\ScoreSheetService.js" />
     <Content Include="App_Start\CSharpRazorViewEngine.cs" />
@@ -244,8 +247,8 @@
     <Compile Include="Controllers\WebApi\Data\GameRosterController.cs" />
     <Compile Include="Controllers\WebApi\Data\GameRostersController.cs" />
     <Compile Include="Controllers\WebApi\Data\GamesController.cs" />
-    <Compile Include="Controllers\WebApi\ForWebGoalieStatsController.cs" />
-    <Compile Include="Controllers\WebApi\ForWebPlayerStatsController.cs" />
+    <Compile Include="Controllers\WebApi\Data\ForWebGoalieStatsController.cs" />
+    <Compile Include="Controllers\WebApi\Data\ForWebPlayerStatsController.cs" />
     <Compile Include="Controllers\WebApi\PlayerStatsSeasonController.cs" />
     <Compile Include="Controllers\WebApi\TeamStandingsController.cs" />
     <Compile Include="Controllers\WebApi\ArticlesController.cs" />
@@ -2120,6 +2123,7 @@
     <Content Include="Content\Images\orderedList8.png" />
     <Content Include="Content\Images\orderedList9.png" />
     <Content Include="Templates\AdminDataProcessingAngular.html" />
+    <Content Include="Templates\Standings\Playoffs.html" />
     <Content Include="Templates\Standings\RegularSeason.html" />
     <Content Include="Templates\Stats\Goalies.html" />
     <Content Include="Templates\Stats\Players.html" />

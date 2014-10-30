@@ -24,8 +24,8 @@ namespace LO30.Data
       _lo30DataSerializationService = new Lo30DataSerializationService();
 
       var folderPath = @"C:\git\LO30\LO30\Data\SqlServer\";
-      //_webGoalieStats = _lo30DataSerializationService.FromJsonFromFile<List<ForWebGoalieStat>>(folderPath + "ForWebGoalieStats.json");
-     // _webPlayerStats = _lo30DataSerializationService.FromJsonFromFile<List<ForWebPlayerStat>>(folderPath + "ForWebPlayerStats.json");
+      _webGoalieStats = _lo30DataSerializationService.FromJsonFromFile<List<ForWebGoalieStat>>(folderPath + "ForWebGoalieStats.json");
+      _webPlayerStats = _lo30DataSerializationService.FromJsonFromFile<List<ForWebPlayerStat>>(folderPath + "ForWebPlayerStats.json");
       _gameOutcomes = _lo30DataSerializationService.FromJsonFromFile<List<GameOutcome>>(folderPath + "GameOutcomes.json");
       _gameRosters = _lo30DataSerializationService.FromJsonFromFile<List<GameRoster>>(folderPath + "GameRosters.json");
       _games = _lo30DataSerializationService.FromJsonFromFile<List<Game>>(folderPath + "Games.json");
@@ -102,12 +102,12 @@ namespace LO30.Data
 
     public List<ForWebPlayerStat> GetPlayerStatsForWeb()
     {
-      throw new NotImplementedException();
+      return _webPlayerStats;
     }
 
     public List<ForWebGoalieStat> GetGoalieStatsForWeb()
     {
-      throw new NotImplementedException();
+      return _webGoalieStats;
     }
 
     public List<ScoreSheetEntry> GetScoreSheetEntries()

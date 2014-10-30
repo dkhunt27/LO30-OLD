@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 
-namespace LO30.Controllers
+namespace LO30.Controllers.Data
 {
   public class GameRosterController : ApiController
   {

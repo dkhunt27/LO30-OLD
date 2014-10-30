@@ -22,7 +22,7 @@ namespace LO30.Controllers
       try
       {
 #if DEBUG
-        return PartialView("NavAdmin");
+        return PartialView("NavPublic");
 #else
         if (Roles.IsUserInRole("admin"))
         {

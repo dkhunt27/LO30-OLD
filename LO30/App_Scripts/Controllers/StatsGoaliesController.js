@@ -5,31 +5,33 @@ lo30NgApp.controller('statsGoaliesController',
   [
     '$scope',
     '$timeout',
-    function ($scope, $timeout) {
+    'alertService',
+    'dataServiceForWebGoalieStats',
+    function ($scope, $timeout, alertService, dataServiceForWebGoalieStats) {
 
-      $scope.searchText = null;
-      $scope.selectedTeam = null;
-      $scope.selectedPosition = null;
-      $scope.selectedLine = null;
-      $scope.selectedSub = null;
+      var alertTitleDataRetrievalSuccessful = "Data Retrieval Successful";
+      var alertTitleDataRetrievalUnsuccessful = "Data Retrieval Unsuccessful";
+      var alertMessageTemplateRetrievalSuccessful = "Retrieved <%=retrievedType%>, Length: <%=retrievedLength%>";
+      var alertMessageTemplateRetrievalUnsuccessful = "Received following error trying to retrieve <%=retrievedType%>. Error:<%=retrievedError%>";
+      var alertMessage;
 
       $scope.filterByTeam = function (team) {
-        var existingSearch = "team:" + $scope.filterByTeamMapper($scope.selectedTeam);
+        var existingSearch = "team:" + $scope.filterByTeamMapper($scope.user.selectedTeam);
         var newSearch = "team:" + $scope.filterByTeamMapper(team);
 
-        if ($scope.selectedTeam) {
+        if ($scope.user.selectedTeam) {
           // if selected populated, that means there was a search before...remove that first 
           $scope.removeExistingSearchFromSearch(existingSearch);
         }
 
-        if ($scope.selectedTeam === team) {
+        if ($scope.user.selectedTeam === team) {
           // if same thing was clicked again...already been remove from search...just reset vars
-          $scope.selectedTeam = null;
+          $scope.user.selectedTeam = null;
         } else {
           // this is a new search, add to search
           $scope.prepSearchForNewSearch();
           $scope.addNewSearchToSearch(newSearch);
-          $scope.selectedTeam = team;
+          $scope.user.selectedTeam = team;
         }
 
         $scope.resetSort();
@@ -71,22 +73,22 @@ lo30NgApp.controller('statsGoaliesController',
       };
 
       $scope.filterBySub = function (sub) {
-        var existingSearch = "sub:" + $scope.filterBySubMapper($scope.selectedSub);
+        var existingSearch = "sub:" + $scope.filterBySubMapper($scope.user.selectedSub);
         var newSearch = "sub:" + $scope.filterBySubMapper(sub);
 
-        if ($scope.selectedSub) {
+        if ($scope.user.selectedSub) {
           // if selected populated, that means there was a search before...remove that first 
           $scope.removeExistingSearchFromSearch(existingSearch);
         }
 
-        if ($scope.selectedSub === sub) {
+        if ($scope.user.selectedSub === sub) {
           // if same thing was clicked again...already been remove from search...just reset vars
-          $scope.selectedSub = null;
+          $scope.user.selectedSub = null;
         } else {
           // this is a new search, add to search
           $scope.prepSearchForNewSearch();
           $scope.addNewSearchToSearch(newSearch);
-          $scope.selectedSub = sub;
+          $scope.user.selectedSub = sub;
         }
 
         $scope.resetSort();
@@ -110,44 +112,44 @@ lo30NgApp.controller('statsGoaliesController',
       };
 
       $scope.filterByLine = function (line) {
-        var existingSearch = "line:" + $scope.selectedLine;
+        var existingSearch = "line:" + $scope.user.selectedLine;
         var newSearch = "line:" + line;
 
-        if ($scope.selectedLine) {
+        if ($scope.user.selectedLine) {
           // if selected populated, that means there was a search before...remove that first 
           $scope.removeExistingSearchFromSearch(existingSearch);
         }
 
-        if ($scope.selectedLine === line) {
+        if ($scope.user.selectedLine === line) {
           // if same thing was clicked again...already been remove from search...just reset vars
-          $scope.selectedLine = null;
+          $scope.user.selectedLine = null;
         } else {
           // this is a new search, add to search
           $scope.prepSearchForNewSearch();
           $scope.addNewSearchToSearch(newSearch);
-          $scope.selectedLine = line;
+          $scope.user.selectedLine = line;
         }
 
         $scope.resetSort();
       };
 
       $scope.filterByPosition = function (position) {
-        var existingSearch = "position:" + $scope.selectedPosition;
+        var existingSearch = "position:" + $scope.user.selectedPosition;
         var newSearch = "position:" + position;
 
-        if ($scope.selectedPosition) {
+        if ($scope.user.selectedPosition) {
           // if selected populated, that means there was a search before...remove that first 
           $scope.removeExistingSearchFromSearch(existingSearch);
         }
 
-        if ($scope.selectedPosition === position) {
+        if ($scope.user.selectedPosition === position) {
           // if same thing was clicked again...already been remove from search...just reset vars
-          $scope.selectedPosition = null;
+          $scope.user.selectedPosition = null;
         } else {
           // this is a new search, add to search
           $scope.prepSearchForNewSearch();
           $scope.addNewSearchToSearch(newSearch);
-          $scope.selectedPosition = position;
+          $scope.user.selectedPosition = position;
         }
 
         $scope.resetSort();
@@ -158,20 +160,20 @@ lo30NgApp.controller('statsGoaliesController',
       };
 
       $scope.addNewSearchToSearch = function (newSearch) {
-        $scope.searchText = $scope.searchText + newSearch;
+        $scope.user.searchText = $scope.user.searchText + newSearch;
       };
 
       $scope.removeExistingSearchFromSearch = function (existingSearch) {
-        $scope.searchText = $scope.searchText.replace(", " + existingSearch, "");
-        $scope.searchText = $scope.searchText.replace(existingSearch + ", ", "");
-        $scope.searchText = $scope.searchText.replace(existingSearch, "");
+        $scope.user.searchText = $scope.user.searchText.replace(", " + existingSearch, "");
+        $scope.user.searchText = $scope.user.searchText.replace(existingSearch + ", ", "");
+        $scope.user.searchText = $scope.user.searchText.replace(existingSearch, "");
       };
 
       $scope.prepSearchForNewSearch = function () {
-        if ($scope.searchText) {
-          $scope.searchText = $scope.searchText + ", ";
+        if ($scope.user.searchText) {
+          $scope.user.searchText = $scope.user.searchText + ", ";
         } else {
-          $scope.searchText = "";
+          $scope.user.searchText = "";
         }
       };
 
@@ -193,240 +195,118 @@ lo30NgApp.controller('statsGoaliesController',
         }
       };
 
-      $scope.removeSearch = function () {
-        $scope.searchText = null;
-        $scope.selectedTeam = null;
-        $scope.selectedPosition = null;
-        $scope.selectedLine = null;
-        $scope.selectedSub = null;
-      }
-
-      $scope.activate = function () {
-        $scope.calcWinPct();
-        //$timeout(function () {
-        $scope.sortAscFirst('gaa');
-        $scope.filterBySub("Without");
-        //},0);  // using timeout so it fires when done rendering
+      $scope.sortAscOnly = function (column) {
+        $scope.sortOn = column;
+        $scope.sortDirection = false;
       };
 
-      $scope.teams = [
-        "Bill Brown",
-      "Hunt's Ace",
-      "LAB/PSI",
-      "Zas Ent",
-      "DPKZ",
-      "Villanova",
-      "Glover",
-      "D&G"
-      ];
+      $scope.sortDescOnly = function (column) {
+        $scope.sortOn = column;
+        $scope.sortDirection = true;
+      };
 
-      $scope.positions = [
-        "F",
-        "D",
-        "G"
-      ];
-
-      $scope.subs = [
-        "With",
-        "Without",
-      ];
-
-      $scope.lines = [
-        "1",
-        "2",
-        "3",
-      ];
+      $scope.removeSearch = function () {
+        $scope.user.searchText = null;
+        $scope.user.selectedTeam = null;
+        $scope.user.selectedPosition = null;
+        $scope.user.selectedLine = null;
+        $scope.user.selectedSub = null;
+      };
 
       $scope.calcWinPct = function () {
-        angular.forEach($scope.goalieStats, function (item) {
+        angular.forEach($scope.data.goalieStats, function (item) {
           item.winPercent = item.w / item.gp;
         })
-      }
+      };
 
-      $scope.goalieStats = [
-  {
-    pid: 650,
-    stidpf: 312,
-    sid: 54,
-    player: "Chris Ciszewski",
-    team: "Hunt's Ace Hardware",
-    sub: "Y",
-    gp: 1,
-    ga: 1,
-    gaa: 1,
-    so: 0,
-    w: 1
-  },
-  {
-    pid: 634,
-    stidpf: 315,
-    sid: 54,
-    player: "Tony Brosky",
-    team: "Liv. Auto Body/Phillips Service Ind",
-    sub: "N",
-    gp: 10,
-    ga: 17,
-    gaa: 1.7,
-    so: 3,
-    w: 7
-  },
-  {
-    pid: 49,
-    stidpf: 312,
-    sid: 54,
-    player: "John Camillo",
-    team: "Hunt's Ace Hardware",
-    sub: "N",
-    gp: 7,
-    ga: 15,
-    gaa: 2.142857142857143,
-    so: 2,
-    w: 5
-  },
-  {
-    pid: 682,
-    stidpf: 311,
-    sid: 54,
-    player: "Scott Fassett",
-    team: "Jeff Glover Realtors",
-    sub: "N",
-    gp: 8,
-    ga: 18,
-    gaa: 2.25,
-    so: 0,
-    w: 2
-  },
-  {
-    pid: 676,
-    stidpf: 312,
-    sid: 54,
-    player: "Mike Guider Jr",
-    team: "Hunt's Ace Hardware",
-    sub: "Y",
-    gp: 2,
-    ga: 5,
-    gaa: 2.5,
-    so: 0,
-    w: 1
-  },
-  {
-    pid: 678,
-    stidpf: 308,
-    sid: 54,
-    player: "Mark Felker",
-    team: "Bill Brown Auto Clinic",
-    sub: "N",
-    gp: 10,
-    ga: 29,
-    gaa: 2.9,
-    so: 1,
-    w: 6
-  },
-  {
-    pid: 619,
-    stidpf: 313,
-    sid: 54,
-    player: "Brad Villa",
-    team: "D&G Heating & Cooling",
-    sub: "N",
-    gp: 10,
-    ga: 29,
-    gaa: 2.9,
-    so: 0,
-    w: 3
-  },
-  {
-    pid: 177,
-    stidpf: 310,
-    sid: 54,
-    player: "Steve Roth",
-    team: "Zaschak Enterprises",
-    sub: "N",
-    gp: 11,
-    ga: 33,
-    gaa: 3,
-    so: 0,
-    w: 6
-  },
-  {
-    pid: 678,
-    stidpf: 312,
-    sid: 54,
-    player: "Mark Felker",
-    team: "Hunt's Ace Hardware",
-    sub: "Y",
-    gp: 1,
-    ga: 3,
-    gaa: 3,
-    so: 0,
-    w: 0
-  },
-  {
-    pid: 682,
-    stidpf: 313,
-    sid: 54,
-    player: "Scott Fassett",
-    team: "D&G Heating & Cooling",
-    sub: "Y",
-    gp: 1,
-    ga: 3,
-    gaa: 3,
-    so: 0,
-    w: 0
-  },
-  {
-    pid: 688,
-    stidpf: 309,
-    sid: 54,
-    player: "Lenny Domanke",
-    team: "DeBrincat Padgett Kobliska Zick",
-    sub: "Y",
-    gp: 2,
-    ga: 8,
-    gaa: 4,
-    so: 0,
-    w: 0
-  },
-  {
-    pid: 81,
-    stidpf: 311,
-    sid: 54,
-    player: "Ron Gabon",
-    team: "Jeff Glover Realtors",
-    sub: "Y",
-    gp: 1,
-    ga: 4,
-    gaa: 4,
-    so: 0,
-    w: 0
-  },
-  {
-    pid: 737,
-    stidpf: 309,
-    sid: 54,
-    player: "Brian Whetstone",
-    team: "DeBrincat Padgett Kobliska Zick",
-    sub: "N",
-    gp: 9,
-    ga: 42,
-    gaa: 4.666666666666667,
-    so: 0,
-    w: 3
-  },
-  {
-    pid: 749,
-    stidpf: 314,
-    sid: 54,
-    player: "Jon Ameel",
-    team: "Villanova Construction",
-    sub: "N",
-    gp: 11,
-    ga: 60,
-    gaa: 5.454545454545454,
-    so: 0,
-    w: 2
-  }
-      ];
+      $scope.initializeScopeVariables = function () {
+
+        $scope.teams = [
+          "Bill Brown",
+          "Hunt's Ace",
+          "LAB/PSI",
+          "Zas Ent",
+          "DPKZ",
+          "Villanova",
+          "Glover",
+          "D&G"
+        ];
+
+        $scope.positions = [
+          "F",
+          "D",
+          "G"
+        ];
+
+        $scope.subs = [
+          "With",
+          "Without",
+        ];
+
+        $scope.lines = [
+          "1",
+          "2",
+          "3",
+        ];
+
+        $scope.data = {
+          goalieStats: []
+        };
+
+        $scope.requests = {
+          goalieStatsLoaded: false
+        };
+
+        $scope.user = {
+          searchText: null,
+          selectedTeam: null,
+          selectedPosition: null,
+          selectedLine: null,
+          selectedSub: null
+        };
+      };
+
+      $scope.getForWebGoalieStats = function () {
+        var retrievedType = "GoalieStats";
+
+        $scope.initializeScopeVariables();
+
+        dataServiceForWebGoalieStats.getForWebGoalieStats().$promise.then(
+          function (result) {
+            // service call on success
+            if (result && result.length && result.length > 0) {
+
+              angular.forEach(result, function (item) {
+                $scope.data.goalieStats.push(item);
+              });
+
+              $scope.calcWinPct();
+              $scope.requests.goalieStatsLoaded = true;
+
+
+              alertMessage = _.template(alertMessageTemplateRetrievalSuccessful)({ retrievedType: retrievedType, retrievedLength: $scope.data.goalieStats.length });
+              alertService.info(alertMessage, alertTitleDataRetrievalSuccessful);
+
+            } else {
+              // results not successful
+              alertMessage = _.template(alertMessageTemplateRetrievalUnsuccessful)({ retrievedType: retrievedType, retrievedError: result.reason });
+              alertService.error(alertMessage, alertTitleDataRetrievalUnsuccessful);
+            }
+          }
+        );
+      };
+
+      $scope.setWatches = function () {
+      };
+
+      $scope.activate = function () {
+        $scope.setWatches();
+        $scope.getForWebGoalieStats();
+        $timeout(function () {
+          $scope.sortAscOnly('gaa');
+          $scope.filterBySub("Without");
+        }, 0);  // using timeout so it fires when done rendering
+      };
 
       $scope.activate();
     }

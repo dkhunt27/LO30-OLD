@@ -69,14 +69,13 @@ namespace LO30
     {
 #if DEBUG
       kernel.Bind<IMailService>().To<MockMailService>().InRequestScope();
+      kernel.Bind<ILo30Repository>().To<Lo30RepositoryMock>().InRequestScope();
 #else
-            kernel.Bind<IMailService>().To<MailService>().InRequestScope();
+      kernel.Bind<IMailService>().To<MailService>().InRequestScope();
+      kernel.Bind<ILo30Repository>().To<Lo30Repository>().InRequestScope();
 #endif
 
       kernel.Bind<Lo30Context>().To<Lo30Context>().InRequestScope();
-
-      kernel.Bind<ILo30Repository>().To<Lo30RepositoryMock>().InRequestScope();
-
       kernel.Bind<Lo30ContextService>().To<Lo30ContextService>().InRequestScope();
     }
   }

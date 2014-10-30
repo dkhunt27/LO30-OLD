@@ -79,11 +79,11 @@
 
   <!-- FOOTER -->
   <footer>
-    <pre>$location.path() = {{$location.path()}}</pre>
+    @*<pre>$location.path() = {{$location.path()}}</pre>
     <pre>$route.current.templateUrl = {{$route.current.templateUrl}}</pre>
     <pre>$route.current.params = {{$route.current.params}}</pre>
     <pre>$route.current.scope.name = {{$route.current.scope.name}}</pre>
-    <pre>$routeParams = {{$routeParams}}</pre>
+    <pre>$routeParams = {{$routeParams}}</pre>*@
 
     <!-- copyright , scrollTo Top -->
     <div class="footer-bar">
@@ -137,6 +137,7 @@
   <script src="~/App_Scripts/Controllers/RootController.js"></script>
   <script src="~/App_Scripts/Controllers/ScoreSheetController.js"></script>
   <script src="~/App_Scripts/Controllers/StandingsRegularSeasonController.js"></script>
+  <script src="~/App_Scripts/Controllers/StandingsPlayoffsController.js"></script>
   <script src="~/App_Scripts/Controllers/StatsGoaliesController.js"></script>
   <script src="~/App_Scripts/Controllers/StatsPlayersController.js"></script>
 
@@ -150,6 +151,8 @@
   <!-- Services -->
   <script src="~/App_Scripts/Services/AdminDataProcessingService.js"></script>
   <script src="~/App_Scripts/Services/AlertService.js"></script>
+  <script src="~/App_Scripts/Services/DataServiceForWebGoalieStats.js"></script>
+  <script src="~/App_Scripts/Services/DataServiceForWebPlayerStats.js"></script>
   <script src="~/App_Scripts/Services/DataServiceGames.js"></script>
   <script src="~/App_Scripts/Services/DataServiceGameRosters.js"></script>
   <script src="~/App_Scripts/Services/NewsService.js"></script>

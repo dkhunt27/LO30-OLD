@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 
-namespace LO30.Controllers
+namespace LO30.Controllers.Data
 {
   public class GamesController : ApiController
   {
@@ -14,15 +14,15 @@ namespace LO30.Controllers
       _repo = repo;
     }
 
-    public List<Game> Get()
+    public List<Game> GetGames()
     {
       var results = _repo.GetGames();
       return results.OrderByDescending(x => x.GameId).ToList();
     }
 
-    public Game Get(int id)
+    public Game GetGamesByGameId(int gameId)
     {
-      var result = _repo.GetGameByGameId(id);
+      var result = _repo.GetGameByGameId(gameId);
       return result;
     }
   }

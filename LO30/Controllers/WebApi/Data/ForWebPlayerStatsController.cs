@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 
-namespace LO30.Controllers
+namespace LO30.Controllers.Data
 {
   public class ForWebPlayerStatsController : ApiController
   {
@@ -14,12 +14,10 @@ namespace LO30.Controllers
       _repo = repo;
     }
 
-    public IEnumerable<ForWebPlayerStat> Get()
+    public List<ForWebPlayerStat> GetForWebPlayerStats()
     {
       var results = _repo.GetPlayerStatsForWeb();
-      var playerStats = results.OrderByDescending(x => x.P).ToList();
-
-      return playerStats;
+      return results.OrderByDescending(x => x.P).ToList();
     }
   }
 }
