@@ -3,6 +3,7 @@ using LO30.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace LO30.Data
@@ -19,8 +20,13 @@ namespace LO30.Data
 
     public void Seed(Lo30Context context)
     {
-      var functionName = "LoadTablesFromJson";
-      var folderPath = "C:\\git\\LO30\\LO30\\Data\\Access\\";
+      //string appRoot = Environment.GetEnvironmentVariable("RoleRoot");
+      //string folderPath2 = Path.Combine(appRoot + @"\", string.Format(@"approot\{0}", "Penalties.json"));
+
+      //string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+      string appDataPath = @"C:\git\LO30\LO30\App_Data\";
+      var folderPath = Path.Combine(appDataPath, "Access");
+      folderPath = @"C:\git\LO30\LO30\App_Data\Access\";
 
       _lo30ContextService = new Lo30ContextService(context);
       _accessDatabaseService = new AccessDatabaseService();
@@ -186,7 +192,7 @@ namespace LO30.Data
         Debug.Print("Data Group 1: Creating Penalties");
         last = DateTime.Now;
 
-        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "Penalties.json");
+        dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(Path.Combine(folderPath, "Penalties.json"));
         int count = parsedJson.Count;
 
         Debug.Print("Access records to process:" + count);

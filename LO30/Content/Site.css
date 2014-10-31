@@ -40,3 +40,34 @@ td.td-sorted-by {
   background-color: rgba(25,128,182,0.5) !important;
   font-weight: 700;
 }
+
+.img-responsive-center,
+.thumbnail > img,
+.thumbnail a > img,
+.carousel-inner > .item > img,
+.carousel-inner > .item > a > img {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.grayscale {
+    filter: url('../Content/Images/gray.svg#grayscale'); /* Firefox 3.5+ */
+    filter: gray; /* IE6-9 */
+    filter: grayscale(1); /* W3C */  
+    -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+}
+ 
+.grayscale-hover:hover {
+    filter: none;
+    -webkit-filter: grayscale(0);
+}
+
+.btn-lo30-disabled {
+	border: #bbb 2px solid;
+  pointer-events: none;
+  cursor: not-allowed;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  opacity: .65;
+}

@@ -4,7 +4,7 @@
 
 <div id="Home">
 
-  <header id="page-title">
+  @*<header id="page-title">
     <div class="container">
       <h1>Home</h1>
 
@@ -12,14 +12,14 @@
         <li class="active">Home</li>
       </ul>
     </div>
-  </header>
+  </header>*@
 
   <!-- REVOLUTION SLIDER -->
   <div class="fullwidthbanner-container roundedcorners">
     <div class="fullwidthbanner">
       <ul>
         <li data-transition="fade" data-slotamount="7" data-masterspeed="300">
-          <img src="@Url.Content("~/Content/Template/images/dummy.png")" alt="church2" data-lazyload="@Url.Content("~/Content/Images/LO30TraditionCollage.png")" data-fullwidthcentering="on">
+          <img src="@Url.Content("~/Content/Template/images/dummy.png")" alt="church2" data-lazyload="@Url.Content("~/Content/Images/Home/LO30TraditionCollage.jpg")" data-fullwidthcentering="on">
           <div class="tp-caption medium_bg_darkblue lft col-xs-12 text-center"
                data-x="0"
                data-y="150"
@@ -32,7 +32,7 @@
         </li>
 
         <li data-transition="fade" data-slotamount="7" data-masterspeed="300">
-          <img src="@Url.Content("~/Content/Template/images/dummy.png")" alt="church1" data-lazyload="@Url.Content("~/Content/Images/eddie-edgar-ice.jpg")" data-fullwidthcentering="on">
+          <img src="@Url.Content("~/Content/Template/images/dummy.png")" alt="church1" data-lazyload="@Url.Content("~/Content/Images/Home/eddie-edgar-ice.jpg")" data-fullwidthcentering="on">
           <div class="tp-caption large_bold_white lft"
                data-x="300"
                data-y="170"
@@ -45,7 +45,7 @@
         </li>
 
         <li data-transition="fade" data-slotamount="7" data-masterspeed="300">
-          <img src="@Url.Content("~/Content/Template/images/dummy.png")" data-lazyload="@Url.Content("~/Content/Images/eddie-edgar-building.jpg")" data-fullwidthcentering="on">
+          <img src="@Url.Content("~/Content/Template/images/dummy.png")" data-lazyload="@Url.Content("~/Content/Images/Home/eddie-edgar-building.jpg")" data-fullwidthcentering="on">
           <div class="tp-caption medium_bg_darkblue lft"
                data-x="25"
                data-y="25"
@@ -83,7 +83,7 @@
     <div class="row">
       <div class="col-md-6">
         <h2>Why Livonia Over 30?</h2>
-        <p>If you want to play hockey, you live in Livonia, and you are over 30, then you need to get into the Livonia Over 30 Hockey league. The league has been in existance since 1970.  It is loaded with tradition, families, and fun.  Through a unique rating system, draft process, and line structure, the league makes it fair and competitive for all ages (over 30) and skill levels.  The facilities are great.  The ice times are fantastic.  And the cost is just right!</p>
+        <p>If you want to play hockey, you live in Livonia, and you are over 30, then you need to get into the Livonia Over 30 Hockey league. The league has been in existance since 1970.  It is loaded with tradition, families, and fun.  Through a unique rating system, draft process, and line structure, the league makes it fair and competitive for all ages (over 30) and skill levels.  The facilities are great, the ice times are fantastic, and the cost is just right!</p>
         <h4>Game Start Times:</h4>
         <div class="row">
           <div class="col-xs-2 col-xs-offset-1">Sunday</div>
@@ -96,32 +96,40 @@
         <div class="row">
           &nbsp;
         </div>
+        <h4>Facilities:</h4>
+        <div class="row">
+          <div class="col-xs-6 col-xs-offset-1">Eddie Edgar Ice Arena</div>
+          <div class="col-xs-6 col-xs-offset-1">33841 Lyndon, Livonia, MI 48150</div>
+        </div>
+        <div class="row">
+          &nbsp;
+        </div>
       </div>
       <div id="carousel" class="col-md-6">
-        <div class="owl-carousel controlls-over" data-plugin-options='{"items": 1, "singleItem": true, "navigation": true, "pagination": true, "transitionStyle":"fadeUp"}'>
+        <div class="owl-carousel controlls-over" data-plugin-options='{"items": 1, "singleItem": true, "autoPlay": true, "navigation": false, "pagination": true, "transitionStyle":"fadeUp"}'>
           <div>
-            <img alt="" class="img-responsive" src="~/Content/Images/2011_daly.jpg">
+            <img alt="" class="img-responsive" src="~/Content/Images/Home/Teams/Team1.jpg">
           </div>
           <div>
-            <img alt="" class="img-responsive" src="~/Content/Images/2011_dg.jpg">
+            <img alt="" class="img-responsive" src="~/Content/Images/Home/Teams/Team2.jpg">
           </div>
           <div>
-            <img alt="" class="img-responsive" src="~/Content/Images/2011_dpkz.jpg">
+            <img alt="" class="img-responsive" src="~/Content/Images/Home/Teams/Team3.jpg">
           </div>
           <div>
-            <img alt="" class="img-responsive" src="~/Content/Images/2011_glover.jpg">
+            <img alt="" class="img-responsive" src="~/Content/Images/Home/Teams/Team4.jpg">
           </div>
           <div>
-            <img alt="" class="img-responsive" src="~/Content/Images/2011_hunts.jpg">
+            <img alt="" class="img-responsive" src="~/Content/Images/Home/Teams/Team5.jpg">
           </div>
           <div>
-            <img alt="" class="img-responsive" src="~/Content/Images/2011_lab.jpg">
+            <img alt="" class="img-responsive" src="~/Content/Images/Home/Teams/Team6.jpg">
           </div>
           <div>
-            <img alt="" class="img-responsive" src="~/Content/Images/2011_psi.jpg">
+            <img alt="" class="img-responsive" src="~/Content/Images/Home/Teams/Team7.jpg">
           </div>
           <div>
-            <img alt="" class="img-responsive" src="~/Content/Images/2011_zaschak.jpg">
+            <img alt="" class="img-responsive" src="~/Content/Images/Home/Teams/Team8.jpg">
           </div>
         </div>
       </div>
@@ -130,70 +138,98 @@
   <!-- /ONE NATION -->
 
 
-  <div class="divider">
+  @*<div class="divider">
     <i class="fa fa-leaf"></i>
-  </div>
+  </div>*@
 
+  <hr />
 
   <section class="container">
-    <div class="row text-center">
-      <div class="col-md-4 col-sm-6 col-xs-12 margin-top30">
+    <div class="row">
+      <div class="col-sm-5 col-xs-12">
         <figure>
-          <img class="img-responsive center-block" style="height: 200px;" src="~/Content/Images/over30_logo.gif" alt="" />
+          <img class="img-responsive center-block" style="height: 400px;" src="~/Content/Images/Logo/Lo30LogoTransparent.gif" alt="" />
         </figure>
-
-        <h3>Join the League</h3>
+      </div>
+      <div class="col-sm-7 col-xs-12">
+        <h3>Join the League (Or Sub in it)</h3>
         <p>
-          Are you a Livonia Resident? Over 30 years old? Able to commit to playing hockey Thursday and Sunday nights? Interested in playing in the <b>Best</b> hockey league in Michigan? Add your name to the wait list! Send an email to <a href="MailTo:information@livoniaover30hockey.com?subject=Add me to both the Waiting List and the Sub List">information@livoniaover30hockey.com</a> Include your full name, address, city, state, zip code, home phone number and work/cell phone number, and the name(s) of anybody currently playing in the league that know you, and a brief background of your hockey playing abilities (how many years you've played, where you last played, what position you play, approx. how good a player you are, etc.).
+          Interested in playing in the <b>Best</b> hockey league in Michigan? You must meet the criteria below to join the league.  If you can't meet all the criteria but still want to play, you can possibly sub in the league.  Currently there is a wait list to join, so sign up ASAP!
         </p>
-        <!--a href="#" class="btn btn-primary btn-xs">READ MORE</a-->
-      </div>
+        <ul>
+          <li>Livonia Resident</li>
+          <li>Over 30 years old</li>
+          <li>Commit to playing hockey Thursday and Sunday nights</li>
+        </ul>
+        <p>
+          To get your name added to the wait list and/or sub list, send an email to information@livoniaover30hockey.com with the following information:
+        </p>
+        <ul>
+          <li>EmailTo: <a href="MailTo:information@livoniaover30hockey.com?subject=I want to join the league!">information@livoniaover30hockey.com</a></li>
+          <li>Subject: I want to join the league! OR I want to sub in the league!</li>
+          <li>Full Name</li>
+          <li>Full Address (Street, City, State, Zip)</li>
+          <li>Phone Number(s) (home, work, cell - indicate best contact method/time)</li>
+          <li>Name(s) of anybody currently playing in the league that knows you</li>
+          <li>Brief background of your hockey playing abilities (years played, where you last played, position(s), approx. how good a player you are)</li>
 
-      <div class="col-md-4 col-sm-6 col-xs-12 margin-top30">
-        <figure>
-          <img class="img-responsive center-block" style="height: 200px;" src="~/Content/Images/hockey_accessories_main.jpg" alt="" />
-        </figure>
-
-        <h3>Sub in the League</h3>
-        <p>Maybe you cannot meet all the criteria for joining the league, but you are still interested in subbing.  Send an email to <a href="MailTo:information@livoniaover30hockey.com?subject=Add me to the Sub List">information@livoniaover30hockey.com</a> Include all the required info for joining the league. </p>
-        <!--a href="#" class="btn btn-primary btn-xs">READ MORE</a-->
-      </div>
-
-      <div class="col-md-4 col-sm-6 col-xs-12 margin-top30">
-        <div id="carousel">
-          <div class="owl-carousel controlls-over" data-plugin-options='{"items": 1, "singleItem": true, "navigation": true, "pagination": true, "transitionStyle":"fadeUp"}'>
-            <div>
-              <img alt="" class="img-responsive center-block" style="height: 200px;" src="~/Content/Images/sponsor_cbs.jpg">
-            </div>
-            <div>
-              <img alt="" class="img-responsive center-block" style="height: 200px;" src="~/Content/Images/sponsor_daly.jpg">
-            </div>
-            <div>
-              <img alt="" class="img-responsive center-block" style="height: 200px;" src="~/Content/Images/sponsor_dg.jpg">
-            </div>
-            <div>
-              <img alt="" class="img-responsive center-block" style="height: 200px;" src="~/Content/Images/sponsor_hunt.jpg">
-            </div>
-            <div>
-              <img alt="" class="img-responsive center-block" style="height: 200px;" src="~/Content/Images/sponsor_lab.jpg">
-            </div>
-            <div>
-              <img alt="" class="img-responsive center-block" style="height: 200px;" src="~/Content/Images/sponsor_lasalle.jpg">
-            </div>
-            <div>
-              <img alt="" class="img-responsive center-block" style="height: 200px;" src="~/Content/Images/sponsor_stante.jpg">
-            </div>
-            <div>
-              <img alt="" class="img-responsive center-block" style="height: 200px;" src="~/Content/Images/sponsor_zas_ent.jpg">
-            </div>
-          </div>
-        </div>
-
-        <h3>Sponsorships</h3>
-        <p>If you are interested in sponsoring a team in league, please send an email to <a href="MailTo:information@livoniaover30hockey.com?subject=Please contact me about sponsorship opportunities">information@livoniaover30hockey.com</a>  Include your full name, contact phone number, and best time to reach you.  You do not need to play hockey, although many of our sponsors are also league members.</p>
-        <!--a href="#" class="btn btn-primary btn-xs">READ MORE</a-->
+        </ul>
       </div>
     </div>
+
+    <hr />
+
+    <h3>Sponsorships</h3>
+    <p>If you are interested in sponsoring a team in league, please send an email to <a href="MailTo:information@livoniaover30hockey.com?subject=Please contact me about sponsorship opportunities">information@livoniaover30hockey.com</a>  Include your full name, contact phone number, and best time to reach you.  You do not need to play hockey, although many of our sponsors are also league members.</p>
+
+    <div class="owl-carousel" data-plugin-options='{"items": 5, "singleItem": false, "autoPlay": true, "navigation": false, "pagination": true}'>
+      <div class="text-center">
+        <a href="http://billbrownauto.com/" target="_blank">
+          <img class="img-responsive img-responsive-center grayscale" src="~/Content/Images/Home/Sponsors/BillBrownLogoTransparent.gif">
+        </a>
+      </div>
+      <div class="text-center">
+        <a href="http://www.d-gheatingandcooling.com/" target="_blank">
+          <img class="img-responsive img-responsive-center grayscale" src="~/Content/Images/Home/Sponsors/DandGLogoTransparent.gif" alt="">
+        </a>
+      </div>
+      <div class="text-center">
+        <a href="http://www.dpkzlaw.com/" target="_blank">
+          <img class="img-responsive img-responsive-center grayscale" src="~/Content/Images/Home/Sponsors/DPKZLogo.jpg" alt="">
+        </a>
+      </div>
+      <div class="text-center">
+        <a href="http://jeffgloverassociates.com/" target="_blank">
+          <img class="img-responsive img-responsive-center grayscale" src="~/Content/Images/Home/Sponsors/GloverLogo.PNG" alt="">
+        </a>
+      </div>
+      <div class="text-center">
+        <a href="https://store.huntsacehardware.com/inet/storefront/store.php" target="_blank">
+          <img class="img-responsive img-responsive-center grayscale" src="~/Content/Images/Home/Sponsors/HuntsLogoTransparent.gif" alt="">
+        </a>
+      </div>
+      <div class="text-center">
+        @*<a href="http://livoniaautobody.com/" target="_blank">*@
+        <img class="img-responsive img-responsive-center grayscale" src="~/Content/Images/Home/Sponsors/LABLogoTransparent.gif" alt="">
+        @*</a>*@
+      </div>
+      <div class="text-center">
+        <a href="http://www.psi-online.com/" target="_blank">
+          <img class="img-responsive img-responsive-center grayscale" src="~/Content/Images/Home/Sponsors/PSILogoTransparent.gif" alt="">
+        </a>
+      </div>
+      <div class="text-center">
+        <a href="http://villanovaconstruction.com/" target="_blank">
+          <img class="img-responsive img-responsive-center grayscale" src="~/Content/Images/Home/Sponsors/VillanovaLogoTransparent.gif" alt="">
+        </a>
+      </div>
+      <div class="text-center">
+        @*<a href="http://zaschakenterprise.com/" target="_blank">*@
+        <img class="img-responsive img-responsive-center grayscale" src="~/Content/Images/Home/Sponsors/ZaschakLogoTransparent.gif" alt="">
+        @*</a>*@
+      </div>
+    </div>
+
   </section>
 
 </div>

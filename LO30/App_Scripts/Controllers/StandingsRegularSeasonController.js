@@ -4,7 +4,8 @@
 lo30NgApp.controller('standingsRegularSeasonController',
   [
     '$scope',
-    function ($scope) {
+    '$timeout',
+    function ($scope, $timeout) {
       $scope.standings = [
         {
           seasonTeamId: 312,
@@ -287,6 +288,28 @@ lo30NgApp.controller('standingsRegularSeasonController',
       }
 
       $scope.calcWinPct();
+
+      $scope.sortAscOnly = function (column) {
+        $scope.sortOn = column;
+        $scope.sortDirection = false;
+      };
+
+      $scope.sortDescOnly = function (column) {
+        $scope.sortOn = column;
+        $scope.sortDirection = true;
+      };
+
+      $scope.setWatches = function () {
+      };
+
+      $scope.activate = function () {
+        $scope.setWatches();
+        $timeout(function () {
+          $scope.sortDescOnly('points');
+        }, 0);  // using timeout so it fires when done rendering
+      };
+
+      $scope.activate();
     }
   ]
 );

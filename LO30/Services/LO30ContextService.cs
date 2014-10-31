@@ -26,7 +26,7 @@ namespace LO30.Services
       {
         _ctx = ctx;
         _lo30DataService = new Lo30DataSerializationService();
-        _folderPath = @"C:\git\LO30\LO30\Data\SqlServer\";
+        _folderPath = @"C:\git\LO30\LO30\App_Data\SqlServer\";
       }
 
       #region SaveOrUpdate functions
@@ -2102,7 +2102,7 @@ namespace LO30.Services
       {
         var results = new ProcessingResult();
 
-        var folderPath = @"C:\git\LO30\LO30\Data\Access\";
+        var folderPath = @"C:\git\LO30\LO30\App_Data\Access\";
 
         DateTime last = DateTime.Now;
         TimeSpan diffFromLast = new TimeSpan();

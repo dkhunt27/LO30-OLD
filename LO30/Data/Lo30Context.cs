@@ -26,6 +26,7 @@ namespace LO30.Data
     }
 
     public DbSet<Address> Addresses { get; set; }
+    public DbSet<DataProcessing> DataProcessing { get; set; }
     public DbSet<Email> Emails { get; set; }
     public DbSet<EmailType> EmailTypes { get; set; }
 

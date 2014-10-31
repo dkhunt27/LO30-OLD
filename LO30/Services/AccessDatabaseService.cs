@@ -31,7 +31,7 @@ namespace LO30.Services
     public AccessDatabaseService()
     {
       _connString = System.Configuration.ConfigurationManager.ConnectionStrings["LO30AccessDB"].ConnectionString;
-      _folderPath = "C:\\git\\LO30\\LO30\\Data\\Access\\";
+      _folderPath = @"C:\git\LO30\LO30\App_Data\Access\";
     }
 
     public void SaveObjToJsonFile(dynamic obj, string destPath)

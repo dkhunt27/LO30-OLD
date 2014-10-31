@@ -2,6 +2,7 @@
 using LO30.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -23,7 +24,10 @@ namespace LO30.Data
     {
       _lo30DataSerializationService = new Lo30DataSerializationService();
 
-      var folderPath = @"C:\git\LO30\LO30\Data\SqlServer\";
+      string appRoot = Environment.GetEnvironmentVariable("RoleRoot");
+      string folderPath2 = Path.Combine(appRoot + @"\", string.Format(@"approot\{0}", "ForWebGoalieStats.json"));
+
+      var folderPath = @"C:\git\LO30\LO30\App_Data\SqlServer\";
       _webGoalieStats = _lo30DataSerializationService.FromJsonFromFile<List<ForWebGoalieStat>>(folderPath + "ForWebGoalieStats.json");
       _webPlayerStats = _lo30DataSerializationService.FromJsonFromFile<List<ForWebPlayerStat>>(folderPath + "ForWebPlayerStats.json");
       _gameOutcomes = _lo30DataSerializationService.FromJsonFromFile<List<GameOutcome>>(folderPath + "GameOutcomes.json");
