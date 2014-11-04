@@ -53,11 +53,11 @@ namespace LO30.Data.Objects
       string contents = File.ReadAllText(filePath);
       dynamic parsedJson = JsonConvert.DeserializeObject(contents);
       int count = parsedJson.Count;
-      Debug.Print(string.Format("{0}: {1} Count:", functionName, className, count));
+      Debug.Print(string.Format("{0}: {1} Count: {2}", functionName, className, count));
 
       for (var d = 0; d < parsedJson.Count; d++)
       {
-        if (d > 0 && d % 100 == 0) Debug.Print(string.Format("{0}: {1} Processed:", functionName, className, d));
+        if (d > 0 && d % 100 == 0) Debug.Print(string.Format("{0}: {1} Processed: {2}", functionName, className, d));
 
         var json = parsedJson[d];
 

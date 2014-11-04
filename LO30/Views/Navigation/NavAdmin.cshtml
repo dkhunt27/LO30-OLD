@@ -105,7 +105,7 @@
           Score Sheets <i class="fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu" role="menu">
-          <li>@Html.ActionLink("Entry", "Index", "ScoreSheet", new { area = "ScoreSheet" })</li>
+          <li><a href="/Ng/#/ScoreSheet">Entry</a></li>
         </ul>
       </li>
       <li id="Admin" class="dropdown">
@@ -113,12 +113,13 @@
           Admin <i class="fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
+          <li>@Html.ActionLink("Settings", "List", "AdminSettings", new { area = "" }, null)</li>
+          <li class="divider"></li>
           <li>@Html.ActionLink("Game Result", "GameResult", "Admin", new { area = "" }, null)</li>
           <li>@Html.ActionLink("Game Roster", "GameRoster", "Admin", new { area = "" }, null)</li>
           <li>@Html.ActionLink("Game Sheet", "GameSheet", "Admin", new { area = "" }, null)</li>
-          <li>@Html.ActionLink("Score Sheet Entry", "ScoreSheetEntry", "ScoreSheetEntry", new { area = "" }, null)</li>
           <li class="divider"></li>
-          <li>@Html.ActionLink("Data Processing", "Index", "AdminDataProcessing", new { area = "AdminDataProcessing" }, null)</li>
+          <li><a href="/Ng/#/Admin/DataProcessing">Data Processing</a></li>
           <li class="divider"></li>
           <li>@Html.ActionLink("Registration", "Registration", "Admin", new { area = "" }, null)</li>
           <li class="divider"></li>

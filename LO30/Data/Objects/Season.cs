@@ -18,7 +18,13 @@ namespace LO30.Data.Objects
     [Required]
     public bool IsCurrentSeason { get; set; }
 
-    public DateTime? StartDate { get; set; }
-    public DateTime? EndDate { get; set; }
+    //TODO..add back the PK2 is unique
+    //[Required, Index("PK2", 2, IsUnique = true)]
+    [Required]
+    public int StartYYYYMMDD { get; set; }
+
+    //[Required, Index("PK2", 3, IsUnique = true)]
+    [Required]
+    public int EndYYYYMMDD { get; set; }
   }
 }

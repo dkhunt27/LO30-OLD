@@ -9,6 +9,12 @@ lo30NgApp.controller('statsPlayersController',
     'dataServiceForWebPlayerStats',
     function ($scope, $timeout, alertService, dataServiceForWebPlayerStats) {
 
+      var alertTitleDataRetrievalSuccessful = "Data Retrieval Successful";
+      var alertTitleDataRetrievalUnsuccessful = "Data Retrieval Unsuccessful";
+      var alertMessageTemplateRetrievalSuccessful = "Retrieved <%=retrievedType%>, Length: <%=retrievedLength%>";
+      var alertMessageTemplateRetrievalUnsuccessful = "Received following error trying to retrieve <%=retrievedType%>. Error:<%=retrievedError%>";
+      var alertMessage;
+
       $scope.filterByTeam = function (team) {
         var existingSearch = "team:" + $scope.filterByTeamMapper($scope.user.selectedTeam);
         var newSearch = "team:" + $scope.filterByTeamMapper(team);

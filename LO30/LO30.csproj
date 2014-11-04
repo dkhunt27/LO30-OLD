@@ -41,6 +41,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah.Mvc">
+      <HintPath>..\packages\Elmah.MVC.2.1.1\lib\net40\Elmah.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
@@ -56,6 +63,17 @@
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AzureSDK2.2DLLs.1.0.0\lib\Microsoft.WindowsAzure.Diagnostics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\AzureSDK2.2DLLs.1.0.0\lib\Microsoft.WindowsAzure.ServiceRuntime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.StorageClient">
+      <HintPath>..\packages\AzureSDK2.2DLLs.1.0.0\lib\Microsoft.WindowsAzure.StorageClient.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.2.0.0\lib\net45-full\Ninject.dll</HintPath>
@@ -205,16 +223,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AdminSettingsController.cs" />
     <Content Include="App_Code\OleDbMembershipProvider.cs" />
     <Content Include="App_Code\OleDbRoleProvider.cs" />
-    <Content Include="App_Scripts\Controllers\AdminDataProcessingController.js" />
-    <Content Include="App_Scripts\Controllers\StandingsPlayoffsController.js" />
-    <Content Include="App_Scripts\Controllers\StatsGoaliesController.js" />
+    <Content Include="App_Readme\Elmah.txt" />
+    <Content Include="App_Scripts\Controllers\Admin\SettingsController.js" />
+    <Content Include="App_Scripts\Controllers\Admin\DataProcessingController.js" />
+    <Content Include="App_Scripts\Controllers\Standings\PlayoffsController.js" />
+    <Content Include="App_Scripts\Controllers\Stats\GoaliesController.js" />
     <Content Include="App_Scripts\Controllers\NewsController.js" />
-    <Content Include="App_Scripts\Controllers\StatsPlayersController.js" />
+    <Content Include="App_Scripts\Controllers\Stats\PlayersController.js" />
     <Content Include="App_Scripts\Controllers\RootController.js" />
-    <Content Include="App_Scripts\Controllers\HomeController.js" />
-    <Content Include="App_Scripts\Controllers\StandingsRegularSeasonController.js" />
+    <Content Include="App_Scripts\Controllers\Home\HomeController.js" />
+    <Content Include="App_Scripts\Controllers\Standings\RegularSeasonController.js" />
     <Content Include="App_Scripts\Directives\GameRoster.js" />
     <Content Include="App_Scripts\Filters\FilterizeFilter.js" />
     <Content Include="App_Scripts\Filters\PercentageFilter.js" />
@@ -222,9 +243,11 @@
     <Content Include="App_Scripts\Controllers\ScoreSheetController.js" />
     <Content Include="App_Scripts\Services\AdminDataProcessingService.js" />
     <Content Include="App_Scripts\Services\AlertService.js" />
+    <Content Include="App_Scripts\Services\DataServiceForWebTeamStandings.js" />
     <Content Include="App_Scripts\Services\DataServiceForWebPlayerStats.js" />
     <Content Include="App_Scripts\Services\DataServiceGameRosters.js" />
     <Content Include="App_Scripts\Services\DataServiceForWebGoalieStats.js" />
+    <Content Include="App_Scripts\Services\DataServiceSettings.js" />
     <Content Include="App_Scripts\Services\DataServiceGames.js" />
     <Content Include="App_Scripts\Services\ScoreSheetService.js" />
     <Content Include="App_Start\CSharpRazorViewEngine.cs" />
@@ -243,6 +266,8 @@
     <Compile Include="Controllers\NgController.cs" />
     <Compile Include="Controllers\ScoreSheetEntryController.cs" />
     <Compile Include="Controllers\NavigationController.cs" />
+    <Compile Include="Controllers\WebApi\Data\ForWebTeamStandingsController.cs" />
+    <Compile Include="Controllers\WebApi\Data\SettingsController.cs" />
     <Compile Include="Controllers\WebApi\Admin\DataProcessingController.cs" />
     <Compile Include="Controllers\WebApi\Data\GameRosterController.cs" />
     <Compile Include="Controllers\WebApi\Data\GameRostersController.cs" />
@@ -262,9 +287,13 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AboutUsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Data\Lo30Repository.Settings.cs" />
     <Compile Include="Data\Lo30RepositoryMock.cs" />
     <Compile Include="Data\Objects\DataProcessing.cs" />
+    <Compile Include="Data\Objects\ForWebTeamStanding.cs" />
     <Compile Include="Data\Objects\ProcessingResult.cs" />
+    <Compile Include="Data\Objects\Setting.cs" />
+    <Compile Include="Models\DataServiceModels.cs" />
     <Compile Include="Models\AdminModels.cs" />
     <Compile Include="Areas\AdminDataProcessing\AdminDataProcessingModels.cs" />
     <Compile Include="Services\Lo30DataSerializationService.cs" />
@@ -2149,6 +2178,7 @@
     <Content Include="Scripts\slider_revolution.min.js">
       <DependentUpon>slider_revolution.js</DependentUpon>
     </Content>
+    <Content Include="Templates\Admin\Settings.html" />
     <Content Include="Templates\Directives\GameRoster.html" />
     <Content Include="Templates\ScoreSheetAngular.html" />
     <Content Include="Templates\articlesView.html" />
@@ -2167,7 +2197,7 @@
     <Content Include="Content\Images\Misc\orderedList7.png" />
     <Content Include="Content\Images\Misc\orderedList8.png" />
     <Content Include="Content\Images\Misc\orderedList9.png" />
-    <Content Include="Templates\AdminDataProcessingAngular.html" />
+    <Content Include="Templates\Admin\DataProcessing.html" />
     <Content Include="Templates\Standings\Playoffs.html" />
     <Content Include="Templates\Standings\RegularSeason.html" />
     <Content Include="Templates\Stats\Goalies.html" />
@@ -2248,6 +2278,11 @@
     <Content Include="Templates\Home\Index.html" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Ng\Index.cshtml" />
+    <Content Include="Views\AdminSettings\List.cshtml" />
+    <Content Include="Views\AdminSettings\Edit.cshtml" />
+    <Content Include="Views\AdminSettings\Create.cshtml" />
+    <Content Include="Views\AdminSettings\Details.cshtml" />
+    <Content Include="Views\AdminSettings\Delete.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

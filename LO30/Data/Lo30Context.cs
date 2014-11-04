@@ -32,6 +32,7 @@ namespace LO30.Data
 
     public DbSet<ForWebGoalieStat> ForWebGoalieStats { get; set; }
     public DbSet<ForWebPlayerStat> ForWebPlayerStats { get; set; }
+    public DbSet<ForWebTeamStanding> ForWebTeamStandings { get; set; }
 
     public DbSet<Game> Games { get; set; }
     public DbSet<GameOutcome> GameOutcomes { get; set; }
@@ -66,6 +67,7 @@ namespace LO30.Data
     public DbSet<ScoreSheetEntryPenaltyProcessed> ScoreSheetEntryPenaltiesProcessed { get; set; }
     public DbSet<Season> Seasons { get; set; }
     public DbSet<SeasonTeam> SeasonTeams { get; set; }
+    public DbSet<Setting> Settings { get; set; }
     public DbSet<Sponsor> Sponsors { get; set; }
     public DbSet<SponsorEmail> SponsorEmails { get; set; }
     public DbSet<SponsorPhone> SponsorPhones { get; set; }

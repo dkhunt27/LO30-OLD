@@ -5,7 +5,8 @@ lo30NgApp.factory("newsService",
   [
     "$http",
     "$q",
-    function ($http, $q) {
+    'constApisUrl',
+    function ($http, $q, constApisUrl) {
 
       var _articles = [];
       var _isInit = false;
@@ -18,7 +19,7 @@ lo30NgApp.factory("newsService",
 
         var deferred = $q.defer();
 
-        $http.get("/api/v1/articles")
+        $http.get(constApisUrl + "/articles")
           .then(function (result) {
             // Successful
             angular.copy(result.data, _articles);
@@ -36,7 +37,7 @@ lo30NgApp.factory("newsService",
       var _addArticle = function (newArticle) {
         var deferred = $q.defer();
 
-        $http.post("/api/v1/articles", newArticle)
+        $http.post(constApisUrl + "/articles", newArticle)
          .then(function (result) {
            // success
            var newlyCreatedArticle = result.data;

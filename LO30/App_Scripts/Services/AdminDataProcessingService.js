@@ -4,9 +4,10 @@
 lo30NgApp.factory("adminDataProcessingService",
   [
     "$resource",
-    function ($resource) {
+    'constApisUrl',
+    function ($resource, constApisUrl) {
 
-      var resource = $resource('/api/v1/dataProcessing');
+      var resource = $resource(constApisUrl + '/dataProcessing');
 
       var postAction = function (model) {
         return resource.save({}, model);

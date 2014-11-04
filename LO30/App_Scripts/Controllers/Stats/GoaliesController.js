@@ -7,7 +7,8 @@ lo30NgApp.controller('statsGoaliesController',
     '$timeout',
     'alertService',
     'dataServiceForWebGoalieStats',
-    function ($scope, $timeout, alertService, dataServiceForWebGoalieStats) {
+    'dataServiceSettings',
+    function ($scope, $timeout, alertService, dataServiceForWebGoalieStats, dataServiceSettings) {
 
       var alertTitleDataRetrievalSuccessful = "Data Retrieval Successful";
       var alertTitleDataRetrievalUnsuccessful = "Data Retrieval Unsuccessful";
@@ -250,7 +251,9 @@ lo30NgApp.controller('statsGoaliesController',
         ];
 
         $scope.data = {
-          goalieStats: []
+          goalieStats: [],
+          villaExchangeRateOn: false,
+          villaExchangeRate: 1
         };
 
         $scope.requests = {
@@ -277,6 +280,11 @@ lo30NgApp.controller('statsGoaliesController',
             if (result && result.length && result.length > 0) {
 
               angular.forEach(result, function (item) {
+
+                if ($scope.data.villaExchangeRateOn && item.player === "Brad Villa") {
+                  item.ga = Math.round(item.ga * $scope.data.villaExchangeRate) + "*";
+                  item.gaa = item.gaa * $scope.data.villaExchangeRate;
+                }
                 $scope.data.goalieStats.push(item);
               });
 
@@ -296,12 +304,48 @@ lo30NgApp.controller('statsGoaliesController',
         );
       };
 
+      $scope.getSettings = function () {
+        var retrievedType = "Settings";
+
+        dataServiceSettings.getSettings().$promise.then(
+          function (result) {
+            // service call on success
+            if (result && result.length && result.length > 0) {
+
+              angular.forEach(result, function (item) {
+                if (item.settingName === "VillaExchangeRateOn") {
+                  if (item.settingValue === "1" || item.settingValue === 1) {
+                    $scope.data.villaExchangeRateOn = true;
+                  } else {
+                    $scope.data.villaExchangeRateOn = false;
+                  }
+                }
+
+                if (item.settingName === "VillaExchangeRate") {
+                  $scope.data.villaExchangeRate = parseFloat(item.settingValue, 10);
+                }
+              });
+
+              alertMessage = _.template(alertMessageTemplateRetrievalSuccessful)({ retrievedType: retrievedType, retrievedLength: 1 });
+              alertService.info(alertMessage, alertTitleDataRetrievalSuccessful);
+
+            } else {
+              // results not successful
+              alertMessage = _.template(alertMessageTemplateRetrievalUnsuccessful)({ retrievedType: retrievedType, retrievedError: result.reason });
+              alertService.error(alertMessage, alertTitleDataRetrievalUnsuccessful);
+            }
+          }
+        );
+      };
+
       $scope.setWatches = function () {
       };
 
       $scope.activate = function () {
+        $scope.initializeScopeVariables();
         $scope.setWatches();
         $scope.getForWebGoalieStats();
+        $scope.getSettings();
         $timeout(function () {
           $scope.sortAscOnly('gaa');
           $scope.filterBySub("Without");

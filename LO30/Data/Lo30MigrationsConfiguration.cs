@@ -26,8 +26,9 @@ namespace LO30.Data
     protected override void Seed(Lo30Context context)
     {
       base.Seed(context);
-      Lo30ContextSeed seeder = new Lo30ContextSeed();
-      seeder.Seed(context);
+      Lo30ContextService contextService = new Lo30ContextService(context);
+      Lo30ContextSeed seeder = new Lo30ContextSeed(context, contextService);
+      seeder.Seed();
     }
   }
 }

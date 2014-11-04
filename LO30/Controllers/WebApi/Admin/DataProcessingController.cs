@@ -19,11 +19,11 @@ namespace LO30.Controllers.Admin
     private AccessDatabaseService _accessDbService;
     private Lo30ContextService _contextService;
 
-    public DataProcessingController(ILo30Repository repo, Lo30Context context)
+    public DataProcessingController(ILo30Repository repo, Lo30ContextService contextService)
     {
       _repo = repo;
       _accessDbService = new AccessDatabaseService();
-      _contextService = new Lo30ContextService(context);
+      _contextService = contextService;
     }
 
     public HttpResponseMessage Get()
@@ -114,6 +114,14 @@ namespace LO30.Controllers.Admin
           if (string.IsNullOrWhiteSpace(results.error))
           {
             result1 = _contextService.LoadScoreSheetEntryPenaltiesFromAccessDBJson();
+            results.error = result1.error;
+            results.toProcess += result1.toProcess;
+            results.modified += result1.modified;
+          }
+
+          if (string.IsNullOrWhiteSpace(results.error))
+          {
+            result1 = _contextService.LoadGameRostersFromAccessDBJson();
             results.error = result1.error;
             results.toProcess += result1.toProcess;
             results.modified += result1.modified;

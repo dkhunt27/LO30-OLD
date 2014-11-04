@@ -17,19 +17,34 @@ namespace LO30.Controllers.Data
     public List<GameRoster> GetGameRosters()
     {
       var results = _repo.GetGameRosters();
-      return results.OrderByDescending(x => x.GameTeam.GameId).ToList();
+      return results.OrderByDescending(x => x.GameTeam.GameId)
+                    .OrderBy(x => x.Line)
+                    .OrderByDescending(x => x.Position)
+                    .OrderBy(x => x.RatingPrimary)
+                    .OrderBy(x => x.RatingSecondary)
+                    .ToList();
     }
 
     public List<GameRoster> GetGameRostersByGameId(int gameId)
     {
       var results = _repo.GetGameRostersByGameId(gameId);
-      return results.OrderByDescending(x => x.GameTeam.GameId).ToList();
+      return results.OrderByDescending(x => x.GameTeam.GameId)
+                    .OrderBy(x=>x.Line)
+                    .OrderByDescending(x=>x.Position)
+                    .OrderBy(x=>x.RatingPrimary)
+                    .OrderBy(x=>x.RatingSecondary)
+                    .ToList();
     }
 
     public List<GameRoster> GetGameRostersByGameIdAndHomeTeam(int gameId, bool homeTeam)
     {
       var results = _repo.GetGameRostersByGameIdAndHomeTeam(gameId, homeTeam);
-      return results.OrderByDescending(x => x.GameTeam.GameId).ToList();
+      return results.OrderByDescending(x => x.GameTeam.GameId)
+                    .OrderBy(x => x.Line)
+                    .OrderByDescending(x => x.Position)
+                    .OrderBy(x => x.RatingPrimary)
+                    .OrderBy(x => x.RatingSecondary)
+                    .ToList();
     }
   }
 }

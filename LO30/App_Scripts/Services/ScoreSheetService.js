@@ -5,12 +5,13 @@ lo30NgApp.factory("scoreSheetService",
   [
     "MOCK_SERVICES",
     "$resource",
-    function (MOCK_SERVICES, $resource) {
+    'constApisUrl',
+    function (MOCK_SERVICES, $resource, constApisUrl) {
 
       if (MOCK_SERVICES) {
 
       } else {
-        var resource = $resource('/api/v1/scoreSheet');
+        var resource = $resource(constApisUrl + '/scoreSheet');
 
         var postAction = function (model) {
           return resource.save({}, model);

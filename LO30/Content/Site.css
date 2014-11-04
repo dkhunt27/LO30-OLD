@@ -20,6 +20,7 @@ color: #1980B6;
 font-weight: 700;
 }
 
+.table-dk-blue > thead > tr > th,
 .table-dk-blue > thead > tr > td {
 color: #fff;
 background-color: #1980B6;

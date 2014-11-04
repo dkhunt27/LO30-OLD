@@ -17,7 +17,7 @@ namespace LO30
       var jsonFormatter = config.Formatters.OfType<JsonMediaTypeFormatter>().First();
       jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
-      var constApisUrl = "api/v1";
+      var constApisUrl = "api/v2";
 
       config.Routes.MapHttpRoute(
           name: "ApiGameRosters",

@@ -9,13 +9,13 @@ namespace LO30.Data.Objects
 {
   public class PlayerStatSeason
   {
-    [Required, Key, Column(Order = 0), ForeignKey("Player")]
+    [Required, Key, Column(Order = 1), ForeignKey("Player")]
     public int PlayerId { get; set; }
 
-    [Required, Key, Column(Order = 1), ForeignKey("Season")]
+    [Required, Key, Column(Order = 2), ForeignKey("Season")]
     public int SeasonId { get; set; }
 
-    [Required, Key, Column(Order = 2)]
+    [Required, Key, Column(Order = 3)]
     public bool Sub { get; set; }
     
     [Required]

@@ -1,5 +1,6 @@
 ﻿using LO30.Data.Objects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -469,7 +470,61 @@ namespace LO30.Services.Tests
       AssertAreEqualGoalieStatGameLists(expected, goalieGameStatsPartial);
     }
     #endregion
-    
+
+    #region ConvertYYYYMMDDIntoDateTime
+    [TestMethod()]
+    public void ConvertYYYYMMDDIntoDateTime_TooSmall()
+    {
+      try
+      {
+        int yyyymmdd = 2012;
+        var result = _lo30DataService.ConvertYYYYMMDDIntoDateTime(yyyymmdd);
+        Assert.Fail("Expecting exception to be thrown");
+      }
+      catch (Exception ex)
+      {
+        Assert.AreEqual(typeof(ArgumentOutOfRangeException), ex.GetType(), "Error type");
+        Assert.IsTrue(ex.Message.Contains("Must be length of 8"), "Error message");
+      }
+    }
+    public void ConvertYYYYMMDDIntoDateTime_TooLong()
+    {
+      try
+      {
+        int yyyymmdd = 2012101112;
+        var result = _lo30DataService.ConvertYYYYMMDDIntoDateTime(yyyymmdd);
+        Assert.Fail("Expecting exception to be thrown");
+      }
+      catch (Exception ex)
+      {
+        Assert.AreEqual(typeof(ArgumentOutOfRangeException), ex.GetType(), "Error type");
+        Assert.IsTrue(ex.Message.Contains("Must be length of 8"), "Error message");
+      }
+    }
+    public void ConvertYYYYMMDDIntoDateTime_Correct()
+    {
+        int yyyymmdd = 19770223;
+        var result = _lo30DataService.ConvertYYYYMMDDIntoDateTime(yyyymmdd);
+        Assert.AreEqual(new DateTime(1977, 2, 23), result, "Result");
+    }
+    #endregion
+
+    #region ConvertDateTimeIntoYYYYMMDD
+    [TestMethod()]
+    public void ConvertDateTimeIntoYYYYMMDD_Null()
+    {
+      DateTime? input = null;
+      var result = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(input);
+      Assert.AreEqual(12345678, result, "Result");
+    }
+    public void ConvertDateTimeIntoYYYYMMDD_Correct()
+    {
+      DateTime? input = new DateTime(1977, 2, 23);
+      var result = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(input);
+      Assert.AreEqual(19770223, result, "Result");
+    }
+    #endregion
+
     #region Asserts
     private void AssertAreEqualPlayerStatGameLists(List<PlayerStatGame> expected, List<PlayerStatGame> actual)
     {

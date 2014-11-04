@@ -19,13 +19,15 @@ namespace LO30.Services
     public class Lo30ContextService
     {
       Lo30Context _ctx;
-      private Lo30DataSerializationService _lo30DataService;
+      private Lo30DataSerializationService _lo30DataSerializationService;
+      private Lo30DataService _lo30DataService;
       private string _folderPath;
 
       public Lo30ContextService(Lo30Context ctx)
       {
         _ctx = ctx;
-        _lo30DataService = new Lo30DataSerializationService();
+        _lo30DataService = new Lo30DataService();
+        _lo30DataSerializationService = new Lo30DataSerializationService();
         _folderPath = @"C:\git\LO30\LO30\App_Data\SqlServer\";
       }
 
@@ -46,7 +48,9 @@ namespace LO30.Services
 
       public int SaveOrUpdateForWebGoalieStat(ForWebGoalieStat toSave)
       {
-        ForWebGoalieStat found = FindForWebGoalieStat(errorIfNotFound: false, errorIfMoreThanOneFound: true, pid: toSave.PID, stidpf: toSave.STIDPF);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        ForWebGoalieStat found = FindForWebGoalieStat(errorIfNotFound, errorIfMoreThanOneFound, toSave.PID, toSave.STIDPF);
 
         if (found == null)
         {
@@ -78,11 +82,47 @@ namespace LO30.Services
 
       public int SaveOrUpdateForWebPlayerStat(ForWebPlayerStat toSave)
       {
-        ForWebPlayerStat found = FindForWebPlayerStat(errorIfNotFound: false, errorIfMoreThanOneFound: true, pid: toSave.PID, stidpf: toSave.STIDPF);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        ForWebPlayerStat found = FindForWebPlayerStat(errorIfNotFound, errorIfMoreThanOneFound, toSave.PID, toSave.STIDPF);
 
         if (found == null)
         {
           _ctx.ForWebPlayerStats.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
+      #region SaveOrUpdate-ForWebTeamStanding
+      public int SaveOrUpdateForWebTeamStanding(List<ForWebTeamStanding> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateForWebTeamStanding(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateForWebTeamStanding(ForWebTeamStanding toSave)
+      {
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        ForWebTeamStanding found = FindForWebTeamStanding(errorIfNotFound, errorIfMoreThanOneFound, toSave.STID);
+
+        if (found == null)
+        {
+          _ctx.ForWebTeamStandings.Add(toSave);
         }
         else
         {
@@ -110,7 +150,9 @@ namespace LO30.Services
 
       public int SaveOrUpdateGame(Game toSave)
       {
-        Game found = FindGame(errorIfNotFound: false, errorIfMoreThanOneFound: true, gameId: toSave.GameId);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        Game found = FindGame(errorIfNotFound, errorIfMoreThanOneFound, toSave.GameId);
 
         if (found == null)
         {
@@ -142,7 +184,9 @@ namespace LO30.Services
 
       public int SaveOrUpdateGameOutcome(GameOutcome toSave)
       {
-        GameOutcome found = FindGameOutcome(errorIfNotFound: false, errorIfMoreThanOneFound: true, gameTeamId: toSave.GameTeamId);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        GameOutcome found = FindGameOutcome(errorIfNotFound, errorIfMoreThanOneFound, toSave.GameTeamId);
 
         if (found == null)
         {
@@ -174,7 +218,27 @@ namespace LO30.Services
 
       public int SaveOrUpdateGameRoster(GameRoster toSave)
       {
-        GameRoster found = FindGameRoster(errorIfNotFound: false, errorIfMoreThanOneFound: true, gameRosterId: toSave.GameRosterId);
+        GameRoster found;
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+
+        // lookup by PK, if it exists
+        if (toSave.GameRosterId > 0)
+        {
+          found = FindGameRoster(errorIfNotFound, errorIfMoreThanOneFound, toSave.GameRosterId);
+        }
+        else
+        {
+          // lookup by PK2
+          found = FindGameRosterByPK2(errorIfNotFound, errorIfMoreThanOneFound, toSave.GameTeamId, toSave.PlayerNumber);
+
+          // if found, set missing PK
+          if (found != null)
+          {
+            toSave.GameRosterId = found.GameRosterId;
+          }
+        }
+
 
         if (found == null)
         {
@@ -207,16 +271,18 @@ namespace LO30.Services
       public int SaveOrUpdateGameScore(GameScore toSave)
       {
         GameScore found;
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
 
         // lookup by PK, if it exists
         if (toSave.GameScoreId > 0)
         {
-          found = FindGameScore(errorIfNotFound: false, errorIfMoreThanOneFound: true, gameScoreId: toSave.GameScoreId);
+          found = FindGameScore(errorIfNotFound, errorIfMoreThanOneFound, toSave.GameScoreId);
         }
         else
         {
           // lookup by PK2
-          found = FindGameScoreByPK2(errorIfNotFound: false, errorIfMoreThanOneFound: true, gameTeamId: toSave.GameTeamId, period: toSave.Period);
+          found = FindGameScoreByPK2(errorIfNotFound, errorIfMoreThanOneFound, toSave.GameTeamId, toSave.Period);
 
           // if found, set missing PK
           if (found != null)
@@ -256,16 +322,18 @@ namespace LO30.Services
       public int SaveOrUpdateGameTeam(GameTeam toSave)
       {
         GameTeam found;
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
 
         // lookup by PK, if it exists
         if (toSave.GameTeamId > 0)
         {
-          found = FindGameTeam(errorIfNotFound: false, errorIfMoreThanOneFound: true, gameTeamId: toSave.GameTeamId);
+          found = FindGameTeam(errorIfNotFound, errorIfMoreThanOneFound, toSave.GameTeamId);
         }
         else
         {
           // lookup by PK2
-          found = FindGameTeamByPK2(errorIfNotFound: false, errorIfMoreThanOneFound: true, gameId: toSave.GameId, homeTeam: toSave.HomeTeam);
+          found = FindGameTeamByPK2(errorIfNotFound, errorIfMoreThanOneFound, toSave.GameId, toSave.HomeTeam);
 
           // if found, set missing PK
           if (found != null)
@@ -304,7 +372,9 @@ namespace LO30.Services
 
       public int SaveOrUpdateGoalieStatGame(GoalieStatGame toSave)
       {
-        GoalieStatGame found = FindGoalieStatGame(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: toSave.PlayerId, gameId: toSave.GameId);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        GoalieStatGame found = FindGoalieStatGame(errorIfNotFound, errorIfMoreThanOneFound, toSave.PlayerId, toSave.GameId);
 
         if (found == null)
         {
@@ -336,7 +406,9 @@ namespace LO30.Services
 
       public int SaveOrUpdateGoalieStatSeason(GoalieStatSeason toSave)
       {
-        GoalieStatSeason found = FindGoalieStatSeason(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: toSave.PlayerId, seasonId: toSave.SeasonId, sub: toSave.Sub);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        GoalieStatSeason found = FindGoalieStatSeason(errorIfNotFound, errorIfMoreThanOneFound, toSave.PlayerId, toSave.SeasonId, toSave.Sub);
 
         if (found == null)
         {
@@ -368,7 +440,9 @@ namespace LO30.Services
 
       public int SaveOrUpdateGoalieStatSeasonTeam(GoalieStatSeasonTeam toSave)
       {
-        GoalieStatSeasonTeam found = FindGoalieStatSeasonTeam(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: toSave.PlayerId, seasonTeamIdPlayingFor: toSave.SeasonTeamIdPlayingFor);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        GoalieStatSeasonTeam found = FindGoalieStatSeasonTeam(errorIfNotFound, errorIfMoreThanOneFound, toSave.PlayerId, toSave.SeasonTeamIdPlayingFor);
 
         if (found == null)
         {
@@ -400,7 +474,9 @@ namespace LO30.Services
 
       public int SaveOrUpdatePlayer(Player toSave)
       {
-        Player found = FindPlayer(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: toSave.PlayerId);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        Player found = FindPlayer(errorIfNotFound, errorIfMoreThanOneFound, toSave.PlayerId);
 
         if (found == null)
         {
@@ -432,7 +508,9 @@ namespace LO30.Services
 
       public int SaveOrUpdatePlayerDraft(PlayerDraft toSave)
       {
-        PlayerDraft found = FindPlayerDraft(errorIfNotFound: false, errorIfMoreThanOneFound: true, seasonId: toSave.SeasonId, playerId: toSave.PlayerId);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        PlayerDraft found = FindPlayerDraft(errorIfNotFound, errorIfMoreThanOneFound, toSave.SeasonId, toSave.PlayerId);
 
         if (found == null)
         {
@@ -465,7 +543,9 @@ namespace LO30.Services
 
       public int SaveOrUpdatePlayerRating(PlayerRating toSave)
       {
-        PlayerRating found = FindPlayerRating(errorIfNotFound: false, errorIfMoreThanOneFound: true, seasonId: toSave.SeasonId, playerId: toSave.PlayerId);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        PlayerRating found = FindPlayerRating(errorIfNotFound, errorIfMoreThanOneFound, toSave.SeasonId, toSave.PlayerId, toSave.StartYYYYMMDD, toSave.EndYYYYMMDD);
 
         if (found == null)
         {
@@ -498,7 +578,9 @@ namespace LO30.Services
 
       public int SaveOrUpdatePlayerStatGame(PlayerStatGame toSave)
       {
-        PlayerStatGame found = FindPlayerStatGame(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: toSave.PlayerId, gameId: toSave.GameId);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        PlayerStatGame found = FindPlayerStatGame(errorIfNotFound, errorIfMoreThanOneFound, toSave.PlayerId, toSave.GameId);
 
         if (found == null)
         {
@@ -530,7 +612,9 @@ namespace LO30.Services
 
       public int SaveOrUpdatePlayerStatSeason(PlayerStatSeason toSave)
       {
-        PlayerStatSeason found = FindPlayerStatSeason(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: toSave.PlayerId, seasonId: toSave.SeasonId, sub: toSave.Sub);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        PlayerStatSeason found = FindPlayerStatSeason(errorIfNotFound, errorIfMoreThanOneFound, toSave.PlayerId, toSave.SeasonId, toSave.Sub);
 
         if (found == null)
         {
@@ -562,7 +646,9 @@ namespace LO30.Services
 
       public int SaveOrUpdatePlayerStatSeasonTeam(PlayerStatSeasonTeam toSave)
       {
-        PlayerStatSeasonTeam found = FindPlayerStatSeasonTeam(errorIfNotFound: false, errorIfMoreThanOneFound: true, playerId: toSave.PlayerId, seasonTeamIdPlayingFor: toSave.SeasonTeamIdPlayingFor);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        PlayerStatSeasonTeam found = FindPlayerStatSeasonTeam(errorIfNotFound, errorIfMoreThanOneFound, toSave.PlayerId, toSave.SeasonTeamIdPlayingFor);
 
         if (found == null)
         {
@@ -594,7 +680,9 @@ namespace LO30.Services
 
       public int SaveOrUpdateScoreSheetEntry(ScoreSheetEntry toSave)
       {
-        ScoreSheetEntry found = FindScoreSheetEntry(errorIfNotFound: false, errorIfMoreThanOneFound: true, scoreSheetEntryId: toSave.ScoreSheetEntryId);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        ScoreSheetEntry found = FindScoreSheetEntry(errorIfNotFound, errorIfMoreThanOneFound, toSave.ScoreSheetEntryId);
 
         if (found == null)
         {
@@ -626,7 +714,9 @@ namespace LO30.Services
 
       public int SaveOrUpdateScoreSheetEntryPenalty(ScoreSheetEntryPenalty toSave)
       {
-        ScoreSheetEntryPenalty found = FindScoreSheetEntryPenalty(errorIfNotFound: false, errorIfMoreThanOneFound: true, scoreSheetEntryPenaltyId: toSave.ScoreSheetEntryPenaltyId);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        ScoreSheetEntryPenalty found = FindScoreSheetEntryPenalty(errorIfNotFound, errorIfMoreThanOneFound, toSave.ScoreSheetEntryPenaltyId);
 
         if (found == null)
         {
@@ -658,7 +748,9 @@ namespace LO30.Services
 
       public int SaveOrUpdateScoreSheetEntryProcessed(ScoreSheetEntryProcessed toSave)
       {
-        ScoreSheetEntryProcessed found = FindScoreSheetEntryProcessed(errorIfNotFound: false, errorIfMoreThanOneFound: true, scoreSheetEntryId: toSave.ScoreSheetEntryId);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        ScoreSheetEntryProcessed found = FindScoreSheetEntryProcessed(errorIfNotFound, errorIfMoreThanOneFound, toSave.ScoreSheetEntryId);
 
         if (found == null)
         {
@@ -690,11 +782,47 @@ namespace LO30.Services
 
       public int SaveOrUpdateScoreSheetEntryPenaltyProcessed(ScoreSheetEntryPenaltyProcessed toSave)
       {
-        ScoreSheetEntryPenaltyProcessed found = FindScoreSheetEntryPenaltyProcessed(errorIfNotFound: false, errorIfMoreThanOneFound: true, scoreSheetEntryPenaltyId: toSave.ScoreSheetEntryPenaltyId);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        ScoreSheetEntryPenaltyProcessed found = FindScoreSheetEntryPenaltyProcessed(errorIfNotFound, errorIfMoreThanOneFound, toSave.ScoreSheetEntryPenaltyId);
 
         if (found == null)
         {
           _ctx.ScoreSheetEntryPenaltiesProcessed.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
+      #region SaveOrUpdate-Season
+      public int SaveOrUpdateSeason(List<Season> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateSeason(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateSeason(Season toSave)
+      {
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        Season found = FindSeason(errorIfNotFound, errorIfMoreThanOneFound, toSave.SeasonId);
+
+        if (found == null)
+        {
+          _ctx.Seasons.Add(toSave);
         }
         else
         {
@@ -722,11 +850,47 @@ namespace LO30.Services
 
       public int SaveOrUpdateSeasonTeam(SeasonTeam toSave)
       {
-        SeasonTeam found = FindSeasonTeam(errorIfNotFound: false, errorIfMoreThanOneFound: true, seasonTeamId: toSave.SeasonTeamId);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        SeasonTeam found = FindSeasonTeam(errorIfNotFound, errorIfMoreThanOneFound, toSave.SeasonTeamId);
 
         if (found == null)
         {
           _ctx.SeasonTeams.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
+      #region SaveOrUpdate-Setting
+      public int SaveOrUpdateSetting(List<Setting> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateSetting(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateSetting(Setting toSave)
+      {
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        Setting found = FindSetting(errorIfNotFound, errorIfMoreThanOneFound, toSave.SettingId);
+
+        if (found == null)
+        {
+          _ctx.Settings.Add(toSave);
         }
         else
         {
@@ -754,7 +918,9 @@ namespace LO30.Services
 
       public int SaveOrUpdateTeamRoster(TeamRoster toSave)
       {
-        TeamRoster found = FindTeamRoster(errorIfNotFound: false, errorIfMoreThanOneFound: true, seasonTeamId: toSave.SeasonTeamId, playerId: toSave.PlayerId);
+        var errorIfNotFound = false;
+        var errorIfMoreThanOneFound = true;
+        TeamRoster found = FindTeamRoster(errorIfNotFound, errorIfMoreThanOneFound, toSave.SeasonTeamId, toSave.PlayerId, toSave.StartYYYYMMDD, toSave.EndYYYYMMDD);
 
         if (found == null)
         {
@@ -786,7 +952,9 @@ namespace LO30.Services
 
       public int SaveOrUpdateTeamStanding(TeamStanding toSave)
       {
-        TeamStanding found = FindTeamStanding(errorIfNotFound: false, errorIfMoreThanOneFound: true, seasonTeamId: toSave.SeasonTeamId, playoff: toSave.Playoff);
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        TeamStanding found = FindTeamStanding(errorIfNotFound, errorIfMoreThanOneFound, toSave.SeasonTeamId, toSave.Playoff);
 
         if (found == null)
         {
@@ -867,6 +1035,41 @@ namespace LO30.Services
           throw new ArgumentNullException("found", "More than 1 ForWebPlayerStat was not found for" +
                                                   " PID:" + pid +
                                                   " STIDPF:" + stidpf
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region Find-ForWebTeamStanding
+      public ForWebTeamStanding FindForWebTeamStanding(int stid)
+      {
+        return FindForWebTeamStanding(errorIfNotFound: true, errorIfMoreThanOneFound: true, stid: stid);
+      }
+
+      public ForWebTeamStanding FindForWebTeamStanding(bool errorIfNotFound, bool errorIfMoreThanOneFound, int stid)
+      {
+        var found = _ctx.ForWebTeamStandings.Where(x => x.STID == stid).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find ForWebTeamStanding for" +
+                                                  " STID:" + stid
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 ForWebTeamStanding was not found for" +
+                                                  " STID:" + stid
                                           );
         }
 
@@ -994,7 +1197,7 @@ namespace LO30.Services
       }
       #endregion
 
-      #region Find-GameRosters  (addtl finds)
+      #region Find-GameRosters (addtl finds)
       public List<GameRoster> FindGameRostersWithGameIdsAndGoalie(int startingGameId, int endingGameId, bool goalie)
       {
         return FindGameRostersWithGameIdsAndGoalie(errorIfNotFound: true, startingGameId: startingGameId, endingGameId: endingGameId, goalie: goalie);
@@ -1495,29 +1698,78 @@ namespace LO30.Services
       }
       #endregion
 
-      #region Find-PlayerRating
-      public PlayerRating FindPlayerRating(int seasonId, int playerId)
+      #region Find-PlayerRating (addtl finds)
+      public PlayerRating FindPlayerRatingWithYYYYMMDD(int seasonId, int playerId, int yyyymmdd)
       {
-        return FindPlayerRating(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonId: seasonId, playerId: playerId);
+        return FindPlayerRatingWithYYYYMMDD(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonId: seasonId, playerId: playerId, yyyymmdd: yyyymmdd);
       }
 
-      public PlayerRating FindPlayerRating(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonId, int playerId)
+      public PlayerRating FindPlayerRatingWithYYYYMMDD(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonId, int playerId, int yyyymmdd)
       {
-        var found = _ctx.PlayerRatings.Where(x => x.SeasonId == seasonId && x.PlayerId == playerId).ToList();
+        var found = _ctx.PlayerRatings.Where(x => x.SeasonId == seasonId &&
+                                                  x.PlayerId == playerId &&
+                                                  x.StartYYYYMMDD <= yyyymmdd &&
+                                                  x.EndYYYYMMDD >= yyyymmdd)
+                                            .ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
-          throw new ArgumentNullException("found", "Could not find PlayerRatings for" +
+          throw new ArgumentNullException("found", "Could not find PlayerRating for" +
                                                   " seasonId:" + seasonId +
-                                                  " PlayerId:" + playerId
+                                                  " PlayerId:" + playerId +
+                                                  " StartYYYYMMDD and EndYYYYMMDD between:" + yyyymmdd
                                           );
         }
 
         if (errorIfMoreThanOneFound == true && found.Count > 1)
         {
-          throw new ArgumentNullException("found", "More than 1 PlayerRatings was not found for" +
+          throw new ArgumentNullException("found", "More than 1 PlayerRating was not found for" +
                                                   " seasonId:" + seasonId +
-                                                  " PlayerId:" + playerId
+                                                  " PlayerId:" + playerId +
+                                                  " StartYYYYMMDD and EndYYYYMMDD between:" + yyyymmdd
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+
+      public PlayerRating FindPlayerRating(int seasonId, int playerId, int startYYYYMMDD, int endYYYYMMDD)
+      {
+        return FindPlayerRating(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonId: seasonId, playerId: playerId, startYYYYMMDD: startYYYYMMDD, endYYYYMMDD: endYYYYMMDD);
+      }
+
+      public PlayerRating FindPlayerRating(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonId, int playerId, int startYYYYMMDD, int endYYYYMMDD)
+      {
+        var found = _ctx.PlayerRatings.Where(x => x.SeasonId == seasonId &&
+                                                  x.PlayerId == playerId &&
+                                                  x.StartYYYYMMDD == startYYYYMMDD &&
+                                                  x.EndYYYYMMDD == endYYYYMMDD)
+                                            .ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find PlayerRating for" +
+                                                  " seasonId:" + seasonId +
+                                                  " PlayerId:" + playerId +
+                                                  " StartYYYYMMDD:" + startYYYYMMDD +
+                                                  " EndYYYYMMDD:" + endYYYYMMDD
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 PlayerRating was not found for" +
+                                                  " seasonId:" + seasonId +
+                                                  " PlayerId:" + playerId +
+                                                  " StartYYYYMMDD:" + startYYYYMMDD +
+                                                  " EndYYYYMMDD:" + endYYYYMMDD
                                           );
         }
 
@@ -1785,6 +2037,74 @@ namespace LO30.Services
       }
       #endregion
 
+      #region Find-Season (addtl finds)
+      public Season FindSeasonWithYYYYMMDD(int yyyymmdd)
+      {
+        return FindSeasonWithYYYYMMDD(errorIfNotFound: true, errorIfMoreThanOneFound: true, yyyymmdd: yyyymmdd);
+      }
+
+      public Season FindSeasonWithYYYYMMDD(bool errorIfNotFound, bool errorIfMoreThanOneFound, int yyyymmdd)
+      {
+        var found = _ctx.Seasons.Where(x => x.StartYYYYMMDD >= yyyymmdd && x.EndYYYYMMDD <= yyyymmdd).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find Season for" +
+                                                  " StartYYYYMMDD and EndYYYYMMDD between:" + yyyymmdd
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 Season was not found for" +
+                                                  " StartYYYYMMDD and EndYYYYMMDD between:" + yyyymmdd
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+
+      public Season FindSeason(int seasonId)
+      {
+        return FindSeason(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonId: seasonId);
+      }
+
+      public Season FindSeason(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonId)
+      {
+        var found = _ctx.Seasons.Where(x => x.SeasonId == seasonId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find Season for" +
+                                                  " SeasonId:" + seasonId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 Season was not found for" +
+                                                  " SeasonId:" + seasonId
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
       #region Find-SeasonTeam
       public SeasonTeam FindSeasonTeam(int seasonTeamId)
       {
@@ -1820,21 +2140,63 @@ namespace LO30.Services
       }
       #endregion
 
-      #region Find-TeamRoster
-      public TeamRoster FindTeamRoster(int seasonTeamId, int playerId)
+      #region Find-Setting
+      public Setting FindSetting(int settingId)
       {
-        return FindTeamRoster(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonTeamId: seasonTeamId, playerId: playerId);
+        bool errorIfNotFound = true;
+        bool errorIfMoreThanOneFound = true;
+        return FindSetting(errorIfNotFound, errorIfMoreThanOneFound, settingId);
       }
 
-      public TeamRoster FindTeamRoster(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonTeamId, int playerId)
+      public Setting FindSetting(bool errorIfNotFound, bool errorIfMoreThanOneFound, int settingId)
       {
-        var found = _ctx.TeamRosters.Where(x => x.SeasonTeamId == seasonTeamId && x.PlayerId == playerId).ToList();
+        var found = _ctx.Settings.Where(x => x.SettingId == settingId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find Setting for" +
+                                                  " SettingId:" + settingId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 Setting was not found for" +
+                                                  " SettingId:" + settingId
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region Find-TeamRoster
+      public TeamRoster FindTeamRosterWithYYYYMMDD(int seasonTeamId, int playerId, int yyyymmdd)
+      {
+        return FindTeamRosterWithYYYYMMDD(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonTeamId: seasonTeamId, playerId: playerId, yyyymmdd: yyyymmdd);
+      }
+
+      public TeamRoster FindTeamRosterWithYYYYMMDD(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonTeamId, int playerId, int yyyymmdd)
+      {
+        var found = _ctx.TeamRosters.Where(x => x.SeasonTeamId == seasonTeamId &&
+                                                  x.PlayerId == playerId &&
+                                                  x.StartYYYYMMDD <= yyyymmdd &&
+                                                  x.EndYYYYMMDD >= yyyymmdd)
+                                            .ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
           throw new ArgumentNullException("found", "Could not find TeamRoster for" +
                                                   " SeasonTeamId:" + seasonTeamId +
-                                                  " PlayerId:" + playerId
+                                                  " PlayerId:" + playerId +
+                                                  " StartYYYYMMDD and EndYYYYMMDD between:" + yyyymmdd
                                           );
         }
 
@@ -1842,7 +2204,51 @@ namespace LO30.Services
         {
           throw new ArgumentNullException("found", "More than 1 TeamRoster was not found for" +
                                                   " SeasonTeamId:" + seasonTeamId +
-                                                  " PlayerId:" + playerId
+                                                  " PlayerId:" + playerId +
+                                                  " StartYYYYMMDD and EndYYYYMMDD between:" + yyyymmdd
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+
+      public TeamRoster FindTeamRoster(int seasonTeamId, int playerId, int startYYYYMMDD, int endYYYYMMDD)
+      {
+        return FindTeamRoster(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonTeamId: seasonTeamId, playerId: playerId, startYYYYMMDD: startYYYYMMDD, endYYYYMMDD: endYYYYMMDD);
+      }
+
+      public TeamRoster FindTeamRoster(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonTeamId, int playerId, int startYYYYMMDD, int endYYYYMMDD)
+      {
+        var found = _ctx.TeamRosters.Where(x => x.SeasonTeamId == seasonTeamId &&
+                                                  x.PlayerId == playerId &&
+                                                  x.StartYYYYMMDD == startYYYYMMDD &&
+                                                  x.EndYYYYMMDD == endYYYYMMDD)
+                                            .ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find TeamRoster for" +
+                                                  " SeasonTeamId:" + seasonTeamId +
+                                                  " PlayerId:" + playerId +
+                                                  " StartYYYYMMDD:" + startYYYYMMDD +
+                                                  " EndYYYYMMDD:" + endYYYYMMDD
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 TeamRoster was not found for" +
+                                                  " SeasonTeamId:" + seasonTeamId +
+                                                  " PlayerId:" + playerId +
+                                                  " StartYYYYMMDD:" + startYYYYMMDD +
+                                                  " EndYYYYMMDD:" + endYYYYMMDD
                                           );
         }
 
@@ -1945,18 +2351,18 @@ namespace LO30.Services
         //Email
         //EmailType
 
-        _lo30DataService.ToJsonToFile(_ctx.ForWebGoalieStats
+        _lo30DataSerializationService.ToJsonToFile(_ctx.ForWebGoalieStats
                                            .Where(x => x.SID == 54).ToList(),
                                      _folderPath + "ForWebGoalieStats.json");
-        _lo30DataService.ToJsonToFile(_ctx.ForWebPlayerStats
+        _lo30DataSerializationService.ToJsonToFile(_ctx.ForWebPlayerStats
                                             .Where(x => x.SID == 54).ToList(),
                                       _folderPath + "ForWebPlayerStats.json");
 
-        _lo30DataService.ToJsonToFile(_ctx.Games
+        _lo30DataSerializationService.ToJsonToFile(_ctx.Games
                                             .Include("Season")
                                             .Where(x => x.SeasonId == 54).ToList(), 
                                       _folderPath + "Games.json");
-        _lo30DataService.ToJsonToFile(_ctx.GameOutcomes
+        _lo30DataSerializationService.ToJsonToFile(_ctx.GameOutcomes
                                             .Include("GameTeam")
                                             .Include("GameTeam.Game")
                                             .Include("GameTeam.Game.Season")
@@ -1967,7 +2373,7 @@ namespace LO30.Services
                                             .Include("GameTeam.SeasonTeam.Team.Sponsor")
                                             .Where(x => x.GameTeam.SeasonTeam.SeasonId == 54).ToList(), 
                                       _folderPath + "GameOutcomes.json");
-        _lo30DataService.ToJsonToFile(_ctx.GameRosters
+        _lo30DataSerializationService.ToJsonToFile(_ctx.GameRosters
                                             .Include("GameTeam")
                                             .Include("GameTeam.Game")
                                             .Include("GameTeam.Game.Season")
@@ -1978,7 +2384,7 @@ namespace LO30.Services
                                             .Include("GameTeam.SeasonTeam.Team.Sponsor")
                                             .Where(x => x.GameTeam.SeasonTeam.SeasonId == 54).ToList(),
                                       _folderPath + "GameRosters.json");
-        _lo30DataService.ToJsonToFile(_ctx.GameScores
+        _lo30DataSerializationService.ToJsonToFile(_ctx.GameScores
                                             .Include("GameTeam")
                                             .Include("GameTeam.Game")
                                             .Include("GameTeam.Game.Season")
@@ -1989,7 +2395,7 @@ namespace LO30.Services
                                             .Include("GameTeam.SeasonTeam.Team.Sponsor")
                                             .Where(x => x.GameTeam.SeasonTeam.SeasonId == 54).ToList(),
                                       _folderPath + "GameScores.json");
-        _lo30DataService.ToJsonToFile(_ctx.GameTeams
+        _lo30DataSerializationService.ToJsonToFile(_ctx.GameTeams
                                             .Include("Game")
                                             .Include("Game.Season")
                                             .Include("SeasonTeam")
@@ -2007,14 +2413,14 @@ namespace LO30.Services
         //Phone
         //PhoneType
 
-        _lo30DataService.ToJsonToFile(_ctx.Players.ToList(),
+        _lo30DataSerializationService.ToJsonToFile(_ctx.Players.ToList(),
                                      _folderPath + "Players.json");
 
         // PlayerDraft
         // PlayerEmail
         // PlayerPhone
 
-        _lo30DataService.ToJsonToFile(_ctx.PlayerRatings
+        _lo30DataSerializationService.ToJsonToFile(_ctx.PlayerRatings
                                             .Include("Season")
                                             .Include("Player")
                                             .Where(x => x.Season.SeasonId == 54).ToList(),
@@ -2027,19 +2433,19 @@ namespace LO30.Services
         //PlayerStatus
         //PlayerStatusType
 
-        _lo30DataService.ToJsonToFile(_ctx.ScoreSheetEntries
+        _lo30DataSerializationService.ToJsonToFile(_ctx.ScoreSheetEntries
                                             .Include("Game")
                                             .Include("Game.Season")
                                             .Where(x => x.Game.Season.SeasonId == 54).ToList(),
                                       _folderPath + "ScoreSheetEntries.json");
 
-        _lo30DataService.ToJsonToFile(_ctx.ScoreSheetEntryPenalties
+        _lo30DataSerializationService.ToJsonToFile(_ctx.ScoreSheetEntryPenalties
                                             .Include("Game")
                                             .Include("Game.Season")
                                             .Where(x => x.Game.Season.SeasonId == 54).ToList(),
                                       _folderPath + "ScoreSheetEntryPenalties.json");
 
-        _lo30DataService.ToJsonToFile(_ctx.ScoreSheetEntriesProcessed
+        _lo30DataSerializationService.ToJsonToFile(_ctx.ScoreSheetEntriesProcessed
                                             .Include("Game")
                                             .Include("Game.Season")
                                             .Include("GoalPlayer")
@@ -2049,7 +2455,7 @@ namespace LO30.Services
                                             .Where(x => x.Game.Season.SeasonId == 54).ToList(),
                                       _folderPath + "ScoreSheetEntriesProcessed.json");
 
-        _lo30DataService.ToJsonToFile(_ctx.ScoreSheetEntryPenaltiesProcessed
+        _lo30DataSerializationService.ToJsonToFile(_ctx.ScoreSheetEntryPenaltiesProcessed
                                             .Include("Game")
                                             .Include("Game.Season")
                                             .Include("Player")
@@ -2057,11 +2463,11 @@ namespace LO30.Services
                                             .Where(x => x.Game.Season.SeasonId == 54).ToList(),
                                       _folderPath + "ScoreSheetEntryPenaltiesProcessed.json");
 
-        _lo30DataService.ToJsonToFile(_ctx.Seasons
+        _lo30DataSerializationService.ToJsonToFile(_ctx.Seasons
                                             .Where(x => x.SeasonId == 54).ToList(),
                                       _folderPath + "Seasons.json");
 
-        _lo30DataService.ToJsonToFile(_ctx.SeasonTeams
+        _lo30DataSerializationService.ToJsonToFile(_ctx.SeasonTeams
                                             .Include("Season")
                                             .Include("Team")
                                             .Include("Team.Coach")
@@ -2069,19 +2475,19 @@ namespace LO30.Services
                                             .Where(x => x.Season.SeasonId == 54).ToList(),
                                       _folderPath + "SeasonTeams.json");
 
-        _lo30DataService.ToJsonToFile(_ctx.Sponsors.ToList(),
+        _lo30DataSerializationService.ToJsonToFile(_ctx.Sponsors.ToList(),
                                      _folderPath + "Sponsors.json");
 
         //SponsorEmail
         //SponsorPhone
 
-        _lo30DataService.ToJsonToFile(_ctx.Teams
+        _lo30DataSerializationService.ToJsonToFile(_ctx.Teams
                                             .Include("Coach")
                                             .Include("Sponsor")
                                             .ToList(),
                                       _folderPath + "Teams.json");
 
-        _lo30DataService.ToJsonToFile(_ctx.TeamRosters
+        _lo30DataSerializationService.ToJsonToFile(_ctx.TeamRosters
                                             .Include("SeasonTeam")
                                             .Include("SeasonTeam.Season")
                                             .Include("SeasonTeam.Team")
@@ -2110,7 +2516,7 @@ namespace LO30.Services
         List<ScoreSheetEntry> scoreSheetEntries = ScoreSheetEntry.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntries.json");
         results.toProcess = scoreSheetEntries.Count;
         results.modified = SaveOrUpdateScoreSheetEntry(scoreSheetEntries);
-        Debug.Print("Data Group 4: Saved ScoreSheetEntries " + _ctx.ScoreSheetEntries.Count());
+        Debug.Print("LoadScoreSheetEntriesFromAccessDBJson: Saved ScoreSheetEntries " + _ctx.ScoreSheetEntries.Count());
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
         results.time = diffFromLast.ToString();
@@ -2122,7 +2528,7 @@ namespace LO30.Services
       {
         var results = new ProcessingResult();
 
-        var folderPath = @"C:\git\LO30\LO30\Data\Access\";
+        var folderPath = @"C:\git\LO30\LO30\App_Data\Access\";
 
         DateTime last = DateTime.Now;
         TimeSpan diffFromLast = new TimeSpan();
@@ -2130,7 +2536,27 @@ namespace LO30.Services
         List<ScoreSheetEntryPenalty> scoreSheetEntryPenalties = ScoreSheetEntryPenalty.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntryPenalties.json");
         results.toProcess = scoreSheetEntryPenalties.Count;
         results.modified = SaveOrUpdateScoreSheetEntryPenalty(scoreSheetEntryPenalties);
-        Debug.Print("Data Group 4: Saved ScoreSheetEntryPenalties " + _ctx.ScoreSheetEntryPenalties.Count());
+        Debug.Print("LoadScoreSheetEntryPenaltiesFromAccessDBJson: Saved ScoreSheetEntryPenalties " + _ctx.ScoreSheetEntryPenalties.Count());
+        diffFromLast = DateTime.Now - last;
+        Debug.Print("TimeToProcess: " + diffFromLast.ToString());
+        results.time = diffFromLast.ToString();
+
+        return results;
+      }
+
+      public ProcessingResult LoadGameRostersFromAccessDBJson()
+      {
+        var results = new ProcessingResult();
+
+        var folderPath = @"C:\git\LO30\LO30\App_Data\Access\";
+
+        DateTime last = DateTime.Now;
+        TimeSpan diffFromLast = new TimeSpan();
+
+        List<GameRoster> gameRosters = GameRoster.LoadListFromAccessDbJsonFile(folderPath + "GameRosters.json", this, _lo30DataService);
+        results.toProcess = gameRosters.Count;
+        results.modified = SaveOrUpdateGameRoster(gameRosters);
+        Debug.Print("LoadGameRostersFromAccessDBJson: Saved GameRosters " + _ctx.ScoreSheetEntryPenalties.Count());
         diffFromLast = DateTime.Now - last;
         Debug.Print("TimeToProcess: " + diffFromLast.ToString());
         results.time = diffFromLast.ToString();

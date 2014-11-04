@@ -19,6 +19,11 @@ namespace LO30.Data
     List<GameRoster> GetGameRostersByGameIdAndHomeTeam(int GameId, bool homeTeam);
     GameRoster GetGameRosterByGameRosterId(int gameRosterId);
     GameRoster GetGameRosterByGameTeamIdAndPlayerNumber(int gameTeamId, string playerNumber);
+
+    List<Setting> GetSettings();
+    int SaveOrUpdateSettings(List<Setting> settings);
+    Setting GetSettingBySettingId(int settingId);
+    Setting DeleteSettingBySettingId(int settingId);
     #endregion
 
     List<Article> GetArticles();
@@ -30,6 +35,8 @@ namespace LO30.Data
     List<ForWebPlayerStat> GetPlayerStatsForWeb();
 
     List<ForWebGoalieStat> GetGoalieStatsForWeb();
+
+    List<ForWebTeamStanding> GetTeamStandingsForWeb();
 
     List<ScoreSheetEntry> GetScoreSheetEntries();
 

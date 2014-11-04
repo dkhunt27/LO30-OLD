@@ -11,7 +11,7 @@ namespace LO30
       bundles.Add(new ScriptBundle("~/bundles/adminDataProcessing").Include(
                     "~/Areas/AdminDataProcessing/AdminDataProcessingAngular.js"));
 
-      /*bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
+      bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                   "~/Scripts/jquery-{version}.js"));
 
       bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
@@ -40,7 +40,7 @@ namespace LO30
                   "~/Content/themes/base/jquery.ui.tabs.css",
                   "~/Content/themes/base/jquery.ui.datepicker.css",
                   "~/Content/themes/base/jquery.ui.progressbar.css",
-                  "~/Content/themes/base/jquery.ui.theme.css"));*/
+                  "~/Content/themes/base/jquery.ui.theme.css"));
     }
   }
 }

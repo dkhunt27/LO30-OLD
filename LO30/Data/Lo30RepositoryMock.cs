@@ -14,6 +14,7 @@ namespace LO30.Data
     
     private List<ForWebGoalieStat> _webGoalieStats;
     private List<ForWebPlayerStat> _webPlayerStats;
+    private List<ForWebTeamStanding> _webTeamStandings;
     private List<GameOutcome> _gameOutcomes;
     private List<GameRoster> _gameRosters;
     private List<Game> _games;
@@ -30,6 +31,7 @@ namespace LO30.Data
       var folderPath = @"C:\git\LO30\LO30\App_Data\SqlServer\";
       _webGoalieStats = _lo30DataSerializationService.FromJsonFromFile<List<ForWebGoalieStat>>(folderPath + "ForWebGoalieStats.json");
       _webPlayerStats = _lo30DataSerializationService.FromJsonFromFile<List<ForWebPlayerStat>>(folderPath + "ForWebPlayerStats.json");
+      _webTeamStandings = _lo30DataSerializationService.FromJsonFromFile<List<ForWebTeamStanding>>(folderPath + "ForWebTeamStandings.json");
       _gameOutcomes = _lo30DataSerializationService.FromJsonFromFile<List<GameOutcome>>(folderPath + "GameOutcomes.json");
       _gameRosters = _lo30DataSerializationService.FromJsonFromFile<List<GameRoster>>(folderPath + "GameRosters.json");
       _games = _lo30DataSerializationService.FromJsonFromFile<List<Game>>(folderPath + "Games.json");
@@ -87,6 +89,28 @@ namespace LO30.Data
     {
       return _gameRosters.Where(x => x.GameTeamId == gameTeamId && x.PlayerNumber == playerNumber).FirstOrDefault();
     }
+
+
+    public List<Setting> GetSettings()
+    {
+      throw new NotImplementedException();
+    }
+
+    public int SaveOrUpdateSettings(List<Setting> settings)
+    {
+      throw new NotImplementedException();
+    }
+
+    public Setting GetSettingBySettingId(int settingId)
+    {
+      throw new NotImplementedException();
+    }
+
+    public Setting DeleteSettingBySettingId(int settingId)
+    {
+      throw new NotImplementedException();
+    }
+
     #endregion
 
     public List<Article> GetArticles()
@@ -114,6 +138,11 @@ namespace LO30.Data
       return _webGoalieStats;
     }
 
+    public List<ForWebTeamStanding> GetTeamStandingsForWeb()
+    {
+      return _webTeamStandings;
+
+    }
     public List<ScoreSheetEntry> GetScoreSheetEntries()
     {
       throw new NotImplementedException();

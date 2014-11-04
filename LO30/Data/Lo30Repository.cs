@@ -7,15 +7,15 @@ using System.Linq;
 
 namespace LO30.Data
 {
-  public class Lo30Repository : ILo30Repository
+  public partial class Lo30Repository : ILo30Repository
   {
     Lo30Context _ctx;
     Lo30DataService _lo30DataService;
     Lo30ContextService _contextService;
 
     Player _unknownPlayer;
-    
-    public Lo30Repository(Lo30Context ctx)
+
+    public Lo30Repository(Lo30Context ctx, Lo30ContextService contextService)
     {
       _ctx = ctx;
       _unknownPlayer = new Player()
@@ -32,7 +32,7 @@ namespace LO30.Data
         };
 
       _lo30DataService = new Lo30DataService();
-      _contextService = new Lo30ContextService(_ctx);
+      _contextService = contextService;
 
       // force the context to populate the data...just for improved error messaging
 
@@ -48,6 +48,8 @@ namespace LO30.Data
     }
 
     #region Data Services
+
+    #region Games
     public List<Game> GetGames()
     {
       return _ctx.Games
@@ -59,7 +61,9 @@ namespace LO30.Data
     {
       return _contextService.FindGame(gameId);
     }
+    #endregion
 
+    #region GameTeams
     public List<GameTeam> GetGameTeams()
     {
       return _ctx.GameTeams
@@ -83,7 +87,9 @@ namespace LO30.Data
     {
       return _contextService.FindGameTeamByPK2(gameTeamId, homeTeam);
     }
+    #endregion
 
+    #region GameRosters
     public List<GameRoster> GetGameRosters()
     {
       return _ctx.GameRosters
@@ -121,6 +127,7 @@ namespace LO30.Data
       return _contextService.FindGameRosterByPK2(gameTeamId, playerNumber);
     }
     #endregion
+    #endregion
 
     public List<ScoreSheetEntry> GetScoreSheetEntries()
     {
@@ -150,6 +157,11 @@ namespace LO30.Data
     public List<ForWebGoalieStat> GetGoalieStatsForWeb()
     {
       return _ctx.ForWebGoalieStats.ToList();
+    }
+
+    public List<ForWebTeamStanding> GetTeamStandingsForWeb()
+    {
+      return _ctx.ForWebTeamStandings.ToList();
     }
 
     public bool Save()
@@ -694,6 +706,10 @@ namespace LO30.Data
                                             .Include("seasonTeamPlayingFor.team")
                                             .ToList();
 
+        var teamStandingsForWeb = _ctx.TeamStandings
+                                            .Include("seasonTeam")
+                                            .ToList();
+
         result.toProcess = seasonPlayerStatsForWeb.Count + seasonGoalieStatsForWeb.Count;
 
         var playerWebStats = _lo30DataService.DeriveWebPlayerStats(seasonPlayerStatsForWeb, ratings);
@@ -703,6 +719,10 @@ namespace LO30.Data
         var goalieWebStats = _lo30DataService.DeriveWebGoalieStats(seasonGoalieStatsForWeb);
         var savedGoaliePlayerStats = _contextService.SaveOrUpdateForWebGoalieStat(goalieWebStats);
         Debug.Print("DeriveWebGoalieStats: savedGoaliePlayerStats:" + savedGoaliePlayerStats);
+
+        var teamStandings = _lo30DataService.DeriveWebTeamStandings(teamStandingsForWeb);
+        var savedTeamStandings = _contextService.SaveOrUpdateForWebTeamStanding(teamStandings);
+        Debug.Print("DeriveWebTeamStandings: savedTeamStandings:" + savedTeamStandings);
 
         result.modified = (savedWebPlayerStats + savedGoaliePlayerStats);
       }

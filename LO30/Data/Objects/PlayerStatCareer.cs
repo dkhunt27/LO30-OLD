@@ -9,10 +9,10 @@ namespace LO30.Data.Objects
 {
   public class PlayerStatCareer
   {
-    [Key, Column(Order = 0), ForeignKey("Player")]
+    [Key, Column(Order = 1), ForeignKey("Player")]
     public int PlayerId { get; set; }
 
-    [Key, Column(Order = 1)]
+    [Key, Column(Order = 2)]
     public bool Sub { get; set; }
 
     [Required]

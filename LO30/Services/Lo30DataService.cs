@@ -8,6 +8,38 @@ namespace LO30.Services
 {
   public class Lo30DataService
   {
+    public List<ForWebTeamStanding> DeriveWebTeamStandings(List<TeamStanding> teamStandings)
+    {
+      var newData = new List<ForWebTeamStanding>();
+
+      foreach (var item in teamStandings)
+      {
+        var stat = new ForWebTeamStanding()
+        {
+          STID = item.SeasonTeamId,
+          Team = item.SeasonTeam.Team.TeamLongName,
+          Rank = item.Rank,
+          GP = item.Games,
+          W = item.Wins,
+          L = item.Losses,
+          T = item.Ties,
+          PTS = item.Points,
+          GF = item.GoalsFor,
+          GA = item.GoalsAgainst,
+          PIM = item.PenaltyMinutes,
+          WPCT = (float)item.Wins/(float)item.Games
+        };
+
+        if (stat.STID == 0)
+        {
+          Debug.Print(string.Format("DeriveWebTeamStandings: Warning ForWebTeamStanding has stid=0 Team:{0}", stat.Team));
+        }
+        newData.Add(stat);
+      }
+
+      return newData;
+    }
+
     public List<PlayerStatGame> DerivePlayerGameStats(List<ScoreSheetEntryProcessed> scoreSheetEntriesProcessed, List<ScoreSheetEntryPenaltyProcessed> scoreSheetEntryPenaltiesProcessed, List<GameRoster> gameRosters)
     {
       var playerGameStats = new List<PlayerStatGame>();
@@ -473,10 +505,10 @@ namespace LO30.Services
         }
 
         // lookup player ids
-        var goalPlayerId = convertPlayerNumberIntoPlayer(gameRosterToUse, goalPlayerNumber);
-        var assist1PlayerId = convertPlayerNumberIntoPlayer(gameRosterToUse, assist1PlayerNumber);
-        var assist2PlayerId = convertPlayerNumberIntoPlayer(gameRosterToUse, assist2PlayerNumber);
-        var assist3PlayerId = convertPlayerNumberIntoPlayer(gameRosterToUse, assist3PlayerNumber);
+        var goalPlayerId = ConvertPlayerNumberIntoPlayer(gameRosterToUse, goalPlayerNumber);
+        var assist1PlayerId = ConvertPlayerNumberIntoPlayer(gameRosterToUse, assist1PlayerNumber);
+        var assist2PlayerId = ConvertPlayerNumberIntoPlayer(gameRosterToUse, assist2PlayerNumber);
+        var assist3PlayerId = ConvertPlayerNumberIntoPlayer(gameRosterToUse, assist3PlayerNumber);
 
         // determine type goal
         // TODO improve this logic
@@ -533,7 +565,7 @@ namespace LO30.Services
         }
 
         // lookup player id
-        var playerId = convertPlayerNumberIntoPlayer(gameRosterToUse, playerNumber);
+        var playerId = ConvertPlayerNumberIntoPlayer(gameRosterToUse, playerNumber);
 
         // lookup penalty
         var penaltyId = penalties.Where(x => x.PenaltyCode == scoreSheetEntryPenalty.PenaltyCode).FirstOrDefault().PenaltyId;
@@ -555,7 +587,7 @@ namespace LO30.Services
       return newData;
     }
 
-    public int? convertPlayerNumberIntoPlayer(ICollection<GameRoster> gameRoster, string playerNumber)
+    public int? ConvertPlayerNumberIntoPlayer(ICollection<GameRoster> gameRoster, string playerNumber)
     {
       int? playerId = null;
 
@@ -573,6 +605,37 @@ namespace LO30.Services
       }
 
       return playerId;
+    }
+
+    public DateTime ConvertYYYYMMDDIntoDateTime(int yyyymmdd)
+    {
+      if (yyyymmdd.ToString().Length != 8)
+      {
+        throw new ArgumentOutOfRangeException("yyyymmdd", yyyymmdd, "Must be length of 8");
+      }
+
+      var year = Convert.ToInt32(yyyymmdd.ToString().Substring(0,4));
+      var month = Convert.ToInt32(yyyymmdd.ToString().Substring(4, 2));
+      var day = Convert.ToInt32(yyyymmdd.ToString().Substring(6,2));
+      var result = new DateTime(year, month, day);
+
+      return result;
+    }
+
+    public int ConvertDateTimeIntoYYYYMMDD(DateTime? toConvert)
+    {
+      int result = -1;
+
+      if (toConvert == null)
+      {
+        result = 12345678;
+      } 
+      else
+      {
+        result = (toConvert.Value.Year * 10000) + (toConvert.Value.Month * 100) + toConvert.Value.Day;
+      }
+
+      return result;
     }
   }
 }
