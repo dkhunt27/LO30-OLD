@@ -21,19 +21,19 @@ namespace LO30
 
       config.Routes.MapHttpRoute(
           name: "ApiGameRosters",
-          routeTemplate: constApisUrl + "/gamerosters/{gameId}/{homeTeam}",
+          routeTemplate: constApisUrl + "/gameRosters/{gameId}/{homeTeam}",
           defaults: new { controller = "GameRosters", gameId = RouteParameter.Optional, homeTeam = RouteParameter.Optional }
       );
 
       config.Routes.MapHttpRoute(
-          name: "ApiGameRosters1",
-          routeTemplate: constApisUrl + "/gameroster/{gameRosterId}",
+          name: "ApiGameRoster",
+          routeTemplate: constApisUrl + "/gameRoster/{gameRosterId}",
           defaults: new { controller = "GameRoster"}
       );
 
       config.Routes.MapHttpRoute(
-          name: "ApiGameRosters2",
-          routeTemplate: constApisUrl + "/gameroster/{gameTeamId}/{playerNumber}",
+          name: "ApiGameRoster2",
+          routeTemplate: constApisUrl + "/gameRoster/{gameTeamId}/{playerNumber}",
           defaults: new { controller = "GameRoster"}
       );
 
@@ -41,6 +41,18 @@ namespace LO30
           name: "ApiGames",
           routeTemplate: constApisUrl + "/games/{gameId}/",
           defaults: new { controller = "Games", gameId = RouteParameter.Optional }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiTeamRosters",
+          routeTemplate: constApisUrl + "/teamRosters/{seasonTeamId}/{yyyymmdd}",
+          defaults: new { controller = "TeamRosters", seasonTeamId = RouteParameter.Optional, yyyymmdd = RouteParameter.Optional }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiTeamRoster",
+          routeTemplate: constApisUrl + "/teamRoster/{seasonTeamId}/{yyyymmdd}/{playerId}",
+          defaults: new { controller = "TeamRosters" }
       );
 
       config.Routes.MapHttpRoute(

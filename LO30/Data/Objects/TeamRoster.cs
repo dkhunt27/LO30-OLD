@@ -16,12 +16,9 @@ namespace LO30.Data.Objects
     public int PlayerId { get; set; }
 
     [Required, Key, Column(Order = 3)]
-    public bool Playoff { get; set; }
-
-    [Required, Key, Column(Order = 4)]
     public int StartYYYYMMDD { get; set; }
 
-    [Required, Key, Column(Order = 5)]
+    [Required, Key, Column(Order = 4)]
     public int EndYYYYMMDD { get; set; }
 
     [Required]
@@ -46,16 +43,15 @@ namespace LO30.Data.Objects
     {
     }
 
-    public TeamRoster(int stid, int pid, bool poff, int symd, int eymd, string pos, int rp, int rs, int line, int pn)
-      : this(stid, pid, poff, symd, eymd, pos, rp, rs, line, pn.ToString())
+    public TeamRoster(int stid, int pid, int symd, int eymd, string pos, int rp, int rs, int line, int pn)
+      : this(stid, pid, symd, eymd, pos, rp, rs, line, pn.ToString())
     {
     }
 
-    public TeamRoster(int stid, int pid, bool poff, int symd, int eymd, string pos, int rp, int rs, int line, string pn)
+    public TeamRoster(int stid, int pid, int symd, int eymd, string pos, int rp, int rs, int line, string pn)
     {
       this.SeasonTeamId = stid;
       this.PlayerId = pid;
-      this.Playoff = poff;
       this.StartYYYYMMDD = symd;
       this.EndYYYYMMDD = eymd;
 

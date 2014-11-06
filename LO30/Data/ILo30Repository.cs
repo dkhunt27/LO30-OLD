@@ -4,39 +4,13 @@ using System.Linq;
 
 namespace LO30.Data
 {
-  public interface ILo30Repository
+  public partial interface ILo30Repository
   {
-    #region Data Services
-    List<Game> GetGames();
-    Game GetGameByGameId(int gameId);
-
-    List<GameTeam> GetGameTeams();
-    GameTeam GetGameTeamByGameTeamId(int gameTeamId);
-    GameTeam GetGameTeamByGameIdAndHomeTeam(int gameId, bool homeTeam);
-
-    List<GameRoster> GetGameRosters();
-    List<GameRoster> GetGameRostersByGameId(int GameId);
-    List<GameRoster> GetGameRostersByGameIdAndHomeTeam(int GameId, bool homeTeam);
-    GameRoster GetGameRosterByGameRosterId(int gameRosterId);
-    GameRoster GetGameRosterByGameTeamIdAndPlayerNumber(int gameTeamId, string playerNumber);
-
-    List<Setting> GetSettings();
-    int SaveOrUpdateSettings(List<Setting> settings);
-    Setting GetSettingBySettingId(int settingId);
-    Setting DeleteSettingBySettingId(int settingId);
-    #endregion
-
     List<Article> GetArticles();
 
     List<TeamStanding> GetTeamStandings();
 
     List<PlayerStatSeason> GetPlayerStatsSeason();
-
-    List<ForWebPlayerStat> GetPlayerStatsForWeb();
-
-    List<ForWebGoalieStat> GetGoalieStatsForWeb();
-
-    List<ForWebTeamStanding> GetTeamStandingsForWeb();
 
     List<ScoreSheetEntry> GetScoreSheetEntries();
 

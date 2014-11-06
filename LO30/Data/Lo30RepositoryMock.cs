@@ -8,7 +8,7 @@ using System.Web;
 
 namespace LO30.Data
 {
-  public class Lo30RepositoryMock : ILo30Repository
+  public partial class Lo30RepositoryMock : ILo30Repository
   {
     private Lo30DataSerializationService _lo30DataSerializationService;
     
@@ -20,6 +20,7 @@ namespace LO30.Data
     private List<Game> _games;
     private List<GameScore> _gameScores;
     private List<GameTeam> _gameTeams;
+    private List<TeamRoster> _teamRosters;
 
     public Lo30RepositoryMock()
     {
@@ -37,81 +38,8 @@ namespace LO30.Data
       _games = _lo30DataSerializationService.FromJsonFromFile<List<Game>>(folderPath + "Games.json");
       _gameScores = _lo30DataSerializationService.FromJsonFromFile<List<GameScore>>(folderPath + "GameScores.json");
       _gameTeams = _lo30DataSerializationService.FromJsonFromFile<List<GameTeam>>(folderPath + "GameTeams.json");
-
+      _teamRosters = _lo30DataSerializationService.FromJsonFromFile<List<TeamRoster>>(folderPath + "TeamRosters.json");
     }
-    #region Data Services
-    public List<Game> GetGames()
-    {
-      return _games;
-    }
-
-    public Game GetGameByGameId(int gameId)
-    {
-      return _games.Where(x => x.GameId == gameId).FirstOrDefault();
-    }
-
-    public List<GameTeam> GetGameTeams()
-    {
-      return _gameTeams;
-    }
-
-    public GameTeam GetGameTeamByGameTeamId(int gameTeamId)
-    {
-      return _gameTeams.Where(x => x.GameTeamId == gameTeamId).FirstOrDefault();
-    }
-
-    public GameTeam GetGameTeamByGameIdAndHomeTeam(int gameId, bool homeTeam)
-    {
-      return _gameTeams.Where(x => x.GameId == gameId && x.HomeTeam == homeTeam).FirstOrDefault();
-    }
-
-    public List<GameRoster> GetGameRosters()
-    {
-      return _gameRosters;
-    }
-
-    public List<GameRoster> GetGameRostersByGameId(int gameId)
-    {
-      return _gameRosters.Where(x => x.GameTeam.GameId == gameId).ToList();
-    }
-
-    public List<GameRoster> GetGameRostersByGameIdAndHomeTeam(int gameId, bool homeTeam)
-    {
-      return _gameRosters.Where(x => x.GameTeam.GameId == gameId && x.GameTeam.HomeTeam == homeTeam).ToList();
-    }
-
-    public GameRoster GetGameRosterByGameRosterId(int gameRosterId)
-    {
-      return _gameRosters.Where(x => x.GameRosterId == gameRosterId).FirstOrDefault();
-    }
-
-    public GameRoster GetGameRosterByGameTeamIdAndPlayerNumber(int gameTeamId, string playerNumber)
-    {
-      return _gameRosters.Where(x => x.GameTeamId == gameTeamId && x.PlayerNumber == playerNumber).FirstOrDefault();
-    }
-
-
-    public List<Setting> GetSettings()
-    {
-      throw new NotImplementedException();
-    }
-
-    public int SaveOrUpdateSettings(List<Setting> settings)
-    {
-      throw new NotImplementedException();
-    }
-
-    public Setting GetSettingBySettingId(int settingId)
-    {
-      throw new NotImplementedException();
-    }
-
-    public Setting DeleteSettingBySettingId(int settingId)
-    {
-      throw new NotImplementedException();
-    }
-
-    #endregion
 
     public List<Article> GetArticles()
     {
@@ -128,21 +56,6 @@ namespace LO30.Data
       throw new NotImplementedException();
     }
 
-    public List<ForWebPlayerStat> GetPlayerStatsForWeb()
-    {
-      return _webPlayerStats;
-    }
-
-    public List<ForWebGoalieStat> GetGoalieStatsForWeb()
-    {
-      return _webGoalieStats;
-    }
-
-    public List<ForWebTeamStanding> GetTeamStandingsForWeb()
-    {
-      return _webTeamStandings;
-
-    }
     public List<ScoreSheetEntry> GetScoreSheetEntries()
     {
       throw new NotImplementedException();

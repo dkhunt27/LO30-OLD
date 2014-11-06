@@ -1149,7 +1149,6 @@ namespace LO30.Data
             var teamRoster = new TeamRoster(
                                       stid: teamId,
                                       pid: playerId,
-                                      poff: playoff,
                                       symd: season.StartYYYYMMDD,
                                       eymd: season.EndYYYYMMDD,
                                       pos: playerDraft.Position,

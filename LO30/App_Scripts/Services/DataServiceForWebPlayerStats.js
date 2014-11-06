@@ -7,7 +7,7 @@ lo30NgApp.factory("dataServiceForWebPlayerStats",
     "$resource",
     function (constApisUrl, $resource) {
 
-      var resourceForWebPlayerStats = $resource(constApisUrl + '/forwebplayerstats');
+      var resourceForWebPlayerStats = $resource(constApisUrl + '/forWebPlayerStats');
 
       var getForWebPlayerStats = function () {
         return resourceForWebPlayerStats.query();

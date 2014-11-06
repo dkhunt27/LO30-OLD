@@ -7,11 +7,11 @@ lo30NgApp.factory("dataServiceGameRosters",
     "$resource",
     function (constApisUrl, $resource) {
 
-      var resourceGameRosters = $resource(constApisUrl + '/gamerosters');
-      var resourceGameRostersByGameId = $resource(constApisUrl + '/gamerosters/:gameId', { gameId: '@gameId' });
-      var resourceGameRostersByGameIdAndHomeTeam = $resource(constApisUrl + '/gamerosters/:gameId/:homeTeam', { gameId: '@gameId', homeTeam: '@homeTeam' });
-      var resourceGameRosterByGameRosterId = $resource(constApisUrl + '/gameroster/:gameRosterId', { gameRosterId: '@gameRosterId' });
-      var resourceGameRosterByGameTeamIdAndPlayerNumber = $resource(constApisUrl + '/gameroster/:gameRosterId', { gameId: '@gameId', playerNumber: '@playerNumber' });
+      var resourceGameRosters = $resource(constApisUrl + '/gameRosters');
+      var resourceGameRostersByGameId = $resource(constApisUrl + '/gameRosters/:gameId', { gameId: '@gameId' });
+      var resourceGameRostersByGameIdAndHomeTeam = $resource(constApisUrl + '/gameRosters/:gameId/:homeTeam', { gameId: '@gameId', homeTeam: '@homeTeam' });
+      var resourceGameRosterByGameRosterId = $resource(constApisUrl + '/gameRoster/:gameRosterId', { gameRosterId: '@gameRosterId' });
+      var resourceGameRosterByGameTeamIdAndPlayerNumber = $resource(constApisUrl + '/gameRoster/:gameRosterId', { gameId: '@gameId', playerNumber: '@playerNumber' });
 
       var getGameRosters = function () {
         return resourceGameRosters.query();

@@ -7,7 +7,7 @@ lo30NgApp.factory("dataServiceForWebGoalieStats",
     "$resource",
     function (constApisUrl, $resource) {
 
-      var resourceForWebGoalieStats = $resource(constApisUrl + '/forwebgoaliestats');
+      var resourceForWebGoalieStats = $resource(constApisUrl + '/forWebGoalieStats');
 
       var getForWebGoalieStats = function () {
         return resourceForWebGoalieStats.query();
