@@ -21,16 +21,11 @@ namespace LO30.Controllers.Data
                     .ToList();
     }
 
-    public GameTeam GetGameTeamByGameTeamId(int gameTeamId)
+    public List<GameTeam> GetGameTeamsByGameId(int gameId)
     {
-      var results = _repo.GetGameTeamByGameTeamId(gameTeamId);
+      var results = _repo.GetGameTeamsByGameId(gameId);
       return results;
-    }
 
-    public GameTeam GetGameTeamByGameIdAndHomeTeam(int gameId, bool homeTeam)
-    {
-      var results = _repo.GetGameTeamByGameIdAndHomeTeam(gameId, homeTeam);
-      return results;
     }
   }
 }

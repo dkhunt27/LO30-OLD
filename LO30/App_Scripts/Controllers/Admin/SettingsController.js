@@ -27,7 +27,7 @@ lo30NgApp.controller('adminSettingsController',
 
         $scope.initializeScopeVariables();
 
-        dataServiceSettings.getSettings().$promise.then(
+        dataServiceSettings.listSettings().$promise.then(
           function (result) {
             // service call on success
             if (result && result.length && result.length > 0) {
@@ -38,14 +38,11 @@ lo30NgApp.controller('adminSettingsController',
 
               $scope.requests.settingsLoaded = true;
 
-
-              alertMessage = _.template(alertMessageTemplateRetrievalSuccessful)({ retrievedType: retrievedType, retrievedLength: $scope.data.settings.length });
-              alertService.info(alertMessage, alertTitleDataRetrievalSuccessful);
+              alertService.successRetrieval(retrievedType, $scope.data.settings.length);
 
             } else {
               // results not successful
-              alertMessage = _.template(alertMessageTemplateRetrievalUnsuccessful)({ retrievedType: retrievedType, retrievedError: result.reason });
-              alertService.error(alertMessage, alertTitleDataRetrievalUnsuccessful);
+              alertService.errorRetrieval(retrievedType, result.reason);
             }
           }
         );

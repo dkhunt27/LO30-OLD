@@ -23,6 +23,11 @@ namespace LO30.Data
                     .ToList();
     }
 
+    public List<GameTeam> GetGameTeamsByGameId(int gameId)
+    {
+      return GetGameTeams().Where(x => x.GameId == gameId).ToList();
+    }
+
     public GameTeam GetGameTeamByGameTeamId(int gameTeamId)
     {
       return _contextService.FindGameTeam(gameTeamId);

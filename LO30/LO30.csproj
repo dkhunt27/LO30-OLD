@@ -240,17 +240,18 @@
     <Content Include="App_Scripts\Filters\FilterizeFilter.js" />
     <Content Include="App_Scripts\Filters\PercentageFilter.js" />
     <Content Include="App_Scripts\Lo30App.js" />
-    <Content Include="App_Scripts\Controllers\ScoreSheetController.js" />
+    <Content Include="App_Scripts\Controllers\ScoreSheets\EntryController.js" />
     <Content Include="App_Scripts\Services\AdminDataProcessingService.js" />
+    <Content Include="App_Scripts\Services\ExternalLibService.js" />
     <Content Include="App_Scripts\Services\AlertService.js" />
     <Content Include="App_Scripts\Services\DataServiceForWebTeamStandings.js" />
     <Content Include="App_Scripts\Services\DataServiceForWebPlayerStats.js" />
+    <Content Include="App_Scripts\Services\DataServiceGameTeams.js" />
     <Content Include="App_Scripts\Services\DataServiceTeamRosters.js" />
     <Content Include="App_Scripts\Services\DataServiceGameRosters.js" />
     <Content Include="App_Scripts\Services\DataServiceForWebGoalieStats.js" />
     <Content Include="App_Scripts\Services\DataServiceSettings.js" />
     <Content Include="App_Scripts\Services\DataServiceGames.js" />
-    <Content Include="App_Scripts\Services\ScoreSheetService.js" />
     <Content Include="App_Start\CSharpRazorViewEngine.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -268,6 +269,7 @@
     <Compile Include="Controllers\ScoreSheetEntryController.cs" />
     <Compile Include="Controllers\NavigationController.cs" />
     <Compile Include="Controllers\WebApi\Data\ForWebTeamStandingsController.cs" />
+    <Compile Include="Controllers\WebApi\Data\GameTeamController.cs" />
     <Compile Include="Controllers\WebApi\Data\TeamRostersController.cs" />
     <Compile Include="Controllers\WebApi\Data\GameTeamsController.cs" />
     <Compile Include="Controllers\WebApi\Data\GameScoresController.cs" />
@@ -502,12 +504,14 @@
     <Content Include="Content\Images\sponsor_stante.jpg" />
     <Content Include="Content\Images\sponsor_zas_ent.jpg" />
     <Content Include="Content\Images\Misc\calendar.jpg" />
+    <Content Include="App_Data\SqlServer\Views\TeamRostersView.sql" />
     <Content Include="Scripts\angular-ui-router.js" />
     <Content Include="Scripts\angular-ui-router.min.js" />
     <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.js" />
     <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.min.js" />
     <Content Include="Scripts\angular-ui\ui-bootstrap.js" />
     <Content Include="Scripts\angular-ui\ui-bootstrap.min.js" />
+    <Content Include="Scripts\simple.js.validator.min.js" />
     <Content Include="Scripts\toaster.js" />
     <Content Include="Scripts\underscore.js" />
     <Content Include="Scripts\underscore.min.js" />
@@ -2214,7 +2218,7 @@
     </Content>
     <Content Include="Templates\Admin\Settings.html" />
     <Content Include="Templates\Directives\GameRoster.html" />
-    <Content Include="Templates\ScoreSheetAngular.html" />
+    <Content Include="Templates\ScoreSheets\Entry.html" />
     <Content Include="Templates\articlesView.html" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />

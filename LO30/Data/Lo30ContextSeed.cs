@@ -3,6 +3,7 @@ using LO30.Services;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -1443,6 +1444,34 @@ namespace LO30.Data
         // populated via other process
       }
       #endregion
+      #endregion
+
+      #region create sql views
+      string connString = System.Configuration.ConfigurationManager.ConnectionStrings["LO30ReportingDB"].ConnectionString;
+
+      var viewFileNameList = new List<string>(){
+        "TeamRostersView.sql"
+      };
+
+      foreach (var viewFileName in viewFileNameList)
+      {
+        var viewFullFilePath = Path.Combine(appDataPath, @"SqlServer\Views");
+        viewFullFilePath = Path.Combine(viewFullFilePath, viewFileName);
+        string viewSql = File.ReadAllText(viewFullFilePath);
+        using (SqlConnection connection = new SqlConnection(connString))
+        {
+          // first drop the view
+          var viewName = "dbo." + viewFileName.Replace(".sql", "");
+          var dropSql = "IF OBJECT_ID('" + viewName + "', 'V') IS NOT NULL DROP VIEW " + viewName;
+          SqlCommand command = new SqlCommand(dropSql, connection);
+          command.Connection.Open();
+          command.ExecuteNonQuery();
+
+          command = new SqlCommand(viewSql, connection);
+          command.ExecuteNonQuery();
+        }
+      }
+
       #endregion
     }
   }

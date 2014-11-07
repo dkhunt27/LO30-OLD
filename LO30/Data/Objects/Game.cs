@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LO30.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,6 +10,8 @@ namespace LO30.Data.Objects
 {
   public class Game
   {
+    private Lo30DataService _lo30DataService;
+
     [Required, Key, DatabaseGenerated(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.None)]
     public int GameId { get; set; }
 
@@ -17,6 +20,9 @@ namespace LO30.Data.Objects
 
     [Required]
     public DateTime GameDateTime { get; set; }
+
+    [Required]
+    public int GameYYYYMMDD { get; set; }
 
     [Required, MaxLength(15)]
     public string Location { get; set; }
@@ -36,6 +42,7 @@ namespace LO30.Data.Objects
       this.SeasonId = sid;
 
       this.GameDateTime = time;
+      this.GameYYYYMMDD = ConvertDateTimeIntoYYYYMMDD(time);
       this.Location = loc;
       this.Playoff = play;
 
@@ -47,6 +54,12 @@ namespace LO30.Data.Objects
       var locationKey = string.Format("gid: {0}, sid: {1}",
                             this.GameId,
                             this.SeasonId);
+    }
+
+    public int ConvertDateTimeIntoYYYYMMDD(DateTime? toConvert)
+    {
+      var lo30DataService = new Lo30DataService();
+      return lo30DataService.ConvertDateTimeIntoYYYYMMDD(toConvert);
     }
   }
 }

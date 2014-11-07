@@ -5,7 +5,21 @@ lo30NgApp.factory(
   'alertService',
   [
     'toaster',
-    function (toaster) {
+    'externalLibService',
+    function (toaster, externalLibService) {
+
+      var _ = externalLibService._;
+
+      var alertTitleDataRetrievalSuccessful = "Data Retrieval Successful";
+      var alertTitleDataRetrievalUnsuccessful = "Data Retrieval Unsuccessful";
+      var alertMessageTemplateRetrievalSuccessful = "Retrieved <%=retrievedType%>, Length: <%=retrievedLength%>";
+      var alertMessageTemplateRetrievalUnsuccessful = "Received following error trying to retrieve <%=retrievedType%>. Error:<%=retrievedError%>";
+      var alertMessage;
+
+      var errorRetrieval = function (retrievedType, retrievedError) {
+        alertMessage = _.template(alertMessageTemplateRetrievalUnsuccessful)({ retrievedType: retrievedType, retrievedError: retrievedError });
+        error(alertMessage, alertTitleDataRetrievalUnsuccessful)
+      };
 
       var error = function (body, title) {
         toaster.pop("error", title, body, 5000);
@@ -15,6 +29,11 @@ lo30NgApp.factory(
       var info = function (body, title) {
         toaster.pop("info", title, body, 5000);
         console.log(title + ":" + body);
+      };
+
+      var successRetrieval = function (retrievedType, retrievedLength) {
+        alertMessage = _.template(alertMessageTemplateRetrievalSuccessful)({ retrievedType: retrievedType, retrievedLength: retrievedLength });
+        success(alertMessage, alertTitleDataRetrievalSuccessful)
       };
 
       var success = function (body, title) {
@@ -28,8 +47,10 @@ lo30NgApp.factory(
       };
 
       return {
+        errorRetrieval: errorRetrieval,
         error: error,
         info: info,
+        successRetrieval: successRetrieval,
         success: success,
         warning: warning
       };

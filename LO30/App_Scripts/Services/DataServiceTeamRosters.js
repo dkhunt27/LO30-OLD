@@ -11,11 +11,11 @@ lo30NgApp.factory("dataServiceTeamRosters",
       var resourceTeamRostersBySeasonTeamIdAndYYYYMMDD = $resource(constApisUrl + '/teamRosters/:seasonTeamId/:yyyymmdd', { seasonTeamId: '@seasonTeamId', yyyymmdd: '@yyyymmdd' });
       var resourceTeamRosterBySeasonTeamIdPlayerIdAndYYYYMMDD = $resource(constApisUrl + '/teamRoster/:seasonTeamId/:yyyymmdd/:playerId', { seasonTeamId: '@seasonTeamId', yyyymmdd: '@yyyymmdd', playerId: '@playerId' });
 
-      var getTeamRosters = function () {
+      var listTeamRosters = function () {
         return resourceTeamRosters.query();
       };
 
-      var getTeamRostersBySeasonTeamIdAndYYYYMMDD = function (seasonTeamId, yyyymmdd) {
+      var listTeamRostersBySeasonTeamIdAndYYYYMMDD = function (seasonTeamId, yyyymmdd) {
         return resourceTeamRostersBySeasonTeamIdAndYYYYMMDD.query({ seasonTeamId: seasonTeamId, yyyymmdd: yyyymmdd });
       };
       
@@ -24,8 +24,8 @@ lo30NgApp.factory("dataServiceTeamRosters",
       };
 
       return {
-        getTeamRosters: getTeamRosters,
-        getTeamRostersBySeasonTeamIdAndYYYYMMDD: getTeamRostersBySeasonTeamIdAndYYYYMMDD,
+        listTeamRosters: listTeamRosters,
+        listTeamRostersBySeasonTeamIdAndYYYYMMDD: listTeamRostersBySeasonTeamIdAndYYYYMMDD,
         getTeamRosterBySeasonTeamIdYYYYMMDDAndPlayerId: getTeamRosterBySeasonTeamIdYYYYMMDDAndPlayerId
       };
     }

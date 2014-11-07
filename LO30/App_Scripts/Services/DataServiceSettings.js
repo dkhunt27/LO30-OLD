@@ -9,7 +9,7 @@ lo30NgApp.factory("dataServiceSettings",
 
       var resourceSettings = $resource(constApisUrl + '/settings');
 
-      var getSettings = function () {
+      var listSettings = function () {
         return resourceSettings.query();
       };
 
@@ -18,7 +18,7 @@ lo30NgApp.factory("dataServiceSettings",
       };
 
       return {
-        getSettings: getSettings,
+        listSettings: listSettings,
         setSettings: setSettings
       };
     }

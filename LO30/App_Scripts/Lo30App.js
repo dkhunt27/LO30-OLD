@@ -19,6 +19,12 @@ lo30NgApp.config(
       // Directives
       // Home
 
+      // ScoreSheets
+      $routeProvider.when("/ScoreSheets/Entry", {
+        controller: "scoreSheetsEntryController",
+        templateUrl: "/Templates/ScoreSheets/Entry.html"
+      });
+
       // Standings
       $routeProvider.when("/Standings/RegularSeason", {
         controller: "standingsRegularSeasonController",
@@ -45,10 +51,7 @@ lo30NgApp.config(
         controller: "newsController",
         templateUrl: "/Templates/articlesView.html"
       });
-      $routeProvider.when("/ScoreSheet", {
-        controller: "scoreSheetController",
-        templateUrl: "/Templates/ScoreSheetAngular.html"
-      });
+
 
 
       $routeProvider.when("/", {

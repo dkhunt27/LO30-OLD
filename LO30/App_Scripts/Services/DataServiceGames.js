@@ -10,7 +10,7 @@ lo30NgApp.factory("dataServiceGames",
       var resourceGames = $resource(constApisUrl + '/games');
       var resourceGameByGameId = $resource(constApisUrl + '/games/:gameId', {gameId: '@gameId'});
 
-      var getGames = function () {
+      var listGames = function () {
         return resourceGames.query();
       };
 
@@ -19,7 +19,7 @@ lo30NgApp.factory("dataServiceGames",
       };
 
       return {
-        getGames: getGames,
+        listGames: listGames,
         getGameByGameId: getGameByGameId
       };
     }

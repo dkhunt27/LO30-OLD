@@ -80,10 +80,10 @@
   <!-- FOOTER -->
   <footer>
     @*<pre>$location.path() = {{$location.path()}}</pre>
-    <pre>$route.current.templateUrl = {{$route.current.templateUrl}}</pre>
-    <pre>$route.current.params = {{$route.current.params}}</pre>
-    <pre>$route.current.scope.name = {{$route.current.scope.name}}</pre>
-    <pre>$routeParams = {{$routeParams}}</pre>*@
+      <pre>$route.current.templateUrl = {{$route.current.templateUrl}}</pre>
+      <pre>$route.current.params = {{$route.current.params}}</pre>
+      <pre>$route.current.scope.name = {{$route.current.scope.name}}</pre>
+      <pre>$routeParams = {{$routeParams}}</pre>*@
 
     <!-- copyright , scrollTo Top -->
     <div class="footer-bar">
@@ -109,7 +109,6 @@
   <script type="text/javascript" src="~/Scripts/angular-resource.min.js"></script>
   <script type="text/javascript" src="~/Scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
   <script type="text/javascript" src="~/Scripts/toaster.js"></script>
-  <script type="text/javascript" src="~/Scripts/underscore.js"></script>
 
   <script type="text/javascript" src="~/Content/Template/plugins/bootstrap/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="~/Content/Template/plugins/magnific-popup/jquery.magnific-popup.min.js"></script>
@@ -134,13 +133,13 @@
   <script src="~/App_Scripts/Controllers/Admin/DataProcessingController.js"></script>
   <script src="~/App_Scripts/Controllers/Admin/SettingsController.js"></script>
   <script src="~/App_Scripts/Controllers/Home/HomeController.js"></script>
+  <script src="~/App_Scripts/Controllers/ScoreSheets/EntryController.js"></script>
   <script src="~/App_Scripts/Controllers/Standings/RegularSeasonController.js"></script>
   <script src="~/App_Scripts/Controllers/Standings/PlayoffsController.js"></script>
   <script src="~/App_Scripts/Controllers/Stats/GoaliesController.js"></script>
   <script src="~/App_Scripts/Controllers/Stats/PlayersController.js"></script>
   <script src="~/App_Scripts/Controllers/NewsController.js"></script>
   <script src="~/App_Scripts/Controllers/RootController.js"></script>
-  <script src="~/App_Scripts/Controllers/ScoreSheetController.js"></script>
 
   <!-- Directives -->
   <script src="~/App_Scripts/Directives/GameRoster.js"></script>
@@ -155,11 +154,17 @@
   <script src="~/App_Scripts/Services/DataServiceForWebGoalieStats.js"></script>
   <script src="~/App_Scripts/Services/DataServiceForWebPlayerStats.js"></script>
   <script src="~/App_Scripts/Services/DataServiceForWebTeamStandings.js"></script>
-  <script src="~/App_Scripts/Services/DataServiceGames.js"></script>
   <script src="~/App_Scripts/Services/DataServiceGameRosters.js"></script>
+  <script src="~/App_Scripts/Services/DataServiceGames.js"></script>
+  <script src="~/App_Scripts/Services/DataServiceGameTeams.js"></script>
   <script src="~/App_Scripts/Services/DataServiceSettings.js"></script>
+  <script src="~/App_Scripts/Services/DataServiceTeamRosters.js"></script>
+  <script src="~/App_Scripts/Services/ExternalLibService.js"></script>
   <script src="~/App_Scripts/Services/NewsService.js"></script>
-  <script src="~/App_Scripts/Services/ScoreSheetService.js"></script>
+
+  <!-- External Libraries -->
+  <script type="text/javascript" src="~/Scripts/underscore.js"></script>
+  <script type="text/javascript" src="~/Scripts/simple.js.validator.min.js"></script>
 
   <!-- Google Analytics: Change UA-XXXXX-X to be your site's ID. Go to http://www.google.com/analytics/ for more information. -->
   <!--<script>

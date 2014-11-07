@@ -13,15 +13,15 @@ lo30NgApp.factory("dataServiceGameRosters",
       var resourceGameRosterByGameRosterId = $resource(constApisUrl + '/gameRoster/:gameRosterId', { gameRosterId: '@gameRosterId' });
       var resourceGameRosterByGameTeamIdAndPlayerNumber = $resource(constApisUrl + '/gameRoster/:gameRosterId', { gameId: '@gameId', playerNumber: '@playerNumber' });
 
-      var getGameRosters = function () {
+      var listGameRosters = function () {
         return resourceGameRosters.query();
       };
 
-      var getGameRostersByGameId = function (gameId) {
+      var listGameRostersByGameId = function (gameId) {
         return resourceGameRostersByGameId.query({ gameId: gameId });
       };
 
-      var getGameRostersByGameIdAndHomeTeam = function (gameId, homeTeam) {
+      var listGameRostersByGameIdAndHomeTeam = function (gameId, homeTeam) {
         return resourceGameRostersByGameIdAndHomeTeam.query({ gameId: gameId, homeTeam: homeTeam });
       };
 
@@ -34,9 +34,9 @@ lo30NgApp.factory("dataServiceGameRosters",
       };
 
       return {
-        getGameRosters: getGameRosters,
-        getGameRostersByGameId: getGameRostersByGameId,
-        getGameRostersByGameIdAndHomeTeam: getGameRostersByGameIdAndHomeTeam,
+        listGameRosters: listGameRosters,
+        listGameRostersByGameId: listGameRostersByGameId,
+        listGameRostersByGameIdAndHomeTeam: listGameRostersByGameIdAndHomeTeam,
         getGameRosterByGameRosterId: getGameRosterByGameRosterId,
         getGameRosterByGameTeamIdAndPlayerNumber: getGameRosterByGameTeamIdAndPlayerNumber
       };

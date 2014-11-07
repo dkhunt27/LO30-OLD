@@ -39,8 +39,26 @@ namespace LO30
 
       config.Routes.MapHttpRoute(
           name: "ApiGames",
-          routeTemplate: constApisUrl + "/games/{gameId}/",
+          routeTemplate: constApisUrl + "/games/{gameId}",
           defaults: new { controller = "Games", gameId = RouteParameter.Optional }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiGameTeams",
+          routeTemplate: constApisUrl + "/gameTeams/{gameId}",
+          defaults: new { controller = "GameTeams", gameId = RouteParameter.Optional }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiGameTeam",
+          routeTemplate: constApisUrl + "/gameTeam/{gameTeamId}",
+          defaults: new { controller = "GameTeam" }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiGameTeam2",
+          routeTemplate: constApisUrl + "/gameTeam/{gameId}/{homeTeam}",
+          defaults: new { controller = "GameTeam" }
       );
 
       config.Routes.MapHttpRoute(

@@ -265,7 +265,7 @@ lo30NgApp.controller('statsPlayersController',
 
         $scope.initializeScopeVariables();
 
-        dataServiceForWebPlayerStats.getForWebPlayerStats().$promise.then(
+        dataServiceForWebPlayerStats.listForWebPlayerStats().$promise.then(
           function (result) {
             // service call on success
             if (result && result.length && result.length > 0) {
@@ -276,13 +276,11 @@ lo30NgApp.controller('statsPlayersController',
 
               $scope.requests.playerStatsLoaded = true;
 
-              alertMessage = _.template(alertMessageTemplateRetrievalSuccessful)({ retrievedType: retrievedType, retrievedLength: $scope.data.playerStats.length });
-              alertService.info(alertMessage, alertTitleDataRetrievalSuccessful);
+              alertService.successRetrieval(retrievedType, $scope.data.playerStats.length);
 
             } else {
               // results not successful
-              alertMessage = _.template(alertMessageTemplateRetrievalUnsuccessful)({ retrievedType: retrievedType, retrievedError: result.reason });
-              alertService.error(alertMessage, alertTitleDataRetrievalUnsuccessful);
+              alertService.errorRetrieval(retrievedType, result.reason);
             }
           }
         );

@@ -9,13 +9,12 @@ lo30NgApp.factory("dataServiceForWebTeamStandings",
 
       var resourceForWebTeamStandings = $resource(constApisUrl + '/forWebTeamStandings');
 
-      var getForWebTeamStandings = function () {
+      var listForWebTeamStandings = function () {
         return resourceForWebTeamStandings.query();
       };
 
-
       return {
-        getForWebTeamStandings: getForWebTeamStandings
+        listForWebTeamStandings: listForWebTeamStandings
       };
     }
   ]

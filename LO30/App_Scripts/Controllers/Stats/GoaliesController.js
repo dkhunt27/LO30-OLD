@@ -274,7 +274,7 @@ lo30NgApp.controller('statsGoaliesController',
 
         $scope.initializeScopeVariables();
 
-        dataServiceForWebGoalieStats.getForWebGoalieStats().$promise.then(
+        dataServiceForWebGoalieStats.listForWebGoalieStats().$promise.then(
           function (result) {
             // service call on success
             if (result && result.length && result.length > 0) {
@@ -291,14 +291,11 @@ lo30NgApp.controller('statsGoaliesController',
               $scope.calcWinPct();
               $scope.requests.goalieStatsLoaded = true;
 
-
-              alertMessage = _.template(alertMessageTemplateRetrievalSuccessful)({ retrievedType: retrievedType, retrievedLength: $scope.data.goalieStats.length });
-              alertService.info(alertMessage, alertTitleDataRetrievalSuccessful);
+              alertService.successRetrieval(retrievedType, $scope.data.goalieStats.length);
 
             } else {
               // results not successful
-              alertMessage = _.template(alertMessageTemplateRetrievalUnsuccessful)({ retrievedType: retrievedType, retrievedError: result.reason });
-              alertService.error(alertMessage, alertTitleDataRetrievalUnsuccessful);
+              alertService.errorRetrieval(retrievedType, result.reason);
             }
           }
         );
@@ -307,7 +304,7 @@ lo30NgApp.controller('statsGoaliesController',
       $scope.getSettings = function () {
         var retrievedType = "Settings";
 
-        dataServiceSettings.getSettings().$promise.then(
+        dataServiceSettings.listSettings().$promise.then(
           function (result) {
             // service call on success
             if (result && result.length && result.length > 0) {
@@ -326,13 +323,11 @@ lo30NgApp.controller('statsGoaliesController',
                 }
               });
 
-              alertMessage = _.template(alertMessageTemplateRetrievalSuccessful)({ retrievedType: retrievedType, retrievedLength: 1 });
-              alertService.info(alertMessage, alertTitleDataRetrievalSuccessful);
+              alertService.successRetrieval(retrievedType, 1);
 
             } else {
               // results not successful
-              alertMessage = _.template(alertMessageTemplateRetrievalUnsuccessful)({ retrievedType: retrievedType, retrievedError: result.reason });
-              alertService.error(alertMessage, alertTitleDataRetrievalUnsuccessful);
+              alertService.errorRetrieval(retrievedType, result.reason);
             }
           }
         );

@@ -9,7 +9,6 @@
     <div>Date: {{data.gameSelected.gameDateTime}}</div>
     <div>Type: {{data.gameSelected.season.seasonName}} {{data.gameSelected.playoff == true ? "Playoff Game" : "Regular Season Game"}}</div>
   </h3>
-
   <div>
     <accordion close-others="true">
       <accordion-group ng-hide="requests.gameRosterHomeLoaded" heading="Select a game to load the Home Team Roster">
@@ -40,4 +39,53 @@
       </accordion-group>
       </accordian>
   </div>
+  <pre>
+    <table>
+      <thead>
+        <tr>
+          <td>Data</td>
+          <td>Loaded</td>
+          <td>Length</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Games</td>
+          <td>{{requests.gamesLoaded}}</td>
+        <td>{{data.games.length}}</td>
+        </tr>
+        <tr>
+        <td>gameTeamHome</td>
+        <td>{{requests.gameTeamHomeLoaded}}</td>
+        <td>{{data.gameTeamHome.length}}</td>
+        </tr>
+        <tr>
+        <td>gameTeamAway</td>
+        <td>{{requests.gameTeamAwayLoaded}}</td>
+        <td>{{data.gameTeamAway.length}}</td>
+        </tr>
+        <tr>
+        <td>gameRosterHome</td>
+        <td>{{requests.gameRosterHomeLoaded}}</td>
+        <td>{{data.gameRosterHome.length}}</td>
+        </tr>
+        <tr>
+        <td>gameRosterAway</td>
+        <td>{{requests.gameRosterAwayLoaded}}</td>
+        <td>{{data.gameRosterAway.length}}</td>
+        </tr>
+        <tr>
+        <td>teamRosterHome</td>
+        <td>{{requests.teamRosterHomeLoaded}}</td>
+        <td>{{data.teamRosterHome.length}}</td>
+        </tr>
+        <tr>
+        <td>teamRosterAway</td>
+        <td>{{requests.teamRosterAwayLoaded}}</td>
+        <td>{{data.teamRosterAway.length}}</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </pre>
 </div>

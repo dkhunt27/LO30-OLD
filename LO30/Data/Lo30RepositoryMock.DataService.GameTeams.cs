@@ -15,6 +15,11 @@ namespace LO30.Data
       return _gameTeams;
     }
 
+    public List<GameTeam> GetGameTeamsByGameId(int gameId)
+    {
+      return _gameTeams.Where(x => x.GameId == gameId).ToList();
+    }
+
     public GameTeam GetGameTeamByGameTeamId(int gameTeamId)
     {
       return _gameTeams.Where(x => x.GameTeamId == gameTeamId).FirstOrDefault();

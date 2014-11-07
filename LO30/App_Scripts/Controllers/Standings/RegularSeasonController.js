@@ -9,12 +9,6 @@ lo30NgApp.controller('standingsRegularSeasonController',
     'dataServiceForWebTeamStandings',
     function ($scope, $timeout, alertService, dataServiceForWebTeamStandings) {
 
-      var alertTitleDataRetrievalSuccessful = "Data Retrieval Successful";
-      var alertTitleDataRetrievalUnsuccessful = "Data Retrieval Unsuccessful";
-      var alertMessageTemplateRetrievalSuccessful = "Retrieved <%=retrievedType%>, Length: <%=retrievedLength%>";
-      var alertMessageTemplateRetrievalUnsuccessful = "Received following error trying to retrieve <%=retrievedType%>. Error:<%=retrievedError%>";
-      var alertMessage;
-
       $scope.sortAscOnly = function (column) {
         $scope.sortOn = column;
         $scope.sortDirection = false;
@@ -44,7 +38,7 @@ lo30NgApp.controller('standingsRegularSeasonController',
 
         $scope.initializeScopeVariables();
 
-        dataServiceForWebTeamStandings.getForWebTeamStandings().$promise.then(
+        dataServiceForWebTeamStandings.listForWebTeamStandings().$promise.then(
           function (result) {
             // service call on success
             if (result && result.length && result.length > 0) {
@@ -55,13 +49,11 @@ lo30NgApp.controller('standingsRegularSeasonController',
 
               $scope.requests.teamStandingsLoaded = true;
 
-              alertMessage = _.template(alertMessageTemplateRetrievalSuccessful)({ retrievedType: retrievedType, retrievedLength: $scope.data.teamStandings.length });
-              alertService.info(alertMessage, alertTitleDataRetrievalSuccessful);
+              alertService.successRetrieval(retrievedType, $scope.data.teamStandings.length);
 
             } else {
               // results not successful
-              alertMessage = _.template(alertMessageTemplateRetrievalUnsuccessful)({ retrievedType: retrievedType, retrievedError: result.reason });
-              alertService.error(alertMessage, alertTitleDataRetrievalUnsuccessful);
+              alertService.errorRetrieval(retrievedType, result.reason);
             }
           }
         );

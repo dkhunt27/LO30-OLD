@@ -9,13 +9,12 @@ lo30NgApp.factory("dataServiceForWebPlayerStats",
 
       var resourceForWebPlayerStats = $resource(constApisUrl + '/forWebPlayerStats');
 
-      var getForWebPlayerStats = function () {
+      var listForWebPlayerStats = function () {
         return resourceForWebPlayerStats.query();
       };
 
-
       return {
-        getForWebPlayerStats: getForWebPlayerStats
+        listForWebPlayerStats: listForWebPlayerStats
       };
     }
   ]
