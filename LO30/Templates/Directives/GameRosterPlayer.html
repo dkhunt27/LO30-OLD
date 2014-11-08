@@ -1,0 +1,62 @@
+﻿<div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="row" ng-hide="teamGameRoster.rosteredDidNotPlay">
+        <div class="col-xs-1">{{teamGameRoster.rostered.line}}</div>
+        <div class="col-xs-1">
+          <input type="checkbox" ng-model="teamGameRoster.rosteredDidNotPlay">
+        </div>
+        <div class="col-xs-1">
+          <input type="checkbox" ng-model="teamGameRoster.rosteredSubbedFor" ng-change="toggleRosteredSubbedFor(teamGameRoster)">
+        </div>
+        <div class="col-xs-1">{{teamGameRoster.rostered.playerNumber}}</div>
+        <div class="col-xs-1">{{teamGameRoster.rostered.position}}</div>
+        <div class="col-xs-5">{{teamGameRoster.rostered.player.firstName}} {{teamGameRoster.rostered.player.lastName}}</div>
+        <div class="col-xs-1">{{teamGameRoster.rostered.ratingPrimary}}.{{teamGameRoster.rostered.ratingSecondary}}</div>
+        <div class="col-xs-1">{{teamGameRoster.rostered.playerId}}</div>
+      </div>
+      <div class="row" ng-show="teamGameRoster.rosteredDidNotPlay">
+        <div class="col-xs-1">{{teamGameRoster.rostered.line}}</div>
+        <div class="col-xs-1">
+          <input type="checkbox" ng-model="teamGameRoster.rosteredDidNotPlay">
+        </div>
+        <div class="col-xs-1">
+          <input type="checkbox" ng-model="teamGameRoster.rosteredSubbedFor">
+        </div>
+        <s class="col-xs-1">{{teamGameRoster.rostered.playerNumber}}</s>
+        <s class="col-xs-1">{{teamGameRoster.rostered.position}}</s>
+        <s class="col-xs-5">{{teamGameRoster.rostered.player.firstName}} {{teamGameRoster.rostered.player.lastName}}</s>
+        <s class="col-xs-1">{{teamGameRoster.rostered.ratingPrimary}}.{{teamGameRoster.rostered.ratingSecondary}}</s>
+        <s class="col-xs-1">{{teamGameRoster.rostered.playerId}}</s>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="row" ng-repeat="item in teamGameRoster.subbed">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-1"></div>
+        <div class="col-xs-1"><span class="glyphicon glyphicon-plus"></span></div>
+        <div class="col-xs-1">{{item.playerNumber}}</div>
+        <div class="col-xs-1">{{item.position}}</div>
+        <div class="col-xs-5">{{item.player.firstName}} {{item.player.lastName}}</div>
+        <div class="col-xs-1">{{item.ratingPrimary}}.{{item.ratingSecondary}}</div>
+        <div class="col-xs-1">{{item.playerId}}</div>
+      </div>
+    </div>
+  </div>
+  <div class="row" ng-show="user.clickedAddSub">
+    <div class="col-xs-12">
+      <div class="row">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-1"></div>
+        <div class="col-xs-1"><span class="glyphicon glyphicon-plus"></span></div>
+        <div class="col-xs-1">here</div>
+        <div class="col-xs-1"></div>
+        <div class="col-xs-5"></div>
+        <div class="col-xs-1"></div>
+        <div class="col-xs-1"></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -173,7 +173,7 @@ lo30NgApp.controller('scoreSheetsEntryController',
 
               // TODO MOVE THIS TO A USER INPUT
               $scope.user.selectedGameId = true;
-              $scope.data.gameIdSelected = 3200;
+              $scope.data.gameIdSelected = 3227;
               $scope.data.gameSelected = _.find($scope.data.games, function (item) { return item.gameId === $scope.data.gameIdSelected });
 
             } else {

@@ -1,23 +1,48 @@
 ﻿<div>
-    <table class="table table-condensed table-striped">
-      <thead>
-        <tr>
-          <td>Sub</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="item in gameRoster">
-          <td>{{item.sub}}</td>
-          <td>{{item.position}}</td>
-          <td>{{item.line}}</td>
-          <td>{{item.playerId}}</td>
-          <td>{{item.playerNumber}}</td>
-          <td>{{item.playerNumber}}</td>
-          <td>{{item.line}}</td>
-          <td>{{item.ratingPrimary}}</td>
-          <td>{{item.ratingSecondary}}</td>
-          <td>{{item.subbingForPlayerId}}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="row">
+    <div class="col-xs-1">Line</div>
+    <div class="col-xs-1">In</div>
+    <div class="col-xs-1">Sub</div>
+    <div class="col-xs-1">Num</div>
+    <div class="col-xs-1">Pos</div>
+    <div class="col-xs-5">Player Name</div>
+    <div class="col-xs-1">Rating</div>
+    <div class="col-xs-1">Pid</div>
+  </div>
+  <div class="well well-sm">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="row" ng-repeat="item in data.goalies">
+          <lo30-game-roster-player team-game-roster="item" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="well well-sm">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="row" ng-repeat="item in data.line1 | orderBy:['-position','ratingPrimary','ratingSecondary']">
+          <lo30-game-roster-player team-game-roster="item" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="well well-sm">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="row" ng-repeat="item in data.line2 | orderBy:['-position','ratingPrimary','ratingSecondary']">
+          <lo30-game-roster-player team-game-roster="item" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="well well-sm">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="row" ng-repeat="item in data.line3 | orderBy:['-position','ratingPrimary','ratingSecondary']">
+          <lo30-game-roster-player team-game-roster="item" />
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

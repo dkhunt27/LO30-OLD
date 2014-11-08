@@ -229,6 +229,7 @@
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="App_Scripts\Controllers\Admin\SettingsController.js" />
     <Content Include="App_Scripts\Controllers\Admin\DataProcessingController.js" />
+    <Content Include="App_Scripts\Controllers\BlankController.js" />
     <Content Include="App_Scripts\Controllers\Standings\PlayoffsController.js" />
     <Content Include="App_Scripts\Controllers\Stats\GoaliesController.js" />
     <Content Include="App_Scripts\Controllers\NewsController.js" />
@@ -236,7 +237,12 @@
     <Content Include="App_Scripts\Controllers\RootController.js" />
     <Content Include="App_Scripts\Controllers\Home\HomeController.js" />
     <Content Include="App_Scripts\Controllers\Standings\RegularSeasonController.js" />
-    <Content Include="App_Scripts\Directives\GameRoster.js" />
+    <Content Include="App_Scripts\Directives\PlayerSearchSub\PlayerSubSearch.js" />
+    <Content Include="App_Scripts\Directives\PlayerSearchSub\PlayerSubSearchController.js" />
+    <Content Include="App_Scripts\Directives\GameRosterPlayer\GameRosterPlayer.js" />
+    <Content Include="App_Scripts\Directives\GameRosterPlayer\GameRosterPlayerController.js" />
+    <Content Include="App_Scripts\Directives\GameRoster\GameRosterController.js" />
+    <Content Include="App_Scripts\Directives\GameRoster\GameRoster.js" />
     <Content Include="App_Scripts\Filters\FilterizeFilter.js" />
     <Content Include="App_Scripts\Filters\PercentageFilter.js" />
     <Content Include="App_Scripts\Lo30App.js" />
@@ -2217,6 +2223,9 @@
       <DependentUpon>slider_revolution.js</DependentUpon>
     </Content>
     <Content Include="Templates\Admin\Settings.html" />
+    <Content Include="Templates\Directives\GameRosterDivs.html" />
+    <Content Include="Templates\Directives\GameRosterPlayer.html" />
+    <Content Include="Templates\Directives\GameRosterTable.html" />
     <Content Include="Templates\Directives\GameRoster.html" />
     <Content Include="Templates\ScoreSheets\Entry.html" />
     <Content Include="Templates\articlesView.html" />

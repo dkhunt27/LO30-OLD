@@ -72,3 +72,11 @@ td.td-sorted-by {
           box-shadow: none;
   opacity: .65;
 }
+
+.on-its-side {
+  transform: rotate(270deg); /* W3C */
+  -webkit-transform: rotate(270deg); /* Safari & Chrome */
+  -moz-transform: rotate(270deg); /* Firefox */
+  -ms-transform: rotate(270deg); /* Internet Explorer */
+  -o-transform: rotate(270deg); /* Opera */
+}
