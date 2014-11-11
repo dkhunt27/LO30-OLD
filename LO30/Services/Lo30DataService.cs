@@ -629,13 +629,28 @@ namespace LO30.Services
       if (toConvert == null)
       {
         result = 12345678;
-      } 
+      }
       else
       {
         result = (toConvert.Value.Year * 10000) + (toConvert.Value.Month * 100) + toConvert.Value.Day;
       }
 
       return result;
+    }
+
+    public void ConvertCombinedRatingToPrimarySecondary(string ratingCombined, out int ratingPrimary, out int ratingSecondary)
+    {
+      var ratingParts = ratingCombined.Split('.');
+
+      if (ratingParts.Length != 2)
+      {
+        throw new ArgumentException("ratingCombined (" + ratingCombined + ") needs to be X.Y");
+      }
+
+      ratingPrimary = Convert.ToInt32(ratingParts[0]);
+      ratingSecondary = Convert.ToInt32(ratingParts[1]);
+
+      return;
     }
   }
 }

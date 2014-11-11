@@ -1,0 +1,46 @@
+<div id="PlayerSubSearch">
+  <div class="col-xs-12">
+    <div class="input-group">
+      <div class="input-group-addon">
+        <span class="glyphicon glyphicon-search"></span>
+      </div>
+      <input class="form-control" id="search-pos" name="searchPos" ng-model="user.searchPos" type="text" focus="" required="" placeholder="POSITION">
+    </div>
+    <div class="input-group">
+      <input class="form-control" id="search-rate-min" name="searchRateMin" ng-model="user.searchRateMin" type="text" focus="" required="" placeholder="MIN RATING">
+      <div class="input-group-addon">
+        <span class="glyphicon glyphicon-step-backward"></span>
+      </div>
+      <div class="input-group-addon">
+        <span>Rating</span>
+      </div>
+      <div class="input-group-addon">
+        <span class="glyphicon glyphicon-step-forward"></span>
+      </div>
+      <input class="form-control" id="search-rate-max" name="searchRateMax" ng-model="user.searchRateMax" type="text" focus="" required="" placeholder="MAX RATING">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Go!</button>
+      </span>
+    </div>
+  </div>
+  <br />
+  <table class="table table-condensed table-bordered table-striped table-dk-blue">
+    <thead>
+      <tr>
+        <td>Id</td>
+        <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'team'}" ng-click="sortAscOnly('team')">Team</td>
+        <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'player'}" ng-click="sortAscOnly('player')">Player</td>
+        <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'pos'}" ng-click="sortAscOnly('pos')">Position</td>
+        <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'rating'}" ng-click="sortDescOnly('rating')">Rating</td>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in data.playersSearch | filterize:user.searchPos:user.searchRateMin:user.searchRateMax | orderBy:sortOn:sortDirection">
+        <td>{{item.playerId}}</td>
+        <td ng-class="{'td-sorted-by':sortOn === 'team' }">{{item.team}}</td>
+        <td ng-class="{'td-sorted-by':sortOn === 'player' }">{{item.player}}</td>
+        <td ng-class="{'td-sorted-by':sortOn === 'pos' }">{{item.pos}}</td>
+        <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'gp'}">{{item.Rating}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

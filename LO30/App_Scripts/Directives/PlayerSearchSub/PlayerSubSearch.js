@@ -6,11 +6,13 @@ lo30NgApp.directive('lo30PlayerSubSearch',
     function () {
       return {
         restrict: 'E',
-        templateUrl: "/Templates/Directives/GameRosterPlayer.html",
+        templateUrl: "/Templates/Directives/PlayersSubSearch.html",
         scope: {
-          "teamGameRoster": "="
+          "position": "=",
+          "ratingMin": "=",
+          "ratingMax": "="
         },
-        controller: "gameRosterPlayerController",
+        controller: "lo30PlayerSubSearchController",
         link: function (scope, element, attrs, controller) {
 
           scope.activate();

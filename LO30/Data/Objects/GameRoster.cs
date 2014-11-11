@@ -254,7 +254,7 @@ namespace LO30.Data.Objects
             isGoalie = true;
           }
 
-          var playerRating = lo30ContextService.FindPlayerRatingWithYYYYMMDD(seasonId, playerId, gameDateYYYYMMDD);
+          var playerRating = lo30ContextService.FindPlayerRatingWithYYYYMMDD(playerId, homePlayerPosition, seasonId, gameDateYYYYMMDD);
 
           var gameRoster = new GameRoster(
                                   gtid: homeGameTeamId,
@@ -347,7 +347,7 @@ namespace LO30.Data.Objects
             isGoalie = true;
           }
 
-          playerRating = lo30ContextService.FindPlayerRatingWithYYYYMMDD(seasonId, playerId, gameDateYYYYMMDD);
+          playerRating = lo30ContextService.FindPlayerRatingWithYYYYMMDD(playerId, awayPlayerPosition, seasonId, gameDateYYYYMMDD);
 
           gameRoster = new GameRoster(
                                   gtid: awayGameTeamId,

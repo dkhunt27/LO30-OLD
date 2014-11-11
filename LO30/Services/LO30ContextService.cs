@@ -1699,15 +1699,18 @@ namespace LO30.Services
       #endregion
 
       #region Find-PlayerRating (addtl finds)
-      public PlayerRating FindPlayerRatingWithYYYYMMDD(int seasonId, int playerId, int yyyymmdd)
+      public PlayerRating FindPlayerRatingWithYYYYMMDD(int playerId, string position, int seasonId, int yyyymmdd)
       {
-        return FindPlayerRatingWithYYYYMMDD(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonId: seasonId, playerId: playerId, yyyymmdd: yyyymmdd);
+        bool errorIfNotFound = true;
+        bool errorIfMoreThanOneFound = true;
+        return FindPlayerRatingWithYYYYMMDD(errorIfNotFound, errorIfMoreThanOneFound, playerId, position, seasonId, yyyymmdd);
       }
 
-      public PlayerRating FindPlayerRatingWithYYYYMMDD(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonId, int playerId, int yyyymmdd)
+      public PlayerRating FindPlayerRatingWithYYYYMMDD(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId, string position, int seasonId, int yyyymmdd)
       {
         var found = _ctx.PlayerRatings.Where(x => x.SeasonId == seasonId &&
                                                   x.PlayerId == playerId &&
+                                                  (x.Position == position || x.Position == "X") &&
                                                   x.StartYYYYMMDD <= yyyymmdd &&
                                                   x.EndYYYYMMDD >= yyyymmdd)
                                             .ToList();
@@ -1715,8 +1718,9 @@ namespace LO30.Services
         if (errorIfNotFound == true && found.Count < 1)
         {
           throw new ArgumentNullException("found", "Could not find PlayerRating for" +
-                                                  " seasonId:" + seasonId +
                                                   " PlayerId:" + playerId +
+                                                  " Position:" + position +
+                                                  " seasonId:" + seasonId +
                                                   " StartYYYYMMDD and EndYYYYMMDD between:" + yyyymmdd
                                           );
         }
@@ -1724,8 +1728,9 @@ namespace LO30.Services
         if (errorIfMoreThanOneFound == true && found.Count > 1)
         {
           throw new ArgumentNullException("found", "More than 1 PlayerRating was not found for" +
-                                                  " seasonId:" + seasonId +
                                                   " PlayerId:" + playerId +
+                                                  " Position:" + position +
+                                                  " seasonId:" + seasonId +
                                                   " StartYYYYMMDD and EndYYYYMMDD between:" + yyyymmdd
                                           );
         }
@@ -2058,6 +2063,39 @@ namespace LO30.Services
         {
           throw new ArgumentNullException("found", "More than 1 Season was not found for" +
                                                   " StartYYYYMMDD and EndYYYYMMDD between:" + yyyymmdd
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+
+      public Season FindSeasonWithIsCurrentSeason(bool isCurrentSeason)
+      {
+        return FindSeasonCurrent(errorIfNotFound: true, errorIfMoreThanOneFound: true, isCurrentSeason: isCurrentSeason);
+      }
+
+      public Season FindSeasonCurrent(bool errorIfNotFound, bool errorIfMoreThanOneFound, bool isCurrentSeason)
+      {
+        var found = _ctx.Seasons.Where(x => x.IsCurrentSeason == isCurrentSeason).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find Season for" +
+                                                  " isCurrentSeason:" + isCurrentSeason
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 Season was not found for" +
+                                                  " isCurrentSeason:" + isCurrentSeason
                                           );
         }
 

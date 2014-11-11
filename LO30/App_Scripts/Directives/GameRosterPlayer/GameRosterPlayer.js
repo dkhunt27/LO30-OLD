@@ -10,7 +10,7 @@ lo30NgApp.directive('lo30GameRosterPlayer',
         scope: {
           "teamGameRoster": "="
         },
-        controller: "gameRosterPlayerController",
+        controller: "lo30GameRosterPlayerController",
         link: function (scope, element, attrs, controller) {
 
           scope.activate();

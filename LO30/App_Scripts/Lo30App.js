@@ -15,6 +15,10 @@ lo30NgApp.config(
         controller: "adminSettingsController",
         templateUrl: "/Templates/Admin/Settings.html"
       });
+      $routeProvider.when("/Admin/Test/PlayerSubSearch", {
+        controller: "testPlayerSubSearchController",
+        templateUrl: "/Templates/Admin/Test/PlayerSubSearch.html"
+      });
 
       // Directives
       // Home

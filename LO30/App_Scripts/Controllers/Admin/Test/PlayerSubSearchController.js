@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 /* jshint -W117 */ //(remove the undefined warning)
-lo30NgApp.controller('blankController',
+lo30NgApp.controller('testPlayerSubSearchController',
   [
     '$scope',
     function ($scope) {
@@ -18,11 +18,6 @@ lo30NgApp.controller('blankController',
       };
 
       $scope.setWatches = function () {
-        $scope.$watch('someField', function (newVal, oldVal) {
-          if (newVal && newVal !== oldVal) {
-            //do something
-          }
-        }, true);
       };
 
       $scope.activate = function () {

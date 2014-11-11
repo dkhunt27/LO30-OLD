@@ -10,6 +10,7 @@ namespace LO30.Data
 {
   public partial class Lo30RepositoryMock : ILo30Repository
   {
+    private Lo30DataService _lo30DataService;
     private Lo30DataSerializationService _lo30DataSerializationService;
     
     private List<ForWebGoalieStat> _webGoalieStats;
@@ -20,14 +21,18 @@ namespace LO30.Data
     private List<Game> _games;
     private List<GameScore> _gameScores;
     private List<GameTeam> _gameTeams;
+    private List<Player> _players;
+    private List<PlayerRating> _playerRatings;
+    private List<Season> _seasons;
     private List<TeamRoster> _teamRosters;
 
     public Lo30RepositoryMock()
     {
+      _lo30DataService = new Lo30DataService();
       _lo30DataSerializationService = new Lo30DataSerializationService();
 
-      string appRoot = Environment.GetEnvironmentVariable("RoleRoot");
-      string folderPath2 = Path.Combine(appRoot + @"\", string.Format(@"approot\{0}", "ForWebGoalieStats.json"));
+      //string appRoot = Environment.GetEnvironmentVariable("RoleRoot");
+      //string folderPath2 = Path.Combine(appRoot + @"\", string.Format(@"approot\{0}", "ForWebGoalieStats.json"));
 
       var folderPath = @"C:\git\LO30\LO30\App_Data\SqlServer\";
       _webGoalieStats = _lo30DataSerializationService.FromJsonFromFile<List<ForWebGoalieStat>>(folderPath + "ForWebGoalieStats.json");
@@ -38,6 +43,9 @@ namespace LO30.Data
       _games = _lo30DataSerializationService.FromJsonFromFile<List<Game>>(folderPath + "Games.json");
       _gameScores = _lo30DataSerializationService.FromJsonFromFile<List<GameScore>>(folderPath + "GameScores.json");
       _gameTeams = _lo30DataSerializationService.FromJsonFromFile<List<GameTeam>>(folderPath + "GameTeams.json");
+      _players = _lo30DataSerializationService.FromJsonFromFile<List<Player>>(folderPath + "Players.json");
+      _playerRatings = _lo30DataSerializationService.FromJsonFromFile<List<PlayerRating>>(folderPath + "PlayerRatings.json");
+      _seasons = _lo30DataSerializationService.FromJsonFromFile<List<Season>>(folderPath + "Seasons.json");
       _teamRosters = _lo30DataSerializationService.FromJsonFromFile<List<TeamRoster>>(folderPath + "TeamRosters.json");
     }
 

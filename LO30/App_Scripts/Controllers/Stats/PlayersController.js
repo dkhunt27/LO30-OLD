@@ -290,6 +290,7 @@ lo30NgApp.controller('statsPlayersController',
       };
 
       $scope.activate = function () {
+        $scope.initializeScopeVariables();
         $scope.setWatches();
         $scope.getForWebPlayerStats();
         $timeout(function () {

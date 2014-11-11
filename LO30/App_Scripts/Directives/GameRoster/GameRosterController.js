@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 /* jshint -W117 */ //(remove the undefined warning)
-lo30NgApp.controller('gameRosterController',
+lo30NgApp.controller('lo30GameRosterController',
   [
     '$scope',
     'externalLibService',

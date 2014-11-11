@@ -229,6 +229,7 @@
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="App_Scripts\Controllers\Admin\SettingsController.js" />
     <Content Include="App_Scripts\Controllers\Admin\DataProcessingController.js" />
+    <Content Include="App_Scripts\Controllers\Admin\Test\PlayerSubSearchController.js" />
     <Content Include="App_Scripts\Controllers\BlankController.js" />
     <Content Include="App_Scripts\Controllers\Standings\PlayoffsController.js" />
     <Content Include="App_Scripts\Controllers\Stats\GoaliesController.js" />
@@ -248,6 +249,9 @@
     <Content Include="App_Scripts\Lo30App.js" />
     <Content Include="App_Scripts\Controllers\ScoreSheets\EntryController.js" />
     <Content Include="App_Scripts\Services\AdminDataProcessingService.js" />
+    <Content Include="App_Scripts\Services\DataServiceLo30Constants.js" />
+    <Content Include="App_Scripts\Services\DataServicePlayersSubSearch.js" />
+    <Content Include="App_Scripts\Services\DataServicePlayers.js" />
     <Content Include="App_Scripts\Services\ExternalLibService.js" />
     <Content Include="App_Scripts\Services\AlertService.js" />
     <Content Include="App_Scripts\Services\DataServiceForWebTeamStandings.js" />
@@ -276,6 +280,8 @@
     <Compile Include="Controllers\NavigationController.cs" />
     <Compile Include="Controllers\WebApi\Data\ForWebTeamStandingsController.cs" />
     <Compile Include="Controllers\WebApi\Data\GameTeamController.cs" />
+    <Compile Include="Controllers\WebApi\Data\PlayersSubSearchController.cs" />
+    <Compile Include="Controllers\WebApi\Data\PlayersController.cs" />
     <Compile Include="Controllers\WebApi\Data\TeamRostersController.cs" />
     <Compile Include="Controllers\WebApi\Data\GameTeamsController.cs" />
     <Compile Include="Controllers\WebApi\Data\GameScoresController.cs" />
@@ -303,6 +309,8 @@
     <Compile Include="Data\ILo30Repository.DataService.ForWebTeamStandings.cs" />
     <Compile Include="Data\ILo30Repository.DataService.ForWebPlayerStats.cs" />
     <Compile Include="Data\ILo30Repository.DataService.ForWebGoalieStats.cs" />
+    <Compile Include="Data\ILo30Repository.DataService.PlayersSubSearch.cs" />
+    <Compile Include="Data\ILo30Repository.DataService.Players.cs" />
     <Compile Include="Data\ILo30Repository.DataService.TeamRosters.cs" />
     <Compile Include="Data\ILo30Repository.DataService.GameScores.cs" />
     <Compile Include="Data\ILo30Repository.DataService.GameRosters.cs" />
@@ -313,6 +321,9 @@
     <Compile Include="Data\Lo30Repository.DataService.ForWebTeamStandings.cs" />
     <Compile Include="Data\Lo30Repository.DataService.ForWebPlayerStats.cs" />
     <Compile Include="Data\Lo30Repository.DataService.ForWebGoalieStats.cs" />
+    <Compile Include="Data\Lo30RepositoryMock.DataService.PlayersSubSearch.cs" />
+    <Compile Include="Data\Lo30Repository.DataService.PlayersSubSearch.cs" />
+    <Compile Include="Data\Lo30Repository.DataService.Players.cs" />
     <Compile Include="Data\Lo30Repository.DataService.TeamRosters.cs" />
     <Compile Include="Data\Lo30Repository.DataService.GameScores.cs" />
     <Compile Include="Data\Lo30Repository.DataService.GameOutcomes.cs" />
@@ -323,6 +334,7 @@
     <Compile Include="Data\Lo30RepositoryMock.DataService.ForWebTeamStandings.cs" />
     <Compile Include="Data\Lo30RepositoryMock.DataService.ForWebPlayerStats.cs" />
     <Compile Include="Data\Lo30RepositoryMock.DataService.ForWebGoalieStats.cs" />
+    <Compile Include="Data\Lo30RepositoryMock.DataService.Players.cs" />
     <Compile Include="Data\Lo30RepositoryMock.DataService.TeamRosters.cs" />
     <Compile Include="Data\Lo30RepositoryMock.DataService.GameScores.cs" />
     <Compile Include="Data\Lo30RepositoryMock.DataService.Settings.cs" />
@@ -333,6 +345,7 @@
     <Compile Include="Data\Lo30RepositoryMock.cs" />
     <Compile Include="Data\Objects\DataProcessing.cs" />
     <Compile Include="Data\Objects\ForWebTeamStanding.cs" />
+    <Compile Include="Data\Objects\PlayerSubSearch.cs" />
     <Compile Include="Data\Objects\ProcessingResult.cs" />
     <Compile Include="Data\Objects\Setting.cs" />
     <Compile Include="Models\DataServiceModels.cs" />
@@ -2223,10 +2236,12 @@
       <DependentUpon>slider_revolution.js</DependentUpon>
     </Content>
     <Content Include="Templates\Admin\Settings.html" />
+    <Content Include="Templates\Admin\Test\PlayerSubSearch.html" />
     <Content Include="Templates\Directives\GameRosterDivs.html" />
     <Content Include="Templates\Directives\GameRosterPlayer.html" />
     <Content Include="Templates\Directives\GameRosterTable.html" />
     <Content Include="Templates\Directives\GameRoster.html" />
+    <Content Include="Templates\Directives\PlayersSubSearch.html" />
     <Content Include="Templates\ScoreSheets\Entry.html" />
     <Content Include="Templates\articlesView.html" />
     <Content Include="Content\Site.css" />

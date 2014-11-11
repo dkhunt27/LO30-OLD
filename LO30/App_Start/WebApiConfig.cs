@@ -62,6 +62,18 @@ namespace LO30
       );
 
       config.Routes.MapHttpRoute(
+          name: "ApiPlayers",
+          routeTemplate: constApisUrl + "/players/{playerId}",
+          defaults: new { controller = "Players" }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiPlayersSubSearch",
+          routeTemplate: constApisUrl + "/playersSubSearch/{position}/{ratingMin}/{ratingMax}",
+          defaults: new { controller = "PlayersSubSearch" }
+      );
+
+      config.Routes.MapHttpRoute(
           name: "ApiTeamRosters",
           routeTemplate: constApisUrl + "/teamRosters/{seasonTeamId}/{yyyymmdd}",
           defaults: new { controller = "TeamRosters", seasonTeamId = RouteParameter.Optional, yyyymmdd = RouteParameter.Optional }

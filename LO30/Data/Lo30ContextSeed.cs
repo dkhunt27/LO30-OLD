@@ -1143,8 +1143,8 @@ namespace LO30.Data
             // based on the draft spot, determine team roster line and position
             var seasonTeam = _lo30ContextService.FindSeasonTeam(teamId);
             var season = _lo30ContextService.FindSeason(seasonId);
-            var playerRating = _lo30ContextService.FindPlayerRatingWithYYYYMMDD(seasonTeam.SeasonId, playerId, season.StartYYYYMMDD);
             var playerDraft = _lo30ContextService.FindPlayerDraft(seasonTeam.SeasonId, playerId);
+            var playerRating = _lo30ContextService.FindPlayerRatingWithYYYYMMDD(playerId, playerDraft.Position, seasonTeam.SeasonId, season.StartYYYYMMDD);
 
             // default the team roster to the start/end of the season
             var teamRoster = new TeamRoster(
@@ -1270,7 +1270,7 @@ namespace LO30.Data
               isGoalie = true;
             }
 
-            var playerRating = _lo30ContextService.FindPlayerRatingWithYYYYMMDD(seasonId, playerId, gameDateYYYYMMDD);
+            var playerRating = _lo30ContextService.FindPlayerRatingWithYYYYMMDD(playerId, homePlayerPosition, seasonId, gameDateYYYYMMDD); ;
 
             var gameRoster = new GameRoster(
                                     gtid: homeGameTeamId, 
@@ -1363,7 +1363,7 @@ namespace LO30.Data
               isGoalie = true;
             }
 
-            playerRating = _lo30ContextService.FindPlayerRatingWithYYYYMMDD(seasonId, playerId, gameDateYYYYMMDD);
+            playerRating = _lo30ContextService.FindPlayerRatingWithYYYYMMDD(playerId, awayPlayerPosition, seasonId, gameDateYYYYMMDD);
 
             gameRoster = new GameRoster(
                                     gtid: awayGameTeamId,
