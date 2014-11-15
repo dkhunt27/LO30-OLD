@@ -7,14 +7,21 @@ lo30NgApp.factory("dataServicePlayersSubSearch",
     "$resource",
     function (constApisUrl, $resource) {
 
-      var resourcePlayersSubSearch = $resource(constApisUrl + '/playersSubSearch/:position/:ratingMin/:ratingMax', { position: '@position', ratingMin: '@ratingMin', ratingMax: '@ratingMax' });
+      // return multiple items
+      var resource = $resource(constApisUrl + '/playersSubSearch');
+      var resourceByPositionRating = $resource(constApisUrl + '/playersSubSearch/:position/:ratingMin/:ratingMax', { position: '@position', ratingMin: '@ratingMin', ratingMax: '@ratingMax' });
 
-      var listPlayersSubSearch = function (position, ratingMin, ratingMax) {
-        return resourcePlayersSubSearch.query({ position: position, ratingMin: ratingMin, ratingMax: ratingMax });
+      var listAll = function () {
+        return resource.query();
+      };
+
+      var listByPositionRating = function (position, ratingMin, ratingMax) {
+        return resourceByPositionRating.query({ position: position, ratingMin: ratingMin, ratingMax: ratingMax });
       };
       
       return {
-        listPlayersSubSearch: listPlayersSubSearch
+        listAll: listAll,
+        listByPositionRating: listByPositionRating
       };
     }
   ]

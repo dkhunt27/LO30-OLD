@@ -27,10 +27,10 @@ namespace LO30.Data.Objects
     [Required, Key, Column(Order = 5), MaxLength(1)]
     public string Position { get; set; }
 
-    [Required]
-    public int RatingPrimary { get; set; }
+    [MaxLength(35)]
+    public string TeamName { get; set; }
 
-    [Required]
-    public int RatingSecondary { get; set; }
+    [Required, MaxLength(35)]
+    public string Rating { get; set; }
   }
 }

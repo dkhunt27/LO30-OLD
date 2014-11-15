@@ -62,11 +62,6 @@ namespace LO30.Data
       return _ctx.TeamStandings.Include("seasonTeam").Include("seasonTeam.team").ToList();
     }
 
-    public List<PlayerStatSeason> GetPlayerStatsSeason()
-    {
-      return _ctx.PlayerStatsSeason.Include("season").Include("player").Include("seasonTeamPlayingFor").Include("seasonTeamPlayingFor.team").ToList();
-    }
-
     public bool Save()
     {
       try
@@ -596,17 +591,17 @@ namespace LO30.Data
       {
         var ratings = _ctx.PlayerRatings.ToList();
         var seasonPlayerStatsForWeb = _ctx.PlayerStatsSeasonTeam
-                                           .Include("season")
-                                           .Include("player")
-                                           .Include("seasonTeamPlayingFor")
-                                           .Include("seasonTeamPlayingFor.team")
+                                           .Include("Season")
+                                           .Include("Player")
+                                           .Include("SeasonTeam")
+                                           .Include("SeasonTeam.team")
                                            .ToList();
 
         var seasonGoalieStatsForWeb = _ctx.GoalieStatsSeasonTeam
-                                            .Include("season")
-                                            .Include("player")
-                                            .Include("seasonTeamPlayingFor")
-                                            .Include("seasonTeamPlayingFor.team")
+                                            .Include("Season")
+                                            .Include("Player")
+                                            .Include("SeasonTeam")
+                                            .Include("SeasonTeam.team")
                                             .ToList();
 
         var teamStandingsForWeb = _ctx.TeamStandings

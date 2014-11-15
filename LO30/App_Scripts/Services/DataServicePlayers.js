@@ -7,26 +7,24 @@ lo30NgApp.factory("dataServicePlayers",
     "$resource",
     function (constApisUrl, $resource) {
 
-      var resourcePlayers = $resource(constApisUrl + '/players');
-      var resourcePlayersSubSearch = $resource(constApisUrl + '/players/:position/:ratingMin/:ratingMax', { position: '@position', ratingMin: '@ratingMin', ratingMax: '@ratingMax' });
-      var resourcePlayerByPlayerId = $resource(constApisUrl + '/players/:playerId', { playerId: '@playerId' });
+      // return multiple items
+      var resource = $resource(constApisUrl + '/players');
 
-      var listPlayers = function () {
-        return resourcePlayers.query();
+      // return single item
+      var resourceByPlayerId = $resource(constApisUrl + '/player/:playerId', { playerId: '@playerId' });
+
+      var listAll = function () {
+        return resource.query();
       };
 
-      var listPlayersSubSearch = function (position, ratingMin, ratingMax) {
-        return resourcePlayersSubSearch.query({ position: position, ratingMin: ratingMin, ratingMax: ratingMax });
-      };
       
-      var getPlayerByPlayerId = function (seasonTeamId, yyyymmdd, playerId) {
-        return resourcePlayerByPlayerId.get({ playerId: playerId });
+      var getByPlayerId = function (playerId) {
+        return resourceByPlayerId.get({ playerId: playerId });
       };
 
       return {
-        listPlayers: listPlayers,
-        listPlayersSubSearch: listPlayersSubSearch,
-        getPlayerByPlayerId: getPlayerByPlayerId
+        listAll: listAll,
+        getByPlayerId: getByPlayerId
       };
     }
   ]

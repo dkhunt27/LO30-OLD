@@ -11,7 +11,7 @@ lo30NgApp.controller('adminDataProcessingController',
         seasonId: 54,
         playoff: false,
         startingGameId: 3200,
-        endingGameId: 3254
+        endingGameId: 3261
       };
 
       var defaultCount = {

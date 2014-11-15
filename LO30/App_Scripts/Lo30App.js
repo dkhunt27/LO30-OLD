@@ -23,6 +23,11 @@ lo30NgApp.config(
       // Directives
       // Home
 
+      // Players
+      $routeProvider.when("/Players/Player", {
+        controller: "playersPlayerController",
+        templateUrl: "/Templates/Players/Player.html"
+      });
       // ScoreSheets
       $routeProvider.when("/ScoreSheets/Entry", {
         controller: "scoreSheetsEntryController",

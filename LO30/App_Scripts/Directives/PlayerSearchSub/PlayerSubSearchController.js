@@ -116,7 +116,7 @@ lo30NgApp.controller('lo30PlayerSubSearchController',
 
         $scope.initializeScopeVariables();
 
-        dataServicePlayersSubSearch.listPlayersSubSearch(position, ratingMin, ratingMax).$promise.then(
+        dataServicePlayersSubSearch.listByPositionRating(position, ratingMin, ratingMax).$promise.then(
           function (result) {
             // service call on success
             if (result && result.length && result.length > 0) {

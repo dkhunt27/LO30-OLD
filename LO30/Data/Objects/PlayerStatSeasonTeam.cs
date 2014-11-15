@@ -12,8 +12,8 @@ namespace LO30.Data.Objects
     [Required, Key, Column(Order = 1), ForeignKey("Player")]
     public int PlayerId { get; set; }
 
-    [Required, Key, Column(Order = 2), ForeignKey("SeasonTeamPlayingFor")]
-    public int SeasonTeamIdPlayingFor { get; set; }
+    [Required, Key, Column(Order = 2), ForeignKey("SeasonTeam")]
+    public int SeasonTeamId { get; set; }
 
     [Required, ForeignKey("Season")]
     public int SeasonId { get; set; }
@@ -56,16 +56,16 @@ namespace LO30.Data.Objects
 
     public virtual Player Player { get; set; }
     public virtual Season Season { get; set; }
-    public virtual SeasonTeam SeasonTeamPlayingFor { get; set; }
+    public virtual SeasonTeam SeasonTeam { get; set; }
 
     public PlayerStatSeasonTeam()
     {
     }
 
-    public PlayerStatSeasonTeam(int pid, int stidpf, int sid, int line, string pos, bool sub, int games, int g, int a, int p, int ppg, int shg, int gwg, int pim)
+    public PlayerStatSeasonTeam(int pid, int stid, int sid, int line, string pos, bool sub, int games, int g, int a, int p, int ppg, int shg, int gwg, int pim)
     {
       this.PlayerId = pid;
-      this.SeasonTeamIdPlayingFor = stidpf;
+      this.SeasonTeamId = stid;
 
       this.SeasonId = sid;
       this.Line = line;
@@ -91,9 +91,9 @@ namespace LO30.Data.Objects
 
     private void Validate()
     {
-      var locationKey = string.Format("pid: {0}, stidpf: {1}, sid: {2}, sub: {3}",
+      var locationKey = string.Format("pid: {0}, stid: {1}, sid: {2}, sub: {3}",
                                       this.PlayerId,
-                                      this.SeasonTeamIdPlayingFor,
+                                      this.SeasonTeamId,
                                       this.SeasonId,
                                       this.Sub);
 

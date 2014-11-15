@@ -2,9 +2,11 @@
 using LO30.Data.Objects;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace LO30.Services
 {
@@ -50,7 +52,7 @@ namespace LO30.Services
       {
         bool errorIfNotFound = false;
         bool errorIfMoreThanOneFound = true;
-        ForWebGoalieStat found = FindForWebGoalieStat(errorIfNotFound, errorIfMoreThanOneFound, toSave.PID, toSave.STIDPF);
+        ForWebGoalieStat found = FindForWebGoalieStat(errorIfNotFound, errorIfMoreThanOneFound, toSave.PID, toSave.STID);
 
         if (found == null)
         {
@@ -84,7 +86,7 @@ namespace LO30.Services
       {
         bool errorIfNotFound = false;
         bool errorIfMoreThanOneFound = true;
-        ForWebPlayerStat found = FindForWebPlayerStat(errorIfNotFound, errorIfMoreThanOneFound, toSave.PID, toSave.STIDPF);
+        ForWebPlayerStat found = FindForWebPlayerStat(errorIfNotFound, errorIfMoreThanOneFound, toSave.PID, toSave.STID);
 
         if (found == null)
         {
@@ -442,7 +444,7 @@ namespace LO30.Services
       {
         bool errorIfNotFound = false;
         bool errorIfMoreThanOneFound = true;
-        GoalieStatSeasonTeam found = FindGoalieStatSeasonTeam(errorIfNotFound, errorIfMoreThanOneFound, toSave.PlayerId, toSave.SeasonTeamIdPlayingFor);
+        GoalieStatSeasonTeam found = FindGoalieStatSeasonTeam(errorIfNotFound, errorIfMoreThanOneFound, toSave.PlayerId, toSave.SeasonTeamId);
 
         if (found == null)
         {
@@ -563,6 +565,38 @@ namespace LO30.Services
 
       #endregion
 
+      #region SaveOrUpdate-PlayerStatCareer
+      public int SaveOrUpdatePlayerStatCareer(List<PlayerStatCareer> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdatePlayerStatCareer(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdatePlayerStatCareer(PlayerStatCareer toSave)
+      {
+        PlayerStatCareer found = FindPlayerStatCareer(toSave.PlayerId, toSave.Sub, errorIfNotFound: false, errorIfMoreThanOneFound: true, populateFully: false);
+
+        if (found == null)
+        {
+          found = _ctx.PlayerStatsCareer.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
       #region SaveOrUpdate-PlayerStatGame
       public int SaveOrUpdatePlayerStatGame(List<PlayerStatGame> listToSave)
       {
@@ -578,9 +612,7 @@ namespace LO30.Services
 
       public int SaveOrUpdatePlayerStatGame(PlayerStatGame toSave)
       {
-        bool errorIfNotFound = false;
-        bool errorIfMoreThanOneFound = true;
-        PlayerStatGame found = FindPlayerStatGame(errorIfNotFound, errorIfMoreThanOneFound, toSave.PlayerId, toSave.GameId);
+        PlayerStatGame found = FindPlayerStatGame(toSave.PlayerId, toSave.GameId, errorIfNotFound: false, errorIfMoreThanOneFound: true, populateFully: false);
 
         if (found == null)
         {
@@ -612,9 +644,7 @@ namespace LO30.Services
 
       public int SaveOrUpdatePlayerStatSeason(PlayerStatSeason toSave)
       {
-        bool errorIfNotFound = false;
-        bool errorIfMoreThanOneFound = true;
-        PlayerStatSeason found = FindPlayerStatSeason(errorIfNotFound, errorIfMoreThanOneFound, toSave.PlayerId, toSave.SeasonId, toSave.Sub);
+        PlayerStatSeason found = FindPlayerStatSeason(toSave.PlayerId, toSave.SeasonId, toSave.Sub, errorIfNotFound: false, errorIfMoreThanOneFound: true, populateFully: false);
 
         if (found == null)
         {
@@ -646,9 +676,7 @@ namespace LO30.Services
 
       public int SaveOrUpdatePlayerStatSeasonTeam(PlayerStatSeasonTeam toSave)
       {
-        bool errorIfNotFound = false;
-        bool errorIfMoreThanOneFound = true;
-        PlayerStatSeasonTeam found = FindPlayerStatSeasonTeam(errorIfNotFound, errorIfMoreThanOneFound, toSave.PlayerId, toSave.SeasonTeamIdPlayingFor);
+        PlayerStatSeasonTeam found = FindPlayerStatSeasonTeam(toSave.PlayerId, toSave.SeasonTeamId, errorIfNotFound: false, errorIfMoreThanOneFound: true, populateFully: false);
 
         if (found == null)
         {
@@ -920,7 +948,7 @@ namespace LO30.Services
       {
         var errorIfNotFound = false;
         var errorIfMoreThanOneFound = true;
-        TeamRoster found = FindTeamRoster(errorIfNotFound, errorIfMoreThanOneFound, toSave.SeasonTeamId, toSave.PlayerId, toSave.StartYYYYMMDD, toSave.EndYYYYMMDD);
+        TeamRoster found = FindTeamRoster(toSave.SeasonTeamId, toSave.PlayerId, toSave.StartYYYYMMDD, toSave.EndYYYYMMDD, errorIfNotFound, errorIfMoreThanOneFound);
 
         if (found == null)
         {
@@ -983,13 +1011,13 @@ namespace LO30.Services
 
       public ForWebGoalieStat FindForWebGoalieStat(bool errorIfNotFound, bool errorIfMoreThanOneFound, int pid, int stidpf)
       {
-        var found = _ctx.ForWebGoalieStats.Where(x => x.PID == pid && x.STIDPF == stidpf).ToList();
+        var found = _ctx.ForWebGoalieStats.Where(x => x.PID == pid && x.STID == stidpf).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
           throw new ArgumentNullException("found", "Could not find ForWebGoalieStat for" +
                                                   " PID:" + pid +
-                                                  " STIDPF:" + stidpf
+                                                  " STID:" + stidpf
                                           );
         }
 
@@ -997,7 +1025,7 @@ namespace LO30.Services
         {
           throw new ArgumentNullException("found", "More than 1 ForWebGoalieStat was not found for" +
                                                   " PID:" + pid +
-                                                  " STIDPF:" + stidpf
+                                                  " STID:" + stidpf
                                           );
         }
 
@@ -1020,13 +1048,13 @@ namespace LO30.Services
 
       public ForWebPlayerStat FindForWebPlayerStat(bool errorIfNotFound, bool errorIfMoreThanOneFound, int pid, int stidpf)
       {
-        var found = _ctx.ForWebPlayerStats.Where(x => x.PID == pid && x.STIDPF == stidpf).ToList();
+        var found = _ctx.ForWebPlayerStats.Where(x => x.PID == pid && x.STID == stidpf).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
           throw new ArgumentNullException("found", "Could not find ForWebPlayerStat for" +
                                                   " PID:" + pid +
-                                                  " STIDPF:" + stidpf
+                                                  " STID:" + stidpf
                                           );
         }
 
@@ -1034,7 +1062,7 @@ namespace LO30.Services
         {
           throw new ArgumentNullException("found", "More than 1 ForWebPlayerStat was not found for" +
                                                   " PID:" + pid +
-                                                  " STIDPF:" + stidpf
+                                                  " STID:" + stidpf
                                           );
         }
 
@@ -1597,13 +1625,13 @@ namespace LO30.Services
 
       public GoalieStatSeasonTeam FindGoalieStatSeasonTeam(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId, int seasonTeamIdPlayingFor)
       {
-        var found = _ctx.GoalieStatsSeasonTeam.Where(x => x.PlayerId == playerId && x.SeasonTeamIdPlayingFor == seasonTeamIdPlayingFor).ToList();
+        var found = _ctx.GoalieStatsSeasonTeam.Where(x => x.PlayerId == playerId && x.SeasonTeamId == seasonTeamIdPlayingFor).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
           throw new ArgumentNullException("found", "Could not find GoalieStatSeasonTeam for" +
                                                   " PlayerId:" + playerId +
-                                                  " SeasonTeamIdPlayingFor:" + seasonTeamIdPlayingFor
+                                                  " SeasonTeamId:" + seasonTeamIdPlayingFor
                                           );
         }
 
@@ -1611,7 +1639,7 @@ namespace LO30.Services
         {
           throw new ArgumentNullException("found", "More than 1 GoalieStatSeasonTeam was not found for" +
                                                   " PlayerId:" + playerId +
-                                                  " SeasonTeamIdPlayingFor:" + seasonTeamIdPlayingFor
+                                                  " SeasonTeamId:" + seasonTeamIdPlayingFor
                                           );
         }
 
@@ -1698,57 +1726,7 @@ namespace LO30.Services
       }
       #endregion
 
-      #region Find-PlayerRating (addtl finds)
-      public PlayerRating FindPlayerRatingWithYYYYMMDD(int playerId, string position, int seasonId, int yyyymmdd)
-      {
-        bool errorIfNotFound = true;
-        bool errorIfMoreThanOneFound = true;
-        return FindPlayerRatingWithYYYYMMDD(errorIfNotFound, errorIfMoreThanOneFound, playerId, position, seasonId, yyyymmdd);
-      }
-
-      public PlayerRating FindPlayerRatingWithYYYYMMDD(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId, string position, int seasonId, int yyyymmdd)
-      {
-        var found = _ctx.PlayerRatings.Where(x => x.SeasonId == seasonId &&
-                                                  x.PlayerId == playerId &&
-                                                  (x.Position == position || x.Position == "X") &&
-                                                  x.StartYYYYMMDD <= yyyymmdd &&
-                                                  x.EndYYYYMMDD >= yyyymmdd)
-                                            .ToList();
-
-        if (errorIfNotFound == true && found.Count < 1)
-        {
-          throw new ArgumentNullException("found", "Could not find PlayerRating for" +
-                                                  " PlayerId:" + playerId +
-                                                  " Position:" + position +
-                                                  " seasonId:" + seasonId +
-                                                  " StartYYYYMMDD and EndYYYYMMDD between:" + yyyymmdd
-                                          );
-        }
-
-        if (errorIfMoreThanOneFound == true && found.Count > 1)
-        {
-          throw new ArgumentNullException("found", "More than 1 PlayerRating was not found for" +
-                                                  " PlayerId:" + playerId +
-                                                  " Position:" + position +
-                                                  " seasonId:" + seasonId +
-                                                  " StartYYYYMMDD and EndYYYYMMDD between:" + yyyymmdd
-                                          );
-        }
-
-        if (found.Count == 1)
-        {
-          return found[0];
-        }
-        else
-        {
-          return null;
-        }
-      }
-
-      public PlayerRating FindPlayerRating(int seasonId, int playerId, int startYYYYMMDD, int endYYYYMMDD)
-      {
-        return FindPlayerRating(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonId: seasonId, playerId: playerId, startYYYYMMDD: startYYYYMMDD, endYYYYMMDD: endYYYYMMDD);
-      }
+      #region Find-PlayerRating (addtl finds) NEW FORMAT
 
       public PlayerRating FindPlayerRating(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonId, int playerId, int startYYYYMMDD, int endYYYYMMDD)
       {
@@ -1787,119 +1765,218 @@ namespace LO30.Services
           return null;
         }
       }
-      #endregion
 
-      #region Find-PlayerStatGame
-      public PlayerStatGame FindPlayerStatGame(int playerId, int gameId)
+      public PlayerRating FindPlayerRatingWithYYYYMMDD(int playerId, string position, int seasonId, int yyyymmdd, bool errorIfNotFound = true, bool errorIfMoreThanOneFound = true, bool populateFully = false)
       {
-        return FindPlayerStatGame(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId, gameId: gameId);
+        Expression<Func<PlayerRating, bool>> whereClause = x => x.SeasonId == seasonId &&
+                                                            x.PlayerId == playerId &&
+                                                            (x.Position == position || x.Position == "X") &&
+                                                            x.StartYYYYMMDD <= yyyymmdd &&
+                                                            x.EndYYYYMMDD >= yyyymmdd
+                                                            ;
+
+        string errMsgNotFoundFor = " PlayerId:" + playerId +
+                                  " Position:" + position +
+                                  " seasonId:" + seasonId +
+                                  " StartYYYYMMDD and EndYYYYMMDD between:" + yyyymmdd
+                                  ;
+
+        return FindPlayerRating(whereClause, errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound, populateFully);
       }
 
-      public PlayerStatGame FindPlayerStatGame(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId, int gameId)
+      public PlayerRating FindPlayerRating(int seasonId, int playerId, int startYYYYMMDD, int endYYYYMMDD, bool errorIfNotFound = true, bool errorIfMoreThanOneFound = true, bool populateFully = false)
       {
-        var found = _ctx.PlayerStatsGame.Where(x => x.PlayerId == playerId && x.GameId == gameId).ToList();
+        Expression<Func<PlayerRating, bool>> whereClause = x => x.SeasonId == seasonId &&
+                                                            x.PlayerId == playerId &&
+                                                            x.StartYYYYMMDD == startYYYYMMDD &&
+                                                            x.EndYYYYMMDD == endYYYYMMDD
+                                                            ;
 
-        if (errorIfNotFound == true && found.Count < 1)
-        {
-          throw new ArgumentNullException("found", "Could not find PlayerStatGame for" +
-                                                  " PlayerId:" + playerId +
-                                                  " GameId:" + gameId
-                                          );
-        }
+        string errMsgNotFoundFor = " SeasonId:" + seasonId +
+                                  " PlayerId:" + playerId +
+                                  " StartYYYYMMDD:" + startYYYYMMDD +
+                                  " EndYYYYMMDD:" + endYYYYMMDD
+                                  ;
 
-        if (errorIfMoreThanOneFound == true && found.Count > 1)
-        {
-          throw new ArgumentNullException("found", "More than 1 PlayerStatGame was not found for" +
-                                                  " PlayerId:" + playerId +
-                                                  " GameId:" + gameId
-                                          );
-        }
-
-        if (found.Count == 1)
-        {
-          return found[0];
-        } 
-        else
-        {
-          return null;
-        }
-      }
-      #endregion
-
-      #region Find-PlayerStatSeason
-      public PlayerStatSeason FindPlayerStatSeason(int playerId, int seasonId, bool sub)
-      {
-        return FindPlayerStatSeason(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId, seasonId: seasonId, sub: sub);
+        return FindPlayerRating(whereClause, errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound, populateFully);
       }
 
-      public PlayerStatSeason FindPlayerStatSeason(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId, int seasonId, bool sub)
+      private PlayerRating FindPlayerRating(Expression<Func<PlayerRating, bool>> whereClause, string errMsgNotFoundFor, bool errorIfNotFound, bool errorIfMoreThanOneFound, bool populateFully)
       {
-        var found = _ctx.PlayerStatsSeason.Where(x => x.PlayerId == playerId && x.SeasonId == seasonId && x.Sub == sub).ToList();
+        List<PlayerRating> found;
 
-        if (errorIfNotFound == true && found.Count < 1)
+        if (populateFully)
         {
-          throw new ArgumentNullException("found", "Could not find PlayerStatsSeason for" +
-                                                  " PlayerId:" + playerId +
-                                                  " SeasonId:" + seasonId +
-                                                  " Sub:" + sub
-                                          );
-        }
-
-        if (errorIfMoreThanOneFound == true && found.Count > 1)
-        {
-          throw new ArgumentNullException("found", "More than 1 PlayerStatsSeason was not found for" +
-                                                  " PlayerId:" + playerId +
-                                                  " SeasonId:" + seasonId +
-                                                  " Sub:" + sub
-                                          );
-        }
-
-        if (found.Count == 1)
-        {
-          return found[0];
+          found = _ctx.PlayerRatings
+                              .Include("Player")
+                              .Include("Season")
+                              .Where(whereClause)
+                              .ToList();
         }
         else
         {
-          return null;
+          found = _ctx.PlayerRatings.Where(whereClause).ToList();
         }
+
+        return FindBase<PlayerRating>(found, "PlayerRating", errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound);
       }
       #endregion
 
-      #region Find-PlayerStatSeasonTeam
-      public PlayerStatSeasonTeam FindPlayerStatSeasonTeam(int playerId, int seasonTeamIdPlayingFor)
+      #region Find-PlayerStatCareer NEW FORMAT
+      public PlayerStatCareer FindPlayerStatCareer(int playerId, bool sub, bool errorIfNotFound = true, bool errorIfMoreThanOneFound = true, bool populateFully = false)
       {
-        return FindPlayerStatSeasonTeam(errorIfNotFound: true, errorIfMoreThanOneFound: true, playerId: playerId, seasonTeamIdPlayingFor: seasonTeamIdPlayingFor);
+        Expression<Func<PlayerStatCareer, bool>> whereClause = x => x.PlayerId == playerId &&
+                                                            x.Sub == sub
+                                                            ;
+
+        string errMsgNotFoundFor = " PlayerId:" + playerId +
+                                  " Sub:" + sub
+                                  ;
+
+        return FindPlayerStatCareer(whereClause, errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound, populateFully);
       }
 
-      public PlayerStatSeasonTeam FindPlayerStatSeasonTeam(bool errorIfNotFound, bool errorIfMoreThanOneFound, int playerId, int seasonTeamIdPlayingFor)
+      private PlayerStatCareer FindPlayerStatCareer(Expression<Func<PlayerStatCareer, bool>> whereClause, string errMsgNotFoundFor, bool errorIfNotFound, bool errorIfMoreThanOneFound, bool populateFully)
       {
-        var found = _ctx.PlayerStatsSeasonTeam.Where(x => x.PlayerId == playerId && x.SeasonTeamIdPlayingFor == seasonTeamIdPlayingFor).ToList();
+        List<PlayerStatCareer> found;
 
-        if (errorIfNotFound == true && found.Count < 1)
+        if (populateFully)
         {
-          throw new ArgumentNullException("found", "Could not find PlayerStatsSeasonTeam for" +
-                                                  " PlayerId:" + playerId +
-                                                  " SeasonTeamIdPlayingFor:" + seasonTeamIdPlayingFor
-                                          );
-        }
-
-        if (errorIfMoreThanOneFound == true && found.Count > 1)
-        {
-          throw new ArgumentNullException("found", "More than 1 PlayerStatsSeasonTeam was not found for" +
-                                                  " PlayerId:" + playerId +
-                                                  " SeasonTeamIdPlayingFor:" + seasonTeamIdPlayingFor
-                                          );
-        }
-
-        if (found.Count == 1)
-        {
-          return found[0];
+          found = _ctx.PlayerStatsCareer
+                              .Include("Player")
+                              .Where(whereClause)
+                              .ToList();
         }
         else
         {
-          return null;
+          found = _ctx.PlayerStatsCareer.Where(whereClause).ToList();
         }
+
+        return FindBase<PlayerStatCareer>(found, "PlayerStatCareer", errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound);
       }
+
+      #endregion
+
+      #region Find-PlayerStatGame NEW FORMAT
+      public PlayerStatGame FindPlayerStatGame(int playerId, int gameId, bool errorIfNotFound = true, bool errorIfMoreThanOneFound = true, bool populateFully = false)
+      {
+        Expression<Func<PlayerStatGame, bool>> whereClause = x => x.PlayerId == playerId &&
+                                                            x.GameId == gameId
+                                                            ;
+
+        string errMsgNotFoundFor = " PlayerId:" + playerId +
+                                  " GameId:" + gameId
+                                  ;
+
+        return FindPlayerStatGame(whereClause, errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound, populateFully);
+      }
+
+      private PlayerStatGame FindPlayerStatGame(Expression<Func<PlayerStatGame, bool>> whereClause, string errMsgNotFoundFor, bool errorIfNotFound, bool errorIfMoreThanOneFound, bool populateFully)
+      {
+        List<PlayerStatGame> found;
+
+        if (populateFully)
+        {
+          found = _ctx.PlayerStatsGame
+                              .Include("Player")
+                              .Include("Season")
+                              .Include("SeasonTeam")
+                              .Include("SeasonTeam.Season")
+                              .Include("SeasonTeam.Team")
+                              .Include("SeasonTeam.Team.Coach")
+                              .Include("SeasonTeam.Team.Sponsor")
+                              .Include("Game")
+                              .Include("Game.Season")
+                              .Where(whereClause)
+                              .ToList();
+        }
+        else
+        {
+          found = _ctx.PlayerStatsGame.Where(whereClause).ToList();
+        }
+
+        return FindBase<PlayerStatGame>(found, "PlayerStatGame", errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound);
+      }
+
+      #endregion
+
+      #region Find-PlayerStatSeason NEW FORMAT
+      public PlayerStatSeason FindPlayerStatSeason(int playerId, int seasonId, bool sub, bool errorIfNotFound = true, bool errorIfMoreThanOneFound = true, bool populateFully = false)
+      {
+        Expression<Func<PlayerStatSeason, bool>> whereClause = x => x.PlayerId == playerId &&
+                                                              x.SeasonId == seasonId &&
+                                                              x.Sub == sub
+                                                            ;
+
+        string errMsgNotFoundFor = " PlayerId:" + playerId +
+                                  " SeasonId:" + seasonId +
+                                  " Sub:" + sub
+                                  ;
+
+        return FindPlayerStatSeason(whereClause, errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound, populateFully);
+      }
+
+      private PlayerStatSeason FindPlayerStatSeason(Expression<Func<PlayerStatSeason, bool>> whereClause, string errMsgNotFoundFor, bool errorIfNotFound, bool errorIfMoreThanOneFound, bool populateFully)
+      {
+        List<PlayerStatSeason> found;
+
+        if (populateFully)
+        {
+          found = _ctx.PlayerStatsSeason
+                              .Include("Player")
+                              .Include("Season")
+                              .Where(whereClause)
+                              .ToList();
+        }
+        else
+        {
+          found = _ctx.PlayerStatsSeason.Where(whereClause).ToList();
+        }
+
+        return FindBase<PlayerStatSeason>(found, "PlayerStatSeason", errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound);
+      }
+
+      #endregion
+
+      #region Find-PlayerStatSeasonTeam NEW FORMAT
+      public PlayerStatSeasonTeam FindPlayerStatSeasonTeam(int playerId, int seasonTeamIdPlayingFor, bool errorIfNotFound = true, bool errorIfMoreThanOneFound = true, bool populateFully = false)
+      {
+        Expression<Func<PlayerStatSeasonTeam, bool>> whereClause = x => x.PlayerId == playerId &&
+                                                              x.SeasonTeamId == seasonTeamIdPlayingFor
+                                                            ;
+
+        string errMsgNotFoundFor = " PlayerId:" + playerId +
+                                  " SeasonTeamId:" + seasonTeamIdPlayingFor
+                                  ;
+
+        return FindPlayerStatSeasonTeam(whereClause, errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound, populateFully);
+      }
+
+      private PlayerStatSeasonTeam FindPlayerStatSeasonTeam(Expression<Func<PlayerStatSeasonTeam, bool>> whereClause, string errMsgNotFoundFor, bool errorIfNotFound, bool errorIfMoreThanOneFound, bool populateFully)
+      {
+        List<PlayerStatSeasonTeam> found;
+
+        if (populateFully)
+        {
+          found = _ctx.PlayerStatsSeasonTeam
+                              .Include("Player")
+                              .Include("Season")
+                              .Include("SeasonTeam")
+                              .Include("SeasonTeam.Season")
+                              .Include("SeasonTeam.Team")
+                              .Include("SeasonTeam.Team.Coach")
+                              .Include("SeasonTeam.Team.Sponsor")
+                              .Where(whereClause)
+                              .ToList();
+        }
+        else
+        {
+          found = _ctx.PlayerStatsSeasonTeam.Where(whereClause).ToList();
+        }
+
+        return FindBase<PlayerStatSeasonTeam>(found, "PlayerStatSeasonTeam", errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound);
+      }
+
       #endregion
 
       #region Find-ScoreSheetEntry
@@ -2215,89 +2292,75 @@ namespace LO30.Services
       }
       #endregion
 
-      #region Find-TeamRoster
-      public TeamRoster FindTeamRosterWithYYYYMMDD(int seasonTeamId, int playerId, int yyyymmdd)
+      #region Find-TeamRoster (addtl finds)  NEW FORMAT
+      public TeamRoster FindTeamRosterWithYYYYMMDD(int seasonTeamId, int playerId, int yyyymmdd, bool errorIfNotFound = true, bool errorIfMoreThanOneFound = true, bool populateFully = false)
       {
-        return FindTeamRosterWithYYYYMMDD(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonTeamId: seasonTeamId, playerId: playerId, yyyymmdd: yyyymmdd);
+        Expression<Func<TeamRoster, bool>> whereClause = x => x.SeasonTeamId == seasonTeamId &&
+                                                              x.PlayerId == playerId &&
+                                                              x.StartYYYYMMDD <= yyyymmdd &&
+                                                              x.EndYYYYMMDD >= yyyymmdd
+                                                              ;
+
+        string errMsgNotFoundFor = " PlayerId:" + playerId +
+                                   " StartYYYYMMDD and EndYYYYMMDD between:" + yyyymmdd
+                                  ;
+
+        return FindTeamRosterBase(whereClause, errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound, populateFully);
       }
 
-      public TeamRoster FindTeamRosterWithYYYYMMDD(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonTeamId, int playerId, int yyyymmdd)
+      public TeamRoster FindTeamRosterWithYYYYMMDD(int playerId, int yyyymmdd, bool errorIfNotFound = true, bool errorIfMoreThanOneFound = true, bool populateFully = false)
       {
-        var found = _ctx.TeamRosters.Where(x => x.SeasonTeamId == seasonTeamId &&
-                                                  x.PlayerId == playerId &&
-                                                  x.StartYYYYMMDD <= yyyymmdd &&
-                                                  x.EndYYYYMMDD >= yyyymmdd)
-                                            .ToList();
+        Expression<Func<TeamRoster, bool>> whereClause = x => x.PlayerId == playerId &&
+                                                              x.StartYYYYMMDD <= yyyymmdd &&
+                                                              x.EndYYYYMMDD >= yyyymmdd
+                                                              ;
 
-        if (errorIfNotFound == true && found.Count < 1)
-        {
-          throw new ArgumentNullException("found", "Could not find TeamRoster for" +
-                                                  " SeasonTeamId:" + seasonTeamId +
-                                                  " PlayerId:" + playerId +
-                                                  " StartYYYYMMDD and EndYYYYMMDD between:" + yyyymmdd
-                                          );
-        }
+        string errMsgNotFoundFor = " PlayerId:" + playerId +
+                                   " StartYYYYMMDD and EndYYYYMMDD between:" + yyyymmdd
+                                  ;
 
-        if (errorIfMoreThanOneFound == true && found.Count > 1)
-        {
-          throw new ArgumentNullException("found", "More than 1 TeamRoster was not found for" +
-                                                  " SeasonTeamId:" + seasonTeamId +
-                                                  " PlayerId:" + playerId +
-                                                  " StartYYYYMMDD and EndYYYYMMDD between:" + yyyymmdd
-                                          );
-        }
+        return FindTeamRosterBase(whereClause, errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound, populateFully);
+      }
 
-        if (found.Count == 1)
+      public TeamRoster FindTeamRoster(int seasonTeamId, int playerId, int startYYYYMMDD, int endYYYYMMDD, bool errorIfNotFound = true, bool errorIfMoreThanOneFound = true, bool populateFully = false)
+      {
+        Expression<Func<TeamRoster, bool>> whereClause = x => x.SeasonTeamId == seasonTeamId &&
+                                                              x.PlayerId == playerId &&
+                                                              x.StartYYYYMMDD == startYYYYMMDD &&
+                                                              x.EndYYYYMMDD == endYYYYMMDD
+                                                            ;
+
+        string errMsgNotFoundFor = " SeasonTeamId:" + seasonTeamId +
+                                  " PlayerId:" + playerId +
+                                  " StartYYYYMMDD:" + startYYYYMMDD +
+                                  " EndYYYYMMDD:" + endYYYYMMDD
+                                  ;
+
+        return FindTeamRosterBase(whereClause, errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound, populateFully);
+      }
+      private TeamRoster FindTeamRosterBase(Expression<Func<TeamRoster, bool>> whereClause, string errMsgNotFoundFor, bool errorIfNotFound, bool errorIfMoreThanOneFound, bool populateFully)
+      {
+        List<TeamRoster> found;
+
+        if (populateFully)
         {
-          return found[0];
+          found = _ctx.TeamRosters
+                              .Include("Player")
+                              .Include("SeasonTeam")
+                              .Include("SeasonTeam.Season")
+                              .Include("SeasonTeam.Team")
+                              .Include("SeasonTeam.Team.Coach")
+                              .Include("SeasonTeam.Team.Sponsor")
+                              .Where(whereClause)
+                              .ToList();
         }
         else
         {
-          return null;
-        }
-      }
-
-      public TeamRoster FindTeamRoster(int seasonTeamId, int playerId, int startYYYYMMDD, int endYYYYMMDD)
-      {
-        return FindTeamRoster(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonTeamId: seasonTeamId, playerId: playerId, startYYYYMMDD: startYYYYMMDD, endYYYYMMDD: endYYYYMMDD);
-      }
-
-      public TeamRoster FindTeamRoster(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonTeamId, int playerId, int startYYYYMMDD, int endYYYYMMDD)
-      {
-        var found = _ctx.TeamRosters.Where(x => x.SeasonTeamId == seasonTeamId &&
-                                                  x.PlayerId == playerId &&
-                                                  x.StartYYYYMMDD == startYYYYMMDD &&
-                                                  x.EndYYYYMMDD == endYYYYMMDD)
-                                            .ToList();
-
-        if (errorIfNotFound == true && found.Count < 1)
-        {
-          throw new ArgumentNullException("found", "Could not find TeamRoster for" +
-                                                  " SeasonTeamId:" + seasonTeamId +
-                                                  " PlayerId:" + playerId +
-                                                  " StartYYYYMMDD:" + startYYYYMMDD +
-                                                  " EndYYYYMMDD:" + endYYYYMMDD
-                                          );
+          found = _ctx.TeamRosters.Where(whereClause)
+                                  .ToList();
         }
 
-        if (errorIfMoreThanOneFound == true && found.Count > 1)
-        {
-          throw new ArgumentNullException("found", "More than 1 TeamRoster was not found for" +
-                                                  " SeasonTeamId:" + seasonTeamId +
-                                                  " PlayerId:" + playerId +
-                                                  " StartYYYYMMDD:" + startYYYYMMDD +
-                                                  " EndYYYYMMDD:" + endYYYYMMDD
-                                          );
-        }
-
-        if (found.Count == 1)
-        {
-          return found[0];
-        }
-        else
-        {
-          return null;
-        }
+        return FindBase<TeamRoster>(found, "TeamRoster", errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound);
       }
       #endregion
 
@@ -2336,6 +2399,31 @@ namespace LO30.Services
           return null;
         }
       }
+      #endregion
+
+      #region Find Base
+      private T FindBase<T>(List<T> found, string errMsgType, string errMsgNotFoundFor, bool errorIfNotFound, bool errorIfMoreThanOneFound)
+      {
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find " + errMsgType + " for" + errMsgNotFoundFor);
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 " + errMsgType + " was not found for" + errMsgNotFoundFor);
+        }
+
+        if (found.Count >= 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return default(T);
+        }
+      }
+ 
       #endregion
 
       #endregion

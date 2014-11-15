@@ -108,7 +108,7 @@ namespace LO30.Services
         new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="ORDER BY SCORE_SHEET_ENTRY_PENALTY_ID", TableName="SCORE_SHEET_ENTRY_PENALTY", FileName="ScoreSheetEntryPenalties"},
         new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54 ORDER BY SEASON_ID, GAME_ID, PERIOD, TIME_REMAINING DESC", TableName="SCORING_DETAIL", FileName="ScoringDetails"},
         new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="ORDER BY SEASON_ID, TEAM_ID", TableName="TEAM", FileName="Teams"},
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54 ORDER BY SEASON_ID, TEAM_ID", TableName="TEAM_ROSTER", FileName="Team_Rosters"}
+        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54 ORDER BY SEASON_ID, TEAM_ID", TableName="TEAM_ROSTER", FileName="TeamRosters"}
       };
 
       foreach (var table in accessTables)

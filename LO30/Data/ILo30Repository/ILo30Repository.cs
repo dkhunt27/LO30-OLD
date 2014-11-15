@@ -10,8 +10,6 @@ namespace LO30.Data
 
     List<TeamStanding> GetTeamStandings();
 
-    List<PlayerStatSeason> GetPlayerStatsSeason();
-
     List<ScoreSheetEntry> GetScoreSheetEntries();
 
     bool Save();

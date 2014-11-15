@@ -13,7 +13,7 @@ namespace LO30.Data.Objects
     public int PID { get; set; }
 
     [Required, Key, Column(Order = 2)]
-    public int STIDPF { get; set; }
+    public int STID { get; set; }
 
     [Required]
     public int SID { get; set; }

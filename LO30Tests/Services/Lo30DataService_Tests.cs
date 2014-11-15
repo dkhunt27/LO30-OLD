@@ -45,12 +45,12 @@ namespace LO30.Services.Tests
 
       var expected = new List<PlayerStatGame>() 
       {
-        new PlayerStatGame(pid: 401, gid: 701, sid: 501, stidpf: 201, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 402, gid: 701, sid: 501, stidpf: 201, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 403, gid: 701, sid: 501, stidpf: 201, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 404, gid: 701, sid: 501, stidpf: 202, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 405, gid: 701, sid: 501, stidpf: 202, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 406, gid: 701, sid: 501, stidpf: 202, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0)
+        new PlayerStatGame(pid: 401, gid: 701, sid: 501, stid: 201, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 402, gid: 701, sid: 501, stid: 201, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 403, gid: 701, sid: 501, stid: 201, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 404, gid: 701, sid: 501, stid: 202, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 405, gid: 701, sid: 501, stid: 202, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 406, gid: 701, sid: 501, stid: 202, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0)
       };
 
       AssertAreEqualPlayerStatGameLists(expected, playerGameStats);
@@ -81,12 +81,12 @@ namespace LO30.Services.Tests
 
       var expected = new List<PlayerStatGame>() 
       {
-        new PlayerStatGame(pid: 401, gid: 701, sid: 501, stidpf: 201, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 408, gid: 701, sid: 501, stidpf: 201, line:1, pos:"F", sub:true, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 403, gid: 701, sid: 501, stidpf: 201, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 407, gid: 701, sid: 501, stidpf: 202, line:1, pos:"F", sub:true, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 405, gid: 701, sid: 501, stidpf: 202, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 406, gid: 701, sid: 501, stidpf: 202, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0)
+        new PlayerStatGame(pid: 401, gid: 701, sid: 501, stid: 201, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 408, gid: 701, sid: 501, stid: 201, line:1, pos:"F", sub:true, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 403, gid: 701, sid: 501, stid: 201, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 407, gid: 701, sid: 501, stid: 202, line:1, pos:"F", sub:true, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 405, gid: 701, sid: 501, stid: 202, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 406, gid: 701, sid: 501, stid: 202, line:1, pos:"F", sub:false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0)
       };
 
       AssertAreEqualPlayerStatGameLists(expected, playerGameStats);
@@ -122,12 +122,12 @@ namespace LO30.Services.Tests
 
       var expected = new List<PlayerStatGame>() 
       {
-        new PlayerStatGame(pid: 401, gid: 701, sid: 501, stidpf: 201, line:1, pos:"F", sub:false, g: 2, a: 1, p: 3, ppg: 0, shg: 2, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 408, gid: 701, sid: 501, stidpf: 201, line:1, pos:"F", sub:true, g: 0, a: 2, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 403, gid: 701, sid: 501, stidpf: 201, line:1, pos:"F", sub:false, g: 1, a: 2, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
-        new PlayerStatGame(pid: 407, gid: 701, sid: 501, stidpf: 202, line:1, pos:"F", sub:true, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 405, gid: 701, sid: 501, stidpf: 202, line:1, pos:"F", sub:false, g: 0, a: 2, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 406, gid: 701, sid: 501, stidpf: 202, line:1, pos:"F", sub:false, g: 2, a: 0, p: 2, ppg: 2, shg: 0, gwg: 0, pim: 0)
+        new PlayerStatGame(pid: 401, gid: 701, sid: 501, stid: 201, line:1, pos:"F", sub:false, g: 2, a: 1, p: 3, ppg: 0, shg: 2, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 408, gid: 701, sid: 501, stid: 201, line:1, pos:"F", sub:true, g: 0, a: 2, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 403, gid: 701, sid: 501, stid: 201, line:1, pos:"F", sub:false, g: 1, a: 2, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
+        new PlayerStatGame(pid: 407, gid: 701, sid: 501, stid: 202, line:1, pos:"F", sub:true, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 405, gid: 701, sid: 501, stid: 202, line:1, pos:"F", sub:false, g: 0, a: 2, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 406, gid: 701, sid: 501, stid: 202, line:1, pos:"F", sub:false, g: 2, a: 0, p: 2, ppg: 2, shg: 0, gwg: 0, pim: 0)
       };
 
       AssertAreEqualPlayerStatGameLists(expected, playerGameStats);
@@ -148,25 +148,25 @@ namespace LO30.Services.Tests
 
       var expected = new List<PlayerStatGame>() 
       {
-          new PlayerStatGame(pid: 593, gid: 3200, sid: 54, stidpf: 308, line:1, pos:"F", sub: false, g: 1, a: 2, p: 3, ppg: 0, shg: 0, gwg: 0, pim: 0),
-          new PlayerStatGame(pid: 593, gid: 3204, sid: 54, stidpf: 308, line:1, pos:"F", sub: false, g: 1, a: 0, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-          new PlayerStatGame(pid: 593, gid: 3208, sid: 54, stidpf: 308, line:1, pos:"F", sub: false, g: 0, a: 2, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0),
-          new PlayerStatGame(pid: 593, gid: 3216, sid: 54, stidpf: 308, line:1, pos:"F", sub: false, g: 4, a: 3, p: 7, ppg: 0, shg: 0, gwg: 0, pim: 0),
-          new PlayerStatGame(pid: 593, gid: 3218, sid: 54, stidpf: 308, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0),
-          new PlayerStatGame(pid: 593, gid: 3222, sid: 54, stidpf: 308, line:1, pos:"F", sub: false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-          new PlayerStatGame(pid: 593, gid: 3227, sid: 54, stidpf: 308, line:1, pos:"F", sub: false, g: 1, a: 3, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
-          new PlayerStatGame(pid: 644, gid: 3200, sid: 54, stidpf: 314, line:1, pos:"F", sub: false, g: 0, a: 2, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0),
-          new PlayerStatGame(pid: 644, gid: 3205, sid: 54, stidpf: 314, line:1, pos:"F", sub: false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-          new PlayerStatGame(pid: 644, gid: 3207, sid: 54, stidpf: 314, line:1, pos:"F", sub: false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-          new PlayerStatGame(pid: 644, gid: 3213, sid: 54, stidpf: 309, line:1, pos:"F", sub: true, g: 1, a: 1, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0),
-          new PlayerStatGame(pid: 644, gid: 3214, sid: 54, stidpf: 313, line:1, pos:"F", sub: true, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-          new PlayerStatGame(pid: 644, gid: 3215, sid: 54, stidpf: 314, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-          new PlayerStatGame(pid: 644, gid: 3216, sid: 54, stidpf: 309, line:1, pos:"F", sub: true, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-          new PlayerStatGame(pid: 644, gid: 3218, sid: 54, stidpf: 315, line:1, pos:"F", sub: true, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-          new PlayerStatGame(pid: 644, gid: 3219, sid: 54, stidpf: 314, line:1, pos:"F", sub: false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-          new PlayerStatGame(pid: 644, gid: 3227, sid: 54, stidpf: 314, line:1, pos:"F", sub: false, g: 1, a: 0, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-          new PlayerStatGame(pid: 680, gid: 3204, sid: 54, stidpf: 308, line:1, pos:"F", sub: true, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-          new PlayerStatGame(pid: 680, gid: 3208, sid: 54, stidpf: 308, line:1, pos:"F", sub: true, g: 0, a: 2, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0)
+          new PlayerStatGame(pid: 593, gid: 3200, sid: 54, stid: 308, line:1, pos:"F", sub: false, g: 1, a: 2, p: 3, ppg: 0, shg: 0, gwg: 0, pim: 0),
+          new PlayerStatGame(pid: 593, gid: 3204, sid: 54, stid: 308, line:1, pos:"F", sub: false, g: 1, a: 0, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+          new PlayerStatGame(pid: 593, gid: 3208, sid: 54, stid: 308, line:1, pos:"F", sub: false, g: 0, a: 2, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0),
+          new PlayerStatGame(pid: 593, gid: 3216, sid: 54, stid: 308, line:1, pos:"F", sub: false, g: 4, a: 3, p: 7, ppg: 0, shg: 0, gwg: 0, pim: 0),
+          new PlayerStatGame(pid: 593, gid: 3218, sid: 54, stid: 308, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0),
+          new PlayerStatGame(pid: 593, gid: 3222, sid: 54, stid: 308, line:1, pos:"F", sub: false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+          new PlayerStatGame(pid: 593, gid: 3227, sid: 54, stid: 308, line:1, pos:"F", sub: false, g: 1, a: 3, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
+          new PlayerStatGame(pid: 644, gid: 3200, sid: 54, stid: 314, line:1, pos:"F", sub: false, g: 0, a: 2, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0),
+          new PlayerStatGame(pid: 644, gid: 3205, sid: 54, stid: 314, line:1, pos:"F", sub: false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+          new PlayerStatGame(pid: 644, gid: 3207, sid: 54, stid: 314, line:1, pos:"F", sub: false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+          new PlayerStatGame(pid: 644, gid: 3213, sid: 54, stid: 309, line:1, pos:"F", sub: true, g: 1, a: 1, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0),
+          new PlayerStatGame(pid: 644, gid: 3214, sid: 54, stid: 313, line:1, pos:"F", sub: true, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+          new PlayerStatGame(pid: 644, gid: 3215, sid: 54, stid: 314, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+          new PlayerStatGame(pid: 644, gid: 3216, sid: 54, stid: 309, line:1, pos:"F", sub: true, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+          new PlayerStatGame(pid: 644, gid: 3218, sid: 54, stid: 315, line:1, pos:"F", sub: true, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+          new PlayerStatGame(pid: 644, gid: 3219, sid: 54, stid: 314, line:1, pos:"F", sub: false, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+          new PlayerStatGame(pid: 644, gid: 3227, sid: 54, stid: 314, line:1, pos:"F", sub: false, g: 1, a: 0, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+          new PlayerStatGame(pid: 680, gid: 3204, sid: 54, stid: 308, line:1, pos:"F", sub: true, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+          new PlayerStatGame(pid: 680, gid: 3208, sid: 54, stid: 308, line:1, pos:"F", sub: true, g: 0, a: 2, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0)
       };
 
       AssertAreEqualPlayerStatGameLists(expected, playerGameStatsPartial);
@@ -179,14 +179,14 @@ namespace LO30.Services.Tests
     {
       var playerGameStats = new List<PlayerStatGame>()
       {
-        new PlayerStatGame(pid: 1, gid: 1, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2)
+        new PlayerStatGame(pid: 1, gid: 1, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2)
       };
 
       var playerSeasonTeamStats = _lo30DataService.DerivePlayerSeasonTeamStats(playerGameStats);
 
       var expected = new List<PlayerStatSeasonTeam>() 
       {
-        new PlayerStatSeasonTeam(pid:1, stidpf:1, sid:1, line:1, pos:"F", sub:false, games:1, g:1,a:1, p:2, ppg:1, shg:0, gwg:1, pim:2)
+        new PlayerStatSeasonTeam(pid:1, stid:1, sid:1, line:1, pos:"F", sub:false, games:1, g:1,a:1, p:2, ppg:1, shg:0, gwg:1, pim:2)
       };
 
       AssertAreEqualPlayerStatSeasonTeamLists(expected, playerSeasonTeamStats);
@@ -197,20 +197,20 @@ namespace LO30.Services.Tests
     {
       var playerGameStats = new List<PlayerStatGame>()
       {
-        new PlayerStatGame(pid: 1, gid: 1, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2),
-        new PlayerStatGame(pid: 1, gid: 2, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 3, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 3, a: 1, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 4, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 0, shg: 1, gwg: 0, pim: 6),
-        new PlayerStatGame(pid: 1, gid: 5, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 2, a: 1, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 6, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 7, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 4, a: 1, p: 5, ppg: 2, shg: 0, gwg: 0, pim: 2)
+        new PlayerStatGame(pid: 1, gid: 1, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2),
+        new PlayerStatGame(pid: 1, gid: 2, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 3, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 3, a: 1, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 4, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 0, shg: 1, gwg: 0, pim: 6),
+        new PlayerStatGame(pid: 1, gid: 5, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 2, a: 1, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 6, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 7, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 4, a: 1, p: 5, ppg: 2, shg: 0, gwg: 0, pim: 2)
       };
 
       var playerSeasonTeamStats = _lo30DataService.DerivePlayerSeasonTeamStats(playerGameStats);
 
       var expected = new List<PlayerStatSeasonTeam>() 
       {
-        new PlayerStatSeasonTeam(pid:1, stidpf:1, sid: 1, line:1, pos:"F", sub:false, games:7, g:11, a:7, p:18, ppg:3, shg:1, gwg:2, pim:10)
+        new PlayerStatSeasonTeam(pid:1, stid:1, sid: 1, line:1, pos:"F", sub:false, games:7, g:11, a:7, p:18, ppg:3, shg:1, gwg:2, pim:10)
       };
 
       AssertAreEqualPlayerStatSeasonTeamLists(expected, playerSeasonTeamStats);
@@ -221,30 +221,30 @@ namespace LO30.Services.Tests
     {
       var playerGameStats = new List<PlayerStatGame>()
       {
-        new PlayerStatGame(pid: 1, gid: 1, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2),
-        new PlayerStatGame(pid: 1, gid: 2, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 3, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 3, a: 1, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 4, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 0, shg: 1, gwg: 0, pim: 6),
-        new PlayerStatGame(pid: 1, gid: 5, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 2, a: 1, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 6, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 7, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 4, a: 1, p: 5, ppg: 2, shg: 0, gwg: 0, pim: 2),
-        new PlayerStatGame(pid: 1, gid: 8, sid: 1, stidpf: 4, line:1, pos:"F", sub: true, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2),
-        new PlayerStatGame(pid: 1, gid: 9, sid: 1, stidpf: 2, line:1, pos:"F", sub: true, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 10, sid: 1, stidpf: 2, line:1, pos:"F", sub: true, g: 3, a: 1, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 11, sid: 1, stidpf: 2, line:1, pos:"F", sub: true, g: 1, a: 1, p: 2, ppg: 0, shg: 1, gwg: 0, pim: 6),
-        new PlayerStatGame(pid: 1, gid: 12, sid: 1, stidpf: 3, line:1, pos:"F", sub: true, g: 2, a: 1, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 13, sid: 1, stidpf: 3, line:1, pos:"F", sub: true, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 14, sid: 1, stidpf: 3, line:1, pos:"F", sub: true, g: 4, a: 1, p: 5, ppg: 2, shg: 0, gwg: 0, pim: 2),
+        new PlayerStatGame(pid: 1, gid: 1, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2),
+        new PlayerStatGame(pid: 1, gid: 2, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 3, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 3, a: 1, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 4, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 0, shg: 1, gwg: 0, pim: 6),
+        new PlayerStatGame(pid: 1, gid: 5, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 2, a: 1, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 6, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 7, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 4, a: 1, p: 5, ppg: 2, shg: 0, gwg: 0, pim: 2),
+        new PlayerStatGame(pid: 1, gid: 8, sid: 1, stid: 4, line:1, pos:"F", sub: true, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2),
+        new PlayerStatGame(pid: 1, gid: 9, sid: 1, stid: 2, line:1, pos:"F", sub: true, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 10, sid: 1, stid: 2, line:1, pos:"F", sub: true, g: 3, a: 1, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 11, sid: 1, stid: 2, line:1, pos:"F", sub: true, g: 1, a: 1, p: 2, ppg: 0, shg: 1, gwg: 0, pim: 6),
+        new PlayerStatGame(pid: 1, gid: 12, sid: 1, stid: 3, line:1, pos:"F", sub: true, g: 2, a: 1, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 13, sid: 1, stid: 3, line:1, pos:"F", sub: true, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 14, sid: 1, stid: 3, line:1, pos:"F", sub: true, g: 4, a: 1, p: 5, ppg: 2, shg: 0, gwg: 0, pim: 2),
       };
 
       var playerSeasonTeamStats = _lo30DataService.DerivePlayerSeasonTeamStats(playerGameStats);
 
       var expected = new List<PlayerStatSeasonTeam>() 
       {
-        new PlayerStatSeasonTeam(pid:1, stidpf:1, sid:1, line:1, pos:"F", sub:false, games:7, g:11, a:7, p:18, ppg:3, shg:1, gwg:2, pim:10),
-        new PlayerStatSeasonTeam(pid:1, stidpf:2, sid:1, line:1, pos:"F", sub:true, games:3, g:4, a:3, p:7, ppg:0, shg:1, gwg:0, pim:6),
-        new PlayerStatSeasonTeam(pid:1, stidpf:3, sid:1, line:1, pos:"F", sub:true, games:3, g:6, a:3, p:9, ppg:2, shg:0, gwg:1, pim:2),
-        new PlayerStatSeasonTeam(pid:1, stidpf:4, sid:1, line:1, pos:"F", sub:true, games:1, g:1, a:1, p:2, ppg:1, shg:0, gwg:1, pim:2)
+        new PlayerStatSeasonTeam(pid:1, stid:1, sid:1, line:1, pos:"F", sub:false, games:7, g:11, a:7, p:18, ppg:3, shg:1, gwg:2, pim:10),
+        new PlayerStatSeasonTeam(pid:1, stid:2, sid:1, line:1, pos:"F", sub:true, games:3, g:4, a:3, p:7, ppg:0, shg:1, gwg:0, pim:6),
+        new PlayerStatSeasonTeam(pid:1, stid:3, sid:1, line:1, pos:"F", sub:true, games:3, g:6, a:3, p:9, ppg:2, shg:0, gwg:1, pim:2),
+        new PlayerStatSeasonTeam(pid:1, stid:4, sid:1, line:1, pos:"F", sub:true, games:1, g:1, a:1, p:2, ppg:1, shg:0, gwg:1, pim:2)
       };
 
       AssertAreEqualPlayerStatSeasonTeamLists(expected, playerSeasonTeamStats);
@@ -255,68 +255,68 @@ namespace LO30.Services.Tests
     {
       var playerGameStats = new List<PlayerStatGame>()
       {
-        new PlayerStatGame(pid: 1, gid: 1, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2),
-        new PlayerStatGame(pid: 1, gid: 2, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 3, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 3, a: 1, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 4, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 0, shg: 1, gwg: 0, pim: 6),
-        new PlayerStatGame(pid: 1, gid: 5, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 2, a: 1, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 6, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 7, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 4, a: 1, p: 5, ppg: 2, shg: 0, gwg: 0, pim: 2),
-        new PlayerStatGame(pid: 1, gid: 8, sid: 1, stidpf: 4, line:1, pos:"F", sub: true, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2),
-        new PlayerStatGame(pid: 1, gid: 9, sid: 1, stidpf: 2, line:1, pos:"F", sub: true, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 10, sid: 1, stidpf: 2, line:1, pos:"F", sub: true, g: 3, a: 1, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 11, sid: 1, stidpf: 2, line:1, pos:"F", sub: true, g: 1, a: 1, p: 2, ppg: 0, shg: 1, gwg: 0, pim: 6),
-        new PlayerStatGame(pid: 1, gid: 12, sid: 1, stidpf: 3, line:1, pos:"F", sub: true, g: 2, a: 1, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 13, sid: 1, stidpf: 3, line:1, pos:"F", sub: true, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 1, gid: 14, sid: 1, stidpf: 3, line:1, pos:"F", sub: true, g: 4, a: 1, p: 5, ppg: 2, shg: 0, gwg: 0, pim: 2),
+        new PlayerStatGame(pid: 1, gid: 1, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2),
+        new PlayerStatGame(pid: 1, gid: 2, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 3, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 3, a: 1, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 4, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 0, shg: 1, gwg: 0, pim: 6),
+        new PlayerStatGame(pid: 1, gid: 5, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 2, a: 1, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 6, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 7, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 4, a: 1, p: 5, ppg: 2, shg: 0, gwg: 0, pim: 2),
+        new PlayerStatGame(pid: 1, gid: 8, sid: 1, stid: 4, line:1, pos:"F", sub: true, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2),
+        new PlayerStatGame(pid: 1, gid: 9, sid: 1, stid: 2, line:1, pos:"F", sub: true, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 10, sid: 1, stid: 2, line:1, pos:"F", sub: true, g: 3, a: 1, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 11, sid: 1, stid: 2, line:1, pos:"F", sub: true, g: 1, a: 1, p: 2, ppg: 0, shg: 1, gwg: 0, pim: 6),
+        new PlayerStatGame(pid: 1, gid: 12, sid: 1, stid: 3, line:1, pos:"F", sub: true, g: 2, a: 1, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 13, sid: 1, stid: 3, line:1, pos:"F", sub: true, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 1, gid: 14, sid: 1, stid: 3, line:1, pos:"F", sub: true, g: 4, a: 1, p: 5, ppg: 2, shg: 0, gwg: 0, pim: 2),
 
-        new PlayerStatGame(pid: 2, gid: 1, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2),
-        new PlayerStatGame(pid: 2, gid: 2, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 2, gid: 3, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 3, a: 1, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 2, gid: 4, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 0, shg: 1, gwg: 0, pim: 6),
-        new PlayerStatGame(pid: 2, gid: 5, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 2, a: 1, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
-        new PlayerStatGame(pid: 2, gid: 6, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 2, gid: 7, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 4, a: 1, p: 5, ppg: 2, shg: 0, gwg: 0, pim: 2),
-        new PlayerStatGame(pid: 2, gid: 8, sid: 1, stidpf: 4, line:1, pos:"F", sub: true, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2),
-        new PlayerStatGame(pid: 2, gid: 9, sid: 1, stidpf: 2, line:1, pos:"F", sub: true, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 2, gid: 10, sid: 1, stidpf: 2, line:1, pos:"F", sub: true, g: 3, a: 1, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 2, gid: 11, sid: 1, stidpf: 2, line:1, pos:"F", sub: true, g: 1, a: 1, p: 2, ppg: 0, shg: 1, gwg: 0, pim: 6),
-        new PlayerStatGame(pid: 2, gid: 12, sid: 1, stidpf: 3, line:1, pos:"F", sub: true, g: 2, a: 1, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
-        new PlayerStatGame(pid: 2, gid: 13, sid: 1, stidpf: 3, line:1, pos:"F", sub: true, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 2, gid: 14, sid: 1, stidpf: 3, line:1, pos:"F", sub: true, g: 4, a: 1, p: 5, ppg: 2, shg: 0, gwg: 0, pim: 2),
+        new PlayerStatGame(pid: 2, gid: 1, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2),
+        new PlayerStatGame(pid: 2, gid: 2, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 2, gid: 3, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 3, a: 1, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 2, gid: 4, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 0, shg: 1, gwg: 0, pim: 6),
+        new PlayerStatGame(pid: 2, gid: 5, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 2, a: 1, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
+        new PlayerStatGame(pid: 2, gid: 6, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 2, gid: 7, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 4, a: 1, p: 5, ppg: 2, shg: 0, gwg: 0, pim: 2),
+        new PlayerStatGame(pid: 2, gid: 8, sid: 1, stid: 4, line:1, pos:"F", sub: true, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2),
+        new PlayerStatGame(pid: 2, gid: 9, sid: 1, stid: 2, line:1, pos:"F", sub: true, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 2, gid: 10, sid: 1, stid: 2, line:1, pos:"F", sub: true, g: 3, a: 1, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 2, gid: 11, sid: 1, stid: 2, line:1, pos:"F", sub: true, g: 1, a: 1, p: 2, ppg: 0, shg: 1, gwg: 0, pim: 6),
+        new PlayerStatGame(pid: 2, gid: 12, sid: 1, stid: 3, line:1, pos:"F", sub: true, g: 2, a: 1, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
+        new PlayerStatGame(pid: 2, gid: 13, sid: 1, stid: 3, line:1, pos:"F", sub: true, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 2, gid: 14, sid: 1, stid: 3, line:1, pos:"F", sub: true, g: 4, a: 1, p: 5, ppg: 2, shg: 0, gwg: 0, pim: 2),
 
-        new PlayerStatGame(pid: 3, gid: 1, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2),
-        new PlayerStatGame(pid: 3, gid: 2, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 3, gid: 3, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 3, a: 1, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 3, gid: 4, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 0, shg: 1, gwg: 0, pim: 6),
-        new PlayerStatGame(pid: 3, gid: 5, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 2, a: 1, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
-        new PlayerStatGame(pid: 3, gid: 6, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 3, gid: 7, sid: 1, stidpf: 1, line:1, pos:"F", sub: false, g: 4, a: 1, p: 5, ppg: 2, shg: 0, gwg: 0, pim: 2),
-        new PlayerStatGame(pid: 3, gid: 8, sid: 1, stidpf: 4, line:1, pos:"F", sub: true, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2),
-        new PlayerStatGame(pid: 3, gid: 9, sid: 1, stidpf: 2, line:1, pos:"F", sub: true, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 3, gid: 10, sid: 1, stidpf: 2, line:1, pos:"F", sub: true, g: 3, a: 1, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 3, gid: 11, sid: 1, stidpf: 2, line:1, pos:"F", sub: true, g: 1, a: 1, p: 2, ppg: 0, shg: 1, gwg: 0, pim: 6),
-        new PlayerStatGame(pid: 3, gid: 12, sid: 1, stidpf: 3, line:1, pos:"F", sub: true, g: 2, a: 1, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
-        new PlayerStatGame(pid: 3, gid: 13, sid: 1, stidpf: 3, line:1, pos:"F", sub: true, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatGame(pid: 3, gid: 14, sid: 1, stidpf: 3, line:1, pos:"F", sub: true, g: 4, a: 1, p: 5, ppg: 2, shg: 0, gwg: 0, pim: 2)
+        new PlayerStatGame(pid: 3, gid: 1, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2),
+        new PlayerStatGame(pid: 3, gid: 2, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 3, gid: 3, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 3, a: 1, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 3, gid: 4, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 1, a: 1, p: 2, ppg: 0, shg: 1, gwg: 0, pim: 6),
+        new PlayerStatGame(pid: 3, gid: 5, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 2, a: 1, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
+        new PlayerStatGame(pid: 3, gid: 6, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 3, gid: 7, sid: 1, stid: 1, line:1, pos:"F", sub: false, g: 4, a: 1, p: 5, ppg: 2, shg: 0, gwg: 0, pim: 2),
+        new PlayerStatGame(pid: 3, gid: 8, sid: 1, stid: 4, line:1, pos:"F", sub: true, g: 1, a: 1, p: 2, ppg: 1, shg: 0, gwg: 1, pim: 2),
+        new PlayerStatGame(pid: 3, gid: 9, sid: 1, stid: 2, line:1, pos:"F", sub: true, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 3, gid: 10, sid: 1, stid: 2, line:1, pos:"F", sub: true, g: 3, a: 1, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 3, gid: 11, sid: 1, stid: 2, line:1, pos:"F", sub: true, g: 1, a: 1, p: 2, ppg: 0, shg: 1, gwg: 0, pim: 6),
+        new PlayerStatGame(pid: 3, gid: 12, sid: 1, stid: 3, line:1, pos:"F", sub: true, g: 2, a: 1, p: 3, ppg: 0, shg: 0, gwg: 1, pim: 0),
+        new PlayerStatGame(pid: 3, gid: 13, sid: 1, stid: 3, line:1, pos:"F", sub: true, g: 0, a: 1, p: 1, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatGame(pid: 3, gid: 14, sid: 1, stid: 3, line:1, pos:"F", sub: true, g: 4, a: 1, p: 5, ppg: 2, shg: 0, gwg: 0, pim: 2)
       };
 
       var playerSeasonTeamStats = _lo30DataService.DerivePlayerSeasonTeamStats(playerGameStats);
 
       var expected = new List<PlayerStatSeasonTeam>() 
       {
-        new PlayerStatSeasonTeam(pid:1, sid:1, stidpf:1, line:1, pos:"F", sub: false, games:7, g:11, a:7, p:18, ppg:3, shg:1, gwg:2, pim:10),
-        new PlayerStatSeasonTeam(pid:1, sid:1, stidpf:2, line:1, pos:"F", sub: true, games:3, g:4, a:3, p:7, ppg:0, shg:1, gwg:0, pim:6),
-        new PlayerStatSeasonTeam(pid:1, sid:1, stidpf:3, line:1, pos:"F", sub: true, games:3, g:6, a:3, p:9, ppg:2, shg:0, gwg:1, pim:2),
-        new PlayerStatSeasonTeam(pid:1, sid:1, stidpf:4, line:1, pos:"F", sub: true, games:1, g:1, a:1, p:2, ppg:1, shg:0, gwg:1, pim:2),
-        new PlayerStatSeasonTeam(pid:2, sid:1, stidpf:1, line:1, pos:"F", sub: false, games:7, g:11, a:7, p:18, ppg:3, shg:1, gwg:2, pim:10),
-        new PlayerStatSeasonTeam(pid:2, sid:1, stidpf:2, line:1, pos:"F", sub: true, games:3, g:4, a:3, p:7, ppg:0, shg:1, gwg:0, pim:6),
-        new PlayerStatSeasonTeam(pid:2, sid:1, stidpf:3, line:1, pos:"F", sub: true, games:3, g:6, a:3, p:9, ppg:2, shg:0, gwg:1, pim:2),
-        new PlayerStatSeasonTeam(pid:2, sid:1, stidpf:4, line:1, pos:"F", sub: true, games:1, g:1, a:1, p:2, ppg:1, shg:0, gwg:1, pim:2),
-        new PlayerStatSeasonTeam(pid:3, sid:1, stidpf:1, line:1, pos:"F", sub: false, games:7, g:11, a:7, p:18, ppg:3, shg:1, gwg:2, pim:10),
-        new PlayerStatSeasonTeam(pid:3, sid:1, stidpf:2, line:1, pos:"F", sub: true, games:3, g:4, a:3, p:7, ppg:0, shg:1, gwg:0, pim:6),
-        new PlayerStatSeasonTeam(pid:3, sid:1, stidpf:3, line:1, pos:"F", sub: true, games:3, g:6, a:3, p:9, ppg:2, shg:0, gwg:1, pim:2),
-        new PlayerStatSeasonTeam(pid:3, sid:1, stidpf:4, line:1, pos:"F", sub: true, games:1, g:1, a:1, p:2, ppg:1, shg:0, gwg:1, pim:2)
+        new PlayerStatSeasonTeam(pid:1, sid:1, stid:1, line:1, pos:"F", sub: false, games:7, g:11, a:7, p:18, ppg:3, shg:1, gwg:2, pim:10),
+        new PlayerStatSeasonTeam(pid:1, sid:1, stid:2, line:1, pos:"F", sub: true, games:3, g:4, a:3, p:7, ppg:0, shg:1, gwg:0, pim:6),
+        new PlayerStatSeasonTeam(pid:1, sid:1, stid:3, line:1, pos:"F", sub: true, games:3, g:6, a:3, p:9, ppg:2, shg:0, gwg:1, pim:2),
+        new PlayerStatSeasonTeam(pid:1, sid:1, stid:4, line:1, pos:"F", sub: true, games:1, g:1, a:1, p:2, ppg:1, shg:0, gwg:1, pim:2),
+        new PlayerStatSeasonTeam(pid:2, sid:1, stid:1, line:1, pos:"F", sub: false, games:7, g:11, a:7, p:18, ppg:3, shg:1, gwg:2, pim:10),
+        new PlayerStatSeasonTeam(pid:2, sid:1, stid:2, line:1, pos:"F", sub: true, games:3, g:4, a:3, p:7, ppg:0, shg:1, gwg:0, pim:6),
+        new PlayerStatSeasonTeam(pid:2, sid:1, stid:3, line:1, pos:"F", sub: true, games:3, g:6, a:3, p:9, ppg:2, shg:0, gwg:1, pim:2),
+        new PlayerStatSeasonTeam(pid:2, sid:1, stid:4, line:1, pos:"F", sub: true, games:1, g:1, a:1, p:2, ppg:1, shg:0, gwg:1, pim:2),
+        new PlayerStatSeasonTeam(pid:3, sid:1, stid:1, line:1, pos:"F", sub: false, games:7, g:11, a:7, p:18, ppg:3, shg:1, gwg:2, pim:10),
+        new PlayerStatSeasonTeam(pid:3, sid:1, stid:2, line:1, pos:"F", sub: true, games:3, g:4, a:3, p:7, ppg:0, shg:1, gwg:0, pim:6),
+        new PlayerStatSeasonTeam(pid:3, sid:1, stid:3, line:1, pos:"F", sub: true, games:3, g:6, a:3, p:9, ppg:2, shg:0, gwg:1, pim:2),
+        new PlayerStatSeasonTeam(pid:3, sid:1, stid:4, line:1, pos:"F", sub: true, games:1, g:1, a:1, p:2, ppg:1, shg:0, gwg:1, pim:2)
       };
 
       AssertAreEqualPlayerStatSeasonTeamLists(expected, playerSeasonTeamStats);
@@ -339,12 +339,12 @@ namespace LO30.Services.Tests
 
       var expected = new List<PlayerStatSeasonTeam>() 
       {
-        new PlayerStatSeasonTeam(pid: 593, sid: 54, stidpf: 308, line:1, pos:"F", sub: false, games: 7, g: 8, a: 11, p: 19, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatSeasonTeam(pid: 644, sid: 54, stidpf: 309, line:1, pos:"F", sub: true, games: 2, g: 1, a: 1, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatSeasonTeam(pid: 644, sid: 54, stidpf: 313, line:1, pos:"F", sub: true, games: 1, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatSeasonTeam(pid: 644, sid: 54, stidpf: 314, line:1, pos:"F", sub: false, games: 6, g: 1, a: 3, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatSeasonTeam(pid: 644, sid: 54, stidpf: 315, line:1, pos:"F", sub: true, games: 1, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
-        new PlayerStatSeasonTeam(pid: 680, sid: 54, stidpf: 308, line:1, pos:"F", sub: true, games: 2, g: 0, a: 2, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0)
+        new PlayerStatSeasonTeam(pid: 593, sid: 54, stid: 308, line:1, pos:"F", sub: false, games: 7, g: 8, a: 11, p: 19, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatSeasonTeam(pid: 644, sid: 54, stid: 309, line:1, pos:"F", sub: true, games: 2, g: 1, a: 1, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatSeasonTeam(pid: 644, sid: 54, stid: 313, line:1, pos:"F", sub: true, games: 1, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatSeasonTeam(pid: 644, sid: 54, stid: 314, line:1, pos:"F", sub: false, games: 6, g: 1, a: 3, p: 4, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatSeasonTeam(pid: 644, sid: 54, stid: 315, line:1, pos:"F", sub: true, games: 1, g: 0, a: 0, p: 0, ppg: 0, shg: 0, gwg: 0, pim: 0),
+        new PlayerStatSeasonTeam(pid: 680, sid: 54, stid: 308, line:1, pos:"F", sub: true, games: 2, g: 0, a: 2, p: 2, ppg: 0, shg: 0, gwg: 0, pim: 0)
       };
 
 
@@ -373,8 +373,8 @@ namespace LO30.Services.Tests
 
       var expected = new List<GoalieStatGame>() 
       {
-        new GoalieStatGame(pid: 401, gid: 701, sid: 501, stidpf: 201, sub: false, ga: 0, so: 0, w: 0),
-        new GoalieStatGame(pid: 402, gid: 701, sid: 501, stidpf: 202, sub: false, ga: 0, so: 0, w: 0)
+        new GoalieStatGame(pid: 401, gid: 701, sid: 501, stid: 201, sub: false, ga: 0, so: 0, w: 0),
+        new GoalieStatGame(pid: 402, gid: 701, sid: 501, stid: 202, sub: false, ga: 0, so: 0, w: 0)
       };
 
       AssertAreEqualGoalieStatGameLists(expected, goalieGameStats);
@@ -401,8 +401,8 @@ namespace LO30.Services.Tests
 
       var expected = new List<GoalieStatGame>() 
       {
-        new GoalieStatGame(pid: 401, gid: 701, sid: 501, stidpf: 201, sub: false, ga: 0, so: 0, w: 0),
-        new GoalieStatGame(pid: 408, gid: 701, sid: 501, stidpf: 202, sub: true, ga: 0, so: 0, w: 0)
+        new GoalieStatGame(pid: 401, gid: 701, sid: 501, stid: 201, sub: false, ga: 0, so: 0, w: 0),
+        new GoalieStatGame(pid: 408, gid: 701, sid: 501, stid: 202, sub: true, ga: 0, so: 0, w: 0)
       };
 
       AssertAreEqualGoalieStatGameLists(expected, goalieGameStats);
@@ -430,8 +430,8 @@ namespace LO30.Services.Tests
 
       var expected = new List<GoalieStatGame>() 
       {
-        new GoalieStatGame(pid: 401, gid: 701, sid: 501, stidpf: 201, sub: false, ga: 2, so: 0, w: 1),
-        new GoalieStatGame(pid: 408, gid: 701, sid: 501, stidpf: 202, sub: true, ga: 4, so: 0, w: 0)
+        new GoalieStatGame(pid: 401, gid: 701, sid: 501, stid: 201, sub: false, ga: 2, so: 0, w: 1),
+        new GoalieStatGame(pid: 408, gid: 701, sid: 501, stid: 202, sub: true, ga: 4, so: 0, w: 0)
       };
 
       AssertAreEqualGoalieStatGameLists(expected, goalieGameStats);
@@ -451,20 +451,20 @@ namespace LO30.Services.Tests
 
       var expected = new List<GoalieStatGame>() 
       {
-        new GoalieStatGame(pid: 81, gid: 3201, sid: 54, stidpf: 311, sub: true, ga: 4, so: 0, w: 0),
-        new GoalieStatGame(pid: 619, gid: 3202, sid: 54, stidpf: 313, sub: false, ga: 3, so: 0, w: 0),
-        new GoalieStatGame(pid: 619, gid: 3206, sid: 54, stidpf: 313, sub: false, ga: 1, so: 0, w: 0),
-        new GoalieStatGame(pid: 619, gid: 3208, sid: 54, stidpf: 313, sub: false, ga: 2, so: 0, w: 0),
-        new GoalieStatGame(pid: 619, gid: 3214, sid: 54, stidpf: 313, sub: false, ga: 4, so: 0, w: 0),
-        new GoalieStatGame(pid: 619, gid: 3221, sid: 54, stidpf: 313, sub: false, ga: 2, so: 0, w: 1),
-        new GoalieStatGame(pid: 619, gid: 3225, sid: 54, stidpf: 313, sub: false, ga: 4, so: 0, w: 0),
-        new GoalieStatGame(pid: 634, gid: 3203, sid: 54, stidpf: 315, sub: false, ga: 0, so: 1, w: 1),
-        new GoalieStatGame(pid: 634, gid: 3209, sid: 54, stidpf: 315, sub: false, ga: 1, so: 0, w: 0),
-        new GoalieStatGame(pid: 634, gid: 3211, sid: 54, stidpf: 315, sub: false, ga: 1, so: 0, w: 1),
-        new GoalieStatGame(pid: 634, gid: 3214, sid: 54, stidpf: 315, sub: false, ga: 0, so: 1, w: 1),
-        new GoalieStatGame(pid: 634, gid: 3218, sid: 54, stidpf: 315, sub: false, ga: 6, so: 0, w: 0),
-        new GoalieStatGame(pid: 634, gid: 3224, sid: 54, stidpf: 315, sub: false, ga: 2, so: 0, w: 1),
-        new GoalieStatGame(pid: 634, gid: 3226, sid: 54, stidpf: 315, sub: false, ga: 0, so: 1, w: 1)
+        new GoalieStatGame(pid: 81, gid: 3201, sid: 54, stid: 311, sub: true, ga: 4, so: 0, w: 0),
+        new GoalieStatGame(pid: 619, gid: 3202, sid: 54, stid: 313, sub: false, ga: 3, so: 0, w: 0),
+        new GoalieStatGame(pid: 619, gid: 3206, sid: 54, stid: 313, sub: false, ga: 1, so: 0, w: 0),
+        new GoalieStatGame(pid: 619, gid: 3208, sid: 54, stid: 313, sub: false, ga: 2, so: 0, w: 0),
+        new GoalieStatGame(pid: 619, gid: 3214, sid: 54, stid: 313, sub: false, ga: 4, so: 0, w: 0),
+        new GoalieStatGame(pid: 619, gid: 3221, sid: 54, stid: 313, sub: false, ga: 2, so: 0, w: 1),
+        new GoalieStatGame(pid: 619, gid: 3225, sid: 54, stid: 313, sub: false, ga: 4, so: 0, w: 0),
+        new GoalieStatGame(pid: 634, gid: 3203, sid: 54, stid: 315, sub: false, ga: 0, so: 1, w: 1),
+        new GoalieStatGame(pid: 634, gid: 3209, sid: 54, stid: 315, sub: false, ga: 1, so: 0, w: 0),
+        new GoalieStatGame(pid: 634, gid: 3211, sid: 54, stid: 315, sub: false, ga: 1, so: 0, w: 1),
+        new GoalieStatGame(pid: 634, gid: 3214, sid: 54, stid: 315, sub: false, ga: 0, so: 1, w: 1),
+        new GoalieStatGame(pid: 634, gid: 3218, sid: 54, stid: 315, sub: false, ga: 6, so: 0, w: 0),
+        new GoalieStatGame(pid: 634, gid: 3224, sid: 54, stid: 315, sub: false, ga: 2, so: 0, w: 1),
+        new GoalieStatGame(pid: 634, gid: 3226, sid: 54, stid: 315, sub: false, ga: 0, so: 1, w: 1)
       };
 
       AssertAreEqualGoalieStatGameLists(expected, goalieGameStatsPartial);
@@ -567,7 +567,7 @@ namespace LO30.Services.Tests
     private void AssertAreEqualPlayerStatGameItem(PlayerStatGame expected, PlayerStatGame actual, string locationKey)
     {
       Assert.AreEqual(expected.SeasonId, actual.SeasonId, "SeasonId key: " + locationKey);
-      Assert.AreEqual(expected.SeasonTeamIdPlayingFor, actual.SeasonTeamIdPlayingFor, "SeasonTeamIdPlayingFor key: " + locationKey);
+      Assert.AreEqual(expected.SeasonTeamId, actual.SeasonTeamId, "SeasonTeamId key: " + locationKey);
       Assert.AreEqual(expected.Sub, actual.Sub, "Sub key: " + locationKey);
       Assert.AreEqual(expected.Goals, actual.Goals, "Goals key: " + locationKey);
       Assert.AreEqual(expected.Assists, actual.Assists, "Assists key: " + locationKey);
@@ -585,12 +585,12 @@ namespace LO30.Services.Tests
       for (var e = 0; e < expected.Count; e++)
       {
         var actualMatch = actual.Where(x => x.PlayerId == expected[e].PlayerId &&
-                                          x.SeasonTeamIdPlayingFor == expected[e].SeasonTeamIdPlayingFor)
+                                          x.SeasonTeamId == expected[e].SeasonTeamId)
                                 .FirstOrDefault();
 
-        var locationKey = string.Format("pid: {0}, stidpf: {1}",
+        var locationKey = string.Format("pid: {0}, stid: {1}",
                                     expected[e].PlayerId,
-                                    expected[e].SeasonTeamIdPlayingFor);
+                                    expected[e].SeasonTeamId);
 
         Assert.IsNotNull(actualMatch, "actualMatch key: " + locationKey);
         AssertAreEqualPlayerStatSeasonTeamItem(expected[e], actualMatch, locationKey);
@@ -604,12 +604,12 @@ namespace LO30.Services.Tests
       for (var e = 0; e < expected.Count; e++)
       {
         var actualMatch = actual.Where(x => x.PlayerId == expected[e].PlayerId &&
-                                          x.SeasonTeamIdPlayingFor == expected[e].SeasonTeamIdPlayingFor)
+                                          x.SeasonTeamId == expected[e].SeasonTeamId)
                                 .FirstOrDefault();
 
-        var locationKey = string.Format("pid: {0}, stidpf: {1}",
+        var locationKey = string.Format("pid: {0}, stid: {1}",
                                     expected[e].PlayerId,
-                                    expected[e].SeasonTeamIdPlayingFor);
+                                    expected[e].SeasonTeamId);
 
         Assert.IsNotNull(actualMatch, "actualMatch key: " + locationKey);
         AssertAreEqualPlayerStatSeasonTeamItem(expected[e], actualMatch, locationKey);
@@ -672,7 +672,7 @@ namespace LO30.Services.Tests
     private void AssertAreEqualGoalieStatGameItem(GoalieStatGame expected, GoalieStatGame actual, string locationKey)
     {
       Assert.AreEqual(expected.SeasonId, actual.SeasonId, "SeasonId key: " + locationKey);
-      Assert.AreEqual(expected.SeasonTeamIdPlayingFor, actual.SeasonTeamIdPlayingFor, "SeasonTeamIdPlayingFor key: " + locationKey);
+      Assert.AreEqual(expected.SeasonTeamId, actual.SeasonTeamId, "SeasonTeamId key: " + locationKey);
       Assert.AreEqual(expected.Sub, actual.Sub, "Sub key: " + locationKey);
       Assert.AreEqual(expected.GoalsAgainst, actual.GoalsAgainst, "GoalsAgainst key: " + locationKey);
       Assert.AreEqual(expected.Shutouts, actual.Shutouts, "Shutouts key: " + locationKey);

@@ -21,11 +21,5 @@ namespace LO30.Controllers.Data
                     .OrderBy(x => x.FirstName)
                     .ToList();
     }
-
-    public Player GetPlayerByPlayerId(int playerId)
-    {
-      var results = _repo.GetPlayerByPlayerId(playerId);
-      return results;
-    }
   }
 }

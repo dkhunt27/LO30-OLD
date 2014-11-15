@@ -132,7 +132,7 @@ namespace LO30.Services
                                         gid: gameId,
 
                                         sid: seasonId,
-                                        stidpf: seasonTeamId,
+                                        stid: seasonTeamId,
                                         line: line,
                                         pos: position,
                                         sub: sub,
@@ -163,7 +163,7 @@ namespace LO30.Services
       var playerSeasonTeamStats = new List<PlayerStatSeasonTeam>();
 
       var summedStats = playerGameStats
-              .GroupBy(x => new { x.PlayerId, x.SeasonId, x.Sub, x.SeasonTeamIdPlayingFor, x.Line, x.Position })
+              .GroupBy(x => new { x.PlayerId, x.SeasonId, x.Sub, SeasonTeamIdPlayingFor = x.SeasonTeamId, x.Line, x.Position })
               .Select(grp => new
               {
                 PlayerId = grp.Key.PlayerId,
@@ -190,7 +190,7 @@ namespace LO30.Services
                                     pid: stat.PlayerId,
                                     sid: stat.SeasonId,
                                     sub: stat.Sub,
-                                    stidpf: stat.SeasonTeamIdPlayingFor,
+                                    stid: stat.SeasonTeamIdPlayingFor,
                                     line: stat.Line,
                                     pos: stat.Position,
 
@@ -270,10 +270,10 @@ namespace LO30.Services
         var stat = new ForWebPlayerStat()
         {
           PID = item.PlayerId,
-          STIDPF = item.SeasonTeamIdPlayingFor,
+          STID = item.SeasonTeamId,
           SID = item.SeasonId,
           Player = playerName,
-          Team = item.SeasonTeamPlayingFor.Team.TeamLongName,
+          Team = item.SeasonTeam.Team.TeamLongName,
           Sub = item.Sub == true ? "Y" : "N",
           Pos = item.Position,
           Line = item.Line,
@@ -287,7 +287,7 @@ namespace LO30.Services
           PIM = item.PenaltyMinutes
         };
 
-        if (stat.PID == 0 && stat.SID == 0 && stat.STIDPF == 0)
+        if (stat.PID == 0 && stat.SID == 0 && stat.STID == 0)
         {
           Debug.Print(string.Format("DeriveWebPlayerStats: Warning ForWebPlayerStat has ids of 0,0,0 Player:{0}, Team:{1}, Sub:{2}", stat.Player, stat.Team, stat.Sub));
         }
@@ -348,7 +348,7 @@ namespace LO30.Services
                                         gid: gameId,
 
                                         sid: seasonId,
-                                        stidpf: seasonTeamId,
+                                        stid: seasonTeamId,
                                         sub: sub,
 
                                         ga: goalAgainst,
@@ -373,7 +373,7 @@ namespace LO30.Services
       var goalieSeasonTeamStats = new List<GoalieStatSeasonTeam>();
 
       var summedStats = goalieGameStats
-              .GroupBy(x => new { x.PlayerId, x.SeasonId, x.Sub, x.SeasonTeamIdPlayingFor })
+              .GroupBy(x => new { x.PlayerId, x.SeasonId, x.Sub, SeasonTeamIdPlayingFor = x.SeasonTeamId })
               .Select(grp => new
               {
                 PlayerId = grp.Key.PlayerId,
@@ -394,7 +394,7 @@ namespace LO30.Services
                                     pid: stat.PlayerId,
                                     sid: stat.SeasonId,
                                     sub: stat.Sub,
-                                    stidpf: stat.SeasonTeamIdPlayingFor,
+                                    stid: stat.SeasonTeamIdPlayingFor,
 
                                     games: stat.Games,
                                     ga: stat.GoalsAgainst,
@@ -459,10 +459,10 @@ namespace LO30.Services
         newData.Add(new ForWebGoalieStat()
         {
           PID = item.PlayerId,
-          STIDPF = item.SeasonTeamIdPlayingFor,
+          STID = item.SeasonTeamId,
           SID = item.SeasonId,
           Player = playerName,
-          Team = item.SeasonTeamPlayingFor.Team.TeamLongName,
+          Team = item.SeasonTeam.Team.TeamLongName,
           Sub = item.Sub == true ? "Y" : "N",
           GP = item.Games,
           GA = item.GoalsAgainst,
@@ -651,6 +651,13 @@ namespace LO30.Services
       ratingSecondary = Convert.ToInt32(ratingParts[1]);
 
       return;
+    }
+
+    public string ConvertRatingPrimarySecondaryToCombined(int ratingPrimary, int ratingSecondary)
+    {
+      string ratingCombined = "";
+      ratingCombined = ratingPrimary.ToString() + '.' + ratingSecondary.ToString();
+      return ratingCombined;
     }
   }
 }

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace LO30.Data
 {
-  public partial class Lo30RepositoryMock
+  public partial class Lo30Repository
   {
     public List<PlayerSubSearch> GetPlayersSubSearch(string position, string ratingMin, string ratingMax)
     {
@@ -17,22 +17,30 @@ namespace LO30.Data
       int ratingMaxSecondary = -1;
       _lo30DataService.ConvertCombinedRatingToPrimarySecondary(ratingMin, out ratingMinPrimary, out ratingMinSecondary);
       _lo30DataService.ConvertCombinedRatingToPrimarySecondary(ratingMax, out ratingMaxPrimary, out ratingMaxSecondary);
-
-      var players = _players.ToList();
+      
+      var players = _ctx.Players.ToList();
 
       var todayYYYYMMDD = Convert.ToInt32(DateTime.Now.ToString("yyyyMMdd"));
-      var currentSeasonId = _seasons.Where(x=>x.IsCurrentSeason == true).FirstOrDefault().SeasonId;
+      var currentSeasonId = _contextService.FindSeasonWithIsCurrentSeason(isCurrentSeason: true).SeasonId;
 
       var playersSubSearch = new List<PlayerSubSearch>();
 
       foreach (var player in players)
       {
-        var playerRating = _playerRatings.Where(x => x.SeasonId == currentSeasonId &&
-                                          x.PlayerId == player.PlayerId &&
-                                          (x.Position == position || x.Position == "X") &&
-                                          x.StartYYYYMMDD <= todayYYYYMMDD &&
-                                          x.EndYYYYMMDD >= todayYYYYMMDD)
-                                    .FirstOrDefault();
+        var playerRating = _contextService.FindPlayerRatingWithYYYYMMDD(player.PlayerId, position, currentSeasonId, todayYYYYMMDD);
+
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        bool populateFully = true;
+
+        var teamRoster = _contextService.FindTeamRosterWithYYYYMMDD(player.PlayerId, todayYYYYMMDD, errorIfNotFound, errorIfMoreThanOneFound, populateFully);
+
+        string teamName = null;
+        if (teamRoster != null)
+        {
+          teamName = teamRoster.SeasonTeam.Team.TeamShortName;
+        }
+
 
         if (ratingMinPrimary <= playerRating.RatingPrimary && ratingMinSecondary <= playerRating.RatingSecondary &&
             playerRating.RatingPrimary <= ratingMaxPrimary && playerRating.RatingSecondary <= ratingMaxSecondary)
@@ -44,8 +52,8 @@ namespace LO30.Data
             LastName = player.LastName,
             Suffix = player.Suffix,
             Position = position,
-            RatingPrimary = playerRating.RatingPrimary,
-            RatingSecondary = playerRating.RatingSecondary
+            TeamName = teamName,
+            Rating = _lo30DataService.ConvertRatingPrimarySecondaryToCombined(playerRating.RatingPrimary, playerRating.RatingSecondary)
           };
 
           playersSubSearch.Add(playerSubSearch);

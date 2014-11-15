@@ -23,8 +23,13 @@ namespace LO30.Data
     private List<GameTeam> _gameTeams;
     private List<Player> _players;
     private List<PlayerRating> _playerRatings;
+    private List<PlayerStatCareer> _playerStatsCareer;
+    private List<PlayerStatGame> _playerStatsGame;
+    private List<PlayerStatSeason> _playerStatsSeason;
+    private List<PlayerStatSeasonTeam> _playerStatsSeasonTeam;
     private List<Season> _seasons;
     private List<TeamRoster> _teamRosters;
+
 
     public Lo30RepositoryMock()
     {
@@ -45,6 +50,10 @@ namespace LO30.Data
       _gameTeams = _lo30DataSerializationService.FromJsonFromFile<List<GameTeam>>(folderPath + "GameTeams.json");
       _players = _lo30DataSerializationService.FromJsonFromFile<List<Player>>(folderPath + "Players.json");
       _playerRatings = _lo30DataSerializationService.FromJsonFromFile<List<PlayerRating>>(folderPath + "PlayerRatings.json");
+      _playerStatsCareer = _lo30DataSerializationService.FromJsonFromFile<List<PlayerStatCareer>>(folderPath + "PlayerStatsCareer.json");
+      _playerStatsGame = _lo30DataSerializationService.FromJsonFromFile<List<PlayerStatGame>>(folderPath + "PlayerStatsGame.json");
+      _playerStatsSeason = _lo30DataSerializationService.FromJsonFromFile<List<PlayerStatSeason>>(folderPath + "PlayerStatsSeason.json");
+      _playerStatsSeasonTeam = _lo30DataSerializationService.FromJsonFromFile<List<PlayerStatSeasonTeam>>(folderPath + "PlayerStatsSeasonTeam.json");
       _seasons = _lo30DataSerializationService.FromJsonFromFile<List<Season>>(folderPath + "Seasons.json");
       _teamRosters = _lo30DataSerializationService.FromJsonFromFile<List<TeamRoster>>(folderPath + "TeamRosters.json");
     }
@@ -55,11 +64,6 @@ namespace LO30.Data
     }
 
     public List<TeamStanding> GetTeamStandings()
-    {
-      throw new NotImplementedException();
-    }
-
-    public List<PlayerStatSeason> GetPlayerStatsSeason()
     {
       throw new NotImplementedException();
     }

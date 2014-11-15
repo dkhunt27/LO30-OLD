@@ -17,8 +17,7 @@ namespace LO30.Controllers.Data
     public List<PlayerSubSearch> GetPlayersSubSearch(string position, string ratingMin, string ratingMax)
     {
       var results = _repo.GetPlayersSubSearch(position, ratingMin, ratingMax);
-      return results.OrderBy(x => x.RatingPrimary)
-                    .OrderBy(x => x.RatingSecondary)
+      return results.OrderBy(x => x.Rating)
                     .ToList();
     }
 

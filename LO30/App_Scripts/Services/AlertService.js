@@ -14,6 +14,7 @@ lo30NgApp.factory(
       var alertTitleDataRetrievalUnsuccessful = "Data Retrieval Unsuccessful";
       var alertMessageTemplateRetrievalSuccessful = "Retrieved <%=retrievedType%>, Length: <%=retrievedLength%>";
       var alertMessageTemplateRetrievalUnsuccessful = "Received following error trying to retrieve <%=retrievedType%>. Error:<%=retrievedError%>";
+      var alertMessageTemplateRetrievalUnsuccessfulWarning = "Received following warning trying to retrieve <%=retrievedType%>. Warning:<%=retrievedWarning%>";
       var alertMessage;
 
       var errorRetrieval = function (retrievedType, retrievedError) {
@@ -41,6 +42,10 @@ lo30NgApp.factory(
         console.log(title + ":" + body);
       };
 
+      var warningRetrieval = function (retrievedType, retrievedWarning) {
+        alertMessage = _.template(alertMessageTemplateRetrievalUnsuccessfulWarning)({ retrievedType: retrievedType, retrievedWarning: retrievedWarning });
+        warning(alertMessage, alertTitleDataRetrievalUnsuccessful)
+      };
       var warning = function (body, title) {
         toaster.pop("warning", title, body, 5000);
         console.warn(title + ":" + body);
@@ -52,6 +57,7 @@ lo30NgApp.factory(
         info: info,
         successRetrieval: successRetrieval,
         success: success,
+        warningRetrieval: warningRetrieval,
         warning: warning
       };
     }

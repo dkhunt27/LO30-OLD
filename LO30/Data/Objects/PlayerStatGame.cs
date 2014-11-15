@@ -18,8 +18,8 @@ namespace LO30.Data.Objects
     [Required, ForeignKey("Season")]
     public int SeasonId { get; set; }
 
-    [Required, ForeignKey("SeasonTeamPlayingFor")]
-    public int SeasonTeamIdPlayingFor { get; set; }
+    [Required, ForeignKey("SeasonTeam")]
+    public int SeasonTeamId { get; set; }
 
     [Required]
     public int Line { get; set; }
@@ -56,19 +56,19 @@ namespace LO30.Data.Objects
 
     public virtual Player Player { get; set; }
     public virtual Season Season { get; set; }
-    public virtual SeasonTeam SeasonTeamPlayingFor { get; set; }
+    public virtual SeasonTeam SeasonTeam { get; set; }
     public virtual Game Game { get; set; }
 
     public PlayerStatGame()
     {
     }
 
-    public PlayerStatGame(int pid, int gid, int sid, int stidpf, int line, string pos, bool sub, int g, int a, int p, int ppg, int shg, int gwg, int pim)
+    public PlayerStatGame(int pid, int gid, int sid, int stid, int line, string pos, bool sub, int g, int a, int p, int ppg, int shg, int gwg, int pim)
     {
       this.PlayerId = pid;
       this.GameId = gid;
       this.SeasonId = sid;
-      this.SeasonTeamIdPlayingFor = stidpf;
+      this.SeasonTeamId = stid;
       this.Line = line;
       this.Position = pos;
       this.Sub = sub;
@@ -90,11 +90,11 @@ namespace LO30.Data.Objects
 
     private void Validate()
     {
-      var locationKey = string.Format("pid: {0}, gid: {1}, sid: {2}, stIdpf: {3}, sub: {4}",
+      var locationKey = string.Format("pid: {0}, gid: {1}, sid: {2}, stid: {3}, sub: {4}",
                                       this.PlayerId,
                                       this.GameId,
                                       this.SeasonId,
-                                      this.SeasonTeamIdPlayingFor,
+                                      this.SeasonTeamId,
                                       this.Sub);
 
       if (this.Points != this.Goals + this.Assists)
