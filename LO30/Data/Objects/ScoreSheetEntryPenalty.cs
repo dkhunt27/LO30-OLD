@@ -38,7 +38,7 @@ namespace LO30.Data.Objects
 
     public virtual Game Game { get; set; }
 
-    public static List<ScoreSheetEntryPenalty> LoadListFromAccessDbJsonFile(string filePath)
+    public static List<ScoreSheetEntryPenalty> LoadListFromAccessDbJsonFile(string filePath, int startingGameIdToProcess, int endingGameIdToProcess)
     {
       string className = "ScoreSheetEntryPenalty";
       string functionName = "LoadListFromAccessDbJsonFile";
@@ -57,26 +57,30 @@ namespace LO30.Data.Objects
         if (d > 0 && d % 100 == 0) Debug.Print(string.Format("{0}: {1} Processed: {2}", functionName, className, d));
 
         var json = parsedJson[d];
+        int gameId = json["GAME_ID"];
 
-        bool homeTeam = true;
-        string teamJson = json["TEAM"];
-        string team = teamJson.ToLower();
-        if (team == "2" || team == "v" || team == "a" || team == "g")
+        if (gameId >= startingGameIdToProcess && gameId <= endingGameIdToProcess)
         {
-          homeTeam = false;
+          bool homeTeam = true;
+          string teamJson = json["TEAM"];
+          string team = teamJson.ToLower();
+          if (team == "2" || team == "v" || team == "a" || team == "g")
+          {
+            homeTeam = false;
+          }
+
+          output.Add(new ScoreSheetEntryPenalty()
+          {
+            ScoreSheetEntryPenaltyId = json["SCORE_SHEET_ENTRY_PENALTY_ID"],
+            GameId = json["GAME_ID"],
+            Period = json["PERIOD"],
+            HomeTeam = homeTeam,
+            Player = json["PLAYER"],
+            PenaltyCode = json["PENALTY_CODE"],
+            TimeRemaining = json["TIME_REMAINING"],
+            PenaltyMinutes = json["PENALTY_MINUTES"]
+          });
         }
-
-        output.Add(new ScoreSheetEntryPenalty()
-        {
-          ScoreSheetEntryPenaltyId = json["SCORE_SHEET_ENTRY_PENALTY_ID"],
-          GameId = json["GAME_ID"],
-          Period = json["PERIOD"],
-          HomeTeam = homeTeam,
-          Player = json["PLAYER"],
-          PenaltyCode = json["PENALTY_CODE"],
-          TimeRemaining = json["TIME_REMAINING"],
-          PenaltyMinutes = json["PENALTY_MINUTES"]
-        });
       }
 
       Debug.Print(string.Format("{0}: {1} Loaded", functionName, className));

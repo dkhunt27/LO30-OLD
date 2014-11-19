@@ -2639,7 +2639,7 @@ namespace LO30.Services
         DateTime last = DateTime.Now;
         TimeSpan diffFromLast = new TimeSpan();
 
-        List<ScoreSheetEntry> scoreSheetEntries = ScoreSheetEntry.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntries.json");
+        List<ScoreSheetEntry> scoreSheetEntries = ScoreSheetEntry.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntries.json", 0, 999999);
         results.toProcess = scoreSheetEntries.Count;
         results.modified = SaveOrUpdateScoreSheetEntry(scoreSheetEntries);
         Debug.Print("LoadScoreSheetEntriesFromAccessDBJson: Saved ScoreSheetEntries " + _ctx.ScoreSheetEntries.Count());
@@ -2659,7 +2659,7 @@ namespace LO30.Services
         DateTime last = DateTime.Now;
         TimeSpan diffFromLast = new TimeSpan();
 
-        List<ScoreSheetEntryPenalty> scoreSheetEntryPenalties = ScoreSheetEntryPenalty.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntryPenalties.json");
+        List<ScoreSheetEntryPenalty> scoreSheetEntryPenalties = ScoreSheetEntryPenalty.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntryPenalties.json", 0, 999999);
         results.toProcess = scoreSheetEntryPenalties.Count;
         results.modified = SaveOrUpdateScoreSheetEntryPenalty(scoreSheetEntryPenalties);
         Debug.Print("LoadScoreSheetEntryPenaltiesFromAccessDBJson: Saved ScoreSheetEntryPenalties " + _ctx.ScoreSheetEntryPenalties.Count());

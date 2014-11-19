@@ -19,10 +19,11 @@ namespace LO30.Data.Objects
     public int PlayerStatusTypeId { get; set; }
 
     [Required]
-    public DateTime StartDate { get; set; }
+    public int StartYYYYMMDD { get; set; }
 
-    public DateTime EndDate { get; set; }
-    
+    [Required]
+    public int EndYYYYMMDD { get; set; }
+
     [Required]
     public bool Archive { get; set; }
 

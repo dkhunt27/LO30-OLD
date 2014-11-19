@@ -80,3 +80,15 @@ td.td-sorted-by {
   -ms-transform: rotate(270deg); /* Internet Explorer */
   -o-transform: rotate(270deg); /* Opera */
 }
+
+hr {
+  margin: 10px 0px 10px 0px;
+}
+
+h3 {
+  margin: 5px 0px 5px 0px;
+}
+
+h6 {
+  margin: 5px 0px 5px 0px;
+}

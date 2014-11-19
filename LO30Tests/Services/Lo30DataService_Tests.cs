@@ -511,16 +511,23 @@ namespace LO30.Services.Tests
 
     #region ConvertDateTimeIntoYYYYMMDD
     [TestMethod()]
-    public void ConvertDateTimeIntoYYYYMMDD_Null()
+    public void ConvertDateTimeIntoYYYYMMDD_Null_Min()
     {
       DateTime? input = null;
-      var result = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(input);
+      var result = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(input, ifNullReturnMax: false);
       Assert.AreEqual(12345678, result, "Result");
+    }
+    [TestMethod()]
+    public void ConvertDateTimeIntoYYYYMMDD_Null_Max()
+    {
+      DateTime? input = null;
+      var result = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(input, ifNullReturnMax: true);
+      Assert.AreEqual(87654321, result, "Result");
     }
     public void ConvertDateTimeIntoYYYYMMDD_Correct()
     {
       DateTime? input = new DateTime(1977, 2, 23);
-      var result = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(input);
+      var result = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(input, ifNullReturnMax: false);
       Assert.AreEqual(19770223, result, "Result");
     }
     #endregion

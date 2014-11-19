@@ -14,7 +14,7 @@
   <div class="row">
     <header class="page-title">
       <h4 class="col-md-10">2014 - 2015 Regular Season - Player Statistics</h4>
-      <h6 class="col-md-2 text-right">Thru Oct. 16</h6>
+      <h6 class="col-md-2 text-right">Thru Nov 16th</h6>
     </header>
   </div>
 
@@ -126,7 +126,7 @@
       <tr ng-repeat="item in data.playerStats | filterize:user.searchText | orderBy:sortOn:sortDirection">
         <td>{{$index+1}}</td>
         <td ng-class="{'td-sorted-by':sortOn === 'team' }">{{item.team}}</td>
-        <td ng-class="{'td-sorted-by':sortOn === 'player' }">{{item.player}}</td>
+        <td ng-class="{'td-sorted-by':sortOn === 'player' }"><a ng-href="/Ng/#/Players/Player/{{item.pid}}">{{item.player}}</a></td>
         <td ng-class="{'td-sorted-by':sortOn === 'pos' }">{{item.pos}}</td>
         <td ng-class="{'td-sorted-by':sortOn === 'line' }">{{item.line}}</td>
         <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'gp'}">{{item.gp}}</td>

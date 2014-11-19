@@ -27,14 +27,19 @@ namespace DataLoader
 
       // THEN CREATE SQL DB (if necessary) AND POPULATE WITH DATA
       Console.WriteLine("Seeding DB");
-      Seed();
+      //Seed();
       Console.WriteLine("Seeded DB");
 
       // THEN PROCESS SCORE SHEETS
       int seasonId = 54;
       bool playoff = false;
       int startingGameId = 3200;
-      int endingGameId = 3261;
+      int endingGameId = 3272;
+
+      // THEN CREATE SQL DB (if necessary) AND POPULATE WITH DATA
+      Console.WriteLine("Loading New Data");
+      //LoadNewData(startingGameId, endingGameId);
+      Console.WriteLine("Loaded New Data");
 
       Console.WriteLine("Processing Score Sheets");
       ProcessScoreSheets(seasonId, playoff, startingGameId, endingGameId);
@@ -45,6 +50,261 @@ namespace DataLoader
     {
       Debug.Print(message);
       Console.WriteLine(message);
+    }
+
+    private static void LoadNewData( int startingGameIdToProcess, int endingGameIdToProcess)
+    {
+      string appDataPath = @"C:\git\LO30\LO30\App_Data\";
+      var folderPath = Path.Combine(appDataPath, "Access");
+      folderPath = folderPath + @"\";
+
+      DateTime first = DateTime.Now;
+      DateTime last = DateTime.Now;
+      TimeSpan diffFromFirst = new TimeSpan();
+      TimeSpan diffFromLast = new TimeSpan();
+
+      using (var context = new Lo30Context())
+      {
+        var _lo30ContextService = new Lo30ContextService(context);
+
+        #region 4:GameRosters...dependency on Games, PlayerRatings, GameTeams, and TeamRoster
+        Print("Data Group 4: Creating GameRosters");
+        last = DateTime.Now;
+
+        dynamic parsedJsonGR = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "GameRosters.json");
+        int countGR = parsedJsonGR.Count;
+        int countSaveOrUpdated = 0;
+
+        Print("Access records to process:" + countGR);
+
+        for (var d = 0; d < parsedJsonGR.Count; d++)
+        {
+          if (d % 100 == 0) { Print("Access records processed:" + d + ". Records saved or updated:" + countSaveOrUpdated); }
+          var json = parsedJsonGR[d];
+
+          int seasonId = json["SEASON_ID"];
+          int gameId = json["GAME_ID"];
+
+          var game = _lo30ContextService.FindGame(gameId);
+          var gameDateYYYYMMDD = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(game.GameDateTime, ifNullReturnMax: false);
+
+          var homeGameTeamId = _lo30ContextService.FindGameTeamByPK2(gameId, homeTeam: true).GameTeamId;
+          var awayGameTeamId = _lo30ContextService.FindGameTeamByPK2(gameId, homeTeam: false).GameTeamId;
+
+          if (gameId >= startingGameIdToProcess && gameId <= endingGameIdToProcess)
+          {
+            int homeTeamId = -1;
+            if (json["HOME_TEAM_ID"] != null)
+            {
+              homeTeamId = json["HOME_TEAM_ID"];
+            }
+
+            int homePlayerId = -1;
+            if (json["HOME_PLAYER_ID"] != null)
+            {
+              homePlayerId = json["HOME_PLAYER_ID"];
+            }
+
+            int homeSubPlayerId = -1;
+            if (json["HOME_SUB_FOR_PLAYER_ID"] != null)
+            {
+              homeSubPlayerId = json["HOME_SUB_FOR_PLAYER_ID"];
+            }
+
+            bool homePlayerSubInd = false;
+            if (json["HOME_PLAYER_SUB_IND"] != null)
+            {
+              homePlayerSubInd = json["HOME_PLAYER_SUB_IND"];
+            }
+
+            int homePlayerNumber = -1;
+            if (json["HOME_PLAYER_NUMBER"] != null)
+            {
+              homePlayerNumber = json["HOME_PLAYER_NUMBER"];
+            }
+
+            if (homeTeamId == -1)
+            {
+              Print(string.Format("The homeTeamId is -1, not sure how to process. homeTeamId:{0}, homePlayerId:{1}, homeSubPlayerId:{2}, homePlayerSubInd:{3}, homePlayerNumber:{4}, gameId:{5}", homeTeamId, homePlayerId, homeSubPlayerId, homePlayerSubInd, homePlayerNumber, gameId));
+            }
+            else if (homePlayerId == -1)
+            {
+              Print(string.Format("The homePlayerId is -1, not sure how to process. homeTeamId:{0}, homePlayerId:{1}, homeSubPlayerId:{2}, homePlayerSubInd:{3}, homePlayerNumber:{4}, gameId:{5}", homeTeamId, homePlayerId, homeSubPlayerId, homePlayerSubInd, homePlayerNumber, gameId));
+            }
+            else if (homePlayerNumber == -1)
+            {
+              Print(string.Format("The homePlayerId is -1, not sure how to process. homeTeamId:{0}, homePlayerId:{1}, homeSubPlayerId:{2}, homePlayerSubInd:{3}, homePlayerNumber:{4}, gameId:{5}", homeTeamId, homePlayerId, homeSubPlayerId, homePlayerSubInd, homePlayerNumber, gameId));
+            }
+
+            // set the line and position equal to the players drafted / set line position from the team roster
+            var homeTeamRoster = _lo30ContextService.FindTeamRosterWithYYYYMMDD(homeTeamId, homePlayerId, gameDateYYYYMMDD);
+            int homePlayerLine = homeTeamRoster.Line;
+            string homePlayerPosition = homeTeamRoster.Position;
+
+            int playerId;
+            int? subbingForPlayerId;
+
+            if (homePlayerSubInd)
+            {
+              playerId = homeSubPlayerId;
+              subbingForPlayerId = homePlayerId;
+            }
+            else
+            {
+              playerId = homePlayerId;
+              subbingForPlayerId = null;
+            }
+
+            bool isGoalie = false;
+            if (homeTeamRoster.Position == "G")
+            {
+              isGoalie = true;
+            }
+
+            int ratingPrimary = 0;
+            int ratingSecondary = 0;
+            var playerRating = _lo30ContextService.FindPlayerRatingWithYYYYMMDD(playerId, homePlayerPosition, seasonId, gameDateYYYYMMDD, errorIfNotFound: false);
+
+            if (playerRating != null)
+            {
+              ratingPrimary = playerRating.RatingPrimary;
+              ratingSecondary = playerRating.RatingSecondary;
+            }
+            var gameRoster = new GameRoster(
+                                    gtid: homeGameTeamId,
+                                    pn: homePlayerNumber.ToString(),
+                                    line: homePlayerLine,
+                                    pos: homePlayerPosition,
+                                    g: isGoalie,
+                                    pid: playerId,
+                                    rp: ratingPrimary,
+                                    rs: ratingSecondary,
+                                    sub: homePlayerSubInd,
+                                    sfpid: subbingForPlayerId
+                              );
+
+            countSaveOrUpdated = countSaveOrUpdated + _lo30ContextService.SaveOrUpdateGameRoster(gameRoster);
+
+            int awayTeamId = -1;
+            if (json["AWAY_TEAM_ID"] != null)
+            {
+              awayTeamId = json["AWAY_TEAM_ID"];
+            }
+
+            int awayPlayerId = -1;
+            if (json["AWAY_PLAYER_ID"] != null)
+            {
+              awayPlayerId = json["AWAY_PLAYER_ID"];
+            }
+
+            int awaySubPlayerId = -1;
+            if (json["AWAY_SUB_FOR_PLAYER_ID"] != null)
+            {
+              awaySubPlayerId = json["AWAY_SUB_FOR_PLAYER_ID"];
+            }
+
+            bool awayPlayerSubInd = false;
+            if (json["AWAY_PLAYER_SUB_IND"] != null)
+            {
+              awayPlayerSubInd = json["AWAY_PLAYER_SUB_IND"];
+
+            }
+
+            int awayPlayerNumber = -1;
+            if (json["AWAY_PLAYER_NUMBER"] != null)
+            {
+              awayPlayerNumber = json["AWAY_PLAYER_NUMBER"];
+            }
+
+            if (awayTeamId == -1)
+            {
+              Print(string.Format("The awayTeamId is -1, not sure how to process. awayTeamId:{0}, awayPlayerId:{1}, awaySubPlayerId:{2}, awayPlayerSubInd:{3}, awayPlayerNumber:{4}, gameId:{5}", awayTeamId, awayPlayerId, awaySubPlayerId, awayPlayerSubInd, awayPlayerNumber, gameId));
+            }
+            else if (awayPlayerId == -1)
+            {
+              Print(string.Format("The awayPlayerId is -1, not sure how to process. awayTeamId:{0}, awayPlayerId:{1}, awaySubPlayerId:{2}, awayPlayerSubInd:{3}, awayPlayerNumber:{4}, gameId:{5}", awayTeamId, awayPlayerId, awaySubPlayerId, awayPlayerSubInd, awayPlayerNumber, gameId));
+            }
+            else if (awayPlayerNumber == -1)
+            {
+              Print(string.Format("The awayPlayerId is -1, not sure how to process. awayTeamId:{0}, awayPlayerId:{1}, awaySubPlayerId:{2}, awayPlayerSubInd:{3}, awayPlayerNumber:{4}, gameId:{5}", awayTeamId, awayPlayerId, awaySubPlayerId, awayPlayerSubInd, awayPlayerNumber, gameId));
+            }
+
+            if (awayPlayerSubInd)
+            {
+              playerId = awaySubPlayerId;
+              subbingForPlayerId = awayPlayerId;
+            }
+            else
+            {
+              playerId = awayPlayerId;
+              subbingForPlayerId = null;
+            }
+
+            // set the line and position equal to the players drafted / set line position from the team roster
+            var awayTeamRoster = _lo30ContextService.FindTeamRosterWithYYYYMMDD(homeTeamId, homePlayerId, gameDateYYYYMMDD);
+            int awayPlayerLine = homeTeamRoster.Line;
+            string awayPlayerPosition = homeTeamRoster.Position;
+
+            isGoalie = false;
+            if (awayTeamRoster.Position == "G")
+            {
+              isGoalie = true;
+            }
+
+            ratingPrimary = 0;
+            ratingSecondary = 0;
+            playerRating = _lo30ContextService.FindPlayerRatingWithYYYYMMDD(playerId, awayPlayerPosition, seasonId, gameDateYYYYMMDD, errorIfNotFound: false);
+
+            if (playerRating != null)
+            {
+              ratingPrimary = playerRating.RatingPrimary;
+              ratingSecondary = playerRating.RatingSecondary;
+            }
+
+            gameRoster = new GameRoster(
+                                    gtid: awayGameTeamId,
+                                    pn: awayPlayerNumber.ToString(),
+                                    line: awayPlayerLine,
+                                    pos: awayPlayerPosition,
+                                    g: isGoalie,
+                                    pid: playerId,
+                                    rp: ratingPrimary,
+                                    rs: ratingSecondary,
+                                    sub: awayPlayerSubInd,
+                                    sfpid: subbingForPlayerId
+                              );
+
+
+
+            countSaveOrUpdated = countSaveOrUpdated + _lo30ContextService.SaveOrUpdateGameRoster(gameRoster);
+
+          }
+        }
+
+        Print("Data Group 4: GameRosters Count:" + context.GameRosters.Count() + " SaveOrUpdated:" + countSaveOrUpdated);
+        diffFromLast = DateTime.Now - last;
+        Print("TimeToProcess: " + diffFromLast.ToString());
+        #endregion
+
+        #region 4:ScoreSheetEntries...using loadJson
+        List<ScoreSheetEntry> scoreSheetEntries = ScoreSheetEntry.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntries.json", startingGameIdToProcess, endingGameIdToProcess);
+        countSaveOrUpdated = _lo30ContextService.SaveOrUpdateScoreSheetEntry(scoreSheetEntries);
+        Print("Data Group 4: ScoreSheetEntries Count:" + context.ScoreSheetEntries.Count() + " SaveOrUpdated:" + countSaveOrUpdated);
+        diffFromLast = DateTime.Now - last;
+        Print("TimeToProcess: " + diffFromLast.ToString());
+        #endregion
+
+        #region 4:ScoreSheetEntryPenalties...using loadJson
+        List<ScoreSheetEntryPenalty> scoreSheetEntryPenalties = ScoreSheetEntryPenalty.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntryPenalties.json", startingGameIdToProcess, endingGameIdToProcess);
+        countSaveOrUpdated = _lo30ContextService.SaveOrUpdateScoreSheetEntryPenalty(scoreSheetEntryPenalties);
+        Print("Data Group 4: ScoreSheetEntryPenalties Count:" + context.ScoreSheetEntryPenalties.Count() + " SaveOrUpdated:" + countSaveOrUpdated);
+        diffFromLast = DateTime.Now - last;
+        Print("TimeToProcess: " + diffFromLast.ToString());
+        #endregion
+
+        diffFromFirst = DateTime.Now - first;
+        Print("Total TimeToProcess: " + diffFromFirst.ToString());
+      }
     }
 
     private static void Seed()
@@ -108,12 +368,6 @@ namespace DataLoader
 
         #region 0:PlayerStatsSeason
         if (context.PlayerStatsSeason.Count() == 0)
-        {
-        }
-        #endregion
-
-        #region 0:PlayerStatuses
-        if (context.PlayerStatuses.Count() == 0)
         {
         }
         #endregion
@@ -374,8 +628,8 @@ namespace DataLoader
               SeasonId = seasonId,
               SeasonName = json["SEASON_NAME"],
               IsCurrentSeason = json["CURRENT_SEASON_IND"],
-              StartYYYYMMDD = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(startDate),
-              EndYYYYMMDD = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(endDate)
+              StartYYYYMMDD = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(startDate, ifNullReturnMax: false),
+              EndYYYYMMDD = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(endDate, ifNullReturnMax: true)
             };
 
             context.Seasons.Add(season);
@@ -869,6 +1123,59 @@ namespace DataLoader
         }
         #endregion
 
+        #region 3:PlayerStatuses
+        if (context.PlayerStatuses.Count() == 0)
+        {
+          Print("Data Group 3: Creating PlayerStatuses");
+          last = DateTime.Now;
+
+          dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "PlayerStatuses.json");
+          int count = parsedJson.Count;
+
+          Print("Access records to process:" + count);
+
+          for (var d = 0; d < parsedJson.Count; d++)
+          {
+            if (d % 100 == 0) { Print("Access records processed:" + d); }
+            var json = parsedJson[d];
+
+            int playerId = json["PLAYER_ID"];
+
+            if (playerId == 512 || playerId == 545 || playerId == 571 || playerId == 170 || playerId == 211 || playerId == 213 || playerId == 215 || playerId == 217 || playerId == 282 || playerId == 381 || playerId == 426 || playerId == 432 || playerId == 767)
+            {
+              // do nothing, these guys do not have a player record
+            }
+            else
+            {
+              DateTime? startDate = json["START_DATE"];
+              DateTime? endDate = json["END_DATE"];
+              int startYYYYMMDD = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(startDate, ifNullReturnMax: false);
+              int endYYYYMMDD = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(endDate, ifNullReturnMax: true);
+
+              var playerStatus = new PlayerStatus()
+              {
+                PlayerId = playerId,
+                PlayerStatusTypeId = json["STATUS_ID"],
+                StartYYYYMMDD = startYYYYMMDD,
+                EndYYYYMMDD = endYYYYMMDD,
+                Archive = false
+              };
+
+              context.PlayerStatuses.Add(playerStatus);
+            }
+          }
+
+          Print("Data Group 3: Created PlayerStatuses");
+          diffFromLast = DateTime.Now - last;
+          Print("TimeToProcess: " + diffFromLast.ToString());
+
+          _lo30ContextService.ContextSaveChanges();
+          Print("Data Group 3: Saved PlayerStatuses " + context.PlayerDrafts.Count());
+          diffFromLast = DateTime.Now - last;
+          Print("TimeToProcess: " + diffFromLast.ToString());
+        }
+        #endregion
+
         #region 3:PlayerDrafts
         if (context.PlayerDrafts.Count() == 0)
         {
@@ -1334,21 +1641,22 @@ namespace DataLoader
           Print("Data Group 4: Creating GameRosters");
           last = DateTime.Now;
 
-          dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "GameRosters.json");
-          int count = parsedJson.Count;
+          dynamic parsedJsonGR = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "GameRosters.json");
+          int countGR = parsedJsonGR.Count;
+          int countSaveOrUpdated = 0;
 
-          Print("Access records to process:" + count);
+          Print("Access records to process:" + countGR);
 
-          for (var d = 0; d < parsedJson.Count; d++)
+          for (var d = 0; d < parsedJsonGR.Count; d++)
           {
-            if (d % 100 == 0) { Print("Access records processed:" + d); }
-            var json = parsedJson[d];
+            if (d % 100 == 0) { Print("Access records processed:" + d + ". Records saved or updated:" + countSaveOrUpdated); }
+            var json = parsedJsonGR[d];
 
             int seasonId = json["SEASON_ID"];
             int gameId = json["GAME_ID"];
 
             var game = _lo30ContextService.FindGame(gameId);
-            var gameDateYYYYMMDD = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(game.GameDateTime);
+            var gameDateYYYYMMDD = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(game.GameDateTime, ifNullReturnMax: false);
 
             var homeGameTeamId = _lo30ContextService.FindGameTeamByPK2(gameId, homeTeam: true).GameTeamId;
             var awayGameTeamId = _lo30ContextService.FindGameTeamByPK2(gameId, homeTeam: false).GameTeamId;
@@ -1446,17 +1754,7 @@ namespace DataLoader
                                       sfpid: subbingForPlayerId
                                 );
 
-              // make sure this gameRoster doesn't have any PK issues.
-              // since PK is auto assigned, just check PK2
-              var pkError = _lo30ContextService.FindGameRosterByPK2(false, false, gameRoster.GameTeamId, gameRoster.PlayerNumber);
-
-              if (pkError != null)
-              {
-                // this insert will cause a PK error
-                throw new ArgumentException("The GameRoster will cause a PK2 error. " + gameRoster);
-              }
-
-              context.GameRosters.Add(gameRoster);
+              countSaveOrUpdated = countSaveOrUpdated + _lo30ContextService.SaveOrUpdateGameRoster(gameRoster);
 
               int awayTeamId = -1;
               if (json["AWAY_TEAM_ID"] != null)
@@ -1549,37 +1847,24 @@ namespace DataLoader
 
 
 
-              // make sure this gameRoster doesn't have any PK issues.
-              // since PK is auto assigned, just check PK2
-              pkError = _lo30ContextService.FindGameRosterByPK2(false, false, gameRoster.GameTeamId, gameRoster.PlayerNumber);
+              countSaveOrUpdated = countSaveOrUpdated + _lo30ContextService.SaveOrUpdateGameRoster(gameRoster);
 
-              if (pkError != null)
-              {
-                // this insert will cause a PK error
-                throw new ArgumentException("The GameRoster will cause a PK2 error. " + gameRoster);
-              }
-
-              context.GameRosters.Add(gameRoster);
             }
           }
 
-          Print("Data Group 4: Created GameRosters");
+          Print("Data Group 4: GameRosters Count:" + context.GameRosters.Count() + " SaveOrUpdated:" + countSaveOrUpdated);
           diffFromLast = DateTime.Now - last;
           Print("TimeToProcess: " + diffFromLast.ToString());
 
-          _lo30ContextService.ContextSaveChanges();
-          Print("Data Group 4: Saved GameRosters " + context.GameRosters.Count());
-          diffFromLast = DateTime.Now - last;
-          Print("TimeToProcess: " + diffFromLast.ToString());
         }
         #endregion
 
         #region 4:ScoreSheetEntries...using loadJson
         if (context.ScoreSheetEntries.Count() == 0)
         {
-          List<ScoreSheetEntry> scoreSheetEntries = ScoreSheetEntry.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntries.json");
-          _lo30ContextService.SaveOrUpdateScoreSheetEntry(scoreSheetEntries);
-          Print("Data Group 4: Saved ScoreSheetEntries " + context.ScoreSheetEntries.Count());
+          List<ScoreSheetEntry> scoreSheetEntries = ScoreSheetEntry.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntries.json", 0, 999999);
+          int countSaveOrUpdatedSSE = _lo30ContextService.SaveOrUpdateScoreSheetEntry(scoreSheetEntries);
+          Print("Data Group 4: ScoreSheetEntries Count:" + context.ScoreSheetEntries.Count() + " SaveOrUpdated:" + countSaveOrUpdatedSSE);
           diffFromLast = DateTime.Now - last;
           Print("TimeToProcess: " + diffFromLast.ToString());
         }
@@ -1588,16 +1873,13 @@ namespace DataLoader
         #region 4:ScoreSheetEntryPenalties...using loadJson
         if (context.ScoreSheetEntryPenalties.Count() == 0)
         {
-          List<ScoreSheetEntryPenalty> scoreSheetEntryPenalties = ScoreSheetEntryPenalty.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntryPenalties.json");
-          _lo30ContextService.SaveOrUpdateScoreSheetEntryPenalty(scoreSheetEntryPenalties);
-          Print("Data Group 4: Saved ScoreSheetEntryPenalties " + context.ScoreSheetEntries.Count());
+          List<ScoreSheetEntryPenalty> scoreSheetEntryPenalties = ScoreSheetEntryPenalty.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntryPenalties.json", 0, 999999);
+          int countSaveOrUpdatedSSEP = _lo30ContextService.SaveOrUpdateScoreSheetEntryPenalty(scoreSheetEntryPenalties);
+          Print("Data Group 4: ScoreSheetEntryPenalties Count:" + context.ScoreSheetEntryPenalties.Count() + " SaveOrUpdated:" + countSaveOrUpdatedSSEP);
           diffFromLast = DateTime.Now - last;
           Print("TimeToProcess: " + diffFromLast.ToString());
         }
         #endregion
-
-        diffFromFirst = DateTime.Now - first;
-        Print("Total TimeToProcess: " + diffFromFirst.ToString());
 
         #region populated via other processes
         #region 99:GameOutcomes
@@ -1642,6 +1924,9 @@ namespace DataLoader
         }
 
         #endregion
+
+        diffFromFirst = DateTime.Now - first;
+        Print("Total TimeToProcess: " + diffFromFirst.ToString());
       }
     }
 
@@ -1655,51 +1940,46 @@ namespace DataLoader
         ProcessingResult results = new ProcessingResult();
         ProcessingResult result1, result2, result3, result4, result5;
 
-        Print("ProcessScoreSheets.ProcessScoreSheetEntries start");
-        result1 = repo.ProcessScoreSheetEntries(startingGameId, endingGameId);
-        Print("ProcessScoreSheets.ProcessScoreSheetEntries end");
-        results.error = result1.error;
-        results.toProcess = result1.toProcess;
-        results.modified = result1.modified;
+        results = repo.ProcessScoreSheetEntries(startingGameId, endingGameId);
+        Print("ProcessScoreSheets.ProcessScoreSheetEntries Modified:" + results.modified + " Time:" + results.time);
 
         if (string.IsNullOrWhiteSpace(results.error))
         {
-          Print("ProcessScoreSheets.ProcessScoreSheetEntriesIntoGameResults start");
-          result2 = repo.ProcessScoreSheetEntriesIntoGameResults(startingGameId, endingGameId);
-          Print("ProcessScoreSheets.ProcessScoreSheetEntriesIntoGameResults end");
-          results.error = result2.error;
-          results.toProcess += result2.toProcess;
-          results.modified += result2.modified;
+          results = repo.ProcessScoreSheetEntryPenalties(startingGameId, endingGameId);
+          Print("ProcessScoreSheets.ProcessScoreSheetEntryPenalties Modified:" + results.modified + " Time:" + results.time);
         }
 
         if (string.IsNullOrWhiteSpace(results.error))
         {
-          Print("ProcessScoreSheets.ProcessGameResultsIntoTeamStandings start");
-          result3 = repo.ProcessGameResultsIntoTeamStandings(seasonId, playoff, startingGameId, endingGameId);
-          Print("ProcessScoreSheets.ProcessGameResultsIntoTeamStandings end");
-          results.error = result3.error;
-          results.toProcess += result3.toProcess;
-          results.modified += result3.modified;
+          results = repo.ProcessScoreSheetEntriesIntoGameResults(startingGameId, endingGameId);
+          Print("ProcessScoreSheets.ProcessScoreSheetEntriesIntoGameResults Modified:" + results.modified + " Time:" + results.time);
         }
 
         if (string.IsNullOrWhiteSpace(results.error))
         {
-          Print("ProcessScoreSheets.ProcessScoreSheetEntriesIntoPlayerStats start");
-          result4 = repo.ProcessScoreSheetEntriesIntoPlayerStats(startingGameId, endingGameId);
-          Print("ProcessScoreSheets.ProcessScoreSheetEntriesIntoPlayerStats end");
-          results.error = result4.error;
-          results.toProcess += result4.toProcess;
-          results.modified += result4.modified;
+          results = repo.ProcessGameResultsIntoTeamStandings(seasonId, playoff, startingGameId, endingGameId);
+          Print("ProcessScoreSheets.ProcessGameResultsIntoTeamStandings Modified:" + results.modified + " Time:" + results.time);
         }
 
         if (string.IsNullOrWhiteSpace(results.error))
         {
-          Print("ProcessScoreSheets.ProcessPlayerStatsIntoWebStats start");
-          result5 = repo.ProcessPlayerStatsIntoWebStats();
-          Print("ProcessScoreSheets.ProcessPlayerStatsIntoWebStats end");
-          results.error = result5.error;
-          results.toProcess += result5.toProcess;
-          results.modified += result5.modified;
+          results = repo.ProcessScoreSheetEntriesIntoPlayerStats(startingGameId, endingGameId);
+          Print("ProcessScoreSheets.ProcessScoreSheetEntriesIntoPlayerStats Modified:" + results.modified + " Time:" + results.time);
+        }
+
+        if (string.IsNullOrWhiteSpace(results.error))
+        {
+          results = repo.ProcessPlayerStatsIntoWebStats();
+          Print("ProcessScoreSheets.ProcessPlayerStatsIntoWebStats Modified:" + results.modified + " Time:" + results.time);
+        }
+
+        if (string.IsNullOrWhiteSpace(results.error))
+        {
+          Print("ProcessScoreSheets no errors!");
+        }
+        else
+        {
+          Print("ProcessScoreSheets Error:" + results.error);
         }
       }
     }

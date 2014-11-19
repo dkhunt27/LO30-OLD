@@ -42,7 +42,7 @@ namespace LO30.Data.Objects
       this.SeasonId = sid;
 
       this.GameDateTime = time;
-      this.GameYYYYMMDD = ConvertDateTimeIntoYYYYMMDD(time);
+      this.GameYYYYMMDD = ConvertDateTimeIntoYYYYMMDD(time, ifNullReturnMax: false);
       this.Location = loc;
       this.Playoff = play;
 
@@ -56,10 +56,10 @@ namespace LO30.Data.Objects
                             this.SeasonId);
     }
 
-    public int ConvertDateTimeIntoYYYYMMDD(DateTime? toConvert)
+    public int ConvertDateTimeIntoYYYYMMDD(DateTime? toConvert, bool ifNullReturnMax)
     {
       var lo30DataService = new Lo30DataService();
-      return lo30DataService.ConvertDateTimeIntoYYYYMMDD(toConvert);
+      return lo30DataService.ConvertDateTimeIntoYYYYMMDD(toConvert, ifNullReturnMax);
     }
   }
 }

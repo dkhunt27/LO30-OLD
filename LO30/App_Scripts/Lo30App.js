@@ -28,6 +28,10 @@ lo30NgApp.config(
         controller: "playersPlayerController",
         templateUrl: "/Templates/Players/Player.html"
       });
+      $routeProvider.when("/Players/Player/:playerId", {
+        controller: "playersPlayerController",
+        templateUrl: "/Templates/Players/Player.html"
+      });
       // ScoreSheets
       $routeProvider.when("/ScoreSheets/Entry", {
         controller: "scoreSheetsEntryController",

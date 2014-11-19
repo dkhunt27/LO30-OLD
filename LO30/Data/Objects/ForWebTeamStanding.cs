@@ -9,13 +9,13 @@ namespace LO30.Data.Objects
 {
   public class ForWebTeamStanding
   {
-    [Required, Key]
+    [Required, Key, DatabaseGenerated(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.None)]
     public int STID { get; set; }
 
     [Required]
     public int Rank { get; set; }
 
-    [Required]
+    [Required, MaxLength(35)]
     public string Team { get; set; }
 
     [Required]

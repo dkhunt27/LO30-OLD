@@ -622,19 +622,38 @@ namespace LO30.Services
       return result;
     }
 
-    public int ConvertDateTimeIntoYYYYMMDD(DateTime? toConvert)
+    public int ConvertDateTimeIntoYYYYMMDD(DateTime? toConvert, bool ifNullReturnMax)
     {
       int result = -1;
 
       if (toConvert == null)
       {
-        result = 12345678;
+        if (ifNullReturnMax)
+        {
+          result = GetMaxYYYYMMDD();
+        }
+        else
+        {
+          result = GetMinYYYYMMDD();
+        }
       }
       else
       {
         result = (toConvert.Value.Year * 10000) + (toConvert.Value.Month * 100) + toConvert.Value.Day;
       }
 
+      return result;
+    }
+
+    public int GetMinYYYYMMDD()
+    {
+      int result = 12345678;
+      return result;
+    }
+
+    public int GetMaxYYYYMMDD()
+    {
+      int result = 87654321;
       return result;
     }
 

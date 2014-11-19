@@ -178,7 +178,7 @@ namespace LO30.Data.Objects
         int gameId = json["GAME_ID"];
 
         var game = lo30ContextService.FindGame(gameId);
-        var gameDateYYYYMMDD = lo30DataService.ConvertDateTimeIntoYYYYMMDD(game.GameDateTime);
+        var gameDateYYYYMMDD = lo30DataService.ConvertDateTimeIntoYYYYMMDD(game.GameDateTime, ifNullReturnMax: false);
 
         var homeGameTeamId = lo30ContextService.FindGameTeamByPK2(gameId, homeTeam: true).GameTeamId;
         var awayGameTeamId = lo30ContextService.FindGameTeamByPK2(gameId, homeTeam: false).GameTeamId;

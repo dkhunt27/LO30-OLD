@@ -18,13 +18,13 @@ namespace LO30.Data.Objects
     [Required]
     public int SID { get; set; }
 
-    [Required]
+    [Required, MaxLength(50)]
     public string Player { get; set; }
 
-    [Required]
+    [Required, MaxLength(35)]
     public string Team { get; set; }
 
-    [Required]
+    [Required, MaxLength(1)]
     public string Sub { get; set; }
 
     [Required]

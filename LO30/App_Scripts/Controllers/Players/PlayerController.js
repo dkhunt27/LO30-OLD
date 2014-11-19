@@ -5,13 +5,14 @@ lo30NgApp.controller('playersPlayerController',
   [
     '$scope',
     '$timeout',
+    '$routeParams',
     'alertService',
     'dataServicePlayers',
     'dataServicePlayerStatsGame',
     'dataServicePlayerStatsCareer',
     'dataServicePlayerStatsSeason',
     'dataServicePlayerStatsSeasonTeam',
-    function ($scope, $timeout, alertService, dataServicePlayers, dataServicePlayerStatsGame, dataServicePlayerStatsCareer, dataServicePlayerStatsSeason, dataServicePlayerStatsSeasonTeam) {
+    function ($scope, $timeout, $routeParams, alertService, dataServicePlayers, dataServicePlayerStatsGame, dataServicePlayerStatsCareer, dataServicePlayerStatsSeason, dataServicePlayerStatsSeasonTeam) {
 
       $scope.sortAscFirst = function (column) {
         if ($scope.sortOn === column) {
@@ -204,8 +205,12 @@ lo30NgApp.controller('playersPlayerController',
         $scope.setWatches();
 
         //TODO make this a user selection
-        //$scope.data.selectedPlayerId = 593;
-        $scope.data.selectedPlayerId = 631;
+        if ($routeParams.playerId === null) {
+          //$scope.data.selectedPlayerId = 593;
+          $scope.data.selectedPlayerId = 631;
+        } else {
+          $scope.data.selectedPlayerId = $routeParams.playerId;
+        }
 
         $scope.getPlayer($scope.data.selectedPlayerId);
         $scope.getPlayerStatsCareer($scope.data.selectedPlayerId);
@@ -213,7 +218,7 @@ lo30NgApp.controller('playersPlayerController',
         $scope.getPlayerStatsSeasonTeam($scope.data.selectedPlayerId);
         $scope.getPlayerStatsGame($scope.data.selectedPlayerId);
         $timeout(function () {
-          //$scope.sortDescOnly('p');
+          $scope.sortAscOnly('game.gameYYYYMMDD');
         }, 0);  // using timeout so it fires when done rendering
       };
 
