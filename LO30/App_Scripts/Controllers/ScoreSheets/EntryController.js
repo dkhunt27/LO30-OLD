@@ -117,6 +117,7 @@ lo30NgApp.controller('scoreSheetsEntryController',
         );
 
       };
+
       $scope.getGameRosters = function (gameId, homeTeam) {
         var retrievedType, gameRostersLoaded, gameRosters;
 

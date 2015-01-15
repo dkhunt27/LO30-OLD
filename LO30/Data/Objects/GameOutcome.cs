@@ -27,13 +27,17 @@ namespace LO30.Data.Objects
     [Required]
     public bool Override { get; set; }
 
+    [Required, ForeignKey("OpponentGameTeam")]
+    public int OpponentGameTeamId { get; set; }
+
     public virtual GameTeam GameTeam { get; set; }
+    public virtual GameTeam OpponentGameTeam { get; set; }
 
     public GameOutcome()
     {
     }
 
-    public GameOutcome(int gtid, string res, int gf, int ga, int pim, bool over)
+    public GameOutcome(int gtid, string res, int gf, int ga, int pim, bool over, int ogtid)
     {
       this.GameTeamId = gtid;
 
@@ -42,6 +46,7 @@ namespace LO30.Data.Objects
       this.GoalsAgainst = ga;
       this.PenaltyMinutes = pim;
       this.Override = over;
+      this.OpponentGameTeamId = ogtid;
 
       Validate();
     }
@@ -84,6 +89,11 @@ namespace LO30.Data.Objects
       if (this.Override == false && this.GoalsFor == this.GoalsAgainst && this.Outcome != "T")
       {
         throw new ArgumentException("Outcome (" + this.Outcome + ") must be a 'T' if GoalsFor = GoalsAgainst without an override for:" + locationKey, "Outcome");
+      }
+
+      if (this.GameTeamId == this.OpponentGameTeamId)
+      {
+        throw new ArgumentException("OpponentGameTeamId (" + this.OpponentGameTeamId + ") cannot equal GameTeamId for:" + locationKey, "OpponentGameTeamId");
       }
     }
   }

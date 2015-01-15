@@ -6,8 +6,9 @@ namespace LO30.Data
 {
   public partial interface ILo30Repository
   {
-    List<GameOutcome> GetGameOutcomes();
-    List<GameOutcome> GetGameOutcomesByGameId(int gameId);
-    List<GameOutcome> GetGameOutcomesByGameIdAndHomeTeam(int gameId, bool homeTeam);
+    List<GameOutcome> GetGameOutcomes(bool fullDetail);
+    List<GameOutcome> GetGameOutcomesByGameId(int gameId, bool fullDetail);
+    GameOutcome GetGameOutcomeByGameIdAndHomeTeam(int gameId, bool homeTeam, bool fullDetail);
+    List<GameOutcome> GetGameOutcomesBySeasonTeamId(int seasonTeamId, bool fullDetail);
   }
 }

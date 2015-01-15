@@ -10,19 +10,25 @@ namespace LO30.Data
 {
   public partial class Lo30RepositoryMock
   {
-    public List<GameOutcome> GetGameOutcomes()
+    public List<GameOutcome> GetGameOutcomes(bool fullDetail = true)
     {
       return _gameOutcomes;
     }
 
-    public List<GameOutcome> GetGameOutcomesByGameId(int gameId)
+    public List<GameOutcome> GetGameOutcomesByGameId(int gameId, bool fullDetail = true)
     {
       return _gameOutcomes.Where(x => x.GameTeam.GameId == gameId).ToList();
     }
 
-    public List<GameOutcome> GetGameOutcomesByGameIdAndHomeTeam(int gameId, bool homeTeam)
+    public GameOutcome GetGameOutcomeByGameIdAndHomeTeam(int gameId, bool homeTeam, bool fullDetail = true)
     {
-      return _gameOutcomes.Where(x => x.GameTeam.GameId == gameId && x.GameTeam.HomeTeam == homeTeam).ToList();
+      return _gameOutcomes.Where(x => x.GameTeam.GameId == gameId && x.GameTeam.HomeTeam == homeTeam).FirstOrDefault();
     }
+
+    public List<GameOutcome> GetGameOutcomesBySeasonTeamId(int seasonTeamId, bool fullDetail = true)
+    {
+      return _gameOutcomes.Where(x => x.GameTeam.SeasonTeam.SeasonTeamId == seasonTeamId).ToList();
+    }
+
   }
 }

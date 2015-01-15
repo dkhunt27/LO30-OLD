@@ -17,11 +17,13 @@ namespace LO30.Data
       this.Configuration.ProxyCreationEnabled = false;
 
       //Database.SetInitializer(new LO30ContextSeedInitializer());
-      //Database.SetInitializer(new MigrateDatabaseToLatestVersion<Lo30Context, Lo30MigrationsConfiguration>());
+      Database.SetInitializer(new MigrateDatabaseToLatestVersion<Lo30Context, Lo30MigrationsConfiguration>());
     }
 
     protected override void OnModelCreating(DbModelBuilder modelBuilder)
     {
+      // TODO use to convert TimeRemaining on Processed tables to decimal so they will sort correctly
+      //modelBuilder.Properties<decimal>().Configure(config => config.HasPrecision(4, 2));
       modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
     }
 

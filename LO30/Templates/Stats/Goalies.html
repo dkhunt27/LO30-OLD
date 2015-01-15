@@ -1,6 +1,6 @@
 <div id="StatsGoalies">
   <header id="page-title">
-    <div class="container">
+    <!--<div class="container">
       <h1>Goalies Stats</h1>
 
       <ul class="breadcrumb">
@@ -8,13 +8,13 @@
         <li><a href="/Ng/#/Stats/Goalies">Stats</a></li>
         <li class="active">Goalies</li>
       </ul>
-    </div>
+    </div>-->
   </header>
 
   <div class="row">
     <header class="page-title">
       <h4 class="col-md-10">2014 - 2015 Regular Season - Goalie Statistics</h4>
-      <h6 class="col-md-2 text-right">Thru Nov 16th</h6>
+      <h6 class="col-md-2 text-right">Thru {{data.goalieStatsDataGoodThru}}</h6>
     </header>
   </div>
 
@@ -123,7 +123,7 @@
       <tr ng-repeat="item in data.goalieStats | filterize:user.searchText | orderBy:sortOn:sortDirection">
         <td>{{$index+1}}</td>
         <td ng-class="{'td-sorted-by':sortOn === 'team' }">{{item.team}}</td>
-        <td ng-class="{'td-sorted-by':sortOn === 'player' }">{{item.player}}</td>
+        <td ng-class="{'td-sorted-by':sortOn === 'player' }"><a ng-href="/Ng/#/Players/Goalie/{{item.pid}}">{{item.player}}</a></td>
         <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'gp' }">{{item.gp}}</td>
         <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'ga' }">{{item.ga}}</td>
         <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'gaa' }">{{item.gaa | number:2}}</td>

@@ -1,6 +1,6 @@
 <div id="StandingsRegularSeason">
   <header id="page-title">
-    <div class="container">
+    <!--<div class="container">
       <h1>Regular Season Standings</h1>
 
       <ul class="breadcrumb">
@@ -8,13 +8,13 @@
         <li><a href="/Ng/#/Standings/RegularSeason">Standings</a></li>
         <li class="active">Regular Season</li>
       </ul>
-    </div>
+    </div>-->
   </header>
 
   <div class="row">
     <header class="page-title">
       <h4 class="col-md-10">2014 - 2015 Regular Season - League Standings</h4>
-      <h6 class="col-md-2 text-right">Thru Nov 16th</h6>
+      <h6 class="col-md-2 text-right">Thru {{data.teamStandingsDataGoodThru}}</h6>
     </header>
   </div>
 
@@ -37,7 +37,7 @@
     <tbody>
       <tr ng-repeat="item in data.teamStandings | orderBy:sortOn:sortDirection">
         <td ng-class="{'td-sorted-by':sortOn === 'rank' }">{{item.rank}}</tdclass>
-        <td ng-class="{'td-sorted-by':sortOn === 'team' }">{{item.team}}</td>
+        <td ng-class="{'td-sorted-by':sortOn === 'team' }"><a ng-href="/Ng/#/Games/Results/{{item.stid}}">{{item.team}}</a></td>
         <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'gp' }">{{item.gp}}</td>
         <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'w' }">{{item.w}}</td>
         <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'l' }">{{item.l}}</td>

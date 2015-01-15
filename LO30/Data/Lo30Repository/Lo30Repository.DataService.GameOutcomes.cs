@@ -9,9 +9,13 @@ namespace LO30.Data
 {
   public partial class Lo30Repository
   {
-    public List<GameOutcome> GetGameOutcomes()
+    public List<GameOutcome> GetGameOutcomes(bool fullDetail)
     {
-      return _ctx.GameOutcomes
+      List<GameOutcome> gameOutcomes = null;
+ 
+      if (fullDetail)
+      {
+        gameOutcomes = _ctx.GameOutcomes
                     .Include("GameTeam")
                     .Include("GameTeam.Game")
                     .Include("GameTeam.Game.Season")
@@ -20,18 +24,134 @@ namespace LO30.Data
                     .Include("GameTeam.SeasonTeam.Team")
                     .Include("GameTeam.SeasonTeam.Team.Coach")
                     .Include("GameTeam.SeasonTeam.Team.Sponsor")
+                    .Include("OpponentGameTeam")
+                    .Include("OpponentGameTeam.Game")
+                    .Include("OpponentGameTeam.Game.Season")
+                    .Include("OpponentGameTeam.SeasonTeam")
+                    .Include("OpponentGameTeam.SeasonTeam.Season")
+                    .Include("OpponentGameTeam.SeasonTeam.Team")
+                    .Include("OpponentGameTeam.SeasonTeam.Team.Coach")
+                    .Include("OpponentGameTeam.SeasonTeam.Team.Sponsor")
                     .ToList();
+      } 
+      else
+      {
+        gameOutcomes = _ctx.GameOutcomes.ToList();
+      }
+
+      return gameOutcomes;
     }
 
-    public List<GameOutcome> GetGameOutcomesByGameId(int gameId)
+    public List<GameOutcome> GetGameOutcomesByGameId(int gameId, bool fullDetail)
     {
-      return GetGameOutcomes().Where(x => x.GameTeam.GameId == gameId).ToList();
+      List<GameOutcome> gameOutcomes = null;
+
+      if (fullDetail)
+      {
+        gameOutcomes = _ctx.GameOutcomes
+                    .Include("GameTeam")
+                    .Include("GameTeam.Game")
+                    .Include("GameTeam.Game.Season")
+                    .Include("GameTeam.SeasonTeam")
+                    .Include("GameTeam.SeasonTeam.Season")
+                    .Include("GameTeam.SeasonTeam.Team")
+                    .Include("GameTeam.SeasonTeam.Team.Coach")
+                    .Include("GameTeam.SeasonTeam.Team.Sponsor")
+                    .Include("OpponentGameTeam")
+                    .Include("OpponentGameTeam.Game")
+                    .Include("OpponentGameTeam.Game.Season")
+                    .Include("OpponentGameTeam.SeasonTeam")
+                    .Include("OpponentGameTeam.SeasonTeam.Season")
+                    .Include("OpponentGameTeam.SeasonTeam.Team")
+                    .Include("OpponentGameTeam.SeasonTeam.Team.Coach")
+                    .Include("OpponentGameTeam.SeasonTeam.Team.Sponsor")
+                    .Where(x => x.GameTeam.GameId == gameId)
+                    .ToList();
+      }
+      else
+      {
+        gameOutcomes = _ctx.GameOutcomes
+                    .Include("GameTeam")
+                    .Where(x => x.GameTeam.GameId == gameId)
+                    .ToList();
+      }
+
+      return gameOutcomes;
     }
 
-    public List<GameOutcome> GetGameOutcomesByGameIdAndHomeTeam(int gameId, bool homeTeam)
+    public GameOutcome GetGameOutcomeByGameIdAndHomeTeam(int gameId, bool homeTeam, bool fullDetail)
     {
-      return GetGameOutcomes().Where(x => x.GameTeam.GameId == gameId && x.GameTeam.HomeTeam == homeTeam).ToList();
+      GameOutcome gameOutcome = null;
+
+      if (fullDetail)
+      {
+        gameOutcome = _ctx.GameOutcomes
+                    .Include("GameTeam")
+                    .Include("GameTeam.Game")
+                    .Include("GameTeam.Game.Season")
+                    .Include("GameTeam.SeasonTeam")
+                    .Include("GameTeam.SeasonTeam.Season")
+                    .Include("GameTeam.SeasonTeam.Team")
+                    .Include("GameTeam.SeasonTeam.Team.Coach")
+                    .Include("GameTeam.SeasonTeam.Team.Sponsor")
+                    .Include("OpponentGameTeam")
+                    .Include("OpponentGameTeam.Game")
+                    .Include("OpponentGameTeam.Game.Season")
+                    .Include("OpponentGameTeam.SeasonTeam")
+                    .Include("OpponentGameTeam.SeasonTeam.Season")
+                    .Include("OpponentGameTeam.SeasonTeam.Team")
+                    .Include("OpponentGameTeam.SeasonTeam.Team.Coach")
+                    .Include("OpponentGameTeam.SeasonTeam.Team.Sponsor")
+                    .Where(x => x.GameTeam.GameId == gameId && x.GameTeam.HomeTeam == homeTeam)
+                    .FirstOrDefault();
+      }
+      else
+      {
+        gameOutcome = _ctx.GameOutcomes
+                    .Include("GameTeam")
+                    .Where(x => x.GameTeam.GameId == gameId && x.GameTeam.HomeTeam == homeTeam)
+                    .FirstOrDefault();
+      }
+
+      return gameOutcome;
     }
 
+    public List<GameOutcome> GetGameOutcomesBySeasonTeamId(int seasonTeamId, bool fullDetail)
+    {
+      List<GameOutcome> gameOutcomes = null;
+
+      if (fullDetail)
+      {
+        gameOutcomes = _ctx.GameOutcomes
+                    .Include("GameTeam")
+                    .Include("GameTeam.Game")
+                    .Include("GameTeam.Game.Season")
+                    .Include("GameTeam.SeasonTeam")
+                    .Include("GameTeam.SeasonTeam.Season")
+                    .Include("GameTeam.SeasonTeam.Team")
+                    .Include("GameTeam.SeasonTeam.Team.Coach")
+                    .Include("GameTeam.SeasonTeam.Team.Sponsor")
+                    .Include("OpponentGameTeam")
+                    .Include("OpponentGameTeam.Game")
+                    .Include("OpponentGameTeam.Game.Season")
+                    .Include("OpponentGameTeam.SeasonTeam")
+                    .Include("OpponentGameTeam.SeasonTeam.Season")
+                    .Include("OpponentGameTeam.SeasonTeam.Team")
+                    .Include("OpponentGameTeam.SeasonTeam.Team.Coach")
+                    .Include("OpponentGameTeam.SeasonTeam.Team.Sponsor")
+                    .Where(x => x.GameTeam.SeasonTeam.SeasonTeamId == seasonTeamId)
+                    .ToList();
+      }
+      else
+      {
+        gameOutcomes = _ctx.GameOutcomes
+                    .Include("GameTeam")
+                    .Include("GameTeam.SeasonTeam")
+                    .Where(x => x.GameTeam.SeasonTeam.SeasonTeamId == seasonTeamId)
+                    .ToList();
+      }
+
+      return gameOutcomes;
+    }
   }
 }

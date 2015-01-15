@@ -422,8 +422,8 @@ namespace LO30.Services.Tests
 
       List<GameOutcome> gameOutcomes = new List<GameOutcome>()
       {
-        new GameOutcome(gtid: 101, res: "W", gf: 4, ga: 2, pim: 2, over: false){GameTeam = gt101},
-        new GameOutcome(gtid: 102, res: "L", gf: 2, ga: 4, pim: 2, over: false){GameTeam = gt102}
+        new GameOutcome(gtid: 101, res: "W", gf: 4, ga: 2, pim: 2, over: false, ogtid:102){GameTeam = gt101, OpponentGameTeam = gt102},
+        new GameOutcome(gtid: 102, res: "L", gf: 2, ga: 4, pim: 2, over: false, ogtid:101){GameTeam = gt102, OpponentGameTeam = gt101}
       };
 
       var goalieGameStats = _lo30DataService.DeriveGoalieGameStats(gameOutcomes, gameRosters);

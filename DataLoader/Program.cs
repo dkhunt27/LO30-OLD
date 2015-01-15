@@ -13,7 +13,7 @@ namespace DataLoader
   class Program
   {
     private static AccessDatabaseService _accessDatabaseService;
-    private static Lo30DataService _lo30DataService;
+    private static Lo30DataService _lo30DataService; 
 
     static void Main(string[] args)
     {
@@ -26,24 +26,61 @@ namespace DataLoader
       Console.WriteLine("Saved Access DB to JSON Files");
 
       // THEN CREATE SQL DB (if necessary) AND POPULATE WITH DATA
-      Console.WriteLine("Seeding DB");
+      //Console.WriteLine("Seeding DB");
       //Seed();
-      Console.WriteLine("Seeded DB");
-
+      //Console.WriteLine("Seeded DB");
+        
       // THEN PROCESS SCORE SHEETS
       int seasonId = 54;
       bool playoff = false;
       int startingGameId = 3200;
-      int endingGameId = 3272;
+      int endingGameId = 3313;
 
       // THEN CREATE SQL DB (if necessary) AND POPULATE WITH DATA
       Console.WriteLine("Loading New Data");
-      //LoadNewData(startingGameId, endingGameId);
+      LoadNewData(startingGameId, endingGameId);
       Console.WriteLine("Loaded New Data");
 
       Console.WriteLine("Processing Score Sheets");
       ProcessScoreSheets(seasonId, playoff, startingGameId, endingGameId);
       Console.WriteLine("Processed Score Sheets");
+
+      // UPDATE Current Status
+      UpdateCurrentStatus();
+    }
+
+    private static void UpdateCurrentStatus()
+    {
+      DateTime first = DateTime.Now;
+      DateTime last = DateTime.Now;
+      TimeSpan diffFromLast = new TimeSpan();
+
+      using (var context = new Lo30Context())
+      {
+        var _lo30ContextService = new Lo30ContextService(context);
+
+        // determine the current status
+        var currentPlayerStatus = context.PlayerStatuses
+                                            .GroupBy(x => new { x.PlayerId })
+                                            .Select(grp => new
+                                            {
+                                              PlayerId = grp.Key.PlayerId,
+                                              EndYYYYMMDD = grp.Max(x => x.EndYYYYMMDD)
+                                            })
+                                            .ToList();
+
+        // now update those records
+        foreach (var current in currentPlayerStatus)
+        {
+          var playerStatus = context.PlayerStatuses.Where(x => x.PlayerId == current.PlayerId && x.EndYYYYMMDD == current.EndYYYYMMDD).FirstOrDefault();
+          playerStatus.CurrentStatus = true;
+        }
+
+        int updated = _lo30ContextService.ContextSaveChanges();
+        Print("Data Group 3: Updated PlayerStatuses Current " + updated);
+        diffFromLast = DateTime.Now - last;
+        Print("TimeToProcess: " + diffFromLast.ToString());
+      }
     }
 
     private static void Print(string message)
@@ -66,6 +103,125 @@ namespace DataLoader
       using (var context = new Lo30Context())
       {
         var _lo30ContextService = new Lo30ContextService(context);
+
+        //#region 2:Players
+        //Print("Data Group 2: Creating Players");
+        //last = DateTime.Now;
+
+        //var player = new Player()
+        //{
+        //  PlayerId = 0,
+        //  FirstName = "Unknown",
+        //  LastName = "Player",
+        //  Suffix = null,
+        //  PreferredPosition = "X",
+        //  Shoots = "X",
+        //  BirthDate = DateTime.Parse("1/1/1970"),
+        //  Profession = null,
+        //  WifesName = null
+        //};
+
+        //context.Players.Add(player);
+
+        //dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "Players.json");
+        //int count = parsedJson.Count;
+        //int countSaveOrUpdated = 0;
+
+        //Print("Access records to process:" + count);
+
+        //for (var d = 0; d < parsedJson.Count; d++)
+        //{
+        //  if (d % 100 == 0) { Print("Access records processed:" + d + ". Records saved or updated:" + countSaveOrUpdated); }
+        //  var json = parsedJson[d];
+        //  int playerId = json["PLAYER_ID"];
+
+        //  string firstName = json["PLAYER_FIRST_NAME"];
+        //  if (string.IsNullOrWhiteSpace(firstName))
+        //  {
+        //    firstName = "_";
+        //  };
+
+        //  string lastName = json["PLAYER_LAST_NAME"];
+        //  if (string.IsNullOrWhiteSpace(lastName))
+        //  {
+        //    lastName = "_";
+        //  };
+
+        //  string position, positionMapped;
+        //  position = json["PLAYER_POSITION"];
+
+        //  if (string.IsNullOrWhiteSpace(position))
+        //  {
+        //    position = "X";
+        //  }
+
+        //  switch (position.ToLower())
+        //  {
+        //    case "f":
+        //    case "forward":
+        //      positionMapped = "F";
+        //      break;
+        //    case "d":
+        //    case "defense":
+        //      positionMapped = "D";
+        //      break;
+        //    case "g":
+        //    case "goal":
+        //    case "goalie":
+        //      positionMapped = "G";
+        //      break;
+        //    default:
+        //      positionMapped = "X";
+        //      break;
+        //  }
+
+        //  string shoots, shootsMapped;
+        //  shoots = json["SHOOTS"];
+        //  if (string.IsNullOrWhiteSpace(shoots))
+        //  {
+        //    shoots = "X";
+        //  }
+
+        //  switch (shoots.ToLower())
+        //  {
+        //    case "l":
+        //      shootsMapped = "L";
+        //      break;
+        //    case "r":
+        //      shootsMapped = "R";
+        //      break;
+        //    default:
+        //      shootsMapped = "X";
+        //      break;
+        //  }
+
+        //  DateTime? birthDate = null;
+
+        //  if (json["BIRTHDATE"] != null)
+        //  {
+        //    birthDate = json["BIRTHDATE"];
+        //  }
+
+        //  player = new Player()
+        //  {
+        //    PlayerId = playerId,
+        //    FirstName = firstName,
+        //    LastName = lastName,
+        //    Suffix = json["PLAYER_SUFFIX"],
+        //    PreferredPosition = positionMapped,
+        //    Shoots = shootsMapped,
+        //    BirthDate = birthDate,
+        //    Profession = json["PROFESSION"],
+        //    WifesName = json["WIFES_NAME"]
+        //  };
+
+        //  countSaveOrUpdated = countSaveOrUpdated + _lo30ContextService.SaveOrUpdatePlayer(player);
+        //}
+
+        //Print("Data Group 4: Players Count:" + context.Players.Count() + " SaveOrUpdated:" + countSaveOrUpdated);
+        //diffFromLast = DateTime.Now - last;
+        //Print("TimeToProcess: " + diffFromLast.ToString());
+        //#endregion
 
         #region 4:GameRosters...dependency on Games, PlayerRatings, GameTeams, and TeamRoster
         Print("Data Group 4: Creating GameRosters");
@@ -1158,7 +1314,7 @@ namespace DataLoader
                 PlayerStatusTypeId = json["STATUS_ID"],
                 StartYYYYMMDD = startYYYYMMDD,
                 EndYYYYMMDD = endYYYYMMDD,
-                Archive = false
+                CurrentStatus = false
               };
 
               context.PlayerStatuses.Add(playerStatus);
@@ -1170,7 +1326,29 @@ namespace DataLoader
           Print("TimeToProcess: " + diffFromLast.ToString());
 
           _lo30ContextService.ContextSaveChanges();
-          Print("Data Group 3: Saved PlayerStatuses " + context.PlayerDrafts.Count());
+          Print("Data Group 3: Saved PlayerStatuses " + context.PlayerStatuses.Count());
+          diffFromLast = DateTime.Now - last;
+          Print("TimeToProcess: " + diffFromLast.ToString());
+
+          // determine the current status
+          var currentPlayerStatus = context.PlayerStatuses
+                                              .GroupBy(x => new { x.PlayerId})
+                                              .Select(grp => new
+                                              {
+                                                PlayerId = grp.Key.PlayerId,
+                                                EndYYYYMMDD = grp.Max(x => x.EndYYYYMMDD)
+                                              })
+                                              .ToList();
+
+          // now update those records
+          foreach (var current in currentPlayerStatus)
+          {
+            var playerStatus = context.PlayerStatuses.Where(x => x.PlayerId == current.PlayerId && x.EndYYYYMMDD == current.EndYYYYMMDD).FirstOrDefault();
+            playerStatus.CurrentStatus = true;
+          }
+
+          int updated = _lo30ContextService.ContextSaveChanges();
+          Print("Data Group 3: Updated PlayerStatuses Current " + updated);
           diffFromLast = DateTime.Now - last;
           Print("TimeToProcess: " + diffFromLast.ToString());
         }
@@ -1901,8 +2079,8 @@ namespace DataLoader
         string connString = System.Configuration.ConfigurationManager.ConnectionStrings["LO30ReportingDB"].ConnectionString;
 
         var viewFileNameList = new List<string>(){
-        "TeamRostersView.sql"
-      };
+          "TeamRostersView.sql"
+        };
 
         foreach (var viewFileName in viewFileNameList)
         {
@@ -1938,7 +2116,6 @@ namespace DataLoader
 
         var repo = new Lo30Repository(context, _lo30ContextService);
         ProcessingResult results = new ProcessingResult();
-        ProcessingResult result1, result2, result3, result4, result5;
 
         results = repo.ProcessScoreSheetEntries(startingGameId, endingGameId);
         Print("ProcessScoreSheets.ProcessScoreSheetEntries Modified:" + results.modified + " Time:" + results.time);

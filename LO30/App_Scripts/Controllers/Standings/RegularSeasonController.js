@@ -22,11 +22,13 @@ lo30NgApp.controller('standingsRegularSeasonController',
       $scope.initializeScopeVariables = function () {
 
         $scope.data = {
-          teamStandings: []
+          teamStandings: [],
+          teamStandingsDataGoodThru: "n/a"
         };
 
         $scope.requests = {
-          teamStandingsLoaded: false
+          teamStandingsLoaded: false,
+          teamStandingsDataGoodThruLoaded: false
         };
 
         $scope.user = {
@@ -54,6 +56,23 @@ lo30NgApp.controller('standingsRegularSeasonController',
             } else {
               // results not successful
               alertService.errorRetrieval(retrievedType, result.reason);
+            }
+          }
+        );
+
+        dataServiceForWebTeamStandings.getForWebTeamStandingsDataGoodThru().then(
+          function (result) {
+            // service call on success
+            if (result && result.data) {
+
+              $scope.data.teamStandingsDataGoodThru = result.data.replace(/\"/g, "");  // TODO figure out why its has double "s
+              $scope.requests.teamStandingsDataGoodThruLoaded = true;
+
+              alertService.successRetrieval("TeamStandingsGoodThru", 1);
+
+            } else {
+              // results not successful
+              alertService.errorRetrieval("TeamStandingsGoodThru", result.reason);
             }
           }
         );

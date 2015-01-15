@@ -14,6 +14,7 @@ namespace LO30.Data
     Lo30ContextService _contextService;
 
     Player _unknownPlayer;
+    int currentSeasonId = 54;
 
     public Lo30Repository(Lo30Context ctx, Lo30ContextService contextService)
     {
@@ -282,7 +283,7 @@ namespace LO30.Data
             var homeGameScore = new GameScore(
                                   gtid: homeGameTeam.GameTeamId,
                                   per: period,
-                                  score: scoreAwayTeamPeriod
+                                  score: scoreHomeTeamPeriod
                                 );
 
             _contextService.SaveOrUpdateGameScore(homeGameScore);
@@ -356,7 +357,8 @@ namespace LO30.Data
                                         gf: scoreHomeTeamTotal,
                                         ga: scoreAwayTeamTotal,
                                         pim: penaltyHomeTeamTotal,
-                                        over: false
+                                        over: false,
+                                        ogtid: awayGameTeam.GameTeamId
                                         );
 
           modifiedCount += _contextService.SaveOrUpdateGameOutcome(homeGameOutcome);
@@ -367,7 +369,8 @@ namespace LO30.Data
                                         gf: scoreAwayTeamTotal,
                                         ga: scoreHomeTeamTotal,
                                         pim: penaltyAwayTeamTotal,
-                                        over: false
+                                        over: false,
+                                        ogtid: homeGameTeam.GameTeamId
                                         );
 
           modifiedCount += _contextService.SaveOrUpdateGameOutcome(awayGameOutcome);

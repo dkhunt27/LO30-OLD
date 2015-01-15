@@ -1,0 +1,24 @@
+<div>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th></th>
+        <th>1st</th>
+        <th>2nd</th>
+        <th>3rd</th>
+        <th>OT</th>
+        <th>Final</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in data.gameResults | orderBy:homeTeam">
+        <td>{{item.teamShortName}}</td>
+        <td>{{item.period1}}</td>
+        <td>{{item.period2}}</td>
+        <td>{{item.period3}}</td>
+        <td>{{item.period4}}</td>
+        <td>{{item.final}}</td>
+      </tr>
+    </tbody>
+  </table>  
+</div>

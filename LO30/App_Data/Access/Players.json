@@ -5838,5 +5838,21 @@
     "PLAYER_SUFFIX": null,
     "PLAYER_POSITION": "Forward",
     "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 768,
+    "PLAYER_FIRST_NAME": "Derek",
+    "PLAYER_LAST_NAME": "Grace",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 769,
+    "PLAYER_FIRST_NAME": "JP",
+    "PLAYER_LAST_NAME": "Hunt",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
   }
 ]

@@ -17,7 +17,49 @@ namespace LO30
       var jsonFormatter = config.Formatters.OfType<JsonMediaTypeFormatter>().First();
       jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
-      var constApisUrl = "api/v2";
+      var constApisUrl = "api/v1";
+
+      #region forWebGoalieStats routes
+      config.Routes.MapHttpRoute(
+          name: "ApiForWebGoalieStats",
+          routeTemplate: constApisUrl + "/forWebGoalieStats",
+          defaults: new { controller = "forWebGoalieStats" }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiForWebGoalieStatsDataGoodThru",
+          routeTemplate: constApisUrl + "/forWebGoalieStatsDataGoodThru",
+          defaults: new { controller = "forWebGoalieStatsDataGoodThru" }
+      );
+      #endregion
+
+      #region forWebPlayerStats routes
+      config.Routes.MapHttpRoute(
+          name: "ApiForWebPlayerStats",
+          routeTemplate: constApisUrl + "/forWebPlayerStats",
+          defaults: new { controller = "forWebPlayerStats" }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiForWebPlayerStatsDataGoodThru",
+          routeTemplate: constApisUrl + "/forWebPlayerStatsDataGoodThru",
+          defaults: new { controller = "forWebPlayerStatsDataGoodThru" }
+      );
+      #endregion
+
+      #region forWebTeamStandings routes
+      config.Routes.MapHttpRoute(
+          name: "ApiForWebTeamStandings",
+          routeTemplate: constApisUrl + "/forWebTeamStandings",
+          defaults: new { controller = "forWebTeamStandings" }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiForWebTeamStandingsDataGoodThru",
+          routeTemplate: constApisUrl + "/forWebTeamStandingsDataGoodThru",
+          defaults: new { controller = "forWebTeamStandingsDataGoodThru" }
+      );
+      #endregion
 
       #region gameRoster(s) routes
       config.Routes.MapHttpRoute(
@@ -29,13 +71,57 @@ namespace LO30
       config.Routes.MapHttpRoute(
           name: "ApiGameRoster",
           routeTemplate: constApisUrl + "/gameRoster/{gameRosterId}",
-          defaults: new { controller = "GameRoster"}
+          defaults: new { controller = "GameRoster" }
       );
 
       config.Routes.MapHttpRoute(
           name: "ApiGameRoster2",
           routeTemplate: constApisUrl + "/gameRoster/{gameTeamId}/{playerNumber}",
-          defaults: new { controller = "GameRoster"}
+          defaults: new { controller = "GameRoster" }
+      );
+      #endregion
+
+      #region gameScore(s) routes
+      config.Routes.MapHttpRoute(
+          name: "ApiGameScores1",
+          routeTemplate: constApisUrl + "/gameScores/{fullDetail}",
+          defaults: new { controller = "GameScores" }
+      );
+      config.Routes.MapHttpRoute(
+          name: "ApiGameScores2",
+          routeTemplate: constApisUrl + "/gameScores/{gameId}/{fullDetail}",
+          defaults: new { controller = "GameScores" }
+      );
+      config.Routes.MapHttpRoute(
+          name: "ApiGameScores3",
+          routeTemplate: constApisUrl + "/gameScores/{gameId}/{homeTeam}/{fullDetail}",
+          defaults: new { controller = "GameScores"}
+      );
+      #endregion
+
+      #region gameOutcome(s) routes
+      config.Routes.MapHttpRoute(
+          name: "ApiGameOutcomes",
+          routeTemplate: constApisUrl + "/gameOutcomes/{fullDetail}",
+          defaults: new { controller = "GameOutcomes" }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiGameOutcomes2",
+          routeTemplate: constApisUrl + "/gameOutcomes/{gameId}/{fullDetail}",
+          defaults: new { controller = "GameOutcomes" }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiGameOutcomes3",
+          routeTemplate: constApisUrl + "/gameOutcomesBySeasonTeam/{seasonTeamId}/{fullDetail}",
+          defaults: new { controller = "GameOutcomesBySeasonTeam" }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiGameOutcome",
+          routeTemplate: constApisUrl + "/gameOutcome/{gameId}/{homeTeam}/{fullDetail}",
+          defaults: new { controller = "GameOutcome" }
       );
       #endregion
 
@@ -64,6 +150,62 @@ namespace LO30
           name: "ApiGameTeam2",
           routeTemplate: constApisUrl + "/gameTeam/{gameId}/{homeTeam}",
           defaults: new { controller = "GameTeam" }
+      );
+      #endregion
+
+      #region goalieStat(s)Career routes
+      config.Routes.MapHttpRoute(
+          name: "ApiGoalieStatsCareer",
+          routeTemplate: constApisUrl + "/goalieStatsCareer/{playerId}",
+          defaults: new { controller = "GoalieStatsCareer", playerId = RouteParameter.Optional }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiGoalieStatCareer",
+          routeTemplate: constApisUrl + "/goalieStatCareer/{playerId}/{sub}",
+          defaults: new { controller = "GoalieStatCareer" }
+      );
+      #endregion
+
+      #region goalieStat(s)Season routes
+      config.Routes.MapHttpRoute(
+          name: "ApiGoalieStatsSeason",
+          routeTemplate: constApisUrl + "/goalieStatsSeason/{playerId}/{seasonId}",
+          defaults: new { controller = "GoalieStatsSeason", playerId = RouteParameter.Optional, seasonId = RouteParameter.Optional }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiGoalieStatSeason",
+          routeTemplate: constApisUrl + "/goalieStatSeason/{playerId}/{seasonId}/{sub}",
+          defaults: new { controller = "GoalieStatSeason" }
+      );
+      #endregion
+
+      #region goalieStat(s)SeasonTeam routes
+      config.Routes.MapHttpRoute(
+          name: "ApiGoalieStatsSeasonTeam",
+          routeTemplate: constApisUrl + "/goalieStatsSeasonTeam/{playerId}/{seasonId}",
+          defaults: new { controller = "GoalieStatsSeasonTeam", playerId = RouteParameter.Optional, seasonId = RouteParameter.Optional }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiGoalieStatSeasonTeam",
+          routeTemplate: constApisUrl + "/goalieStatSeasonTeam/{playerId}/{seasonTeamId}",
+          defaults: new { controller = "GoalieStatSeasonTeam" }
+      );
+      #endregion
+
+      #region goalieStat(s)Game routes
+      config.Routes.MapHttpRoute(
+          name: "ApiGoalieStatsGame",
+          routeTemplate: constApisUrl + "/goalieStatsGame/{playerId}/{seasonId}",
+          defaults: new { controller = "GoalieStatsGame", playerId = RouteParameter.Optional, seasonId = RouteParameter.Optional }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiGoalieStatGame",
+          routeTemplate: constApisUrl + "/goalieStatGame/{playerId}/{gameId}",
+          defaults: new { controller = "GoalieStatGame" }
       );
       #endregion
 
@@ -142,6 +284,34 @@ namespace LO30
           name: "ApiPlayersSubSearch",
           routeTemplate: constApisUrl + "/playersSubSearch/{position}/{ratingMin}/{ratingMax}",
           defaults: new { controller = "PlayersSubSearch" }
+      );
+      #endregion
+
+      #region scoreSheetEntry(s)Processed routes
+      config.Routes.MapHttpRoute(
+          name: "ApiScoreSheetEntriesProcessed",
+          routeTemplate: constApisUrl + "/scoreSheetEntriesProcessed/{fullDetail}",
+          defaults: new { controller = "ScoreSheetEntriesProcessed" }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiScoreSheetEntriesProcessed2",
+          routeTemplate: constApisUrl + "/scoreSheetEntriesProcessed/{gameId}/{fullDetail}",
+          defaults: new { controller = "ScoreSheetEntriesProcessed" }
+      );
+      #endregion
+
+      #region scoreSheetEntryPenalty(s)Processed routes
+      config.Routes.MapHttpRoute(
+          name: "ApiScoreSheetEntryPenaltiesProcessed",
+          routeTemplate: constApisUrl + "/scoreSheetEntryPenaltiesProcessed/{fullDetail}",
+          defaults: new { controller = "ScoreSheetEntryPenaltiesProcessed" }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiScoreSheetEntryPenaltiesProcessed2",
+          routeTemplate: constApisUrl + "/scoreSheetEntryPenaltiesProcessed/{gameId}/{fullDetail}",
+          defaults: new { controller = "ScoreSheetEntryPenaltiesProcessed" }
       );
       #endregion
 

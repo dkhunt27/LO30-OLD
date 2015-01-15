@@ -252,12 +252,14 @@ lo30NgApp.controller('statsGoaliesController',
 
         $scope.data = {
           goalieStats: [],
+          goalieStatsDataGoodThru: "n/a",
           villaExchangeRateOn: false,
           villaExchangeRate: 1
         };
 
         $scope.requests = {
-          goalieStatsLoaded: false
+          goalieStatsLoaded: false,
+          goalieStatsDataGoodThruLoaded: false
         };
 
         $scope.user = {
@@ -270,10 +272,9 @@ lo30NgApp.controller('statsGoaliesController',
       };
 
       $scope.getForWebGoalieStats = function () {
-        var retrievedType = "GoalieStats";
-
         $scope.initializeScopeVariables();
 
+        var retrievedType = "GoalieStats";
         dataServiceForWebGoalieStats.listForWebGoalieStats().$promise.then(
           function (result) {
             // service call on success
@@ -296,6 +297,23 @@ lo30NgApp.controller('statsGoaliesController',
             } else {
               // results not successful
               alertService.errorRetrieval(retrievedType, result.reason);
+            }
+          }
+        );
+
+        dataServiceForWebGoalieStats.getForWebGoalieStatsDataGoodThru().then(
+          function (result) {
+            // service call on success
+            if (result && result.data) {
+
+              $scope.data.goalieStatsDataGoodThru = result.data.replace(/\"/g, "");  // TODO figure out why its has double "s
+              $scope.requests.goalieStatsDataGoodThruLoaded = true;
+
+              alertService.successRetrieval("GoalieStatsGoodThru", 1);
+
+            } else {
+              // results not successful
+              alertService.errorRetrieval("GoalieStatsGoodThru", result.reason);
             }
           }
         );

@@ -1,6 +1,6 @@
 ﻿var lo30NgApp = angular.module("lo30NgApp", ['ngRoute', 'ngResource', 'ngAnimate', 'ui.bootstrap','toaster']);
 
-lo30NgApp.value("constApisUrl", "/api/v2");
+lo30NgApp.value("constApisUrl", "/api/v1");
 
 lo30NgApp.config(
   [
@@ -15,12 +15,27 @@ lo30NgApp.config(
         controller: "adminSettingsController",
         templateUrl: "/Templates/Admin/Settings.html"
       });
+      $routeProvider.when("/Admin/Test/BoxScore", {
+        controller: "testBoxScoreController",
+        templateUrl: "/Templates/Admin/Test/BoxScore.html"
+      });
       $routeProvider.when("/Admin/Test/PlayerSubSearch", {
         controller: "testPlayerSubSearchController",
         templateUrl: "/Templates/Admin/Test/PlayerSubSearch.html"
       });
 
       // Directives
+
+      // Games
+      $routeProvider.when("/Games/BoxScores/:gameId", {
+        controller: "gamesBoxScoresController",
+        templateUrl: "/Templates/Games/BoxScores.html"
+      });
+      $routeProvider.when("/Games/Results/:seasonTeamId", {
+        controller: "gamesResultsController",
+        templateUrl: "/Templates/Games/Results.html"
+      });
+
       // Home
 
       // Players
@@ -32,7 +47,20 @@ lo30NgApp.config(
         controller: "playersPlayerController",
         templateUrl: "/Templates/Players/Player.html"
       });
+      $routeProvider.when("/Players/Goalie", {
+        controller: "playersPlayerController",
+        templateUrl: "/Templates/Players/Player.html"
+      });
+      $routeProvider.when("/Players/Goalie/:playerId", {
+        controller: "playersGoalieController",
+        templateUrl: "/Templates/Players/Goalie.html"
+      });
+
       // ScoreSheets
+      $routeProvider.when("/Games/BoxScores", {
+        controller: "gamesBoxScoresController",
+        templateUrl: "/Templates/Games/BoxScores.html"
+      });
       $routeProvider.when("/ScoreSheets/Entry", {
         controller: "scoreSheetsEntryController",
         templateUrl: "/Templates/ScoreSheets/Entry.html"
