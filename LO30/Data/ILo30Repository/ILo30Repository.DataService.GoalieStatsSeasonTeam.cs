@@ -10,6 +10,6 @@ namespace LO30.Data
     List<GoalieStatSeasonTeam> GetGoalieStatsSeasonTeamByPlayerId(int playerId);
     List<GoalieStatSeasonTeam> GetGoalieStatsSeasonTeamByPlayerIdSeasonId(int playerId, int seasonId);
 
-    GoalieStatSeasonTeam GetGoalieStatSeasonTeamByPlayerIdSeasonTeamId(int playerId, int seasonTeamId);
+    GoalieStatSeasonTeam GetGoalieStatSeasonTeamByPlayerIdSeasonTeamId(int playerId, int seasonTeamId, bool playoffs);
   }
 }

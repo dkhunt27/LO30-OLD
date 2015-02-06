@@ -15,10 +15,10 @@ namespace LO30.Data.Objects
     [Required, Key, Column(Order = 2), ForeignKey("Player")]
     public int PlayerId { get; set; }
 
-    [Required, Key, Column(Order = 3)]
+    [Required]
     public int StartYYYYMMDD { get; set; }
 
-    [Required, Key, Column(Order = 4)]
+    [Required]
     public int EndYYYYMMDD { get; set; }
 
     [Required]

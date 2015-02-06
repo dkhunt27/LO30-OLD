@@ -17,6 +17,7 @@ namespace LO30.Services
 {
   class AccessTableList
   {
+    public string ConnString { get; set; }
     public string QueryBegin { get; set; }
     public string QueryEnd { get; set; }
     public string TableName { get; set; }
@@ -27,10 +28,12 @@ namespace LO30.Services
   {
     private string _folderPath;
     private string _connString;
+    private string _connStringSSE;
 
     public AccessDatabaseService()
     {
       _connString = System.Configuration.ConfigurationManager.ConnectionStrings["LO30AccessDB"].ConnectionString;
+      _connStringSSE = System.Configuration.ConfigurationManager.ConnectionStrings["LO30AccessDBSSE"].ConnectionString;
       _folderPath = @"C:\git\LO30\LO30\App_Data\Access\";
     }
 
@@ -54,7 +57,7 @@ namespace LO30.Services
       return parsedJson;
     }
 
-    public ProcessingResult ProcessAccessTableToJsonFile(string queryBegin, string queryEnd, string table, string file)
+    public ProcessingResult ProcessAccessTableToJsonFile(string connString, string queryBegin, string queryEnd, string table, string file)
     {
       var result = new ProcessingResult();
 
@@ -63,7 +66,7 @@ namespace LO30.Services
 
       var sql = queryBegin + " " + table + " " + queryEnd;
       var dsView = new DataSet();
-      var adp = new OleDbDataAdapter(sql, _connString);
+      var adp = new OleDbDataAdapter(sql, connString);
       adp.Fill(dsView, "AccessData");
       adp.Dispose();
       var tbl = dsView.Tables["AccessData"];
@@ -95,25 +98,26 @@ namespace LO30.Services
 
       List<AccessTableList> accessTables = new List<AccessTableList>()
       {
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54 ORDER BY SEASON_ID, GAME_ID", TableName="GAME", FileName="Games"},
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54 ORDER BY SEASON_ID, GAME_ID", TableName="GAME_ROSTER", FileName="GameRosters"},
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54 ORDER BY SEASON_ID, GAME_ID, PERIOD, TIME_REMAINING DESC", TableName="PENALTY_DETAIL", FileName="PenaltyDetails"},
-        new AccessTableList(){QueryBegin="SELECT PLAYER_ID, PLAYER_FIRST_NAME, PLAYER_LAST_NAME, PLAYER_SUFFIX, PLAYER_POSITION, SHOOTS FROM", QueryEnd="ORDER BY PLAYER_ID", TableName="PLAYER", FileName="Players"},
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54 ORDER BY SEASON_ID, PLAYER_ID", TableName="PLAYER_RATING", FileName="PlayerRatings"},
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="ORDER BY PLAYER_ID", TableName="PLAYER_STATUS", FileName="PlayerStatuses"},
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="ORDER BY PENALTY_ID", TableName="REF_PENALTY", FileName="Penalties"},
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="ORDER BY SEASON_ID", TableName="REF_SEASON", FileName="Seasons"},
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="ORDER BY STATUS_ID", TableName="REF_STATUS", FileName="Statuses"},
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="ORDER BY SCORE_SHEET_ENTRY_ID", TableName="SCORE_SHEET_ENTRY", FileName="ScoreSheetEntries"},
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="ORDER BY SCORE_SHEET_ENTRY_PENALTY_ID", TableName="SCORE_SHEET_ENTRY_PENALTY", FileName="ScoreSheetEntryPenalties"},
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54 ORDER BY SEASON_ID, GAME_ID, PERIOD, TIME_REMAINING DESC", TableName="SCORING_DETAIL", FileName="ScoringDetails"},
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="ORDER BY SEASON_ID, TEAM_ID", TableName="TEAM", FileName="Teams"},
-        new AccessTableList(){QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54 ORDER BY SEASON_ID, TEAM_ID", TableName="TEAM_ROSTER", FileName="TeamRosters"}
+        new AccessTableList(){ConnString=_connString, QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54 ORDER BY SEASON_ID, GAME_ID", TableName="GAME", FileName="Games"},
+        new AccessTableList(){ConnString=_connString, QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54 ORDER BY SEASON_ID, GAME_ID", TableName="GAME_ROSTER", FileName="GameRosters"},
+        new AccessTableList(){ConnString=_connString, QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54 ORDER BY SEASON_ID, GAME_ID, PERIOD, TIME_REMAINING DESC", TableName="PENALTY_DETAIL", FileName="PenaltyDetails"},
+        new AccessTableList(){ConnString=_connString, QueryBegin="SELECT PLAYER_ID, PLAYER_FIRST_NAME, PLAYER_LAST_NAME, PLAYER_SUFFIX, PLAYER_POSITION, SHOOTS FROM", QueryEnd="ORDER BY PLAYER_ID", TableName="PLAYER", FileName="Players"},
+        new AccessTableList(){ConnString=_connString, QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54 ORDER BY SEASON_ID, PLAYER_ID", TableName="PLAYER_RATING", FileName="PlayerRatings"},
+        new AccessTableList(){ConnString=_connString, QueryBegin="SELECT * FROM", QueryEnd="ORDER BY PLAYER_ID", TableName="PLAYER_STATUS", FileName="PlayerStatuses"},
+        new AccessTableList(){ConnString=_connString, QueryBegin="SELECT * FROM", QueryEnd="ORDER BY PENALTY_ID", TableName="REF_PENALTY", FileName="Penalties"},
+        new AccessTableList(){ConnString=_connString, QueryBegin="SELECT * FROM", QueryEnd="ORDER BY SEASON_ID", TableName="REF_SEASON", FileName="Seasons"},
+        new AccessTableList(){ConnString=_connString, QueryBegin="SELECT * FROM", QueryEnd="ORDER BY STATUS_ID", TableName="REF_STATUS", FileName="Statuses"},
+        new AccessTableList(){ConnString=_connStringSSE, QueryBegin="SELECT * FROM", QueryEnd="ORDER BY SCORE_SHEET_ENTRY_ID", TableName="SCORE_SHEET_ENTRY", FileName="ScoreSheetEntries"},
+        new AccessTableList(){ConnString=_connStringSSE, QueryBegin="SELECT * FROM", QueryEnd="ORDER BY SCORE_SHEET_ENTRY_PENALTY_ID", TableName="SCORE_SHEET_ENTRY_PENALTY", FileName="ScoreSheetEntryPenalties"},
+        new AccessTableList(){ConnString=_connStringSSE, QueryBegin="SELECT * FROM", QueryEnd="ORDER BY SCORE_SHEET_ENTRY_SUB_ID", TableName="SCORE_SHEET_ENTRY_SUB", FileName="ScoreSheetEntrySubs"},
+        new AccessTableList(){ConnString=_connString, QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54 ORDER BY SEASON_ID, GAME_ID, PERIOD, TIME_REMAINING DESC", TableName="SCORING_DETAIL", FileName="ScoringDetails"},
+        new AccessTableList(){ConnString=_connString, QueryBegin="SELECT * FROM", QueryEnd="ORDER BY SEASON_ID, TEAM_ID", TableName="TEAM", FileName="Teams"},
+        new AccessTableList(){ConnString=_connString, QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54 ORDER BY SEASON_ID, TEAM_ID", TableName="TEAM_ROSTER", FileName="TeamRosters"}
       };
 
       foreach (var table in accessTables)
       {
-        var result = ProcessAccessTableToJsonFile(table.QueryBegin, table.QueryEnd, table.TableName, table.FileName);
+        var result = ProcessAccessTableToJsonFile(table.ConnString, table.QueryBegin, table.QueryEnd, table.TableName, table.FileName);
 
         results.error = result.error;
         results.toProcess += result.toProcess;

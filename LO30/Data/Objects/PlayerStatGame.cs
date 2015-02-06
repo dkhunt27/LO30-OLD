@@ -22,6 +22,9 @@ namespace LO30.Data.Objects
     public int SeasonTeamId { get; set; }
 
     [Required]
+    public bool Playoffs { get; set; }
+
+    [Required]
     public int Line { get; set; }
 
     [Required]
@@ -63,11 +66,12 @@ namespace LO30.Data.Objects
     {
     }
 
-    public PlayerStatGame(int pid, int gid, int sid, int stid, int line, string pos, bool sub, int g, int a, int p, int ppg, int shg, int gwg, int pim)
+    public PlayerStatGame(int pid, int gid, int sid, int stid, bool pfs, int line, string pos, bool sub, int g, int a, int p, int ppg, int shg, int gwg, int pim)
     {
       this.PlayerId = pid;
       this.GameId = gid;
       this.SeasonId = sid;
+      this.Playoffs = pfs;
       this.SeasonTeamId = stid;
       this.Line = line;
       this.Position = pos;

@@ -15,6 +15,9 @@ namespace LO30.Data.Objects
     [Required, Key, Column(Order = 2)]
     public int STID { get; set; }
 
+    [Required, Key, Column(Order = 3)]
+    public bool PFS { get; set; }
+
     [Required]
     public int SID { get; set; }
 

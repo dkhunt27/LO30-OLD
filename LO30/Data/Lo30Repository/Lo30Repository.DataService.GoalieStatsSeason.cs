@@ -38,9 +38,9 @@ namespace LO30.Data
       return results;
     }
 
-    public GoalieStatSeason GetGoalieStatSeasonByPlayerIdSeasonIdSub(int playerId, int seasonId, bool sub)
+    public GoalieStatSeason GetGoalieStatSeasonByPlayerIdSeasonIdSub(int playerId, int seasonId, bool playoffs, bool sub)
     {
-      return _contextService.FindGoalieStatSeason(playerId, seasonId, sub, errorIfNotFound: false, errorIfMoreThanOneFound: true, populateFully: true);
+      return _contextService.FindGoalieStatSeason(playerId, seasonId, playoffs, sub, errorIfNotFound: false, errorIfMoreThanOneFound: true, populateFully: true);
     }
   }
 }

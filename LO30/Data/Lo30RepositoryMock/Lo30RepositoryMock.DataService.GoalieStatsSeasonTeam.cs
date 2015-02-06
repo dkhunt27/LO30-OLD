@@ -24,9 +24,9 @@ namespace LO30.Data
       return _goalieStatsSeasonTeam.Where(x => x.PlayerId == playerId && x.SeasonId == seasonId).ToList();
     }
 
-    public GoalieStatSeasonTeam GetGoalieStatSeasonTeamByPlayerIdSeasonTeamId(int playerId, int seasonTeamId)
+    public GoalieStatSeasonTeam GetGoalieStatSeasonTeamByPlayerIdSeasonTeamId(int playerId, int seasonTeamId, bool playoffs)
     {
-      return _goalieStatsSeasonTeam.Where(x => x.PlayerId == playerId && x.SeasonTeamId == seasonTeamId).FirstOrDefault();
+      return _goalieStatsSeasonTeam.Where(x => x.PlayerId == playerId && x.SeasonTeamId == seasonTeamId && x.Playoffs == playoffs).FirstOrDefault();
     }
   }
 }

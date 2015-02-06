@@ -1,0 +1,236 @@
+[
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 1,
+    "SEASON_ID": 54,
+    "GAME_ID": 3324,
+    "TEAM": 2.0,
+    "JERSEY": 31,
+    "SUB_ID": 619,
+    "SUB_FOR_ID": 49
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 2,
+    "SEASON_ID": 54,
+    "GAME_ID": 3324,
+    "TEAM": 2.0,
+    "JERSEY": 20,
+    "SUB_ID": 684,
+    "SUB_FOR_ID": 36
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 3,
+    "SEASON_ID": 54,
+    "GAME_ID": 3324,
+    "TEAM": 2.0,
+    "JERSEY": 18,
+    "SUB_ID": 713,
+    "SUB_FOR_ID": 120
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 4,
+    "SEASON_ID": 54,
+    "GAME_ID": 3324,
+    "TEAM": 2.0,
+    "JERSEY": 22,
+    "SUB_ID": 63,
+    "SUB_FOR_ID": 96
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 5,
+    "SEASON_ID": 54,
+    "GAME_ID": 3325,
+    "TEAM": 1.0,
+    "JERSEY": 31,
+    "SUB_ID": 172,
+    "SUB_FOR_ID": 634
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 6,
+    "SEASON_ID": 54,
+    "GAME_ID": 3325,
+    "TEAM": 1.0,
+    "JERSEY": 28,
+    "SUB_ID": 739,
+    "SUB_FOR_ID": 85
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 7,
+    "SEASON_ID": 54,
+    "GAME_ID": 3325,
+    "TEAM": 2.0,
+    "JERSEY": 2,
+    "SUB_ID": 237,
+    "SUB_FOR_ID": 609
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 8,
+    "SEASON_ID": 54,
+    "GAME_ID": 3325,
+    "TEAM": 2.0,
+    "JERSEY": 9,
+    "SUB_ID": 99,
+    "SUB_FOR_ID": 98
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 9,
+    "SEASON_ID": 54,
+    "GAME_ID": 3326,
+    "TEAM": 1.0,
+    "JERSEY": 18,
+    "SUB_ID": 760,
+    "SUB_FOR_ID": 67
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 10,
+    "SEASON_ID": 54,
+    "GAME_ID": 3326,
+    "TEAM": 1.0,
+    "JERSEY": 15,
+    "SUB_ID": 672,
+    "SUB_FOR_ID": 624
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 11,
+    "SEASON_ID": 54,
+    "GAME_ID": 3326,
+    "TEAM": 2.0,
+    "JERSEY": 8,
+    "SUB_ID": 576,
+    "SUB_FOR_ID": 184
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 12,
+    "SEASON_ID": 54,
+    "GAME_ID": 3327,
+    "TEAM": 2.0,
+    "JERSEY": 17,
+    "SUB_ID": 617,
+    "SUB_FOR_ID": 70
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 13,
+    "SEASON_ID": 54,
+    "GAME_ID": 3328,
+    "TEAM": 1.0,
+    "JERSEY": 9,
+    "SUB_ID": 646,
+    "SUB_FOR_ID": 98
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 14,
+    "SEASON_ID": 54,
+    "GAME_ID": 3328,
+    "TEAM": 2.0,
+    "JERSEY": 8,
+    "SUB_ID": 99,
+    "SUB_FOR_ID": 23
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 15,
+    "SEASON_ID": 54,
+    "GAME_ID": 3329,
+    "TEAM": 2.0,
+    "JERSEY": 6,
+    "SUB_ID": 34,
+    "SUB_FOR_ID": 49
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 16,
+    "SEASON_ID": 54,
+    "GAME_ID": 3329,
+    "TEAM": 2.0,
+    "JERSEY": 18,
+    "SUB_ID": 713,
+    "SUB_FOR_ID": 120
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 17,
+    "SEASON_ID": 54,
+    "GAME_ID": 3331,
+    "TEAM": 1.0,
+    "JERSEY": 8,
+    "SUB_ID": null,
+    "SUB_FOR_ID": 53
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 18,
+    "SEASON_ID": 54,
+    "GAME_ID": 3331,
+    "TEAM": 1.0,
+    "JERSEY": 18,
+    "SUB_ID": 44,
+    "SUB_FOR_ID": 23
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 19,
+    "SEASON_ID": 54,
+    "GAME_ID": 3331,
+    "TEAM": 2.0,
+    "JERSEY": 20,
+    "SUB_ID": 654,
+    "SUB_FOR_ID": 626
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 20,
+    "SEASON_ID": 54,
+    "GAME_ID": 3332,
+    "TEAM": 2.0,
+    "JERSEY": 20,
+    "SUB_ID": 680,
+    "SUB_FOR_ID": 677
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 21,
+    "SEASON_ID": 54,
+    "GAME_ID": 3332,
+    "TEAM": 2.0,
+    "JERSEY": 17,
+    "SUB_ID": 617,
+    "SUB_FOR_ID": 55
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 22,
+    "SEASON_ID": 54,
+    "GAME_ID": 3332,
+    "TEAM": 1.0,
+    "JERSEY": 4,
+    "SUB_ID": 646,
+    "SUB_FOR_ID": 718
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 23,
+    "SEASON_ID": 54,
+    "GAME_ID": 3333,
+    "TEAM": 1.0,
+    "JERSEY": 7,
+    "SUB_ID": 3,
+    "SUB_FOR_ID": 120
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 24,
+    "SEASON_ID": 54,
+    "GAME_ID": 3333,
+    "TEAM": 1.0,
+    "JERSEY": 31,
+    "SUB_ID": 619,
+    "SUB_FOR_ID": 49
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 25,
+    "SEASON_ID": 54,
+    "GAME_ID": 3333,
+    "TEAM": 2.0,
+    "JERSEY": 10,
+    "SUB_ID": 684,
+    "SUB_FOR_ID": 233
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 26,
+    "SEASON_ID": 54,
+    "GAME_ID": 3333,
+    "TEAM": 2.0,
+    "JERSEY": 8,
+    "SUB_ID": 647,
+    "SUB_FOR_ID": 681
+  }
+]

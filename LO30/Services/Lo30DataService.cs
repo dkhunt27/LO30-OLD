@@ -14,9 +14,16 @@ namespace LO30.Services
 
       foreach (var item in teamStandings)
       {
+        float winPct = 0;
+        if (item.Games > 0)
+        {
+          winPct = (float)item.Wins / (float)item.Games;
+        }
         var stat = new ForWebTeamStanding()
         {
           STID = item.SeasonTeamId,
+          PFS = item.Playoff,
+          Div = item.Division,
           Team = item.SeasonTeam.Team.TeamLongName,
           Rank = item.Rank,
           GP = item.Games,
@@ -27,7 +34,7 @@ namespace LO30.Services
           GF = item.GoalsFor,
           GA = item.GoalsAgainst,
           PIM = item.PenaltyMinutes,
-          WPCT = (float)item.Wins/(float)item.Games
+          WPCT = winPct
         };
 
         if (stat.STID == 0)
@@ -52,6 +59,7 @@ namespace LO30.Services
           #region determine key fields (gameId, seasonTeamId, playerId, playerStatTypeId, sub, etc)
           var gameId = gameRoster.GameTeam.GameId;
           var seasonTeamId = gameRoster.GameTeam.SeasonTeamId;
+          var playoffs = gameRoster.GameTeam.Game.Playoff;
           var sub = gameRoster.Sub;
           var playerId = gameRoster.PlayerId;
           var line = gameRoster.Line;
@@ -133,6 +141,7 @@ namespace LO30.Services
 
                                         sid: seasonId,
                                         stid: seasonTeamId,
+                                        pfs: playoffs,
                                         line: line,
                                         pos: position,
                                         sub: sub,
@@ -163,11 +172,12 @@ namespace LO30.Services
       var playerSeasonTeamStats = new List<PlayerStatSeasonTeam>();
 
       var summedStats = playerGameStats
-              .GroupBy(x => new { x.PlayerId, x.SeasonId, x.Sub, SeasonTeamIdPlayingFor = x.SeasonTeamId, x.Line, x.Position })
+              .GroupBy(x => new { x.PlayerId, x.SeasonId, x.Playoffs, x.Sub, SeasonTeamIdPlayingFor = x.SeasonTeamId, x.Line, x.Position })
               .Select(grp => new
               {
                 PlayerId = grp.Key.PlayerId,
                 SeasonId = grp.Key.SeasonId,
+                Playoffs = grp.Key.Playoffs,
                 Sub = grp.Key.Sub,
                 SeasonTeamIdPlayingFor = grp.Key.SeasonTeamIdPlayingFor,
                 Line = grp.Key.Line,
@@ -189,6 +199,7 @@ namespace LO30.Services
         playerSeasonTeamStats.Add(new PlayerStatSeasonTeam(
                                     pid: stat.PlayerId,
                                     sid: stat.SeasonId,
+                                    pfs: stat.Playoffs,
                                     sub: stat.Sub,
                                     stid: stat.SeasonTeamIdPlayingFor,
                                     line: stat.Line,
@@ -215,11 +226,12 @@ namespace LO30.Services
       var playerSeasonStats = new List<PlayerStatSeason>();
 
       var summedStats = playerSeasonTeamStats
-              .GroupBy(x => new { x.PlayerId, x.SeasonId, x.Sub })
+              .GroupBy(x => new { x.PlayerId, x.SeasonId, x.Playoffs, x.Sub })
               .Select(grp => new
               {
                 PlayerId = grp.Key.PlayerId,
                 SeasonId = grp.Key.SeasonId,
+                Playoffs = grp.Key.Playoffs,
                 Sub = grp.Key.Sub,
 
                 Games = grp.Sum(x => x.Games),
@@ -238,6 +250,7 @@ namespace LO30.Services
         playerSeasonStats.Add(new PlayerStatSeason(
                                     pid: stat.PlayerId,
                                     sid: stat.SeasonId,
+                                    pfs: stat.Playoffs,
                                     sub: stat.Sub,
 
                                     games: stat.Games,
@@ -271,6 +284,7 @@ namespace LO30.Services
         {
           PID = item.PlayerId,
           STID = item.SeasonTeamId,
+          PFS = item.Playoffs,
           SID = item.SeasonId,
           Player = playerName,
           Team = item.SeasonTeam.Team.TeamLongName,
@@ -309,6 +323,7 @@ namespace LO30.Services
           #region determine key fields (gameId, seasonTeamId, playerId, playerStatTypeId, sub, etc)
           var gameId = gameRoster.GameTeam.GameId;
           var seasonTeamId = gameRoster.GameTeam.SeasonTeamId;
+          var playoffs = gameRoster.GameTeam.Game.Playoff;
           var sub = gameRoster.Sub;
           var playerId = gameRoster.PlayerId;
 
@@ -349,6 +364,7 @@ namespace LO30.Services
 
                                         sid: seasonId,
                                         stid: seasonTeamId,
+                                        pfs: playoffs,
                                         sub: sub,
 
                                         ga: goalAgainst,
@@ -373,11 +389,12 @@ namespace LO30.Services
       var goalieSeasonTeamStats = new List<GoalieStatSeasonTeam>();
 
       var summedStats = goalieGameStats
-              .GroupBy(x => new { x.PlayerId, x.SeasonId, x.Sub, SeasonTeamIdPlayingFor = x.SeasonTeamId })
+              .GroupBy(x => new { x.PlayerId, x.SeasonId, x.Playoffs, x.Sub, SeasonTeamIdPlayingFor = x.SeasonTeamId })
               .Select(grp => new
               {
                 PlayerId = grp.Key.PlayerId,
                 SeasonId = grp.Key.SeasonId,
+                Playoffs = grp.Key.Playoffs,
                 Sub = grp.Key.Sub,
                 SeasonTeamIdPlayingFor = grp.Key.SeasonTeamIdPlayingFor,
 
@@ -393,6 +410,7 @@ namespace LO30.Services
         goalieSeasonTeamStats.Add(new GoalieStatSeasonTeam(
                                     pid: stat.PlayerId,
                                     sid: stat.SeasonId,
+                                    pfs: stat.Playoffs,
                                     sub: stat.Sub,
                                     stid: stat.SeasonTeamIdPlayingFor,
 
@@ -412,11 +430,12 @@ namespace LO30.Services
       var goalieSeasonStats = new List<GoalieStatSeason>();
 
       var summedStats = goalieSeasonTeamStats
-              .GroupBy(x => new { x.PlayerId, x.SeasonId, x.Sub })
+              .GroupBy(x => new { x.PlayerId, x.SeasonId, x.Playoffs, x.Sub })
               .Select(grp => new
               {
                 PlayerId = grp.Key.PlayerId,
                 SeasonId = grp.Key.SeasonId,
+                Playoffs = grp.Key.Playoffs,
                 Sub = grp.Key.Sub,
 
                 Games = grp.Sum(x => x.Games),
@@ -431,6 +450,7 @@ namespace LO30.Services
         goalieSeasonStats.Add(new GoalieStatSeason(
                                     pid: stat.PlayerId,
                                     sid: stat.SeasonId,
+                                    pfs: stat.Playoffs,
                                     sub: stat.Sub,
 
                                     games: stat.Games,
@@ -460,6 +480,7 @@ namespace LO30.Services
         {
           PID = item.PlayerId,
           STID = item.SeasonTeamId,
+          PFS = item.Playoffs,
           SID = item.SeasonId,
           Player = playerName,
           Team = item.SeasonTeam.Team.TeamLongName,

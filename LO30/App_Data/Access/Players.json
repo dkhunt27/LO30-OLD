@@ -5854,5 +5854,181 @@
     "PLAYER_SUFFIX": null,
     "PLAYER_POSITION": null,
     "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 770,
+    "PLAYER_FIRST_NAME": "Donny",
+    "PLAYER_LAST_NAME": "Borgula",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 771,
+    "PLAYER_FIRST_NAME": "Javan",
+    "PLAYER_LAST_NAME": "Borgula",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 772,
+    "PLAYER_FIRST_NAME": "Kerry",
+    "PLAYER_LAST_NAME": "Donahue",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 773,
+    "PLAYER_FIRST_NAME": "Jason",
+    "PLAYER_LAST_NAME": "Fournier",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 774,
+    "PLAYER_FIRST_NAME": "Al",
+    "PLAYER_LAST_NAME": "Gaskill",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 775,
+    "PLAYER_FIRST_NAME": "Tom",
+    "PLAYER_LAST_NAME": "Hardy",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 776,
+    "PLAYER_FIRST_NAME": "Adam",
+    "PLAYER_LAST_NAME": "Jakubowski",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 777,
+    "PLAYER_FIRST_NAME": "Craig",
+    "PLAYER_LAST_NAME": "Justice",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 778,
+    "PLAYER_FIRST_NAME": "Henry",
+    "PLAYER_LAST_NAME": "Klimes",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 779,
+    "PLAYER_FIRST_NAME": "Chuck",
+    "PLAYER_LAST_NAME": "Light",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 780,
+    "PLAYER_FIRST_NAME": "John",
+    "PLAYER_LAST_NAME": "Lindman",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 781,
+    "PLAYER_FIRST_NAME": "Tony",
+    "PLAYER_LAST_NAME": "Maceri",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 782,
+    "PLAYER_FIRST_NAME": "John",
+    "PLAYER_LAST_NAME": "McCracken",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 783,
+    "PLAYER_FIRST_NAME": "Todd",
+    "PLAYER_LAST_NAME": "Moilanen",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 784,
+    "PLAYER_FIRST_NAME": "Mark",
+    "PLAYER_LAST_NAME": "Nagy",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 785,
+    "PLAYER_FIRST_NAME": "Pat",
+    "PLAYER_LAST_NAME": "O'Dowd",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 786,
+    "PLAYER_FIRST_NAME": "Bill",
+    "PLAYER_LAST_NAME": "Ostulund",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 787,
+    "PLAYER_FIRST_NAME": "Louis",
+    "PLAYER_LAST_NAME": "Pivetta",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 788,
+    "PLAYER_FIRST_NAME": "Nick",
+    "PLAYER_LAST_NAME": "Reed",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 789,
+    "PLAYER_FIRST_NAME": "Glen",
+    "PLAYER_LAST_NAME": "Revak",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 790,
+    "PLAYER_FIRST_NAME": "Chris",
+    "PLAYER_LAST_NAME": "Wegienka",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
+  },
+  {
+    "PLAYER_ID": 791,
+    "PLAYER_FIRST_NAME": "Erik",
+    "PLAYER_LAST_NAME": "Weiler",
+    "PLAYER_SUFFIX": null,
+    "PLAYER_POSITION": null,
+    "SHOOTS": null
   }
 ]

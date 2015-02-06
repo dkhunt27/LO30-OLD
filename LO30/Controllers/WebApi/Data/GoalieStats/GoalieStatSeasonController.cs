@@ -14,9 +14,9 @@ namespace LO30.Controllers.Data.GoalieStats
       _repo = repo;
     }
 
-    public GoalieStatSeason GetGoalieStatSeasonByPlayerIdSeasonIdSub(int playerId, int seasonId, bool sub)
+    public GoalieStatSeason GetGoalieStatSeasonByPlayerIdSeasonIdSub(int playerId, int seasonId, bool playoffs, bool sub)
     {
-      var results = _repo.GetGoalieStatSeasonByPlayerIdSeasonIdSub(playerId, seasonId, sub);
+      var results = _repo.GetGoalieStatSeasonByPlayerIdSeasonIdSub(playerId, seasonId, playoffs, sub);
       return results;
     }
   }

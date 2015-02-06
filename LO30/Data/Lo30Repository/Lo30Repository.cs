@@ -402,6 +402,10 @@ namespace LO30.Data
       DateTime last = DateTime.Now;
       TimeSpan diffFromLast = new TimeSpan();
 
+      var modified = 0;
+      int rank = -1;
+      string division = null;
+
       try
       {
         // get every team just in case they do not have a game result yet
@@ -428,40 +432,64 @@ namespace LO30.Data
             int penaltyMinutes = 0;
 
             // get game outcomes for this season team
-            var gameOutcomes = _contextService.FindGameOutcomesWithGameIdsAndTeamId(startingGameId, endingGameId, seasonTeam.SeasonTeamId);
+            bool errorIfNotFound = false;
+            var gameOutcomes = _contextService.FindGameOutcomesWithGameIdsAndTeamId(errorIfNotFound, startingGameId, endingGameId, seasonTeam.SeasonTeamId);
 
-            // loop through each game
-            //int seasonTypeId=-1; // TODO, make sure the games match seasonTYpe
-            for (var g = 0; g < gameOutcomes.Count; g++)
+            if (gameOutcomes.Count == 0)
             {
-              var gameOutcome = gameOutcomes[g];
-
-              if (gameOutcome.Outcome.ToLower() == "w")
+              // they haven't played any games yet
+              games = 0;
+              wins = 0;
+              losses = 0;
+              ties = 0;
+              points = 0;
+              goalsAgainst = 0;
+              goalsFor = 0;
+              penaltyMinutes = 0;
+              
+            }
+            else
+            {
+              // loop through each game
+              //int seasonTypeId=-1; // TODO, make sure the games match seasonTYpe
+              for (var g = 0; g < gameOutcomes.Count; g++)
               {
-                wins++;
-              }
-              else if (gameOutcome.Outcome.ToLower() == "l")
-              {
-                losses++;
-              }
-              else
-              {
-                ties++;
-              }
+                var gameOutcome = gameOutcomes[g];
 
-              games++;
-              points = (wins * 2) + (losses * 0) + (ties * 1);
+                if (gameOutcome.Outcome.ToLower() == "w")
+                {
+                  wins++;
+                }
+                else if (gameOutcome.Outcome.ToLower() == "l")
+                {
+                  losses++;
+                }
+                else
+                {
+                  ties++;
+                }
 
-              goalsFor = goalsFor + gameOutcome.GoalsFor;
-              goalsAgainst = goalsAgainst + gameOutcome.GoalsAgainst;
-              penaltyMinutes = penaltyMinutes + gameOutcome.PenaltyMinutes;
+                games++;
+                points = (wins * 2) + (losses * 0) + (ties * 1);
+
+                goalsFor = goalsFor + gameOutcome.GoalsFor;
+                goalsAgainst = goalsAgainst + gameOutcome.GoalsAgainst;
+                penaltyMinutes = penaltyMinutes + gameOutcome.PenaltyMinutes;
+              }
             }
 
-            var rank = -1;
+            rank = -1;
+            division = "n/a";
+            if (playoffs)
+            {
+              division = seasonTeam.Division;
+            }
+
             var teamStanding = new TeamStanding()
             {
               SeasonTeamId = seasonTeam.SeasonTeamId,
               Playoff = playoffs,
+              Division = division,
               Rank = rank,
               Games = games,
               Wins = wins,
@@ -473,27 +501,41 @@ namespace LO30.Data
               PenaltyMinutes = penaltyMinutes
             };
 
-            _contextService.SaveOrUpdateTeamStanding(teamStanding);
+            modified = modified + _contextService.SaveOrUpdateTeamStanding(teamStanding);
           }
         }
 
         // now process rank
         var standings = _ctx.TeamStandings.Where(ts => ts.SeasonTeam.SeasonId == seasonId)
-                            .OrderByDescending(ts => ts.Points)
+                            .OrderBy(ts => ts.Playoff)
+                            .ThenBy(ts => ts.Division)
+                            .ThenByDescending(ts => ts.Points)
                             .ThenByDescending(ts => ts.Wins)
                             .ThenByDescending(ts => ts.GoalsFor - ts.GoalsAgainst)
                             .ThenByDescending(ts => ts.GoalsFor)
                             .ThenBy(ts => ts.PenaltyMinutes)
                             .ToList();
 
+        division = "not set yet";
         for (var x = 0; x < standings.Count; x++)
         {
           var s = standings[x];
-          var rank = x + 1;
+
+          if (s.Division == division)
+          {
+            rank = rank + 1;
+          }
+          else
+          {
+            rank = 1;
+            division = s.Division;
+          }
+
           var teamStanding = new TeamStanding()
           {
             SeasonTeamId = s.SeasonTeamId,
             Playoff = s.Playoff,
+            Division = s.Division,
             Rank = rank,
             Games = s.Games,
             Wins = s.Wins,
@@ -508,7 +550,7 @@ namespace LO30.Data
           _contextService.SaveOrUpdateTeamStanding(teamStanding);
         }
 
-        result.modified = _ctx.SaveChanges();
+        result.modified = modified;
       }
       catch (Exception ex)
       {

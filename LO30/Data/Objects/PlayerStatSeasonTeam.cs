@@ -15,6 +15,9 @@ namespace LO30.Data.Objects
     [Required, Key, Column(Order = 2), ForeignKey("SeasonTeam")]
     public int SeasonTeamId { get; set; }
 
+    [Required, Key, Column(Order = 3)]
+    public bool Playoffs { get; set; }
+
     [Required, ForeignKey("Season")]
     public int SeasonId { get; set; }
 
@@ -62,10 +65,11 @@ namespace LO30.Data.Objects
     {
     }
 
-    public PlayerStatSeasonTeam(int pid, int stid, int sid, int line, string pos, bool sub, int games, int g, int a, int p, int ppg, int shg, int gwg, int pim)
+    public PlayerStatSeasonTeam(int pid, int stid, bool pfs, int sid, int line, string pos, bool sub, int games, int g, int a, int p, int ppg, int shg, int gwg, int pim)
     {
       this.PlayerId = pid;
       this.SeasonTeamId = stid;
+      this.Playoffs = pfs;
 
       this.SeasonId = sid;
       this.Line = line;
@@ -91,9 +95,10 @@ namespace LO30.Data.Objects
 
     private void Validate()
     {
-      var locationKey = string.Format("pid: {0}, stid: {1}, sid: {2}, sub: {3}",
+      var locationKey = string.Format("pid: {0}, stid: {1}, pfs: {2}, sid: {3}, sub: {4}",
                                       this.PlayerId,
                                       this.SeasonTeamId,
+                                      this.Playoffs,
                                       this.SeasonId,
                                       this.Sub);
 

@@ -15,6 +15,9 @@ namespace LO30.Data.Objects
     [Required, Key, Column(Order = 2), ForeignKey("SeasonTeam")]
     public int SeasonTeamId { get; set; }
 
+    [Required, Key, Column(Order = 3)]
+    public bool Playoffs { get; set; }
+
     [Required, ForeignKey("Season")]
     public int SeasonId { get; set; }
 
@@ -53,10 +56,11 @@ namespace LO30.Data.Objects
     {
     }
 
-    public GoalieStatSeasonTeam(int pid, int stid, int sid, bool sub, int games, int ga, int so, int w)
+    public GoalieStatSeasonTeam(int pid, int stid, bool pfs, int sid, bool sub, int games, int ga, int so, int w)
     {
       this.PlayerId = pid;
       this.SeasonTeamId = stid;
+      this.Playoffs = pfs;
 
       this.SeasonId = sid;
       this.Sub = sub;

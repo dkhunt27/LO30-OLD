@@ -46,7 +46,9 @@ lo30NgApp.controller('standingsRegularSeasonController',
             if (result && result.length && result.length > 0) {
 
               angular.forEach(result, function (item) {
-                $scope.data.teamStandings.push(item);
+                if (item.pfs === false) {
+                  $scope.data.teamStandings.push(item);
+                }
               });
 
               $scope.requests.teamStandingsLoaded = true;

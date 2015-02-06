@@ -15,6 +15,9 @@ namespace LO30.Data.Objects
     [Required, Key, Column(Order = 2)]
     public bool Playoff { get; set; }
 
+    [MaxLength(35)]
+    public string Division { get; set; }
+
     [Required]
     public int Rank { get; set; }
 

@@ -4,7 +4,7 @@
     "PLAYER_ID": 3,
     "PLAYER_RATING": 9.3,
     "PLAYER_LINE": 3,
-    "PLAYER_DRAFT_ROUND": "9F"
+    "PLAYER_DRAFT_ROUND": "8F"
   },
   {
     "SEASON_ID": 54,
@@ -88,7 +88,7 @@
     "PLAYER_ID": 33,
     "PLAYER_RATING": 1.2,
     "PLAYER_LINE": 1,
-    "PLAYER_DRAFT_ROUND": "1D"
+    "PLAYER_DRAFT_ROUND": "2D"
   },
   {
     "SEASON_ID": 54,
@@ -375,7 +375,7 @@
     "PLAYER_ID": 118,
     "PLAYER_RATING": 2.6,
     "PLAYER_LINE": 1,
-    "PLAYER_DRAFT_ROUND": "2D"
+    "PLAYER_DRAFT_ROUND": "5F"
   },
   {
     "SEASON_ID": 54,
@@ -547,6 +547,13 @@
   },
   {
     "SEASON_ID": 54,
+    "PLAYER_ID": 581,
+    "PLAYER_RATING": 5.8,
+    "PLAYER_LINE": 2,
+    "PLAYER_DRAFT_ROUND": "5F"
+  },
+  {
+    "SEASON_ID": 54,
     "PLAYER_ID": 583,
     "PLAYER_RATING": 6.5,
     "PLAYER_LINE": 2,
@@ -592,7 +599,7 @@
     "PLAYER_ID": 594,
     "PLAYER_RATING": 2.3,
     "PLAYER_LINE": 1,
-    "PLAYER_DRAFT_ROUND": "2D"
+    "PLAYER_DRAFT_ROUND": "1D"
   },
   {
     "SEASON_ID": 54,
@@ -774,7 +781,7 @@
     "PLAYER_ID": 660,
     "PLAYER_RATING": 1.5,
     "PLAYER_LINE": 1,
-    "PLAYER_DRAFT_ROUND": "1F"
+    "PLAYER_DRAFT_ROUND": "2D"
   },
   {
     "SEASON_ID": 54,
@@ -792,6 +799,13 @@
   },
   {
     "SEASON_ID": 54,
+    "PLAYER_ID": 674,
+    "PLAYER_RATING": 2.5,
+    "PLAYER_LINE": 1,
+    "PLAYER_DRAFT_ROUND": "2D"
+  },
+  {
+    "SEASON_ID": 54,
     "PLAYER_ID": 677,
     "PLAYER_RATING": 1.4,
     "PLAYER_LINE": 1,
@@ -806,6 +820,13 @@
   },
   {
     "SEASON_ID": 54,
+    "PLAYER_ID": 681,
+    "PLAYER_RATING": 2.5,
+    "PLAYER_LINE": 1,
+    "PLAYER_DRAFT_ROUND": "1F"
+  },
+  {
+    "SEASON_ID": 54,
     "PLAYER_ID": 682,
     "PLAYER_RATING": 5.0,
     "PLAYER_LINE": null,
@@ -816,7 +837,7 @@
     "PLAYER_ID": 686,
     "PLAYER_RATING": 8.8,
     "PLAYER_LINE": 3,
-    "PLAYER_DRAFT_ROUND": "8F"
+    "PLAYER_DRAFT_ROUND": "9F"
   },
   {
     "SEASON_ID": 54,
@@ -855,6 +876,13 @@
   },
   {
     "SEASON_ID": 54,
+    "PLAYER_ID": 721,
+    "PLAYER_RATING": 3.8,
+    "PLAYER_LINE": 2,
+    "PLAYER_DRAFT_ROUND": "3D"
+  },
+  {
+    "SEASON_ID": 54,
     "PLAYER_ID": 731,
     "PLAYER_RATING": 2.7,
     "PLAYER_LINE": 1,
@@ -883,10 +911,24 @@
   },
   {
     "SEASON_ID": 54,
+    "PLAYER_ID": 757,
+    "PLAYER_RATING": 3.1,
+    "PLAYER_LINE": 1,
+    "PLAYER_DRAFT_ROUND": "2D"
+  },
+  {
+    "SEASON_ID": 54,
+    "PLAYER_ID": 758,
+    "PLAYER_RATING": 7.2,
+    "PLAYER_LINE": 3,
+    "PLAYER_DRAFT_ROUND": "8F"
+  },
+  {
+    "SEASON_ID": 54,
     "PLAYER_ID": 762,
     "PLAYER_RATING": 5.3,
     "PLAYER_LINE": 2,
-    "PLAYER_DRAFT_ROUND": "5F"
+    "PLAYER_DRAFT_ROUND": "6F"
   },
   {
     "SEASON_ID": 54,

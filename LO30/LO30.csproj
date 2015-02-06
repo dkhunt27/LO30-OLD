@@ -273,6 +273,8 @@
     <Content Include="App_Data\OleDbMembershipProvider.cs" />
     <Content Include="App_Data\OleDbRoleProvider.cs" />
     <Compile Include="Controllers\AdminSettingsController.cs" />
+    <Content Include="App_Data\SqlServer\Views\GameTeamsView.sql" />
+    <Content Include="App_Data\SqlServer\Views\GamesView.sql" />
     <Content Include="App_Data\SqlServer\Views\BoxScoresDetailView.sql" />
     <Content Include="App_Data\SqlServer\Views\BoxScoresSummaryView.sql" />
     <Content Include="App_Readme\Elmah.txt" />

@@ -88,7 +88,7 @@ namespace LO30.Data.Objects
         }
       }
 
-      Debug.Print(string.Format("{0}: {1} Loaded", functionName, className));
+      Debug.Print(string.Format("{0}: {1} Loaded {2} Record(s)", functionName, className, output.Count));
       var end = DateTime.Now - start;
       Debug.Print("TimeToProcess: " + end.ToString());
 
