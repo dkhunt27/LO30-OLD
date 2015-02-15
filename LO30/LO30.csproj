@@ -466,8 +466,10 @@
     <Compile Include="Data\Lo30RepositoryMock\Lo30RepositoryMock.DataService.GameOutcomes.cs" />
     <Compile Include="Data\Lo30RepositoryMock\Lo30RepositoryMock.cs" />
     <Compile Include="Data\Objects\DataProcessing.cs" />
+    <Compile Include="Data\Objects\ForWebGoodThru.cs" />
     <Compile Include="Data\Objects\ForWebTeamStanding.cs" />
     <Compile Include="Data\Objects\BoxScoresSummary.cs" />
+    <Compile Include="Data\Objects\Division.cs" />
     <Compile Include="Data\Objects\PlayerSubSearch.cs" />
     <Compile Include="Data\Objects\ProcessingResult.cs" />
     <Compile Include="Data\Objects\Setting.cs" />
@@ -1562,6 +1564,7 @@
     <Content Include="Areas\Web.config" />
     <Content Include="Areas\_ViewStart.cshtml" />
     <Content Include="Areas\ScoreSheet\ScoreSheet.Index.cshtml" />
+    <Content Include="App_Data\Access\ScoreSheetEntrySubs.json" />
     <None Include="Properties\PublishProfiles\lo30 %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\lo30.pubxml" />
     <Content Include="Scripts\angular-animate.js" />
@@ -2459,7 +2462,9 @@
     <Content Include="Views\Standings\Playoffs.cshtml" />
     <Content Include="Views\Scores\Index.cshtml" />
     <Content Include="Views\AboutUs\Services.cshtml" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Scripts\version.json" />
     <Content Include="Views\Navigation\NavAdmin.cshtml" />
     <Content Include="Views\Navigation\NavPublic.cshtml" />

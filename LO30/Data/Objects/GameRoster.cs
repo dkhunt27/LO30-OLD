@@ -337,9 +337,9 @@ namespace LO30.Data.Objects
           }
 
           // set the line and position equal to the players drafted / set line position from the team roster
-          var awayTeamRoster = lo30ContextService.FindTeamRosterWithYYYYMMDD(homeTeamId, homePlayerId, gameDateYYYYMMDD);
-          int awayPlayerLine = homeTeamRoster.Line;
-          string awayPlayerPosition = homeTeamRoster.Position;
+          var awayTeamRoster = lo30ContextService.FindTeamRosterWithYYYYMMDD(awayTeamId, awayPlayerId, gameDateYYYYMMDD);
+          int awayPlayerLine = awayTeamRoster.Line;
+          string awayPlayerPosition = awayTeamRoster.Position;
 
           isGoalie = false;
           if (awayTeamRoster.Position == "G")

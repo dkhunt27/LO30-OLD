@@ -28,7 +28,7 @@ namespace LO30.Data.Objects
     public string Location { get; set; }
 
     [Required]
-    public bool Playoff { get; set; }
+    public bool Playoffs { get; set; }
 
     public virtual Season Season { get; set; }
 
@@ -44,7 +44,7 @@ namespace LO30.Data.Objects
       this.GameDateTime = time;
       this.GameYYYYMMDD = ConvertDateTimeIntoYYYYMMDD(time, ifNullReturnMax: false);
       this.Location = loc;
-      this.Playoff = play;
+      this.Playoffs = play;
 
       Validate();
     }

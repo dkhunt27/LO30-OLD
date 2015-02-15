@@ -14,9 +14,9 @@ namespace LO30.Controllers.Data.Games
       _repo = repo;
     }
 
-    public List<GameOutcome> GetGameOutcomesBySeasonTeamId(int seasonTeamId, bool fullDetail = true)
+    public List<GameOutcome> GetGameOutcomesBySeasonTeamId(int seasonId, bool playoffs, int seasonTeamId, bool fullDetail = true)
     {
-      var results = _repo.GetGameOutcomesBySeasonTeamId(seasonTeamId, fullDetail);
+      var results = _repo.GetGameOutcomesBySeasonTeamId(seasonId, playoffs, seasonTeamId, fullDetail);
       return results.OrderByDescending(x => x.GameTeam.GameId)
                     .ToList();
     }

@@ -8,7 +8,7 @@ using System.Web;
 
 namespace LO30.Data
 {
-  public partial class Lo30RepositoryMock : ILo30Repository
+  public partial class Lo30RepositoryMock
   {
     int currentSeasonId = 54;
 
@@ -120,7 +120,7 @@ namespace LO30.Data
       throw new NotImplementedException();
     }
 
-    public ProcessingResult ProcessGameResultsIntoTeamStandings(int seasonId, bool playoff, int startingGameId, int endingGameId)
+    public ProcessingResult ProcessGameResultsIntoTeamStandings(int seasonId, bool playoffs, int startingGameId, int endingGameId)
     {
       throw new NotImplementedException();
     }

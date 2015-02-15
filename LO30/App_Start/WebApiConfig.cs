@@ -22,13 +22,13 @@ namespace LO30
       #region forWebGoalieStats routes
       config.Routes.MapHttpRoute(
           name: "ApiForWebGoalieStats",
-          routeTemplate: constApisUrl + "/forWebGoalieStats",
+          routeTemplate: constApisUrl + "/forWebGoalieStats/{seasonId}/{playoffs}",
           defaults: new { controller = "forWebGoalieStats" }
       );
 
       config.Routes.MapHttpRoute(
           name: "ApiForWebGoalieStatsDataGoodThru",
-          routeTemplate: constApisUrl + "/forWebGoalieStatsDataGoodThru",
+          routeTemplate: constApisUrl + "/forWebGoalieStatsDataGoodThru/{seasonId}",
           defaults: new { controller = "forWebGoalieStatsDataGoodThru" }
       );
       #endregion
@@ -36,13 +36,13 @@ namespace LO30
       #region forWebPlayerStats routes
       config.Routes.MapHttpRoute(
           name: "ApiForWebPlayerStats",
-          routeTemplate: constApisUrl + "/forWebPlayerStats",
+          routeTemplate: constApisUrl + "/forWebPlayerStats/{seasonId}/{playoffs}",
           defaults: new { controller = "forWebPlayerStats" }
       );
 
       config.Routes.MapHttpRoute(
           name: "ApiForWebPlayerStatsDataGoodThru",
-          routeTemplate: constApisUrl + "/forWebPlayerStatsDataGoodThru",
+          routeTemplate: constApisUrl + "/forWebPlayerStatsDataGoodThru/{seasonId}",
           defaults: new { controller = "forWebPlayerStatsDataGoodThru" }
       );
       #endregion
@@ -50,13 +50,13 @@ namespace LO30
       #region forWebTeamStandings routes
       config.Routes.MapHttpRoute(
           name: "ApiForWebTeamStandings",
-          routeTemplate: constApisUrl + "/forWebTeamStandings",
+          routeTemplate: constApisUrl + "/forWebTeamStandings/{seasonId}/{playoffs}",
           defaults: new { controller = "forWebTeamStandings" }
       );
 
       config.Routes.MapHttpRoute(
           name: "ApiForWebTeamStandingsDataGoodThru",
-          routeTemplate: constApisUrl + "/forWebTeamStandingsDataGoodThru",
+          routeTemplate: constApisUrl + "/forWebTeamStandingsDataGoodThru/{seasonId}",
           defaults: new { controller = "forWebTeamStandingsDataGoodThru" }
       );
       #endregion
@@ -114,7 +114,7 @@ namespace LO30
 
       config.Routes.MapHttpRoute(
           name: "ApiGameOutcomes3",
-          routeTemplate: constApisUrl + "/gameOutcomesBySeasonTeam/{seasonTeamId}/{fullDetail}",
+          routeTemplate: constApisUrl + "/gameOutcomesBySeasonTeam/{seasonId}/{playoffs}/{seasonTeamId}/{fullDetail}",
           defaults: new { controller = "GameOutcomesBySeasonTeam" }
       );
 

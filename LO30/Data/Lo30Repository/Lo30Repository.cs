@@ -394,7 +394,7 @@ namespace LO30.Data
       return result;
     }
 
-    // TODO, remove playoff input and determine it from the gameIds
+    // TODO, remove playoffs input and determine it from the gameIds
     public ProcessingResult ProcessGameResultsIntoTeamStandings(int seasonId, bool playoffs, int startingGameId, int endingGameId)
     {
       var result = new ProcessingResult();
@@ -404,7 +404,7 @@ namespace LO30.Data
 
       var modified = 0;
       int rank = -1;
-      string division = null;
+      int divisionId = -1;
 
       try
       {
@@ -479,17 +479,17 @@ namespace LO30.Data
             }
 
             rank = -1;
-            division = "n/a";
+            divisionId = 1;
             if (playoffs)
             {
-              division = seasonTeam.Division;
+              divisionId = seasonTeam.DivisionId;
             }
 
             var teamStanding = new TeamStanding()
             {
               SeasonTeamId = seasonTeam.SeasonTeamId,
-              Playoff = playoffs,
-              Division = division,
+              Playoffs = playoffs,
+              DivisionId = divisionId,
               Rank = rank,
               Games = games,
               Wins = wins,
@@ -507,7 +507,7 @@ namespace LO30.Data
 
         // now process rank
         var standings = _ctx.TeamStandings.Where(ts => ts.SeasonTeam.SeasonId == seasonId)
-                            .OrderBy(ts => ts.Playoff)
+                            .OrderBy(ts => ts.Playoffs)
                             .ThenBy(ts => ts.Division)
                             .ThenByDescending(ts => ts.Points)
                             .ThenByDescending(ts => ts.Wins)
@@ -516,26 +516,26 @@ namespace LO30.Data
                             .ThenBy(ts => ts.PenaltyMinutes)
                             .ToList();
 
-        division = "not set yet";
+        divisionId = -1;
         for (var x = 0; x < standings.Count; x++)
         {
           var s = standings[x];
 
-          if (s.Division == division)
+          if (s.DivisionId == divisionId)
           {
             rank = rank + 1;
           }
           else
           {
             rank = 1;
-            division = s.Division;
+            divisionId = s.DivisionId;
           }
 
           var teamStanding = new TeamStanding()
           {
             SeasonTeamId = s.SeasonTeamId,
-            Playoff = s.Playoff,
-            Division = s.Division,
+            Playoffs = s.Playoffs,
+            DivisionId = s.DivisionId,
             Rank = rank,
             Games = s.Games,
             Wins = s.Wins,
@@ -650,6 +650,7 @@ namespace LO30.Data
                                             .ToList();
 
         var teamStandingsForWeb = _ctx.TeamStandings
+                                            .Include("division")
                                             .Include("seasonTeam")
                                             .ToList();
 

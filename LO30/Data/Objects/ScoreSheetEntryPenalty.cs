@@ -36,6 +36,8 @@ namespace LO30.Data.Objects
     [Required]
     public int PenaltyMinutes { get; set; }
 
+    public DateTime UpdatedOn { get; set; }
+
     public virtual Game Game { get; set; }
 
     public static List<ScoreSheetEntryPenalty> LoadListFromAccessDbJsonFile(string filePath, int startingGameIdToProcess, int endingGameIdToProcess)
@@ -69,6 +71,8 @@ namespace LO30.Data.Objects
             homeTeam = false;
           }
 
+          DateTime updatedOn = json["UPDATED_ON"];
+
           output.Add(new ScoreSheetEntryPenalty()
           {
             ScoreSheetEntryPenaltyId = json["SCORE_SHEET_ENTRY_PENALTY_ID"],
@@ -78,7 +82,8 @@ namespace LO30.Data.Objects
             Player = json["PLAYER"],
             PenaltyCode = json["PENALTY_CODE"],
             TimeRemaining = json["TIME_REMAINING"],
-            PenaltyMinutes = json["PENALTY_MINUTES"]
+            PenaltyMinutes = json["PENALTY_MINUTES"],
+            UpdatedOn = updatedOn
           });
         }
       }

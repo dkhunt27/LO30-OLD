@@ -22,6 +22,8 @@ lo30NgApp.controller('standingsPlayoffsController',
       $scope.initializeScopeVariables = function () {
 
         $scope.data = {
+          seasonId: 54,
+          playoffs: true,
           teamStandings: [],
           teamStandingsByDiv: [],
           teamStandingsDataGoodThru: "n/a"
@@ -42,7 +44,7 @@ lo30NgApp.controller('standingsPlayoffsController',
 
         $scope.initializeScopeVariables();
 
-        dataServiceForWebTeamStandings.listForWebTeamStandings().$promise.then(
+        dataServiceForWebTeamStandings.listForWebTeamStandings($scope.data.seasonId, $scope.data.playoffs).$promise.then(
           function (result) {
             // service call on success
             if (result && result.length && result.length > 0) {
@@ -64,12 +66,12 @@ lo30NgApp.controller('standingsPlayoffsController',
           }
         );
 
-        dataServiceForWebTeamStandings.getForWebTeamStandingsDataGoodThru().then(
+        dataServiceForWebTeamStandings.getForWebTeamStandingsDataGoodThru($scope.data.seasonId).$promise.then(
           function (result) {
             // service call on success
-            if (result && result.data) {
+            if (result && result.gt) {
 
-              $scope.data.teamStandingsDataGoodThru = result.data.replace(/\"/g, "");  // TODO figure out why its has double "s
+              $scope.data.teamStandingsDataGoodThru = result.gt;
               $scope.requests.teamStandingsDataGoodThruLoaded = true;
 
               alertService.successRetrieval("TeamStandingsGoodThru", 1);

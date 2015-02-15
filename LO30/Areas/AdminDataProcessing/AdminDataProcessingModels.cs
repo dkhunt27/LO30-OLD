@@ -12,7 +12,7 @@ namespace LO30.Areas.AdminDataProcessing
 
     public int seasonId { get; set; }
 
-    public bool playoff { get; set; }
+    public bool playoffs { get; set; }
 
     public int startingGameId { get; set; }
 

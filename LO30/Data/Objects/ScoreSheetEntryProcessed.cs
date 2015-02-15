@@ -45,6 +45,8 @@ namespace LO30.Data.Objects
     [Required]
     public bool GameWinningGoal { get; set; }
 
+    public DateTime UpdatedOn { get; set; }
+
     public virtual Game Game { get; set; }
     public virtual Player GoalPlayer { get; set; }
     public virtual Player Assist1Player { get; set; }
@@ -55,7 +57,7 @@ namespace LO30.Data.Objects
     {
     }
 
-    public ScoreSheetEntryProcessed(int sseid, int gid, int per, bool ht, string time, int gpid, int? a1pid, int? a2pid, int? a3pid, bool shg, bool ppg, bool gwg)
+    public ScoreSheetEntryProcessed(int sseid, int gid, int per, bool ht, string time, int gpid, int? a1pid, int? a2pid, int? a3pid, bool shg, bool ppg, bool gwg, DateTime upd)
     {
       this.ScoreSheetEntryId = sseid;
 
@@ -71,6 +73,8 @@ namespace LO30.Data.Objects
       this.ShortHandedGoal = shg;
       this.PowerPlayGoal = ppg;
       this.GameWinningGoal = gwg;
+
+      this.UpdatedOn = upd;
 
       Validate();
     }

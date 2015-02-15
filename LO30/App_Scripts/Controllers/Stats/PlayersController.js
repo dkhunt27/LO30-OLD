@@ -5,9 +5,10 @@ lo30NgApp.controller('statsPlayersController',
   [
     '$scope',
     '$timeout',
+    '$routeParams',
     'alertService',
     'dataServiceForWebPlayerStats',
-    function ($scope, $timeout, alertService, dataServiceForWebPlayerStats) {
+    function ($scope, $timeout, $routeParams, alertService, dataServiceForWebPlayerStats) {
 
       var alertTitleDataRetrievalSuccessful = "Data Retrieval Successful";
       var alertTitleDataRetrievalUnsuccessful = "Data Retrieval Unsuccessful";
@@ -244,6 +245,10 @@ lo30NgApp.controller('statsPlayersController',
         ];
 
         $scope.data = {
+          selectedSeasonId: -1,
+          selectedPlayoffs: false,
+          seasonName: "not set",
+          seasonTypeName: "not set",
           playerStats: [],
           playerStatsDataGoodThru: "n/a"
         };
@@ -262,12 +267,12 @@ lo30NgApp.controller('statsPlayersController',
         };
       };
 
-      $scope.getForWebPlayerStats = function () {
+      $scope.getForWebPlayerStats = function (seasonId, playoffs) {
         var retrievedType = "PlayerStats";
 
-        $scope.initializeScopeVariables();
+        //$scope.initializeScopeVariables();
 
-        dataServiceForWebPlayerStats.listForWebPlayerStats().$promise.then(
+        dataServiceForWebPlayerStats.listForWebPlayerStats(seasonId, playoffs).$promise.then(
           function (result) {
             // service call on success
             if (result && result.length && result.length > 0) {
@@ -287,12 +292,12 @@ lo30NgApp.controller('statsPlayersController',
           }
         );
 
-        dataServiceForWebPlayerStats.getForWebPlayerStatsDataGoodThru().then(
+        dataServiceForWebPlayerStats.getForWebPlayerStatsDataGoodThru(seasonId).$promise.then(
           function (result) {
             // service call on success
-            if (result && result.data) {
+            if (result && result.gt) {
 
-              $scope.data.playerStatsDataGoodThru = result.data.replace(/\"/g, "");  // TODO figure out why its has double "s
+              $scope.data.playerStatsDataGoodThru = result.gt;
               $scope.requests.playerStatsDataGoodThruLoaded = true;
 
               alertService.successRetrieval("PlayerStatsGoodThru", 1);
@@ -311,7 +316,31 @@ lo30NgApp.controller('statsPlayersController',
       $scope.activate = function () {
         $scope.initializeScopeVariables();
         $scope.setWatches();
-        $scope.getForWebPlayerStats();
+
+        //TODO make this a user selection
+        if ($routeParams.seasonId === null) {
+          $scope.data.selectedSeasonId = 54;
+          $scope.data.selectedPlayoffs = false;
+        } else {
+          $scope.data.selectedSeasonId = $routeParams.seasonId;
+          $scope.data.selectedPlayoffs = $routeParams.playoffs;
+        }
+
+        // TODO get this from a service
+        if ($scope.data.selectedPlayoffs == "true") {
+          $scope.data.seasonTypeName = "Playoffs";
+        } else {
+          $scope.data.seasonTypeName = "Regular Season";
+        }
+
+        if ($scope.data.selectedSeasonId == "54") {
+          $scope.data.seasonName = "2014 - 2105";
+        } else {
+          $scope.data.seasonName = "not mapped";
+        }
+
+
+        $scope.getForWebPlayerStats($scope.data.selectedSeasonId, $scope.data.selectedPlayoffs);
         $timeout(function () {
           $scope.sortDescOnly('p');
           $scope.filterBySub("Without");

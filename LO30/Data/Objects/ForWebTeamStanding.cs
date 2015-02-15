@@ -15,7 +15,10 @@ namespace LO30.Data.Objects
     [Required, Key, Column(Order = 2)]
     public bool PFS { get; set; }
 
-    [MaxLength(35)]
+    [Required]
+    public int SID { get; set; }
+
+    [Required, MaxLength(35)]
     public string Div { get; set; }
 
     [Required]

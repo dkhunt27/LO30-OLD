@@ -1,0 +1,51 @@
+SaveOrUpdateGames: Starting
+SaveOrUpdateGames:Access records to process:178
+SaveOrUpdateGames:Access records processed:0
+SaveOrUpdateGames:Access records processed:100
+SaveOrUpdateGames: Games Count: 178 SaveOrUpdated:0
+SaveOrUpdateGames: TimeToProcess: 00:00:02.6961542
+SaveOrUpdateGameTeams: Creating GameTeams
+SaveOrUpdateGameTeams: Access records to process:178
+SaveOrUpdateGameTeams: Access records processed:0
+SaveOrUpdateGameTeams: Access records processed:100
+SaveOrUpdateGameTeams: GameTeams Count: 328 SaveOrUpdated:0
+SaveOrUpdateGameTeams: TimeToProcess: 00:00:01.9841135
+SaveOrUpdateGameRosters: Starting
+SaveOrUpdateGameRosters: Access records to process:2032
+SaveOrUpdateGameRosters: Access records processed:0. Records saved or updated:0
+SaveOrUpdateGameRosters: Access records processed:100. Records saved or updated:72
+SaveOrUpdateGameRosters: Access records processed:200. Records saved or updated:272
+SaveOrUpdateGameRosters: Access records processed:300. Records saved or updated:472
+SaveOrUpdateGameRosters: Access records processed:400. Records saved or updated:672
+SaveOrUpdateGameRosters: Access records processed:500. Records saved or updated:872
+SaveOrUpdateGameRosters: Access records processed:600. Records saved or updated:1072
+SaveOrUpdateGameRosters: Access records processed:700. Records saved or updated:1272
+SaveOrUpdateGameRosters: Access records processed:800. Records saved or updated:1472
+SaveOrUpdateGameRosters: Access records processed:900. Records saved or updated:1672
+SaveOrUpdateGameRosters: Access records processed:1000. Records saved or updated:1872
+SaveOrUpdateGameRosters: Access records processed:1100. Records saved or updated:2072
+SaveOrUpdateGameRosters: Access records processed:1200. Records saved or updated:2272
+SaveOrUpdateGameRosters: Access records processed:1300. Records saved or updated:2472
+SaveOrUpdateGameRosters: Access records processed:1400. Records saved or updated:2672
+SaveOrUpdateGameRosters: Access records processed:1500. Records saved or updated:2872
+SaveOrUpdateGameRosters: Access records processed:1600. Records saved or updated:3072
+SaveOrUpdateGameRosters: Access records processed:1700. Records saved or updated:3272
+SaveOrUpdateGameRosters: Access records processed:1800. Records saved or updated:3472
+SaveOrUpdateGameRosters: Access records processed:1900. Records saved or updated:3672
+SaveOrUpdateGameRosters: Access records processed:2000. Records saved or updated:3840
+SaveOrUpdateGameRosters: GameRosters Count:3840 SaveOrUpdated:3840
+SaveOrUpdateGameRosters: TimeToProcess: 00:04:47.5434466
+SaveOrUpdateScoreSheetEntries: ScoreSheetEntries Count:837 SaveOrUpdated:0
+TimeToProcess: 00:06:03.4437878
+SaveOrUpdateScoreSheetEntryPenalties: ScoreSheetEntryPenalties Count:325 SaveOrUpdated:0
+TimeToProcess: 00:06:31.9564187
+LoadNewData: TimeToProcess: 00:06:31.9574187
+ProcessScoreSheets.ProcessScoreSheetEntries Modified:763 Time:00:01:24.8868553
+ProcessScoreSheets.ProcessScoreSheetEntryPenalties Modified:285 Time:00:00:36.7681030
+ProcessScoreSheets.ProcessScoreSheetEntriesIntoGameResults Modified:0 Time:00:03:19.5394130
+ProcessScoreSheets.ProcessGameResultsIntoTeamStandings Modified:8 Time:00:00:03.6102065
+ProcessScoreSheets.ProcessScoreSheetEntriesIntoPlayerStats Modified:4496 Time:00:17:51.2952746
+ProcessScoreSheets.ProcessPlayerStatsIntoWebStats Modified:18 Time:00:01:54.7375626
+ProcessScoreSheets no errors!
+Data Group 3: Updated PlayerStatuses Current 0
+TimeToProcess: 00:00:03.4271960

@@ -35,6 +35,56 @@ namespace LO30.Services
 
       #region SaveOrUpdate functions
 
+      #region SaveOrUpdate-Divisions (multi lookups)
+      public int SaveOrUpdateDivision(List<Division> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateDivision(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateDivision(Division toSave)
+      {
+        Division found;
+
+        // lookup by PK, if it exists
+        if (toSave.DivisionId > 0)
+        {
+          found = FindDivision(toSave.DivisionId, errorIfNotFound: false, errorIfMoreThanOneFound: true, populateFully: false);
+        }
+        else
+        {
+          // lookup by PK2
+          found = FindDivisionByPK2(toSave.DivisionLongName, errorIfNotFound: false, errorIfMoreThanOneFound: true, populateFully: false);
+
+          // if found, set missing PK
+          if (found != null)
+          {
+            toSave.DivisionId = found.DivisionId;
+          }
+        }
+
+
+        if (found == null)
+        {
+          _ctx.Divisions.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
       #region SaveOrUpdate-ForWebGoalieStat
       public int SaveOrUpdateForWebGoalieStat(List<ForWebGoalieStat> listToSave)
       {
@@ -205,7 +255,7 @@ namespace LO30.Services
       }
       #endregion
 
-      #region SaveOrUpdate-GameRoster
+      #region SaveOrUpdate-GameRoster (multi lookups)
       public int SaveOrUpdateGameRoster(List<GameRoster> listToSave)
       {
         var saved = 0;
@@ -539,9 +589,7 @@ namespace LO30.Services
 
       public int SaveOrUpdatePlayerRating(PlayerRating toSave)
       {
-        bool errorIfNotFound = false;
-        bool errorIfMoreThanOneFound = true;
-        PlayerRating found = FindPlayerRating(errorIfNotFound, errorIfMoreThanOneFound, toSave.SeasonId, toSave.PlayerId, toSave.StartYYYYMMDD, toSave.EndYYYYMMDD);
+        PlayerRating found = FindPlayerRating(toSave.SeasonId, toSave.PlayerId, toSave.StartYYYYMMDD, toSave.EndYYYYMMDD, errorIfNotFound: false, errorIfMoreThanOneFound: true, populateFully: false);
 
         if (found == null)
         {
@@ -556,7 +604,6 @@ namespace LO30.Services
 
         return ContextSaveChanges();
       }
-
       #endregion
 
       #region SaveOrUpdate-PlayerStatCareer
@@ -976,7 +1023,7 @@ namespace LO30.Services
       {
         bool errorIfNotFound = false;
         bool errorIfMoreThanOneFound = true;
-        TeamStanding found = FindTeamStanding(errorIfNotFound, errorIfMoreThanOneFound, toSave.SeasonTeamId, toSave.Playoff);
+        TeamStanding found = FindTeamStanding(errorIfNotFound, errorIfMoreThanOneFound, toSave.SeasonTeamId, toSave.Playoffs);
 
         if (found == null)
         {
@@ -996,6 +1043,43 @@ namespace LO30.Services
       #endregion
 
       #region find functions
+
+      #region Find-Division (addtl finds) NEW FORMAT
+
+      public Division FindDivision(int divisionId, bool errorIfNotFound = true, bool errorIfMoreThanOneFound = true, bool populateFully = false)
+      {
+        Expression<Func<Division, bool>> whereClause = x => x.DivisionId == divisionId;
+
+        string errMsgNotFoundFor = " DivisionId:" + divisionId;
+
+        return FindDivision(whereClause, errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound, populateFully);
+      }
+
+      public Division FindDivisionByPK2(string divisionLongName, bool errorIfNotFound = true, bool errorIfMoreThanOneFound = true, bool populateFully = false)
+      {
+        Expression<Func<Division, bool>> whereClause = x => x.DivisionLongName == divisionLongName;
+
+        string errMsgNotFoundFor = " DivisionLongName:" + divisionLongName;
+
+        return FindDivision(whereClause, errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound, populateFully);
+      }
+
+      private Division FindDivision(Expression<Func<Division, bool>> whereClause, string errMsgNotFoundFor, bool errorIfNotFound, bool errorIfMoreThanOneFound, bool populateFully)
+      {
+        List<Division> found;
+
+        if (populateFully)
+        {
+          found = _ctx.Divisions.Where(whereClause).ToList();
+        }
+        else
+        {
+          found = _ctx.Divisions.Where(whereClause).ToList();
+        }
+
+        return FindBase<Division>(found, "Division", errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound);
+      }
+      #endregion
 
       #region Find-ForWebGoalieStat
       public ForWebGoalieStat FindForWebGoalieStat(int pid, int stidpf, bool pfs)
@@ -1740,45 +1824,6 @@ namespace LO30.Services
       #endregion
 
       #region Find-PlayerRating (addtl finds) NEW FORMAT
-
-      public PlayerRating FindPlayerRating(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonId, int playerId, int startYYYYMMDD, int endYYYYMMDD)
-      {
-        var found = _ctx.PlayerRatings.Where(x => x.SeasonId == seasonId &&
-                                                  x.PlayerId == playerId &&
-                                                  x.StartYYYYMMDD == startYYYYMMDD &&
-                                                  x.EndYYYYMMDD == endYYYYMMDD)
-                                            .ToList();
-
-        if (errorIfNotFound == true && found.Count < 1)
-        {
-          throw new ArgumentNullException("found", "Could not find PlayerRating for" +
-                                                  " seasonId:" + seasonId +
-                                                  " PlayerId:" + playerId +
-                                                  " StartYYYYMMDD:" + startYYYYMMDD +
-                                                  " EndYYYYMMDD:" + endYYYYMMDD
-                                          );
-        }
-
-        if (errorIfMoreThanOneFound == true && found.Count > 1)
-        {
-          throw new ArgumentNullException("found", "More than 1 PlayerRating was not found for" +
-                                                  " seasonId:" + seasonId +
-                                                  " PlayerId:" + playerId +
-                                                  " StartYYYYMMDD:" + startYYYYMMDD +
-                                                  " EndYYYYMMDD:" + endYYYYMMDD
-                                          );
-        }
-
-        if (found.Count == 1)
-        {
-          return found[0];
-        }
-        else
-        {
-          return null;
-        }
-      }
-
       public PlayerRating FindPlayerRatingWithYYYYMMDD(int playerId, string position, int seasonId, int yyyymmdd, bool errorIfNotFound = true, bool errorIfMoreThanOneFound = true, bool populateFully = false)
       {
         Expression<Func<PlayerRating, bool>> whereClause = x => x.SeasonId == seasonId &&
@@ -2425,20 +2470,20 @@ namespace LO30.Services
       #endregion
 
       #region Find-TeamStanding
-      public TeamStanding FindTeamStanding(int seasonTeamId, bool playoff)
+      public TeamStanding FindTeamStanding(int seasonTeamId, bool playoffs)
       {
-        return FindTeamStanding(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonTeamId: seasonTeamId, playoff: playoff);
+        return FindTeamStanding(errorIfNotFound: true, errorIfMoreThanOneFound: true, seasonTeamId: seasonTeamId, playoffs: playoffs);
       }
 
-      public TeamStanding FindTeamStanding(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonTeamId, bool playoff)
+      public TeamStanding FindTeamStanding(bool errorIfNotFound, bool errorIfMoreThanOneFound, int seasonTeamId, bool playoffs)
       {
-        var found = _ctx.TeamStandings.Where(x => x.SeasonTeamId == seasonTeamId && x.Playoff == playoff).ToList();
+        var found = _ctx.TeamStandings.Where(x => x.SeasonTeamId == seasonTeamId && x.Playoffs == playoffs).ToList();
 
         if (errorIfNotFound == true && found.Count < 1)
         {
           throw new ArgumentNullException("found", "Could not find TeamStanding for" +
                                                   " SeasonTeamId:" + seasonTeamId +
-                                                  " Playoff:" + playoff
+                                                  " Playoffs:" + playoffs
                                           );
         }
 
@@ -2446,7 +2491,7 @@ namespace LO30.Services
         {
           throw new ArgumentNullException("found", "More than 1 TeamStanding was not found for" +
                                                   " SeasonTeamId:" + seasonTeamId +
-                                                  " Playoff:" + playoff
+                                                  " Playoffs:" + playoffs
                                           );
         }
 

@@ -116,7 +116,7 @@ namespace LO30.Data
       return gameOutcome;
     }
 
-    public List<GameOutcome> GetGameOutcomesBySeasonTeamId(int seasonTeamId, bool fullDetail)
+    public List<GameOutcome> GetGameOutcomesBySeasonTeamId(int seasonId, bool playoffs, int seasonTeamId, bool fullDetail)
     {
       List<GameOutcome> gameOutcomes = null;
 
@@ -139,7 +139,7 @@ namespace LO30.Data
                     .Include("OpponentGameTeam.SeasonTeam.Team")
                     .Include("OpponentGameTeam.SeasonTeam.Team.Coach")
                     .Include("OpponentGameTeam.SeasonTeam.Team.Sponsor")
-                    .Where(x => x.GameTeam.SeasonTeam.SeasonTeamId == seasonTeamId)
+                    .Where(x => x.GameTeam.SeasonTeam.SeasonTeamId == seasonTeamId && x.GameTeam.Game.Playoffs == playoffs)
                     .ToList();
       }
       else
@@ -147,7 +147,7 @@ namespace LO30.Data
         gameOutcomes = _ctx.GameOutcomes
                     .Include("GameTeam")
                     .Include("GameTeam.SeasonTeam")
-                    .Where(x => x.GameTeam.SeasonTeam.SeasonTeamId == seasonTeamId)
+                    .Where(x => x.GameTeam.SeasonTeam.SeasonTeamId == seasonTeamId && x.GameTeam.Game.Playoffs == playoffs)
                     .ToList();
       }
 

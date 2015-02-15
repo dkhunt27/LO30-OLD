@@ -5,10 +5,11 @@ lo30NgApp.controller('statsGoaliesController',
   [
     '$scope',
     '$timeout',
+    '$routeParams',
     'alertService',
     'dataServiceForWebGoalieStats',
     'dataServiceSettings',
-    function ($scope, $timeout, alertService, dataServiceForWebGoalieStats, dataServiceSettings) {
+    function ($scope, $timeout, $routeParams, alertService, dataServiceForWebGoalieStats, dataServiceSettings) {
 
       var alertTitleDataRetrievalSuccessful = "Data Retrieval Successful";
       var alertTitleDataRetrievalUnsuccessful = "Data Retrieval Unsuccessful";
@@ -251,6 +252,10 @@ lo30NgApp.controller('statsGoaliesController',
         ];
 
         $scope.data = {
+          selectedSeasonId: -1,
+          selectedPlayoffs: false,
+          seasonName: "not set",
+          seasonTypeName: "not set",
           goalieStats: [],
           goalieStatsDataGoodThru: "n/a",
           villaExchangeRateOn: false,
@@ -271,11 +276,11 @@ lo30NgApp.controller('statsGoaliesController',
         };
       };
 
-      $scope.getForWebGoalieStats = function () {
-        $scope.initializeScopeVariables();
+      $scope.getForWebGoalieStats = function (seasonId, playoffs) {
+        //$scope.initializeScopeVariables();
 
         var retrievedType = "GoalieStats";
-        dataServiceForWebGoalieStats.listForWebGoalieStats().$promise.then(
+        dataServiceForWebGoalieStats.listForWebGoalieStats(seasonId, playoffs).$promise.then(
           function (result) {
             // service call on success
             if (result && result.length && result.length > 0) {
@@ -301,12 +306,12 @@ lo30NgApp.controller('statsGoaliesController',
           }
         );
 
-        dataServiceForWebGoalieStats.getForWebGoalieStatsDataGoodThru().then(
+        dataServiceForWebGoalieStats.getForWebGoalieStatsDataGoodThru(seasonId).$promise.then(
           function (result) {
             // service call on success
-            if (result && result.data) {
+            if (result && result.gt) {
 
-              $scope.data.goalieStatsDataGoodThru = result.data.replace(/\"/g, "");  // TODO figure out why its has double "s
+              $scope.data.goalieStatsDataGoodThru = result.gt;
               $scope.requests.goalieStatsDataGoodThruLoaded = true;
 
               alertService.successRetrieval("GoalieStatsGoodThru", 1);
@@ -325,7 +330,8 @@ lo30NgApp.controller('statsGoaliesController',
         dataServiceSettings.listSettings().$promise.then(
           function (result) {
             // service call on success
-            if (result && result.length && result.length > 0) {
+            if (result && result.length > -1) {
+              // there can be no settings, so no length > 0
 
               angular.forEach(result, function (item) {
                 if (item.settingName === "VillaExchangeRateOn") {
@@ -357,7 +363,30 @@ lo30NgApp.controller('statsGoaliesController',
       $scope.activate = function () {
         $scope.initializeScopeVariables();
         $scope.setWatches();
-        $scope.getForWebGoalieStats();
+
+        //TODO make this a user selection
+        if ($routeParams.seasonId === null) {
+          $scope.data.selectedSeasonId = 54;
+          $scope.data.selectedPlayoffs = false;
+        } else {
+          $scope.data.selectedSeasonId = $routeParams.seasonId;
+          $scope.data.selectedPlayoffs = $routeParams.playoffs;
+        }
+
+        // TODO get this from a service
+        if ($scope.data.selectedPlayoffs == "true") {
+          $scope.data.seasonTypeName = "Playoffs";
+        } else {
+          $scope.data.seasonTypeName = "Regular Season";
+        }
+
+        if ($scope.data.selectedSeasonId == "54") {
+          $scope.data.seasonName = "2014 - 2105";
+        } else {
+          $scope.data.seasonName = "not mapped";
+        }
+
+        $scope.getForWebGoalieStats($scope.data.selectedSeasonId, $scope.data.selectedPlayoffs);
         $scope.getSettings();
         $timeout(function () {
           $scope.sortAscOnly('gaa');

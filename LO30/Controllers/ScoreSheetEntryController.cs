@@ -43,7 +43,7 @@ namespace LO30.Controllers
     //  TimeSpan diffFromLast = new TimeSpan();
 
     //  int seasonId = 54;
-    //  bool playoff = false;
+    //  bool playoffs = false;
     //  int startingGameId = 3200;
     //  int endingGameId = 3227;
 
@@ -63,7 +63,7 @@ namespace LO30.Controllers
 
     //  Debug.Print("GameResults into TeamStandings processing...");
     //  last = DateTime.Now;
-    //  _repo.ProcessGameResultsIntoTeamStandings(seasonId, playoff, startingGameId, endingGameId);
+    //  _repo.ProcessGameResultsIntoTeamStandings(seasonId, playoffs, startingGameId, endingGameId);
     //  Debug.Print("GameResults into TeamStandings processed");
     //  diffFromLast = DateTime.Now - last;
     //  Debug.Print("TimeToProcess: " + diffFromLast.ToString());
@@ -92,7 +92,7 @@ namespace LO30.Controllers
     //  TimeSpan diffFromLast = new TimeSpan();
 
     //  int seasonId = 54;
-    //  bool playoff = false;
+    //  bool playoffs = false;
     //  int startingGameId = 3200;
     //  int endingGameId = 3227;
 

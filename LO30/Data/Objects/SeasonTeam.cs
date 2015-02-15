@@ -18,31 +18,23 @@ namespace LO30.Data.Objects
     [Required, ForeignKey("Team")]
     public int TeamId { get; set; }
 
-    [MaxLength(35)]
-    public string Division { get; set; }
+    [Required, ForeignKey("Division")]
+    public int DivisionId { get; set; }
 
     public virtual Season Season { get; set; }
     public virtual Team Team { get; set; }
+    public virtual Division Division { get; set; }
 
     public SeasonTeam()
     {
     }
 
-    public SeasonTeam(int stid, int sid, int tid)
+    public SeasonTeam(int stid, int sid, int tid, int div)
     {
       this.SeasonTeamId = stid;
       this.SeasonId = sid;
       this.TeamId = tid;
-
-      Validate();
-    }
-
-    public SeasonTeam(int stid, int sid, int tid, string div)
-    {
-      this.SeasonTeamId = stid;
-      this.SeasonId = sid;
-      this.TeamId = tid;
-      this.Division = div;
+      this.DivisionId = div;
 
       Validate();
     }

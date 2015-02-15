@@ -39,6 +39,8 @@ namespace LO30.Data.Objects
     [MaxLength(2)]
     public string ShortHandedPowerPlay { get; set; }
 
+    public DateTime UpdatedOn { get; set; }
+
     public virtual Game Game { get; set; }
 
     public static List<ScoreSheetEntry> LoadListFromAccessDbJsonFile(string filePath, int startingGameIdToProcess, int endingGameIdToProcess)
@@ -72,6 +74,8 @@ namespace LO30.Data.Objects
             homeTeam = false;
           }
 
+          DateTime updatedOn = json["UPDATED_ON"];
+
           output.Add(new ScoreSheetEntry()
           {
             ScoreSheetEntryId = json["SCORE_SHEET_ENTRY_ID"],
@@ -84,6 +88,7 @@ namespace LO30.Data.Objects
             Assist3 = json["ASSIST3"],
             TimeRemaining = json["TIME_REMAINING"],
             ShortHandedPowerPlay = json["SH_PP"],
+            UpdatedOn = updatedOn
           });
         }
       }

@@ -8,15 +8,15 @@ lo30NgApp.factory("dataServiceForWebTeamStandings",
     "$http",
     function (constApisUrl, $resource, $http) {
 
-      var resourceForWebTeamStandings = $resource(constApisUrl + '/forwebteamstandings');
-      var foWebTeamStandingsDataGoodThruUrl = constApisUrl + '/forwebteamstandingsdatagoodthru';
+      var resourceForWebTeamStandings = $resource(constApisUrl + '/forWebTeamStandings/:seasonId/:playoffs', { seasonId: '@seasonId', playoffs: '@playoffs' });
+      var resourceFoWebTeamStandingsDataGoodThru = $resource(constApisUrl + '/forWebTeamStandingsDataGoodThru/:seasonId', { seasonId: '@seasonId' });
 
-      var listForWebTeamStandings = function () {
-        return resourceForWebTeamStandings.query();
+      var listForWebTeamStandings = function (seasonId, playoffs) {
+        return resourceForWebTeamStandings.query({ seasonId: seasonId, playoffs: playoffs });
       };
 
-      var getForWebTeamStandingsDataGoodThru = function () {
-        return $http.get(foWebTeamStandingsDataGoodThruUrl);
+      var getForWebTeamStandingsDataGoodThru = function (seasonId) {
+        return resourceFoWebTeamStandingsDataGoodThru.get({ seasonId: seasonId });
       };
 
       return {

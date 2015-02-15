@@ -14,6 +14,8 @@ lo30NgApp.controller('gamesResultsController',
       $scope.initializeScopeVariables = function () {
 
         $scope.data = {
+          selectedSeasonId: -1,
+          selectedPlayoffs: false,
           selectedSeasonTeamId: -1,
           game: {},
           gameOutcomes: [],
@@ -30,11 +32,11 @@ lo30NgApp.controller('gamesResultsController',
         };
       };
 
-      $scope.getGameOutcomes = function (seasonTeamId) {
+      $scope.getGameOutcomes = function (seasonId, playoffs, seasonTeamId) {
         var retrievedType = "GameOutcomes";
 
         var fullDetail = true;
-        dataServiceGameOutcomes.listGameOutcomesBySeasonTeamId(seasonTeamId, fullDetail).$promise.then(
+        dataServiceGameOutcomes.listGameOutcomesBySeasonTeamId(seasonId, playoffs, seasonTeamId, fullDetail).$promise.then(
           function (result) {
             if (result && result.length && result.length > 0) {
 
@@ -56,10 +58,10 @@ lo30NgApp.controller('gamesResultsController',
         );
       };
 
-      $scope.getForWebTeamStandings = function (seasonTeamId) {
+      $scope.getForWebTeamStandings = function (seasonId, playoffs, seasonTeamId) {
         var retrievedType = "ForWebTeamStandings";
 
-        dataServiceForWebTeamStandings.listForWebTeamStandings().$promise.then(
+        dataServiceForWebTeamStandings.listForWebTeamStandings(seasonId, playoffs).$promise.then(
           function (result) {
             // service call on success
             if (result && result.length && result.length > 0) {
@@ -82,15 +84,15 @@ lo30NgApp.controller('gamesResultsController',
         );
       };
 
-      $scope.getForWebTeamStandingsGoodThru = function () {
+      $scope.getForWebTeamStandingsGoodThru = function (seasonId) {
         var retrievedType = "ForWebTeamStandingsGoodThru";
 
-        dataServiceForWebTeamStandings.getForWebTeamStandingsDataGoodThru().then(
+        dataServiceForWebTeamStandings.getForWebTeamStandingsDataGoodThru(seasonId).$promise.then(
           function (result) {
             // service call on success
-            if (result && result.data) {
+            if (result && result.gt) {
 
-              $scope.data.teamStandingsDataGoodThru = result.data.replace(/\"/g, "");  // TODO figure out why its has double "s
+              $scope.data.teamStandingsDataGoodThru = result.gt;
               $scope.requests.teamStandingsDataGoodThruLoaded = true;
 
               alertService.successRetrieval("TeamStandingsGoodThru", 1);
@@ -111,15 +113,19 @@ lo30NgApp.controller('gamesResultsController',
         $scope.setWatches();
 
         //TODO make this a user selection
-        if ($routeParams.gameId === null) {
+        if ($routeParams.seasonId === null) {
+          $scope.data.selectedSeasonId = 54;
+          $scope.data.selectedPlayoffs = false;
           $scope.data.selectedSeasonTeamId = 308;
         } else {
+          $scope.data.selectedSeasonId = $routeParams.seasonId;
+          $scope.data.selectedPlayoffs = $routeParams.playoffs;
           $scope.data.selectedSeasonTeamId = $routeParams.seasonTeamId;
         }
 
-        $scope.getGameOutcomes($scope.data.selectedSeasonTeamId);
-        $scope.getForWebTeamStandings($scope.data.selectedSeasonTeamId);
-        $scope.getForWebTeamStandingsGoodThru();
+        $scope.getGameOutcomes($scope.data.selectedSeasonId, $scope.data.selectedPlayoffs, $scope.data.selectedSeasonTeamId);
+        $scope.getForWebTeamStandings($scope.data.selectedSeasonId, $scope.data.selectedPlayoffs, $scope.data.selectedSeasonTeamId);
+        $scope.getForWebTeamStandingsGoodThru($scope.data.selectedSeasonId);
         $timeout(function () {
         }, 0);  // using timeout so it fires when done rendering
       };

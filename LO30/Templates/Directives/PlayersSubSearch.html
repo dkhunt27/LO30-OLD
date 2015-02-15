@@ -24,25 +24,27 @@
     </div>
   </div>
   <br />
-  <table class="table table-condensed table-bordered table-striped table-dk-blue">
-    <thead>
-      <tr>
-        <td>Id</td>
-        <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'teamName'}" ng-click="sortAscOnly('teamName')">Team</td>
-        <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'firstName'}" ng-click="sortAscOnly('firstName')">First Name</td>
-        <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'lastName'}" ng-click="sortAscOnly('lastName')">Last Name</td>
-        <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'position'}" ng-click="sortAscOnly('position')">Position</td>
-        <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'rating'}" ng-click="sortDescOnly('rating')">Rating</td>
-    </thead>
-    <tbody>
-      <tr ng-repeat="item in data.playersSearch | filterize:user.searchPos:user.searchRateMin:user.searchRateMax | orderBy:sortOn:sortDirection">
-        <td>{{item.playerId}}</td>
-        <td ng-class="{'td-sorted-by':sortOn === 'teamName' }">{{item.teamName}}</td>
-        <td ng-class="{'td-sorted-by':sortOn === 'firstName' }">{{item.firstName}}</td>
-        <td ng-class="{'td-sorted-by':sortOn === 'lastName' }">{{item.lastName}}</td>
-        <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'position' }">{{item.position}}</td>
-        <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'rating'}">{{item.rating}}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table class="table table-condensed table-bordered table-striped table-dk-blue">
+      <thead>
+        <tr>
+          <td>Id</td>
+          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'teamName'}" ng-click="sortAscOnly('teamName')">Team</td>
+          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'firstName'}" ng-click="sortAscOnly('firstName')">First Name</td>
+          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'lastName'}" ng-click="sortAscOnly('lastName')">Last Name</td>
+          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'position'}" ng-click="sortAscOnly('position')">Position</td>
+          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'rating'}" ng-click="sortDescOnly('rating')">Rating</td>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in data.playersSearch | filterize:user.searchPos:user.searchRateMin:user.searchRateMax | orderBy:sortOn:sortDirection">
+          <td>{{item.playerId}}</td>
+          <td ng-class="{'td-sorted-by':sortOn === 'teamName' }">{{item.teamName}}</td>
+          <td ng-class="{'td-sorted-by':sortOn === 'firstName' }">{{item.firstName}}</td>
+          <td ng-class="{'td-sorted-by':sortOn === 'lastName' }">{{item.lastName}}</td>
+          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'position' }">{{item.position}}</td>
+          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'rating'}">{{item.rating}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

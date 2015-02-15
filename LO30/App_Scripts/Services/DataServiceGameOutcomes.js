@@ -9,7 +9,7 @@ lo30NgApp.factory("dataServiceGameOutcomes",
 
       var resourceGameOutcomes = $resource(constApisUrl + '/gameOutcomes/:fullDetail', { fullDetail: '@fullDetail' });
       var resourceGameOutcomesByGameId = $resource(constApisUrl + '/gameOutcomes/:gameId/:fullDetail', { gameId: '@gameId', fullDetail: '@fullDetail' });
-      var resourceGameOutcomesBySeasonTeamId = $resource(constApisUrl + '/gameOutcomesBySeasonTeam/:seasonTeamId/:fullDetail', { seasonTeamId: '@seasonTeamId', fullDetail: '@fullDetail' });
+      var resourceGameOutcomesBySeasonTeamId = $resource(constApisUrl + '/gameOutcomesBySeasonTeam/:seasonId/:playoffs/:seasonTeamId/:fullDetail', { seasonId: '@seasonId', playoffs: '@playoffs', seasonTeamId: '@seasonTeamId', fullDetail: '@fullDetail' });
 
       var resourceGameOutcomeByGameIdAndHomeTeam = $resource(constApisUrl + '/gameOutcome/:gameId/:homeTeam/:fullDetail', { gameId: '@gameId', homeTeam: '@homeTeam', fullDetail: '@fullDetail' });
 
@@ -25,8 +25,8 @@ lo30NgApp.factory("dataServiceGameOutcomes",
         return resourceGameOutcomesByGameIdAndHomeTeam.get({ gameId: gameId, homeTeam: homeTeam, fullDetail: fullDetail });
       };
 
-      var listGameOutcomesBySeasonTeamId = function (seasonTeamId, fullDetail) {
-        return resourceGameOutcomesBySeasonTeamId.query({ seasonTeamId: seasonTeamId, fullDetail: fullDetail });
+      var listGameOutcomesBySeasonTeamId = function (seasonId, playoffs, seasonTeamId, fullDetail) {
+        return resourceGameOutcomesBySeasonTeamId.query({ seasonId: seasonId, playoffs: playoffs, seasonTeamId: seasonTeamId, fullDetail: fullDetail });
       };
 
       return {

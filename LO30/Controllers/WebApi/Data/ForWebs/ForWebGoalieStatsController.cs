@@ -14,9 +14,9 @@ namespace LO30.Controllers.Data.ForWebs
       _repo = repo;
     }
 
-    public List<ForWebGoalieStat> GetForWebGoalieStats()
+    public List<ForWebGoalieStat> GetForWebGoalieStats(int seasonId, bool playoffs)
     {
-      var results = _repo.GetGoalieStatsForWeb();
+      var results = _repo.GetGoalieStatsForWeb(seasonId, playoffs);
       return results.OrderBy(x => x.GAA).ToList();
     }
   }

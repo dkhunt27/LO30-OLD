@@ -39,7 +39,7 @@ namespace DataLoader
         int seasonId = 54;
         bool playoff = true;
         int startingGameId = 3324;
-        int endingGameId = 3333;
+        int endingGameId = 3339;
 
         //bool playoff = false;
         //int startingGameId = 3200;
@@ -136,9 +136,9 @@ namespace DataLoader
 
         //SaveOrUpdateSeasons(context, lo30ContextService, folderPath, seasonIdToProcess);
         //SaveOrUpdateTeamRosters(context, lo30ContextService, folderPath, seasonIdToProcess, playoffToProcess);
-        SaveOrUpdateGames(context, lo30ContextService, folderPath, startingGameIdToProcess, endingGameIdToProcess);
-        SaveOrUpdateGameTeams(context, lo30ContextService, folderPath, startingGameIdToProcess, endingGameIdToProcess);
-        SaveOrUpdateGameRosters(context, lo30ContextService, folderPath, startingGameIdToProcess, endingGameIdToProcess);
+        //SaveOrUpdateGames(context, lo30ContextService, folderPath, startingGameIdToProcess, endingGameIdToProcess);
+        //SaveOrUpdateGameTeams(context, lo30ContextService, folderPath, startingGameIdToProcess, endingGameIdToProcess);
+        //SaveOrUpdateGameRosters(context, lo30ContextService, folderPath, startingGameIdToProcess, endingGameIdToProcess);
 
         #region 4:ScoreSheetEntries...using loadJson
         List<ScoreSheetEntry> scoreSheetEntries = ScoreSheetEntry.LoadListFromAccessDbJsonFile(folderPath + "ScoreSheetEntries.json", startingGameIdToProcess, endingGameIdToProcess);
@@ -440,7 +440,7 @@ namespace DataLoader
         }
         #endregion
 
-        #region 2:Seasons
+        #region 2:Seasons (not using function)
         if (context.Seasons.Count() == 0)
         {
           Print("Data Group 2: Creating Seasons");
@@ -652,28 +652,17 @@ namespace DataLoader
         }
         #endregion
 
-        #region 2:Players
-        if (context.Players.Count() == 0)
+        #region 2:Divisions
+        if (context.Divisions.Count() == 0)
         {
-          Print("Data Group 2: Creating Players");
+          Print("Data Group 2: Creating Divisions");
           last = DateTime.Now;
+          int saveOrUpdatedCount = 0;
 
-          var player = new Player()
-          {
-            PlayerId = 0,
-            FirstName = "Unknown",
-            LastName = "Player",
-            Suffix = null,
-            PreferredPosition = "X",
-            Shoots = "X",
-            BirthDate = DateTime.Parse("1/1/1970"),
-            Profession = null,
-            WifesName = null
-          };
+          var division = new Division(did: 0, dln: "No Division", dsn: "n/a");
+          saveOrUpdatedCount =+ _lo30ContextService.SaveOrUpdateDivision(division);
 
-          context.Players.Add(player);
-
-          dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "Players.json");
+          dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "Teams.json");
           int count = parsedJson.Count;
 
           Print("Access records to process:" + count);
@@ -682,96 +671,39 @@ namespace DataLoader
           {
             if (d % 100 == 0) { Print("Access records processed:" + d); }
             var json = parsedJson[d];
-            int playerId = json["PLAYER_ID"];
 
-            string firstName = json["PLAYER_FIRST_NAME"];
-            if (string.IsNullOrWhiteSpace(firstName))
+            string divName = json["TEAM_DIVISION_NAME"];
+
+            if (!string.IsNullOrWhiteSpace(divName))
             {
-              firstName = "_";
-            };
-
-            string lastName = json["PLAYER_LAST_NAME"];
-            if (string.IsNullOrWhiteSpace(lastName))
-            {
-              lastName = "_";
-            };
-
-            string position, positionMapped;
-            position = json["PLAYER_POSITION"];
-
-            if (string.IsNullOrWhiteSpace(position))
-            {
-              position = "X";
+              var found = _lo30ContextService.FindDivisionByPK2(divName, errorIfNotFound: false, errorIfMoreThanOneFound: true, populateFully: false);
+              if (found == null)
+              { // only add new divisions
+                division = new Division()
+                {
+                  DivisionLongName = divName,
+                  DivisionShortName = "TBD"
+                };
+                saveOrUpdatedCount =+ _lo30ContextService.SaveOrUpdateDivision(division);
+              }
             }
-
-            switch (position.ToLower())
-            {
-              case "f":
-              case "forward":
-                positionMapped = "F";
-                break;
-              case "d":
-              case "defense":
-                positionMapped = "D";
-                break;
-              case "g":
-              case "goal":
-              case "goalie":
-                positionMapped = "G";
-                break;
-              default:
-                positionMapped = "X";
-                break;
-            }
-
-            string shoots, shootsMapped;
-            shoots = json["SHOOTS"];
-            if (string.IsNullOrWhiteSpace(shoots))
-            {
-              shoots = "X";
-            }
-
-            switch (shoots.ToLower())
-            {
-              case "l":
-                shootsMapped = "L";
-                break;
-              case "r":
-                shootsMapped = "R";
-                break;
-              default:
-                shootsMapped = "X";
-                break;
-            }
-
-            DateTime? birthDate = null;
-
-            if (json["BIRTHDATE"] != null)
-            {
-              birthDate = json["BIRTHDATE"];
-            }
-
-            player = new Player()
-            {
-              PlayerId = playerId,
-              FirstName = firstName,
-              LastName = lastName,
-              Suffix = json["PLAYER_SUFFIX"],
-              PreferredPosition = positionMapped,
-              Shoots = shootsMapped,
-              BirthDate = birthDate,
-              Profession = json["PROFESSION"],
-              WifesName = json["WIFES_NAME"]
-            };
-
-            context.Players.Add(player);
           }
 
-          Print("Data Group 2: Created Players");
+          Print("Data Group 2: Saved or updated Divisions " + saveOrUpdatedCount);
           diffFromLast = DateTime.Now - last;
           Print("TimeToProcess: " + diffFromLast.ToString());
+        }
 
-          _lo30ContextService.ContextSaveChanges();
+        #endregion
+
+        #region 2:Players (using function)
+        if (context.Players.Count() == 0)
+        {
+          Print("Data Group 2: Creating Players");
+          last = DateTime.Now;
+
+          SaveOrUpdatePlayers(context, _lo30ContextService, folderPath);
+
           Print("Data Group 2: Saved Players " + context.Players.Count());
           diffFromLast = DateTime.Now - last;
           Print("TimeToProcess: " + diffFromLast.ToString());
@@ -786,35 +718,36 @@ namespace DataLoader
 
           #region add the position night placeholders for this season
           var team = context.Teams.Where(t => t.TeamShortName == "1st").FirstOrDefault();
-          var seasonTeam = new SeasonTeam(stid: 321, sid: 54, tid: team.TeamId);
+          var divId = 1;
+          var seasonTeam = new SeasonTeam(stid: 321, sid: 54, tid: team.TeamId, div: divId);
           context.SeasonTeams.Add(seasonTeam);
 
           team = context.Teams.Where(t => t.TeamShortName == "2nd").FirstOrDefault();
-          seasonTeam = new SeasonTeam(stid: 322, sid: 54, tid: team.TeamId);
+          seasonTeam = new SeasonTeam(stid: 322, sid: 54, tid: team.TeamId, div: divId);
           context.SeasonTeams.Add(seasonTeam);
 
           team = context.Teams.Where(t => t.TeamShortName == "3rd").FirstOrDefault();
-          seasonTeam = new SeasonTeam(stid: 323, sid: 54, tid: team.TeamId);
+          seasonTeam = new SeasonTeam(stid: 323, sid: 54, tid: team.TeamId, div: divId);
           context.SeasonTeams.Add(seasonTeam);
 
           team = context.Teams.Where(t => t.TeamShortName == "4th").FirstOrDefault();
-          seasonTeam = new SeasonTeam(stid: 324, sid: 54, tid: team.TeamId);
+          seasonTeam = new SeasonTeam(stid: 324, sid: 54, tid: team.TeamId, div: divId);
           context.SeasonTeams.Add(seasonTeam);
 
           team = context.Teams.Where(t => t.TeamShortName == "5th").FirstOrDefault();
-          seasonTeam = new SeasonTeam(stid: 325, sid: 54, tid: team.TeamId);
+          seasonTeam = new SeasonTeam(stid: 325, sid: 54, tid: team.TeamId, div: divId);
           context.SeasonTeams.Add(seasonTeam);
 
           team = context.Teams.Where(t => t.TeamShortName == "6th").FirstOrDefault();
-          seasonTeam = new SeasonTeam(stid: 326, sid: 54, tid: team.TeamId);
+          seasonTeam = new SeasonTeam(stid: 326, sid: 54, tid: team.TeamId, div: divId);
           context.SeasonTeams.Add(seasonTeam);
 
           team = context.Teams.Where(t => t.TeamShortName == "7th").FirstOrDefault();
-          seasonTeam = new SeasonTeam(stid: 327, sid: 54, tid: team.TeamId);
+          seasonTeam = new SeasonTeam(stid: 327, sid: 54, tid: team.TeamId, div: divId);
           context.SeasonTeams.Add(seasonTeam);
 
           team = context.Teams.Where(t => t.TeamShortName == "8th").FirstOrDefault();
-          seasonTeam = new SeasonTeam(stid: 328, sid: 54, tid: team.TeamId);
+          seasonTeam = new SeasonTeam(stid: 328, sid: 54, tid: team.TeamId, div: divId);
           context.SeasonTeams.Add(seasonTeam);
           #endregion
 
@@ -837,7 +770,13 @@ namespace DataLoader
             string div = json["TEAM_DIVISION_NAME"];
             int tid = team.TeamId;
 
-            seasonTeam = new SeasonTeam(stid, sid, tid, div);
+            divId = 1;
+            if (!string.IsNullOrWhiteSpace(div))
+            {
+              var division = context.Divisions.Where(x => x.DivisionLongName == div).FirstOrDefault();
+              divId = division.DivisionId;
+            }
+            seasonTeam = new SeasonTeam(stid, sid, tid, divId);
 
             context.SeasonTeams.Add(seasonTeam);
           }
@@ -853,128 +792,35 @@ namespace DataLoader
         }
         #endregion
 
-        #region 3:Games
+        #region 3:Games (using function)
         if (context.Games.Count() == 0)
         {
           Print("Data Group 3: Creating Games");
           last = DateTime.Now;
 
-          dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "Games.json");
-          int count = parsedJson.Count;
+          SaveOrUpdateGames(context, _lo30ContextService, folderPath, startingGameIdToProcess: 3200, endingGameIdToProcess: 3319);  // sid 54, pfs:false
+          SaveOrUpdateGames(context, _lo30ContextService, folderPath, startingGameIdToProcess: 3324, endingGameIdToProcess: 3377);  // sid 54, pfs:true
 
-          Print("Access records to process:" + count);
-
-          for (var d = 0; d < parsedJson.Count; d++)
-          {
-            if (d % 100 == 0) { Print("Access records processed:" + d); }
-            var json = parsedJson[d];
-
-            int seasonId = json["SEASON_ID"];
-            int gameId = json["GAME_ID"];
-            DateTime gameDate = json["GAME_DATE"];
-            DateTime gameTime = json["GAME_TIME"];
-            bool playoffGame = json["PLAYOFF_GAME_IND"];
-
-            var timeSpan = new TimeSpan(gameTime.Hour, gameTime.Minute, gameTime.Second);
-
-            var gameDateTime = gameDate.Add(timeSpan);
-
-            var game = new Game(
-                  gid: gameId,
-                  time: gameDateTime,
-                  loc: "not set",
-                  sid: seasonId,
-                  play: playoffGame
-            );
-
-            context.Games.Add(game);
-          }
-
-          Print("Data Group 3: Created Games");
-          diffFromLast = DateTime.Now - last;
-          Print("TimeToProcess: " + diffFromLast.ToString());
-
-          _lo30ContextService.ContextSaveChanges();
           Print("Data Group 3: Saved Games " + context.Games.Count());
           diffFromLast = DateTime.Now - last;
           Print("TimeToProcess: " + diffFromLast.ToString());
         }
         #endregion
 
-        #region 3:GameTeams
+        #region 3:GameTeams (using function)
         if (context.GameTeams.Count() == 0)
         {
-          Print("Data Group 3: Creating GameTeams");
-          last = DateTime.Now;
 
-          dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "Games.json");
-          int count = parsedJson.Count;
+            Print("Data Group 3: Creating GameTeams");
+            last = DateTime.Now;
 
-          Print("Access records to process:" + count);
+            SaveOrUpdateGameTeams(context, _lo30ContextService, folderPath, startingGameIdToProcess: 3200, endingGameIdToProcess: 3319);  // sid 54, pfs:false
+            SaveOrUpdateGameTeams(context, _lo30ContextService, folderPath, startingGameIdToProcess: 3324, endingGameIdToProcess: 3377);  // sid 54, pfs:true
 
-          for (var d = 0; d < parsedJson.Count; d++)
-          {
-            if (d % 100 == 0) { Print("Access records processed:" + d); }
-            var json = parsedJson[d];
-
-            int gameId = json["GAME_ID"];
-            int homeTeamId, awayTeamId;
-
-            switch (gameId)
-            {
-              case 3276:
-                homeTeamId = 322;
-                awayTeamId = 321;
-                break;
-              case 3277:
-                homeTeamId = 324;
-                awayTeamId = 323;
-                break;
-              case 3278:
-                homeTeamId = 326;
-                awayTeamId = 325;
-                break;
-              case 3279:
-                homeTeamId = 328;
-                awayTeamId = 327;
-                break;
-              case 3316:
-                homeTeamId = 328;
-                awayTeamId = 327;
-                break;
-              case 3317:
-                homeTeamId = 326;
-                awayTeamId = 325;
-                break;
-              case 3318:
-                homeTeamId = 324;
-                awayTeamId = 323;
-                break;
-              case 3319:
-                homeTeamId = 322;
-                awayTeamId = 321;
-                break;
-              default:
-                homeTeamId = json["HOME_TEAM_ID"];
-                awayTeamId = json["AWAY_TEAM_ID"];
-                break;
-            };
-
-            var gameTeam = new GameTeam(gid: gameId, ht: true, stid: homeTeamId);
-            context.GameTeams.Add(gameTeam);
-
-            gameTeam = new GameTeam(gid: gameId, ht: false, stid: awayTeamId);
-            context.GameTeams.Add(gameTeam);
-          }
-
-          Print("Data Group 3: Created GameTeams");
-          diffFromLast = DateTime.Now - last;
-          Print("TimeToProcess: " + diffFromLast.ToString());
-
-          _lo30ContextService.ContextSaveChanges();
-          Print("Data Group 3: Saved GameTeams " + context.GameTeams.Count());
-          diffFromLast = DateTime.Now - last;
-          Print("TimeToProcess: " + diffFromLast.ToString());
+            Print("Data Group 3: Saved GameTeams " + context.GameTeams.Count());
+            diffFromLast = DateTime.Now - last;
+            Print("TimeToProcess: " + diffFromLast.ToString());
+          
         }
         #endregion
 
@@ -1310,429 +1156,33 @@ namespace DataLoader
         }
         #endregion
 
-        #region 3:TeamRosters...dependency on Season, SeasonTeam, PlayerDrafts, and PlayerRatings
+        #region 3:TeamRosters (using function)
         if (context.TeamRosters.Count() == 0)
         {
           Print("Data Group 3: Creating TeamRosters");
           last = DateTime.Now;
 
-          dynamic parsedJson = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "TeamRosters.json");
-          int count = parsedJson.Count;
+          SaveOrUpdateTeamRosters(context, _lo30ContextService, folderPath, seasonIdToProcess: 54, playoffToProcess: false);
+          SaveOrUpdateTeamRosters(context, _lo30ContextService, folderPath, seasonIdToProcess: 54, playoffToProcess: true);
 
-          Print("Access records to process:" + count);
-
-          for (var d = 0; d < parsedJson.Count; d++)
-          {
-            if (d % 100 == 0) { Print("Access records processed:" + d); }
-            var json = parsedJson[d];
-
-            int seasonId = json["SEASON_ID"];
-
-            // ONLY PROCESS THIS YEARS...TODO implement position/draft lookup for other years
-            if (seasonId == 54)
-            {
-
-              int teamId = json["TEAM_ID"];
-              int playerId = json["PLAYER_ID"];
-              bool playoff = json["PLAYOFF_SEASON_IND"];
-
-              int playerNumber = -1;
-              if (json["PLAYER_NUMBER"] != null)
-              {
-                playerNumber = json["PLAYER_NUMBER"];
-              }
-
-              // based on the draft spot, determine team roster line and position
-              var seasonTeam = _lo30ContextService.FindSeasonTeam(teamId);
-              var season = _lo30ContextService.FindSeason(seasonId);
-
-              PlayerDraft playerDraft;
-              if (seasonTeam.SeasonId == 54 && playerId == 66)
-              {
-                // HACK FIX for Bill Hamilton rostered sub
-                playerDraft = new PlayerDraft()
-                {
-                  PlayerId = playerId,
-                  SeasonId = seasonTeam.SeasonId,
-                  Line = 1,
-                  Position = "F",
-                  Order = -1,
-                  Round = 4,
-                  Special = false
-                };
-              } 
-              else if (seasonTeam.SeasonId == 54 && playerId == 662)
-              {
-                // HACK FIX for Matt Spease rostered sub
-                playerDraft = new PlayerDraft()
-                {
-                  PlayerId = playerId,
-                  SeasonId = seasonTeam.SeasonId,
-                  Line = 2,
-                  Position = "F",
-                  Order = -1,
-                  Round = 10,
-                  Special = false
-                };
-              } 
-              else
-              {
-                playerDraft = _lo30ContextService.FindPlayerDraft(seasonTeam.SeasonId, playerId);
-              }
-              
-              PlayerRating playerRating;
-              if (seasonTeam.SeasonId == 54 && playerId == 66)
-              {
-                // HACK FIX for Bill Hamilton rostered sub
-                playerRating = new PlayerRating()
-                {
-                  PlayerId = playerId,
-                  SeasonId = seasonTeam.SeasonId,
-                  RatingPrimary = 2,
-                  RatingSecondary = 1,
-                  StartYYYYMMDD = 20140904,
-                  EndYYYYMMDD = 20141031,
-                  Line = 1,
-                  Position = "F"
-                };
-              }
-              else if (seasonTeam.SeasonId == 54 && playerId == 662)
-              {
-                // HACK FIX for Matt Spease rostered sub
-                playerRating = new PlayerRating()
-                {
-                  PlayerId = playerId,
-                  SeasonId = seasonTeam.SeasonId,
-                  RatingPrimary = 6,
-                  RatingSecondary = 2,
-                  StartYYYYMMDD = 20140904,
-                  EndYYYYMMDD = 20141031,
-                  Line = 2,
-                  Position = "F"
-                };
-              }
-              else
-              {
-                playerRating = _lo30ContextService.FindPlayerRatingWithYYYYMMDD(playerId, playerDraft.Position, seasonTeam.SeasonId, season.StartYYYYMMDD);
-              }
-
-              // default the team roster to the start/end of the season
-              TeamRoster teamRoster;
-              if (seasonTeam.SeasonId == 54 && playerId == 710)
-              {
-                // HACK FIX for Bill Hamilton rostered sub (Howard)
-
-                // add billy
-                teamRoster = new TeamRoster(
-                        stid: teamId,
-                        pid: 66,
-                        symd: season.StartYYYYMMDD,
-                        eymd: 20141031,
-                        pos: "F",
-                        rp: 2,
-                        rs: 1,
-                        line: 1,
-                        pn: 15
-                );
-                context.TeamRosters.Add(teamRoster);
-
-                // add howard
-                teamRoster = new TeamRoster(
-                                        stid: teamId,
-                                        pid: playerId,
-                                        symd: 20141101,
-                                        eymd: season.EndYYYYMMDD,
-                                        pos: playerDraft.Position,
-                                        rp: playerRating.RatingPrimary,
-                                        rs: playerRating.RatingSecondary,
-                                        line: playerDraft.Line,
-                                        pn: playerNumber
-                                );
-                context.TeamRosters.Add(teamRoster);
-              }
-              else if (seasonTeam.SeasonId == 54 && playerId == 708)
-              {
-                // HACK FIX for Matt Spease rostered sub (Vince)
-
-                // add matt
-                teamRoster = new TeamRoster(
-                        stid: teamId,
-                        pid: 662,
-                        symd: season.StartYYYYMMDD,
-                        eymd: 20141031,
-                        pos: "F",
-                        rp: 6,
-                        rs: 2,
-                        line: 2,
-                        pn: 17
-                );
-                context.TeamRosters.Add(teamRoster);
-
-                // add vince
-                teamRoster = new TeamRoster(
-                                        stid: teamId,
-                                        pid: playerId,
-                                        symd: 20141101,
-                                        eymd: season.EndYYYYMMDD,
-                                        pos: playerDraft.Position,
-                                        rp: playerRating.RatingPrimary,
-                                        rs: playerRating.RatingSecondary,
-                                        line: playerDraft.Line,
-                                        pn: playerNumber
-                                );
-                context.TeamRosters.Add(teamRoster);
-              }
-              else 
-              {
-                teamRoster = new TeamRoster(
-                                        stid: teamId,
-                                        pid: playerId,
-                                        symd: season.StartYYYYMMDD,
-                                        eymd: season.EndYYYYMMDD,
-                                        pos: playerDraft.Position,
-                                        rp: playerRating.RatingPrimary,
-                                        rs: playerRating.RatingSecondary,
-                                        line: playerDraft.Line,
-                                        pn: playerNumber
-                                );
-                context.TeamRosters.Add(teamRoster);
-              }
-
-            }
-          }
-
-          Print("Data Group 3: Created TeamRosters");
-          diffFromLast = DateTime.Now - last;
-          Print("TimeToProcess: " + diffFromLast.ToString());
-
-          _lo30ContextService.ContextSaveChanges();
           Print("Data Group 3: Saved TeamRosters " + context.TeamRosters.Count());
           diffFromLast = DateTime.Now - last;
           Print("TimeToProcess: " + diffFromLast.ToString());
         }
         #endregion
 
-        #region 4:GameRosters...dependency on Games, PlayerRatings, GameTeams, and TeamRoster
+        #region 4:GameRosters (using function)
         if (context.GameRosters.Count() == 0)
         {
           Print("Data Group 4: Creating GameRosters");
           last = DateTime.Now;
 
-          dynamic parsedJsonGR = _accessDatabaseService.ParseObjectFromJsonFile(folderPath + "GameRosters.json");
-          int countGR = parsedJsonGR.Count;
-          int countSaveOrUpdated = 0;
+          SaveOrUpdateGameRosters(context, _lo30ContextService, folderPath, startingGameIdToProcess: 3200, endingGameIdToProcess: 3319);  // sid 54, pfs:false
+          SaveOrUpdateGameRosters(context, _lo30ContextService, folderPath, startingGameIdToProcess: 3324, endingGameIdToProcess: 3377);  // sid 54, pfs:true
 
-          Print("Access records to process:" + countGR);
-
-          for (var d = 0; d < parsedJsonGR.Count; d++)
-          {
-            if (d % 100 == 0) { Print("Access records processed:" + d + ". Records saved or updated:" + countSaveOrUpdated); }
-            var json = parsedJsonGR[d];
-
-            int seasonId = json["SEASON_ID"];
-            int gameId = json["GAME_ID"];
-
-            var game = _lo30ContextService.FindGame(gameId);
-            var gameDateYYYYMMDD = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(game.GameDateTime, ifNullReturnMax: false);
-
-            var homeGameTeamId = _lo30ContextService.FindGameTeamByPK2(gameId, homeTeam: true).GameTeamId;
-            var awayGameTeamId = _lo30ContextService.FindGameTeamByPK2(gameId, homeTeam: false).GameTeamId;
-
-            // ONLY PROCESS THIS YEARS...TODO speed up to process historic data
-            if (seasonId == 54 && gameId >= 3200)
-            {
-              int homeTeamId = -1;
-              if (json["HOME_TEAM_ID"] != null)
-              {
-                homeTeamId = json["HOME_TEAM_ID"];
-              }
-
-              int homePlayerId = -1;
-              if (json["HOME_PLAYER_ID"] != null)
-              {
-                homePlayerId = json["HOME_PLAYER_ID"];
-              }
-
-              int homeSubPlayerId = -1;
-              if (json["HOME_SUB_FOR_PLAYER_ID"] != null)
-              {
-                homeSubPlayerId = json["HOME_SUB_FOR_PLAYER_ID"];
-              }
-
-              bool homePlayerSubInd = false;
-              if (json["HOME_PLAYER_SUB_IND"] != null)
-              {
-                homePlayerSubInd = json["HOME_PLAYER_SUB_IND"];
-              }
-
-              int homePlayerNumber = -1;
-              if (json["HOME_PLAYER_NUMBER"] != null)
-              {
-                homePlayerNumber = json["HOME_PLAYER_NUMBER"];
-              }
-
-              if (homeTeamId == -1)
-              {
-                Print(string.Format("The homeTeamId is -1, not sure how to process. homeTeamId:{0}, homePlayerId:{1}, homeSubPlayerId:{2}, homePlayerSubInd:{3}, homePlayerNumber:{4}, gameId:{5}", homeTeamId, homePlayerId, homeSubPlayerId, homePlayerSubInd, homePlayerNumber, gameId));
-              }
-              else if (homePlayerId == -1)
-              {
-                Print(string.Format("The homePlayerId is -1, not sure how to process. homeTeamId:{0}, homePlayerId:{1}, homeSubPlayerId:{2}, homePlayerSubInd:{3}, homePlayerNumber:{4}, gameId:{5}", homeTeamId, homePlayerId, homeSubPlayerId, homePlayerSubInd, homePlayerNumber, gameId));
-              }
-              else if (homePlayerNumber == -1)
-              {
-                Print(string.Format("The homePlayerId is -1, not sure how to process. homeTeamId:{0}, homePlayerId:{1}, homeSubPlayerId:{2}, homePlayerSubInd:{3}, homePlayerNumber:{4}, gameId:{5}", homeTeamId, homePlayerId, homeSubPlayerId, homePlayerSubInd, homePlayerNumber, gameId));
-              }
-
-              // set the line and position equal to the players drafted / set line position from the team roster
-              var homeTeamRoster = _lo30ContextService.FindTeamRosterWithYYYYMMDD(homeTeamId, homePlayerId, gameDateYYYYMMDD);
-              int homePlayerLine = homeTeamRoster.Line;
-              string homePlayerPosition = homeTeamRoster.Position;
-
-              int playerId;
-              int? subbingForPlayerId;
-
-              if (homePlayerSubInd)
-              {
-                playerId = homeSubPlayerId;
-                subbingForPlayerId = homePlayerId;
-              }
-              else
-              {
-                playerId = homePlayerId;
-                subbingForPlayerId = null;
-              }
-
-              bool isGoalie = false;
-              if (homeTeamRoster.Position == "G")
-              {
-                isGoalie = true;
-              }
-
-              int ratingPrimary = 0;
-              int ratingSecondary = 0;
-              var playerRating = _lo30ContextService.FindPlayerRatingWithYYYYMMDD(playerId, homePlayerPosition, seasonId, gameDateYYYYMMDD, errorIfNotFound: false);
-
-              if (playerRating != null)
-              {
-                ratingPrimary = playerRating.RatingPrimary;
-                ratingSecondary = playerRating.RatingSecondary;
-              }
-              var gameRoster = new GameRoster(
-                                      gtid: homeGameTeamId,
-                                      pn: homePlayerNumber.ToString(),
-                                      line: homePlayerLine,
-                                      pos: homePlayerPosition,
-                                      g: isGoalie,
-                                      pid: playerId,
-                                      rp: ratingPrimary,
-                                      rs: ratingSecondary,
-                                      sub: homePlayerSubInd,
-                                      sfpid: subbingForPlayerId
-                                );
-
-              countSaveOrUpdated = countSaveOrUpdated + _lo30ContextService.SaveOrUpdateGameRoster(gameRoster);
-
-              int awayTeamId = -1;
-              if (json["AWAY_TEAM_ID"] != null)
-              {
-                awayTeamId = json["AWAY_TEAM_ID"];
-              }
-
-              int awayPlayerId = -1;
-              if (json["AWAY_PLAYER_ID"] != null)
-              {
-                awayPlayerId = json["AWAY_PLAYER_ID"];
-              }
-
-              int awaySubPlayerId = -1;
-              if (json["AWAY_SUB_FOR_PLAYER_ID"] != null)
-              {
-                awaySubPlayerId = json["AWAY_SUB_FOR_PLAYER_ID"];
-              }
-
-              bool awayPlayerSubInd = false;
-              if (json["AWAY_PLAYER_SUB_IND"] != null)
-              {
-                awayPlayerSubInd = json["AWAY_PLAYER_SUB_IND"];
-
-              }
-
-              int awayPlayerNumber = -1;
-              if (json["AWAY_PLAYER_NUMBER"] != null)
-              {
-                awayPlayerNumber = json["AWAY_PLAYER_NUMBER"];
-              }
-
-              if (awayTeamId == -1)
-              {
-                Print(string.Format("The awayTeamId is -1, not sure how to process. awayTeamId:{0}, awayPlayerId:{1}, awaySubPlayerId:{2}, awayPlayerSubInd:{3}, awayPlayerNumber:{4}, gameId:{5}", awayTeamId, awayPlayerId, awaySubPlayerId, awayPlayerSubInd, awayPlayerNumber, gameId));
-              }
-              else if (awayPlayerId == -1)
-              {
-                Print(string.Format("The awayPlayerId is -1, not sure how to process. awayTeamId:{0}, awayPlayerId:{1}, awaySubPlayerId:{2}, awayPlayerSubInd:{3}, awayPlayerNumber:{4}, gameId:{5}", awayTeamId, awayPlayerId, awaySubPlayerId, awayPlayerSubInd, awayPlayerNumber, gameId));
-              }
-              else if (awayPlayerNumber == -1)
-              {
-                Print(string.Format("The awayPlayerId is -1, not sure how to process. awayTeamId:{0}, awayPlayerId:{1}, awaySubPlayerId:{2}, awayPlayerSubInd:{3}, awayPlayerNumber:{4}, gameId:{5}", awayTeamId, awayPlayerId, awaySubPlayerId, awayPlayerSubInd, awayPlayerNumber, gameId));
-              }
-
-              if (awayPlayerSubInd)
-              {
-                playerId = awaySubPlayerId;
-                subbingForPlayerId = awayPlayerId;
-              }
-              else
-              {
-                playerId = awayPlayerId;
-                subbingForPlayerId = null;
-              }
-
-              // set the line and position equal to the players drafted / set line position from the team roster
-              var awayTeamRoster = _lo30ContextService.FindTeamRosterWithYYYYMMDD(homeTeamId, homePlayerId, gameDateYYYYMMDD);
-              int awayPlayerLine = homeTeamRoster.Line;
-              string awayPlayerPosition = homeTeamRoster.Position;
-
-              isGoalie = false;
-              if (awayTeamRoster.Position == "G")
-              {
-                isGoalie = true;
-              }
-
-              ratingPrimary = 0;
-              ratingSecondary = 0;
-              playerRating = _lo30ContextService.FindPlayerRatingWithYYYYMMDD(playerId, awayPlayerPosition, seasonId, gameDateYYYYMMDD, errorIfNotFound: false);
-
-              if (playerRating != null)
-              {
-                ratingPrimary = playerRating.RatingPrimary;
-                ratingSecondary = playerRating.RatingSecondary;
-              }
-
-              gameRoster = new GameRoster(
-                                      gtid: awayGameTeamId,
-                                      pn: awayPlayerNumber.ToString(),
-                                      line: awayPlayerLine,
-                                      pos: awayPlayerPosition,
-                                      g: isGoalie,
-                                      pid: playerId,
-                                      rp: ratingPrimary,
-                                      rs: ratingSecondary,
-                                      sub: awayPlayerSubInd,
-                                      sfpid: subbingForPlayerId
-                                );
-
-
-
-              countSaveOrUpdated = countSaveOrUpdated + _lo30ContextService.SaveOrUpdateGameRoster(gameRoster);
-
-            }
-          }
-
-          Print("Data Group 4: GameRosters Count:" + context.GameRosters.Count() + " SaveOrUpdated:" + countSaveOrUpdated);
+          Print("Data Group 3: Saved GameRosters " + context.GameRosters.Count());
           diffFromLast = DateTime.Now - last;
           Print("TimeToProcess: " + diffFromLast.ToString());
-
         }
         #endregion
 
@@ -2246,20 +1696,6 @@ namespace DataLoader
 
           countSaveOrUpdated = countSaveOrUpdated + lo30ContextService.SaveOrUpdateSeason(season);
         }
-      }
-
-      if (seasonIdToProcess == 55)
-      {
-        var season = new Season()
-        {
-          SeasonId = 55,
-          SeasonName = "2014-2015 P",
-          IsCurrentSeason = true,
-          StartYYYYMMDD = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(new DateTime(2015, 1, 22), ifNullReturnMax: false),
-          EndYYYYMMDD = _lo30DataService.ConvertDateTimeIntoYYYYMMDD(new DateTime(2015, 3, 22), ifNullReturnMax: true)
-        };
-
-        countSaveOrUpdated = countSaveOrUpdated + lo30ContextService.SaveOrUpdateSeason(season);
       }
 
       lo30ContextService.ContextSaveChanges();

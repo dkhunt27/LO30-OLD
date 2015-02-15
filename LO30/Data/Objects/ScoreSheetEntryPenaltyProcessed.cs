@@ -36,6 +36,8 @@ namespace LO30.Data.Objects
     [Required]
     public int PenaltyMinutes { get; set; }
 
+    public DateTime UpdatedOn { get; set; }
+
     public virtual Game Game { get; set; }
     public virtual Player Player { get; set; }
     public virtual Penalty Penalty { get; set; }
@@ -44,7 +46,7 @@ namespace LO30.Data.Objects
     {
     }
 
-    public ScoreSheetEntryPenaltyProcessed(int ssepid, int gid, int per, bool ht, string time, int playid, int penid, int pim)
+    public ScoreSheetEntryPenaltyProcessed(int ssepid, int gid, int per, bool ht, string time, int playid, int penid, int pim, DateTime upd)
     {
       this.ScoreSheetEntryPenaltyId = ssepid;
 
@@ -56,6 +58,8 @@ namespace LO30.Data.Objects
       this.PlayerId = playid;
       this.PenaltyId = penid;
       this.PenaltyMinutes = pim;
+
+      this.UpdatedOn = upd;
 
       Validate();
     }

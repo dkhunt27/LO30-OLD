@@ -7,8 +7,8 @@ namespace LO30.Data
 {
   public partial interface ILo30Repository
   {
-    List<ForWebGoalieStat> GetGoalieStatsForWeb();
+    List<ForWebGoalieStat> GetGoalieStatsForWeb(int seasonId, bool playoffs);
 
-    DateTime GetGoalieStatsForWebDataGoodThru();
+    DateTime GetGoalieStatsForWebDataGoodThru(int seasonId);
   }
 }

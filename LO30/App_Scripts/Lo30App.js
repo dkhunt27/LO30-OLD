@@ -31,7 +31,7 @@ lo30NgApp.config(
         controller: "gamesBoxScoresController",
         templateUrl: "/Templates/Games/BoxScores.html"
       });
-      $routeProvider.when("/Games/Results/:seasonTeamId", {
+      $routeProvider.when("/Games/Results/:seasonId/:playoffs/:seasonTeamId", {
         controller: "gamesResultsController",
         templateUrl: "/Templates/Games/Results.html"
       });
@@ -77,11 +77,11 @@ lo30NgApp.config(
       });
 
       // Stats
-      $routeProvider.when("/Stats/Players", {
+      $routeProvider.when("/Stats/Players/:seasonId/:playoffs", {
         controller: "statsPlayersController",
         templateUrl: "/Templates/Stats/Players.html"
       });
-      $routeProvider.when("/Stats/Goalies", {
+      $routeProvider.when("/Stats/Goalies/:seasonId/:playoffs", {
         controller: "statsGoaliesController",
         templateUrl: "/Templates/Stats/Goalies.html"
       });

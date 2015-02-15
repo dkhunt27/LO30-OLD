@@ -58,7 +58,7 @@ namespace LO30.Controllers.Admin
           results = _repo.ProcessScoreSheetEntriesIntoGameResults(model.startingGameId, model.endingGameId);
           break;
         case "ProcessGameResultsIntoTeamStandings":
-          results = _repo.ProcessGameResultsIntoTeamStandings(model.seasonId, model.playoff, model.startingGameId, model.endingGameId);
+          results = _repo.ProcessGameResultsIntoTeamStandings(model.seasonId, model.playoffs, model.startingGameId, model.endingGameId);
           break;
         case "ProcessScoreSheetEntriesIntoPlayerStats":
           results = _repo.ProcessScoreSheetEntriesIntoPlayerStats(model.startingGameId, model.endingGameId);
@@ -82,7 +82,7 @@ namespace LO30.Controllers.Admin
 
           if (string.IsNullOrWhiteSpace(results.error))
           {
-            result3 = _repo.ProcessGameResultsIntoTeamStandings(model.seasonId, model.playoff, model.startingGameId, model.endingGameId);
+            result3 = _repo.ProcessGameResultsIntoTeamStandings(model.seasonId, model.playoffs, model.startingGameId, model.endingGameId);
             results.error = result3.error;
             results.toProcess += result3.toProcess;
             results.modified += result3.modified;

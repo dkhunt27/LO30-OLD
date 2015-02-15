@@ -9,24 +9,26 @@ namespace LO30.Data
 {
   public partial class Lo30Repository
   {
-    public List<ForWebGoalieStat> GetGoalieStatsForWeb()
+    public List<ForWebGoalieStat> GetGoalieStatsForWeb(int seasonId, bool playoffs)
     {
-      return _ctx.ForWebGoalieStats.ToList();
+      return _ctx.ForWebGoalieStats.Where(x => x.SID == seasonId && x.PFS == playoffs).ToList();
     }
 
-    public DateTime GetGoalieStatsForWebDataGoodThru()
+    public DateTime GetGoalieStatsForWebDataGoodThru(int seasonId)
     {
       var maxGameData = _ctx.GoalieStatsGame
-              .GroupBy(x => new { x.SeasonId })
+              .GroupBy(x => new { x.SeasonId, x.Playoffs })
               .Select(grp => new
               {
                 SeasonId = grp.Key.SeasonId,
+                Playoffs = grp.Key.Playoffs,
                 GameId = grp.Max(x => x.GameId),
                 GameDateTime = grp.Max(x => x.Game.GameDateTime)
               })
+              .Where(x => x.SeasonId == seasonId)
               .ToList();
 
-      var gameDateTime = maxGameData.Where(x=>x.SeasonId == currentSeasonId).FirstOrDefault().GameDateTime;
+      var gameDateTime = maxGameData.FirstOrDefault().GameDateTime;
 
       return gameDateTime;
     }

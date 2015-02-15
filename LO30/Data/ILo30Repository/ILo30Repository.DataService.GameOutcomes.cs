@@ -9,6 +9,6 @@ namespace LO30.Data
     List<GameOutcome> GetGameOutcomes(bool fullDetail);
     List<GameOutcome> GetGameOutcomesByGameId(int gameId, bool fullDetail);
     GameOutcome GetGameOutcomeByGameIdAndHomeTeam(int gameId, bool homeTeam, bool fullDetail);
-    List<GameOutcome> GetGameOutcomesBySeasonTeamId(int seasonTeamId, bool fullDetail);
+    List<GameOutcome> GetGameOutcomesBySeasonTeamId(int seasonId, bool playoffs, int seasonTeamId, bool fullDetail);
   }
 }

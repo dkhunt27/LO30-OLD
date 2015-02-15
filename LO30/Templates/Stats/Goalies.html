@@ -13,7 +13,7 @@
 
   <div class="row">
     <header class="page-title">
-      <h4 class="col-md-10">2014 - 2015 Regular Season - Goalie Statistics</h4>
+      <h4 class="col-md-10">{{data.seasonName}} {{data.seasonTypeName}} - Goalie Statistics</h4>
       <h6 class="col-md-2 text-right">Thru {{data.goalieStatsDataGoodThru}}</h6>
     </header>
   </div>
@@ -104,37 +104,38 @@
     </tr>
   </table>
   <br/>
-  <table class="table table-condensed table-bordered table-striped table-dk-blue">
-    <thead>
-      <tr>
-        <td>Rank</td>
-        <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'team'}" ng-click="sortAscOnly('team')">Team</td>
-        <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'player'}" ng-click="sortAscOnly('player')">Player</td>
-        <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'gp'}" ng-click="sortDescOnly('gp')">GP</td>
-        <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'ga'}" ng-click="sortAscOnly('ga')">GA</td>
-        <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'gaa'}" ng-click="sortAscOnly('gaa')">GAA</td>
-        <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'so'}" ng-click="sortDescOnly('so')">SO</td>
-        <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'w'}" ng-click="sortDescOnly('w')">Wins</td>
-        <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'winPercent'}" ng-click="sortDescOnly('winPercent')">Win%</td>
-        <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'sub'}" ng-click="sortAscFirst('sub')">Sub</td>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="item in data.goalieStats | filterize:user.searchText | orderBy:sortOn:sortDirection">
-        <td>{{$index+1}}</td>
-        <td ng-class="{'td-sorted-by':sortOn === 'team' }">{{item.team}}</td>
-        <td ng-class="{'td-sorted-by':sortOn === 'player' }"><a ng-href="/Ng/#/Players/Goalie/{{item.pid}}">{{item.player}}</a></td>
-        <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'gp' }">{{item.gp}}</td>
-        <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'ga' }">{{item.ga}}</td>
-        <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'gaa' }">{{item.gaa | number:2}}</td>
-        <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'so' }">{{item.so}}</td>
-        <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'w' }">{{item.w}}</td>
-        <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'winPercent' }">{{item.winPercent | percentage:0}}</td>
-        <td class ="text-right" ng-class="{'td-sorted-by':sortOn === 'sub'}">{{item.sub}}</tdclass>
-      </tr>
-    </tbody>
-  </table>
-
+  <div class="table-responsive">
+    <table class="table table-condensed table-bordered table-striped table-dk-blue">
+      <thead>
+        <tr>
+          <td>Rank</td>
+          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'team'}" ng-click="sortAscOnly('team')">Team</td>
+          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'player'}" ng-click="sortAscOnly('player')">Player</td>
+          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'gp'}" ng-click="sortDescOnly('gp')">GP</td>
+          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'ga'}" ng-click="sortAscOnly('ga')">GA</td>
+          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'gaa'}" ng-click="sortAscOnly('gaa')">GAA</td>
+          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'so'}" ng-click="sortDescOnly('so')">SO</td>
+          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'w'}" ng-click="sortDescOnly('w')">Wins</td>
+          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'winPercent'}" ng-click="sortDescOnly('winPercent')">Win%</td>
+          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'sub'}" ng-click="sortAscFirst('sub')">Sub</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in data.goalieStats | filterize:user.searchText | orderBy:sortOn:sortDirection">
+          <td>{{$index+1}}</td>
+          <td ng-class="{'td-sorted-by':sortOn === 'team' }">{{item.team}}</td>
+          <td ng-class="{'td-sorted-by':sortOn === 'player' }"><a ng-href="/Ng/#/Players/Goalie/{{item.pid}}">{{item.player}}</a></td>
+          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'gp' }">{{item.gp}}</td>
+          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'ga' }">{{item.ga}}</td>
+          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'gaa' }">{{item.gaa | number:2}}</td>
+          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'so' }">{{item.so}}</td>
+          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'w' }">{{item.w}}</td>
+          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'winPercent' }">{{item.winPercent | percentage:0}}</td>
+          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'sub'}">{{item.sub}}</tdclass>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <h6 ng-show="data.villaExchangeRateOn">*American to Mexican Goals Against Exchange Rate: {{data.villaExchangeRate}}</h6>
 
-</div>
+  </div>

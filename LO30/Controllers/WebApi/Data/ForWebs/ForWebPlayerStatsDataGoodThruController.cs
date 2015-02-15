@@ -14,10 +14,11 @@ namespace LO30.Controllers.Data.ForWebs
       _repo = repo;
     }
 
-    public string GetDataGoodThru()
+    public ForWebGoodThru GetDataGoodThru(int seasonId)
     {
-      var results = _repo.GetPlayerStatsForWebDataGoodThru();
-      return results.ToShortDateString();
+      var results = _repo.GetPlayerStatsForWebDataGoodThru(seasonId);
+      var goodThru = new ForWebGoodThru() { GT = results.ToShortDateString() };
+      return goodThru;
     }
   }
 }

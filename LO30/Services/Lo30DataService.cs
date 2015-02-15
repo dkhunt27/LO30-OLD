@@ -22,8 +22,9 @@ namespace LO30.Services
         var stat = new ForWebTeamStanding()
         {
           STID = item.SeasonTeamId,
-          PFS = item.Playoff,
-          Div = item.Division,
+          PFS = item.Playoffs,
+          SID = item.SeasonTeam.SeasonId,
+          Div = item.Division.DivisionLongName,
           Team = item.SeasonTeam.Team.TeamLongName,
           Rank = item.Rank,
           GP = item.Games,
@@ -59,7 +60,7 @@ namespace LO30.Services
           #region determine key fields (gameId, seasonTeamId, playerId, playerStatTypeId, sub, etc)
           var gameId = gameRoster.GameTeam.GameId;
           var seasonTeamId = gameRoster.GameTeam.SeasonTeamId;
-          var playoffs = gameRoster.GameTeam.Game.Playoff;
+          var playoffs = gameRoster.GameTeam.Game.Playoffs;
           var sub = gameRoster.Sub;
           var playerId = gameRoster.PlayerId;
           var line = gameRoster.Line;
@@ -323,7 +324,7 @@ namespace LO30.Services
           #region determine key fields (gameId, seasonTeamId, playerId, playerStatTypeId, sub, etc)
           var gameId = gameRoster.GameTeam.GameId;
           var seasonTeamId = gameRoster.GameTeam.SeasonTeamId;
-          var playoffs = gameRoster.GameTeam.Game.Playoff;
+          var playoffs = gameRoster.GameTeam.Game.Playoffs;
           var sub = gameRoster.Sub;
           var playerId = gameRoster.PlayerId;
 
@@ -552,7 +553,9 @@ namespace LO30.Services
 
                           shg: shortHandedGoal,
                           ppg: powerPlayGoal,
-                          gwg: gameWinningGoal
+                          gwg: gameWinningGoal,
+
+                          upd: DateTime.Now
                   ));
       }
 
@@ -601,7 +604,9 @@ namespace LO30.Services
 
                           playid: Convert.ToInt32(playerId),
                           penid: penaltyId,
-                          pim: scoreSheetEntryPenalty.PenaltyMinutes
+                          pim: scoreSheetEntryPenalty.PenaltyMinutes,
+
+                          upd: DateTime.Now
                   ));
       }
 

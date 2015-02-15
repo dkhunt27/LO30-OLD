@@ -12,11 +12,11 @@ namespace LO30.Data.Objects
     [Required, Key, Column(Order = 0), ForeignKey("SeasonTeam")]
     public int SeasonTeamId { get; set; }
 
-    [Required, Key, Column(Order = 2)]
-    public bool Playoff { get; set; }
+    [Required, Key, Column(Order = 1)]
+    public bool Playoffs { get; set; }
 
-    [MaxLength(35)]
-    public string Division { get; set; }
+    [Required, ForeignKey("Division")]
+    public int DivisionId { get; set; }
 
     [Required]
     public int Rank { get; set; }
@@ -45,6 +45,7 @@ namespace LO30.Data.Objects
     [Required]
     public int PenaltyMinutes { get; set; }
 
+    public Division Division { get; set; }
     public SeasonTeam SeasonTeam { get; set; }
 
     public TeamStanding()
