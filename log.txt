@@ -1,28 +1,30 @@
-Total TimeToProcess: 00:00:02.0941198
 SaveOrUpdateGames: Starting
 SaveOrUpdateGames:Access records to process:178
 SaveOrUpdateGames:Access records processed:0
 SaveOrUpdateGames:Access records processed:100
 SaveOrUpdateGames: Games Count: 178 SaveOrUpdated:0
-SaveOrUpdateGames: TimeToProcess: 00:00:00.3430196
+SaveOrUpdateGames: TimeToProcess: 00:00:02.1991258
 SaveOrUpdateGameTeams: Starting
 SaveOrUpdateGameTeams: Access records to process:178
 SaveOrUpdateGameTeams: Access records processed:0
 SaveOrUpdateGameTeams: Access records processed:100
-SaveOrUpdateGameTeams: GameTeams Count:328 SaveOrUpdated:0
-SaveOrUpdateGameTeams: TimeToProcess: 00:00:00.3040174
-SaveOrUpdateScoreSheetEntries: ScoreSheetEntries Count:837 SaveOrUpdated:0
-TimeToProcess: 00:00:01.2750729
-SaveOrUpdateScoreSheetEntryPenalties: ScoreSheetEntryPenalties Count:325 SaveOrUpdated:0
-TimeToProcess: 00:00:01.6830962
-Data Group 4: ScoreSheetEntrySubs Count:42 SaveOrUpdated:0
-TimeToProcess: 00:00:02.0941198
-LoadNewData: TimeToProcess: 00:00:02.0941198
-ProcessScoreSheets.ProcessScoreSheetEntries Modified:74 Time:00:00:01.9431112
-ProcessScoreSheets.ProcessScoreSheetEntryPenalties Modified:40 Time:00:00:01.0800618
-ProcessScoreSheets.ProcessScoreSheetEntrySubs Modified:42 Time:00:00:01.5350878
-ProcessScoreSheets.ProcessScoreSheetEntriesIntoGameResults Modified:0 Time:00:00:06.4883711
-ProcessScoreSheets.ProcessGameResultsIntoTeamStandings Modified:8 Time:00:00:00.9190526
-ProcessScoreSheets.ProcessScoreSheetEntriesIntoPlayerStats Modified:830 Time:00:00:45.7256153
-ProcessScoreSheets.ProcessPlayerStatsIntoWebStats Modified:2 Time:00:00:39.5042595
+SaveOrUpdateGameTeams: GameTeams Count:336 SaveOrUpdated:0
+SaveOrUpdateGameTeams: TimeToProcess: 00:00:00.3780216
+SaveOrUpdateScoreSheetEntries: ScoreSheetEntries Count:881 SaveOrUpdated:0
+TimeToProcess: 00:00:03.6792105
+SaveOrUpdateScoreSheetEntryPenalties: ScoreSheetEntryPenalties Count:344 SaveOrUpdated:0
+TimeToProcess: 00:00:04.2652440
+Data Group 4: ScoreSheetEntrySubs Count:74 SaveOrUpdated:0
+TimeToProcess: 00:00:04.9722844
+ProcessScoreSheets.ProcessScoreSheetEntrySubs Modified:74 Time:00:00:01.7521002
+GameRosters Count:4576 Processed:736 SaveOrUpdated:224
+LoadNewData: TimeToProcess: 00:00:06.8173900
+ProcessScoreSheets.ProcessScoreSheetEntries Modified:118 Time:00:00:03.6322078
+ProcessScoreSheets.ProcessScoreSheetEntryPenalties Modified:59 Time:00:00:02.0241158
+ProcessScoreSheets.ProcessScoreSheetEntriesIntoGameResults Modified:14 Time:00:00:09.9505691
+ProcessScoreSheets.ProcessGameResultsIntoTeamStandings Modified:8 Time:00:00:00.9510544
+ProcessScoreSheets.ProcessScoreSheetEntriesIntoPlayerStats Modified:1097 Time:00:01:08.0628930
+ProcessScoreSheets.ProcessPlayerStatsIntoWebStats Modified:156 Time:00:00:48.6247811
 ProcessScoreSheets no errors!
+Data Group 3: Updated PlayerStatuses Current 0
+TimeToProcess: 00:00:03.4691984

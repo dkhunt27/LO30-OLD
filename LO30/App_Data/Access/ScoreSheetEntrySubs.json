@@ -418,5 +418,325 @@
     "SUB_ID": 0,
     "SUB_FOR_ID": 7,
     "UPDATED_ON": "2015-02-09T20:28:51"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 43,
+    "SEASON_ID": 54,
+    "GAME_ID": 3340,
+    "TEAM": 1.0,
+    "JERSEY": 77,
+    "SUB_ID": 63,
+    "SUB_FOR_ID": 605,
+    "UPDATED_ON": "2015-02-18T01:23:29"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 44,
+    "SEASON_ID": 54,
+    "GAME_ID": 3340,
+    "TEAM": 1.0,
+    "JERSEY": 8,
+    "SUB_ID": 731,
+    "SUB_FOR_ID": 4,
+    "UPDATED_ON": "2015-02-18T01:23:34"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 45,
+    "SEASON_ID": 54,
+    "GAME_ID": 3340,
+    "TEAM": 1.0,
+    "JERSEY": 18,
+    "SUB_ID": 765,
+    "SUB_FOR_ID": 173,
+    "UPDATED_ON": "2015-02-18T01:38:37"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 46,
+    "SEASON_ID": 54,
+    "GAME_ID": 3340,
+    "TEAM": 1.0,
+    "JERSEY": 22,
+    "SUB_ID": 3,
+    "SUB_FOR_ID": 659,
+    "UPDATED_ON": "2015-02-18T01:38:37"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 47,
+    "SEASON_ID": 54,
+    "GAME_ID": 3340,
+    "TEAM": 2.0,
+    "JERSEY": 30,
+    "SUB_ID": 676,
+    "SUB_FOR_ID": 49,
+    "UPDATED_ON": "2015-02-18T01:38:37"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 48,
+    "SEASON_ID": 54,
+    "GAME_ID": 3340,
+    "TEAM": 2.0,
+    "JERSEY": 2,
+    "SUB_ID": 680,
+    "SUB_FOR_ID": 164,
+    "UPDATED_ON": "2015-02-18T01:39:08"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 49,
+    "SEASON_ID": 54,
+    "GAME_ID": 3340,
+    "TEAM": 2.0,
+    "JERSEY": 9,
+    "SUB_ID": 684,
+    "SUB_FOR_ID": 36,
+    "UPDATED_ON": "2015-02-18T01:39:12"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 50,
+    "SEASON_ID": 54,
+    "GAME_ID": 3341,
+    "TEAM": 2.0,
+    "JERSEY": 30,
+    "SUB_ID": 81,
+    "SUB_FOR_ID": 678,
+    "UPDATED_ON": "2015-02-18T01:39:13"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 51,
+    "SEASON_ID": 54,
+    "GAME_ID": 3342,
+    "TEAM": 2.0,
+    "JERSEY": 18,
+    "SUB_ID": 615,
+    "SUB_FOR_ID": 123,
+    "UPDATED_ON": "2015-02-18T01:40:26"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 52,
+    "SEASON_ID": 54,
+    "GAME_ID": 3342,
+    "TEAM": 2.0,
+    "JERSEY": 16,
+    "SUB_ID": 642,
+    "SUB_FOR_ID": 590,
+    "UPDATED_ON": "2015-02-18T01:41:05"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 53,
+    "SEASON_ID": 54,
+    "GAME_ID": 3343,
+    "TEAM": 1.0,
+    "JERSEY": 31,
+    "SUB_ID": 172,
+    "SUB_FOR_ID": 634,
+    "UPDATED_ON": "2015-02-18T01:41:07"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 54,
+    "SEASON_ID": 54,
+    "GAME_ID": 3343,
+    "TEAM": 2.0,
+    "JERSEY": 22,
+    "SUB_ID": 63,
+    "SUB_FOR_ID": 638,
+    "UPDATED_ON": "2015-02-18T01:49:33"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 55,
+    "SEASON_ID": 54,
+    "GAME_ID": 3344,
+    "TEAM": 1.0,
+    "JERSEY": 30,
+    "SUB_ID": 749,
+    "SUB_FOR_ID": 678,
+    "UPDATED_ON": "2015-02-18T01:49:50"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 56,
+    "SEASON_ID": 54,
+    "GAME_ID": 3344,
+    "TEAM": 1.0,
+    "JERSEY": 17,
+    "SUB_ID": 185,
+    "SUB_FOR_ID": 652,
+    "UPDATED_ON": "2015-02-18T01:50:12"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 57,
+    "SEASON_ID": 54,
+    "GAME_ID": 3344,
+    "TEAM": 2.0,
+    "JERSEY": 30,
+    "SUB_ID": 676,
+    "SUB_FOR_ID": 49,
+    "UPDATED_ON": "2015-02-18T01:50:21"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 58,
+    "SEASON_ID": 54,
+    "GAME_ID": 3344,
+    "TEAM": 2.0,
+    "JERSEY": 22,
+    "SUB_ID": 684,
+    "SUB_FOR_ID": 164,
+    "UPDATED_ON": "2015-02-18T01:50:45"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 59,
+    "SEASON_ID": 54,
+    "GAME_ID": 3344,
+    "TEAM": 2.0,
+    "JERSEY": 77,
+    "SUB_ID": 42,
+    "SUB_FOR_ID": 235,
+    "UPDATED_ON": "2015-02-18T01:50:59"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 60,
+    "SEASON_ID": 54,
+    "GAME_ID": 3345,
+    "TEAM": 1.0,
+    "JERSEY": 5,
+    "SUB_ID": 172,
+    "SUB_FOR_ID": 177,
+    "UPDATED_ON": "2015-02-18T01:51:09"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 61,
+    "SEASON_ID": 54,
+    "GAME_ID": 3345,
+    "TEAM": 1.0,
+    "JERSEY": 89,
+    "SUB_ID": 680,
+    "SUB_FOR_ID": 204,
+    "UPDATED_ON": "2015-02-18T01:52:46"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 62,
+    "SEASON_ID": 54,
+    "GAME_ID": 3345,
+    "TEAM": 1.0,
+    "JERSEY": 75,
+    "SUB_ID": 55,
+    "SUB_FOR_ID": 608,
+    "UPDATED_ON": "2015-02-18T01:52:51"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 63,
+    "SEASON_ID": 54,
+    "GAME_ID": 3345,
+    "TEAM": 1.0,
+    "JERSEY": 2,
+    "SUB_ID": 758,
+    "SUB_FOR_ID": 617,
+    "UPDATED_ON": "2015-02-18T01:52:52"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 64,
+    "SEASON_ID": 54,
+    "GAME_ID": 3345,
+    "TEAM": 1.0,
+    "JERSEY": 79,
+    "SUB_ID": 718,
+    "SUB_FOR_ID": 635,
+    "UPDATED_ON": "2015-02-18T01:52:52"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 65,
+    "SEASON_ID": 54,
+    "GAME_ID": 3345,
+    "TEAM": 2.0,
+    "JERSEY": 18,
+    "SUB_ID": 708,
+    "SUB_FOR_ID": 583,
+    "UPDATED_ON": "2015-02-18T01:52:53"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 66,
+    "SEASON_ID": 54,
+    "GAME_ID": 3345,
+    "TEAM": 2.0,
+    "JERSEY": 17,
+    "SUB_ID": 656,
+    "SUB_FOR_ID": 53,
+    "UPDATED_ON": "2015-02-18T01:53:54"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 67,
+    "SEASON_ID": 54,
+    "GAME_ID": 3345,
+    "TEAM": 2.0,
+    "JERSEY": 8,
+    "SUB_ID": 721,
+    "SUB_FOR_ID": 23,
+    "UPDATED_ON": "2015-02-18T01:54:03"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 68,
+    "SEASON_ID": 54,
+    "GAME_ID": 3345,
+    "TEAM": 2.0,
+    "JERSEY": 6,
+    "SUB_ID": 59,
+    "SUB_FOR_ID": 605,
+    "UPDATED_ON": "2015-02-18T01:54:07"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 69,
+    "SEASON_ID": 54,
+    "GAME_ID": 3345,
+    "TEAM": 2.0,
+    "JERSEY": 5,
+    "SUB_ID": 716,
+    "SUB_FOR_ID": 659,
+    "UPDATED_ON": "2015-02-18T01:54:09"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 70,
+    "SEASON_ID": 54,
+    "GAME_ID": 3346,
+    "TEAM": 1.0,
+    "JERSEY": 16,
+    "SUB_ID": 729,
+    "SUB_FOR_ID": 123,
+    "UPDATED_ON": "2015-02-18T01:54:09"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 71,
+    "SEASON_ID": 54,
+    "GAME_ID": 3346,
+    "TEAM": 1.0,
+    "JERSEY": 7,
+    "SUB_ID": 173,
+    "SUB_FOR_ID": 237,
+    "UPDATED_ON": "2015-02-18T01:56:37"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 72,
+    "SEASON_ID": 54,
+    "GAME_ID": 3346,
+    "TEAM": 2.0,
+    "JERSEY": 17,
+    "SUB_ID": 684,
+    "SUB_FOR_ID": 233,
+    "UPDATED_ON": "2015-02-18T01:56:40"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 73,
+    "SEASON_ID": 54,
+    "GAME_ID": 3346,
+    "TEAM": 2.0,
+    "JERSEY": 6,
+    "SUB_ID": 647,
+    "SUB_FOR_ID": 681,
+    "UPDATED_ON": "2015-02-18T01:56:47"
+  },
+  {
+    "SCORE_SHEET_ENTRY_SUB_ID": 74,
+    "SEASON_ID": 54,
+    "GAME_ID": 3346,
+    "TEAM": 2.0,
+    "JERSEY": 8,
+    "SUB_ID": 706,
+    "SUB_FOR_ID": 62,
+    "UPDATED_ON": "2015-02-18T01:56:49"
   }
 ]

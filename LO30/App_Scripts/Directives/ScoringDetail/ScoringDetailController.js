@@ -83,15 +83,22 @@ lo30NgApp.controller('lo30ScoringDetailController',
             // service call on success
             if (result) {
 
+              
               angular.forEach(result, function (item, index) {
                 $scope.data.goalieStatsGame.push(item);
-
-                if (item.wins === 1) {
-                  $scope.data.goalieStatsGameWinner = item;
-                } else {
-                  $scope.data.goalieStatsGameLoser = item;
-                }
               });
+
+              var winner = _.find(result, function(item) { return item.wins === 1;});
+              var loser = _.find(result, function(item) { return item.wins === 0;});
+
+              if (winner) {
+                $scope.data.goalieStatsGameWinner = winner;
+                $scope.data.goalieStatsGameLoser = loser;
+              } else {
+                // then the game was a tie...set the player ids to -1
+                $scope.data.goalieStatsGameWinner = { playerId: -1 };
+                $scope.data.goalieStatsGameLoser = { playerId: -1 };
+              }
 
               $scope.events.goalieStatsGameLoaded = true;
 

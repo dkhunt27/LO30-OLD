@@ -27,7 +27,7 @@
       </thead>
       <tbody>
         <tr ng-repeat="item in data.playerStatsGame | orderBy:sortOn:sortDirection | limitTo:data.limitTo">
-          <td ng-class="{'td-sorted-by':sortOn === 'gameId' }">{{item.gameId}}</td>
+          <td ng-class="{'td-sorted-by':sortOn === 'gameId' }"><a ng-href="/Ng/#/Games/BoxScores/{{item.gameId}}">{{item.gameId}}</a></td>
           <td ng-class="{'td-sorted-by':sortOn === 'game.gameDate' }">{{ item.game.gameDate | amDateFormat:'MMM Do YYYY' }}</td>
           <td ng-class="{'td-sorted-by':sortOn === 'seasonTeam.team.teamShortName' }">{{item.seasonTeam.team.teamShortName}}{{item.sub == true ? "*" : ""}}</td>
           <td ng-class="{'td-sorted-by':sortOn === 'playoffs' }">{{item.playoffs}}</td>
