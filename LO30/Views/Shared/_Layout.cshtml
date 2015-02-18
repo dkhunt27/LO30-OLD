@@ -109,6 +109,10 @@
   <script type="text/javascript" src="~/Scripts/angular-resource.min.js"></script>
   <script type="text/javascript" src="~/Scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
   <script type="text/javascript" src="~/Scripts/toaster.js"></script>
+  <script type="text/javascript" src="~/Scripts/moment.min.js"></script>
+  <script type="text/javascript" src="~/Scripts/angular-moment.min.js"></script>
+  @*<script type="text/javascript" src="~/Scripts/angulartics.min.js"></script>
+  <script type="text/javascript" src="~/Scripts/angulartics-ga.min.js"></script>*@
 
   <script type="text/javascript" src="~/Content/Template/plugins/bootstrap/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="~/Content/Template/plugins/magnific-popup/jquery.magnific-popup.min.js"></script>
@@ -148,14 +152,32 @@
   <script src="~/App_Scripts/Controllers/RootController.js"></script>
 
   <!-- Directives -->
-  <script src="~/App_Scripts/Directives/BoxScore/BoxScore.js"></script>
-  <script src="~/App_Scripts/Directives/BoxScore/BoxScoreController.js"></script>
   <script src="~/App_Scripts/Directives/GameRoster/GameRoster.js"></script>
   <script src="~/App_Scripts/Directives/GameRoster/GameRosterController.js"></script>
   <script src="~/App_Scripts/Directives/GameRosterPlayer/GameRosterPlayer.js"></script>
   <script src="~/App_Scripts/Directives/GameRosterPlayer/GameRosterPlayerController.js"></script>
+  <script src="~/App_Scripts/Directives/GoalieStatsCareer/GoalieStatsCareer.js"></script>
+  <script src="~/App_Scripts/Directives/GoalieStatsCareer/GoalieStatsCareerController.js"></script>
+  <script src="~/App_Scripts/Directives/GoalieStatsGame/GoalieStatsGame.js"></script>
+  <script src="~/App_Scripts/Directives/GoalieStatsGame/GoalieStatsGameController.js"></script>
+  <script src="~/App_Scripts/Directives/GoalieStatsSeason/GoalieStatsSeason.js"></script>
+  <script src="~/App_Scripts/Directives/GoalieStatsSeason/GoalieStatsSeasonController.js"></script>
+  <script src="~/App_Scripts/Directives/GoalieStatsSeasonTeam/GoalieStatsSeasonTeam.js"></script>
+  <script src="~/App_Scripts/Directives/GoalieStatsSeasonTeam/GoalieStatsSeasonTeamController.js"></script>
   <script src="~/App_Scripts/Directives/PlayerSearchSub/PlayerSubSearch.js"></script>
   <script src="~/App_Scripts/Directives/PlayerSearchSub/PlayerSubSearchController.js"></script>
+  <script src="~/App_Scripts/Directives/PlayerStatsCareer/PlayerStatsCareer.js"></script>
+  <script src="~/App_Scripts/Directives/PlayerStatsCareer/PlayerStatsCareerController.js"></script>
+  <script src="~/App_Scripts/Directives/PlayerStatsGame/PlayerStatsGame.js"></script>
+  <script src="~/App_Scripts/Directives/PlayerStatsGame/PlayerStatsGameController.js"></script>
+  <script src="~/App_Scripts/Directives/PlayerStatsSeason/PlayerStatsSeason.js"></script>
+  <script src="~/App_Scripts/Directives/PlayerStatsSeason/PlayerStatsSeasonController.js"></script>
+  <script src="~/App_Scripts/Directives/PlayerStatsSeasonTeam/PlayerStatsSeasonTeam.js"></script>
+  <script src="~/App_Scripts/Directives/PlayerStatsSeasonTeam/PlayerStatsSeasonTeamController.js"></script>
+  <script src="~/App_Scripts/Directives/ScoringByPeriod/ScoringByPeriod.js"></script>
+  <script src="~/App_Scripts/Directives/ScoringByPeriod/ScoringByPeriodController.js"></script>
+  <script src="~/App_Scripts/Directives/ScoringDetail/ScoringDetail.js"></script>
+  <script src="~/App_Scripts/Directives/ScoringDetail/ScoringDetailController.js"></script>
 
   <!-- Filters -->
   <script src="~/App_Scripts/Filters/FilterizeFilter.js"></script>
@@ -183,6 +205,8 @@
   <script src="~/App_Scripts/Services/DataServicePlayerStatsGame.js"></script>
   <script src="~/App_Scripts/Services/DataServicePlayerStatsSeason.js"></script>
   <script src="~/App_Scripts/Services/DataServicePlayerStatsSeasonTeam.js"></script>
+  <script src="~/App_Scripts/Services/DataServiceScoreSheetEntryProcessedPenalties.js"></script>
+  <script src="~/App_Scripts/Services/DataServiceScoreSheetEntryProcessedScoring.js"></script>
   <script src="~/App_Scripts/Services/DataServiceSettings.js"></script>
   <script src="~/App_Scripts/Services/DataServiceTeamRosters.js"></script>
   <script src="~/App_Scripts/Services/ExternalLibService.js"></script>
@@ -191,18 +215,20 @@
   <!-- External Libraries -->
   <script type="text/javascript" src="~/Scripts/underscore.js"></script>
   <script type="text/javascript" src="~/Scripts/simple.js.validator.min.js"></script>
+  <script type="text/javascript" src="~/Scripts/simple.js.validator.min.js"></script>
 
-  <!-- Google Analytics: Change UA-XXXXX-X to be your site's ID. Go to http://www.google.com/analytics/ for more information. -->
-  <!--<script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date(); a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-      ga('create', 'UA-XXXXX-X', 'domainname.com');
-      ga('send', 'pageview');
+    ga('create', 'UA-59828026-1', 'auto');
+    ga('send', 'pageview');
   </script>
-  -->
+  
   @RenderSection("scripts", required: false)
 
 </body>

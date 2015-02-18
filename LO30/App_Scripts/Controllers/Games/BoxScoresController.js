@@ -8,9 +8,7 @@ lo30NgApp.controller('gamesBoxScoresController',
     '$routeParams',
     'alertService',
     'dataServiceGames',
-    'dataServiceGameOutcomes',
-    'dataServiceGameScores',
-    function ($scope, $timeout, $routeParams, alertService, dataServiceGames, dataServiceGameOutcomes, dataServiceGameScores) {
+    function ($scope, $timeout, $routeParams, alertService, dataServiceGames) {
 
       $scope.initializeScopeVariables = function () {
 
@@ -51,56 +49,6 @@ lo30NgApp.controller('gamesBoxScoresController',
         );
       };
 
-      $scope.getGameOutcomes = function (gameId) {
-        var retrievedType = "GameOutcomes";
-
-        dataServiceGameOutcomes.listGameOutcomesByGameId(gameId).$promise.then(
-          function (result) {
-            if (result && result.length && result.length > 0) {
-
-              angular.forEach(result, function (item) {
-                $scope.data.gameOutcomes.push(item);
-              });
-
-              $scope.requests.gameOutcomesLoaded = true;
-
-              alertService.successRetrieval(retrievedType, $scope.data.gameOutcomes.length);
-
-            } else {
-              alertService.warningRetrieval(retrievedType, "No results returned");
-            }
-          },
-          function (err) {
-            alertService.errorRetrieval(retrievedType, err.message);
-          }
-        );
-      };
-
-      $scope.getGameScores = function (gameId) {
-        var retrievedType = "GameScores";
-
-        dataServiceGameScores.listGameScoresByGameId(gameId).$promise.then(
-          function (result) {
-            if (result && result.length && result.length > 0) {
-
-              angular.forEach(result, function (item) {
-                $scope.data.gameScores.push(item);
-              });
-
-              $scope.requests.gameScoresLoaded = true;
-
-              alertService.successRetrieval(retrievedType, $scope.data.gameScores.length);
-
-            } else {
-              alertService.warningRetrieval(retrievedType, "No results returned");
-            }
-          },
-          function (err) {
-            alertService.errorRetrieval(retrievedType, err.message);
-          }
-        );
-      };
-
       $scope.setWatches = function () {
       };
 
@@ -116,8 +64,6 @@ lo30NgApp.controller('gamesBoxScoresController',
         }
 
         $scope.getGame($scope.data.selectedGameId);
-        $scope.getGameOutcomes($scope.data.selectedGameId);
-        $scope.getGameScores($scope.data.selectedGameId);
         $timeout(function () {
         }, 0);  // using timeout so it fires when done rendering
       };

@@ -47,53 +47,34 @@
   <br />
   <div class="row">
     <div class="col-md-10 col-md-offset-1">
-      <div class="table-responsive">
-        <table class="table table-condensed table-bordered table-striped table-dk-blue">
-          <thead>
-            <tr>
-              <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'gameId'}" ng-click="sortAscOnly('gameId')">Gid</td>
-              <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'game.gameYYYYMMDD'}" ng-click="sortAscOnly('game.gameYYYYMMDD')">Date</td>
-              <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'seasonTeam.team.teamShortName'}" ng-click="sortAscOnly('seasonTeam.team.teamShortName')">Team</td>
-              <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'games'}" ng-click="sortDescOnly('games')">Games</td>
-              <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'goalsAgainst'}" ng-click="sortAscOnly('goalsAgainst')">GA</td>
-              <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'goalsAgainstAverage'}" ng-click="sortAscOnly('goalsAgainstAverage')">GAA</td>
-              <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'wins'}" ng-click="sortDescOnly('wins')">Wins</td>
-              <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'shutouts'}" ng-click="sortDescOnly('shutouts')">Shutouts</td>
-
-          </thead>
-          <tbody>
-            <tr ng-repeat="itemPSG in data.goalieStatsGame | orderBy:sortOn:sortDirection">
-              <td ng-class="{'td-sorted-by':sortOn === 'gameId' }">{{itemPSG.gameId}}</td>
-              <td ng-class="{'td-sorted-by':sortOn === 'game.gameYYYYMMDD' }">{{itemPSG.game.gameYYYYMMDD}}</td>
-              <td ng-class="{'td-sorted-by':sortOn === 'seasonTeam.team.teamShortName' }">{{itemPSG.seasonTeam.team.teamShortName}}{{itemPSG.sub == true ? "*" : ""}}</td>
-              <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'games'}">1</td>
-              <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'goalsAgainst'}">{{itemPSG.goalsAgainst}}</td>
-              <td class="text-right"></td>
-              <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'wins' }">{{itemPSG.wins}}</td>
-              <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'shutouts' }">{{itemPSG.shutouts}}</td>
-            </tr>
-            <tr>
-              <td colspan="13">
-                <hr />
-              </td>
-            </tr>
-
-            <tr ng-repeat="itemPSST in data.goalieStatsSeasonTeam | orderBy:sortOn:sortDirection">
-              <td ng-class="{'td-sorted-by':sortOn === 'gameId' }">Total</td>
-              <td ng-class="{'td-sorted-by':sortOn === 'game.gameYYYYMMDD' }">{{itemPSST.season.seasonName}}</td>
-              <td ng-class="{'td-sorted-by':sortOn === 'seasonTeam.team.teamShortName' }">{{itemPSST.seasonTeam.team.teamShortName}}{{itemPSST.sub == true ? "*" : ""}}</td>
-              <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'games'}">{{itemPSST.games}}</td>
-              <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'goalsAgainst' }">{{itemPSST.goalsAgainst}}</td>
-              <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'goalsAgainstAverage' }">{{itemPSST.goalsAgainstAverage | number:2}}</td>
-              <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'wins' }">{{itemPSST.wins}}</td>
-              <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'shutouts' }">{{itemPSST.shutouts}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <lo30-goalie-stats-season player-id="data.selectedPlayerId" season-id="data.selectedSeasonId" />
     </div>
   </div>
-  <br />
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <lo30-goalie-stats-game player-id="data.selectedPlayerId" season-id="data.selectedSeasonId" />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <h4>
+        Career Regular Season Statistics
+        <small>(other years still to be added)</small>
+      </h4>
+      <lo30-goalie-stats-season-team player-id="data.selectedPlayerId" playoffs=false />
+      <!--lo30-goalie-stats-career player-id="data.selectedPlayerId" playoffs=false /-->
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <h4>
+        Career Playoff Statistics
+        <small>(other years still to be added)</small>
+      </h4>
+      <lo30-goalie-stats-season-team player-id="data.selectedPlayerId" playoffs=true />
+      <!--lo30-goalie-stats-career player-id="data.selectedPlayerId" playoffs=true /-->
+    </div>
+  </div>
   <div class="row">
     <div class="col-md-10 col-md-offset-1">
       <h6>

@@ -8,7 +8,6 @@ namespace LO30.Data
   {
     List<PlayerStatCareer> GetPlayerStatsCareer();
     List<PlayerStatCareer> GetPlayerStatsCareerByPlayerId(int playerId);
-
-    PlayerStatCareer GetPlayerStatCareerByPlayerIdSub(int playerId, bool sub);
+    PlayerStatCareer GetPlayerStatCareerByPlayerIdPlayoffs(int playerId, bool playoffs);
   }
 }

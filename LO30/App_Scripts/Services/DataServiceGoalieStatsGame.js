@@ -8,30 +8,31 @@ lo30NgApp.factory("dataServiceGoalieStatsGame",
     function (constApisUrl, $resource) {
 
       // return multiple items
-      var resourceQuery = $resource(constApisUrl + '/goalieStatsGame/:playerId/:seasonId', { playerId: '@playerId', seasonId: '@seasonId' });
+      var resourceQueryByGameId = $resource(constApisUrl + '/goalieStatsGame/:gameId', { gameId: '@gameId' });
+      var resourceQueryByPlayerIdSeasonId = $resource(constApisUrl + '/goalieStatsGame/:playerId/:seasonId', { playerId: '@playerId', seasonId: '@seasonId' });
 
       // return single item
       var resourceGet = $resource(constApisUrl + '/goalieStatGame/:playerId/:gameId', { playerId: '@playerId', gameId: '@gameId' });
 
       var listAll = function () {
-        return resourceQuery.query();
+        return resourceQueryByGameId.query();
       };
 
-      var listByPlayerId = function (playerId) {
-        return resourceQuery.query({ playerId: playerId });
+      var listByGameId = function (gameId) {
+        return resourceQueryByGameId.query({ gameId: gameId });
       };
 
       var listByPlayerIdSeasonId = function (playerId, seasonId) {
-        return resourceQuery.query({ playerId: playerId, seasonId: seasonId });
+        return resourceQueryByPlayerIdSeasonId.query({ playerId: playerId, seasonId: seasonId });
       };
       
       var getByPlayerIdGameId = function (playerId, gameId) {
-        return resourceByPlayerIdGameId.get({ playerId: playerId, gameId: gameId });
+        return resourceGet.get({ playerId: playerId, gameId: gameId });
       };
 
       return {
         listAll: listAll,
-        listByPlayerId: listByPlayerId,
+        listByGameId: listByGameId,
         listByPlayerIdSeasonId: listByPlayerIdSeasonId,
         getByPlayerIdGameId: getByPlayerIdGameId
       };

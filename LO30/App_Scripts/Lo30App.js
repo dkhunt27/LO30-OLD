@@ -1,4 +1,4 @@
-﻿var lo30NgApp = angular.module("lo30NgApp", ['ngRoute', 'ngResource', 'ngAnimate', 'ui.bootstrap','toaster']);
+﻿var lo30NgApp = angular.module("lo30NgApp", ['ngRoute', 'ngResource', 'ngAnimate', 'ui.bootstrap', 'toaster', 'angularMoment']);
 
 lo30NgApp.value("constApisUrl", "/api/v1");
 
@@ -47,6 +47,10 @@ lo30NgApp.config(
         controller: "playersPlayerController",
         templateUrl: "/Templates/Players/Player.html"
       });
+      $routeProvider.when("/Players/Player/:playerId/:seasonId", {
+        controller: "playersPlayerController",
+        templateUrl: "/Templates/Players/Player.html"
+      });
       $routeProvider.when("/Players/Goalie", {
         controller: "playersPlayerController",
         templateUrl: "/Templates/Players/Player.html"
@@ -61,7 +65,7 @@ lo30NgApp.config(
         controller: "gamesBoxScoresController",
         templateUrl: "/Templates/Games/BoxScores.html"
       });
-      $routeProvider.when("/ScoreSheets/Entry", {
+      $routeProvider.when("/ScoreSheets/Entry/:gameId", {
         controller: "scoreSheetsEntryController",
         templateUrl: "/Templates/ScoreSheets/Entry.html"
       });

@@ -23,7 +23,7 @@ namespace LO30.Controllers.Data.PlayerStats
     public List<PlayerStatCareer> GetPlayerStatsCareerByPlayerId(int playerId)
     {
       var results = _repo.GetPlayerStatsCareerByPlayerId(playerId);
-      return results;
+      return results.ToList();
     }
   }
 }

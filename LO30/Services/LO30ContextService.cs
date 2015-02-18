@@ -621,7 +621,7 @@ namespace LO30.Services
 
       public int SaveOrUpdatePlayerStatCareer(PlayerStatCareer toSave)
       {
-        PlayerStatCareer found = FindPlayerStatCareer(toSave.PlayerId, toSave.Sub, errorIfNotFound: false, errorIfMoreThanOneFound: true, populateFully: false);
+        PlayerStatCareer found = FindPlayerStatCareer(toSave.PlayerId, toSave.Playoffs, errorIfNotFound: false, errorIfMoreThanOneFound: true, populateFully: false);
 
         if (found == null)
         {
@@ -858,6 +858,74 @@ namespace LO30.Services
         if (found == null)
         {
           _ctx.ScoreSheetEntryPenaltiesProcessed.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
+      #region SaveOrUpdate-ScoreSheetEntrySub
+      public int SaveOrUpdateScoreSheetEntrySub(List<ScoreSheetEntrySub> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateScoreSheetEntrySub(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateScoreSheetEntrySub(ScoreSheetEntrySub toSave)
+      {
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        ScoreSheetEntrySub found = FindScoreSheetEntrySub(errorIfNotFound, errorIfMoreThanOneFound, toSave.ScoreSheetEntrySubId);
+
+        if (found == null)
+        {
+          _ctx.ScoreSheetEntrySubs.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
+      #region SaveOrUpdate-ScoreSheetEntrySubProcessed
+      public int SaveOrUpdateScoreSheetEntrySubProcessed(List<ScoreSheetEntrySubProcessed> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateScoreSheetEntrySubProcessed(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateScoreSheetEntrySubProcessed(ScoreSheetEntrySubProcessed toSave)
+      {
+        bool errorIfNotFound = false;
+        bool errorIfMoreThanOneFound = true;
+        ScoreSheetEntrySubProcessed found = FindScoreSheetEntrySubProcessed(errorIfNotFound, errorIfMoreThanOneFound, toSave.ScoreSheetEntrySubId);
+
+        if (found == null)
+        {
+          found = _ctx.ScoreSheetEntrySubsProcessed.Add(toSave);
         }
         else
         {
@@ -1881,15 +1949,11 @@ namespace LO30.Services
       #endregion
 
       #region Find-PlayerStatCareer NEW FORMAT
-      public PlayerStatCareer FindPlayerStatCareer(int playerId, bool sub, bool errorIfNotFound = true, bool errorIfMoreThanOneFound = true, bool populateFully = false)
+      public PlayerStatCareer FindPlayerStatCareer(int playerId, bool playoffs, bool errorIfNotFound = true, bool errorIfMoreThanOneFound = true, bool populateFully = false)
       {
-        Expression<Func<PlayerStatCareer, bool>> whereClause = x => x.PlayerId == playerId &&
-                                                            x.Sub == sub
-                                                            ;
+        Expression<Func<PlayerStatCareer, bool>> whereClause = x => x.PlayerId == playerId && x.Playoffs == playoffs;
 
-        string errMsgNotFoundFor = " PlayerId:" + playerId +
-                                  " Sub:" + sub
-                                  ;
+        string errMsgNotFoundFor = " PlayerId:" + playerId + " Playoffs:" + playoffs;
 
         return FindPlayerStatCareer(whereClause, errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound, populateFully);
       }
@@ -2228,6 +2292,76 @@ namespace LO30.Services
       }
       #endregion
 
+      #region Find-ScoreSheetEntrySub
+      public ScoreSheetEntrySub FindScoreSheetEntrySub(int scoreSheetEntrySubId)
+      {
+        return FindScoreSheetEntrySub(errorIfNotFound: true, errorIfMoreThanOneFound: true, scoreSheetEntrySubId: scoreSheetEntrySubId);
+      }
+
+      public ScoreSheetEntrySub FindScoreSheetEntrySub(bool errorIfNotFound, bool errorIfMoreThanOneFound, int scoreSheetEntrySubId)
+      {
+        var found = _ctx.ScoreSheetEntrySubs.Where(x => x.ScoreSheetEntrySubId == scoreSheetEntrySubId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find ScoreSheetEntrySub for" +
+                                                  " scoreSheetEntrySubId:" + scoreSheetEntrySubId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 ScoreSheetEntrySub was found for" +
+                                                  " scoreSheetEntrySubId:" + scoreSheetEntrySubId
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
+      #region Find-ScoreSheetEntrySubProcessed
+      public ScoreSheetEntrySubProcessed FindScoreSheetEntrySubProcessed(int scoreSheetEntrySubId)
+      {
+        return FindScoreSheetEntrySubProcessed(errorIfNotFound: true, errorIfMoreThanOneFound: true, scoreSheetEntrySubId: scoreSheetEntrySubId);
+      }
+
+      public ScoreSheetEntrySubProcessed FindScoreSheetEntrySubProcessed(bool errorIfNotFound, bool errorIfMoreThanOneFound, int scoreSheetEntrySubId)
+      {
+        var found = _ctx.ScoreSheetEntrySubsProcessed.Where(x => x.ScoreSheetEntrySubId == scoreSheetEntrySubId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find ScoreSheetEntrySubProcessed for" +
+                                                  " scoreSheetEntrySubId:" + scoreSheetEntrySubId
+                                          );
+        }
+
+        if (errorIfMoreThanOneFound == true && found.Count > 1)
+        {
+          throw new ArgumentNullException("found", "More than 1 ScoreSheetEntrySubProcessed was found for" +
+                                                  " scoreSheetEntrySubId:" + scoreSheetEntrySubId
+                                          );
+        }
+
+        if (found.Count == 1)
+        {
+          return found[0];
+        }
+        else
+        {
+          return null;
+        }
+      }
+      #endregion
+
       #region Find-Season (addtl finds)
       public Season FindSeasonWithYYYYMMDD(int yyyymmdd)
       {
@@ -2401,7 +2535,21 @@ namespace LO30.Services
       }
       #endregion
 
-      #region Find-TeamRoster (addtl finds)  NEW FORMAT
+      #region Find-TeamRoster(s) (addtl finds)  NEW FORMAT
+      public List<TeamRoster> FindTeamRostersWithYYYYMMDD(int seasonTeamId, int yyyymmdd, bool errorIfNotFound = true, bool populateFully = false)
+      {
+        Expression<Func<TeamRoster, bool>> whereClause = x => x.SeasonTeamId == seasonTeamId &&
+                                                              x.StartYYYYMMDD <= yyyymmdd &&
+                                                              x.EndYYYYMMDD >= yyyymmdd
+                                                              ;
+
+        string errMsgNotFoundFor = " SeasonTeamId:" + seasonTeamId + 
+                                    " StartYYYYMMDD and EndYYYYMMDD between:" + yyyymmdd
+                                  ;
+
+        return FindTeamRostersBase(whereClause, errMsgNotFoundFor, errorIfNotFound, populateFully);
+      }
+
       public TeamRoster FindTeamRosterWithYYYYMMDD(int seasonTeamId, int playerId, int yyyymmdd, bool errorIfNotFound = true, bool errorIfMoreThanOneFound = true, bool populateFully = false)
       {
         Expression<Func<TeamRoster, bool>> whereClause = x => x.SeasonTeamId == seasonTeamId &&
@@ -2410,7 +2558,8 @@ namespace LO30.Services
                                                               x.EndYYYYMMDD >= yyyymmdd
                                                               ;
 
-        string errMsgNotFoundFor = " PlayerId:" + playerId +
+        string errMsgNotFoundFor = " SeasonTeamId:" + seasonTeamId +
+                                    " PlayerId:" + playerId +
                                    " StartYYYYMMDD and EndYYYYMMDD between:" + yyyymmdd
                                   ;
 
@@ -2443,6 +2592,7 @@ namespace LO30.Services
 
         return FindTeamRosterBase(whereClause, errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound, populateFully);
       }
+
       private TeamRoster FindTeamRosterBase(Expression<Func<TeamRoster, bool>> whereClause, string errMsgNotFoundFor, bool errorIfNotFound, bool errorIfMoreThanOneFound, bool populateFully)
       {
         List<TeamRoster> found;
@@ -2466,6 +2616,31 @@ namespace LO30.Services
         }
 
         return FindBase<TeamRoster>(found, "TeamRoster", errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound);
+      }
+
+      private List<TeamRoster> FindTeamRostersBase(Expression<Func<TeamRoster, bool>> whereClause, string errMsgNotFoundFor, bool errorIfNotFound, bool populateFully)
+      {
+        List<TeamRoster> found;
+
+        if (populateFully)
+        {
+          found = _ctx.TeamRosters
+                              .Include("Player")
+                              .Include("SeasonTeam")
+                              .Include("SeasonTeam.Season")
+                              .Include("SeasonTeam.Team")
+                              .Include("SeasonTeam.Team.Coach")
+                              .Include("SeasonTeam.Team.Sponsor")
+                              .Where(whereClause)
+                              .ToList();
+        }
+        else
+        {
+          found = _ctx.TeamRosters.Where(whereClause)
+                                  .ToList();
+        }
+
+        return FindListBase<TeamRoster>(found, "TeamRoster", errMsgNotFoundFor, errorIfNotFound);
       }
       #endregion
 
@@ -2507,6 +2682,16 @@ namespace LO30.Services
       #endregion
 
       #region Find Base
+      private List<T> FindListBase<T>(List<T> found, string errMsgType, string errMsgNotFoundFor, bool errorIfNotFound)
+      {
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find " + errMsgType + " for" + errMsgNotFoundFor);
+        }
+
+        return found;
+      }
+
       private T FindBase<T>(List<T> found, string errMsgType, string errMsgNotFoundFor, bool errorIfNotFound, bool errorIfMoreThanOneFound)
       {
         if (errorIfNotFound == true && found.Count < 1)

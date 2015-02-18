@@ -8,12 +8,11 @@ lo30NgApp.directive('lo30GameRosterPlayer',
         restrict: 'E',
         templateUrl: "/Templates/Directives/GameRosterPlayer.html",
         scope: {
-          "teamGameRoster": "="
+          "teamGameRoster": "=",
+          "locked": "="
         },
         controller: "lo30GameRosterPlayerController",
         link: function (scope, element, attrs, controller) {
-
-          scope.activate();
         }
       };
     }

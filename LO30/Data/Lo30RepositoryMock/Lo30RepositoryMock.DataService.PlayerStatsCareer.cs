@@ -19,9 +19,9 @@ namespace LO30.Data
       return _playerStatsCareer.Where(x => x.PlayerId == playerId).ToList();
     }
 
-    public PlayerStatCareer GetPlayerStatCareerByPlayerIdSub(int playerId, bool sub)
+    public PlayerStatCareer GetPlayerStatCareerByPlayerIdPlayoffs(int playerId, bool playoffs)
     {
-      return _playerStatsCareer.Where(x => x.PlayerId == playerId && x.Sub == sub).FirstOrDefault();
+      return _playerStatsCareer.Where(x => x.PlayerId == playerId && x.Playoffs == playoffs).FirstOrDefault();
     }
   }
 }

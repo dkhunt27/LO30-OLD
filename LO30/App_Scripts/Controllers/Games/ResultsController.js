@@ -11,6 +11,34 @@ lo30NgApp.controller('gamesResultsController',
     'dataServiceForWebTeamStandings',
     function ($scope, $timeout, $routeParams, alertService, dataServiceGameOutcomes, dataServiceForWebTeamStandings) {
 
+      $scope.sortAscFirst = function (column) {
+        if ($scope.sortOn === column) {
+          $scope.sortDirection = !$scope.sortDirection;
+        } else {
+          $scope.sortOn = column;
+          $scope.sortDirection = false;
+        }
+      };
+
+      $scope.sortDescFirst = function (column) {
+        if ($scope.sortOn === column) {
+          $scope.sortDirection = !$scope.sortDirection;
+        } else {
+          $scope.sortOn = column;
+          $scope.sortDirection = true;
+        }
+      };
+
+      $scope.sortAscOnly = function (column) {
+        $scope.sortOn = column;
+        $scope.sortDirection = false;
+      };
+
+      $scope.sortDescOnly = function (column) {
+        $scope.sortOn = column;
+        $scope.sortDirection = true;
+      };
+
       $scope.initializeScopeVariables = function () {
 
         $scope.data = {
@@ -41,6 +69,7 @@ lo30NgApp.controller('gamesResultsController',
             if (result && result.length && result.length > 0) {
 
               angular.forEach(result, function (item) {
+                item.gameTeam.game.gameDate = moment(item.gameTeam.game.gameYYYYMMDD, "YYYYMMDD");
                 $scope.data.gameOutcomes.push(item);
               });
 

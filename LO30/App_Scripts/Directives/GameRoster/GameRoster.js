@@ -10,12 +10,11 @@ lo30NgApp.directive('lo30GameRoster',
         scope: {
           "teamRoster": "=",
           "gameRoster": "=",
-          "homeTeam": "="
+          "homeTeam": "=",
+          "locked": "="
         },
         controller: "lo30GameRosterController",
         link: function (scope, element, attrs, controller) {
-
-          scope.activate();
         }
       };
     }

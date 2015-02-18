@@ -14,9 +14,9 @@ namespace LO30.Data
       return _goalieStatsGame.ToList();
     }
 
-    public List<GoalieStatGame> GetGoalieStatsGameByPlayerId(int playerId)
+    public List<GoalieStatGame> GetGoalieStatsGameByGameId(int gameId)
     {
-      return _goalieStatsGame.Where(x => x.PlayerId == playerId).ToList();
+      return _goalieStatsGame.Where(x => x.GameId == gameId).ToList();
     }
 
     public List<GoalieStatGame> GetGoalieStatsGameByPlayerIdSeasonId(int playerId, int seasonId)

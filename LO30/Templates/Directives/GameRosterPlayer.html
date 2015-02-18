@@ -4,10 +4,10 @@
       <div class="row" ng-hide="teamGameRoster.rosteredDidNotPlay">
         <div class="col-xs-1">{{teamGameRoster.rostered.line}}</div>
         <div class="col-xs-1">
-          <input type="checkbox" ng-model="teamGameRoster.rosteredDidNotPlay">
+          <input type="checkbox" ng-model="teamGameRoster.rosteredDidNotPlay" ng-disabled="locked">
         </div>
         <div class="col-xs-1">
-          <input type="checkbox" ng-model="teamGameRoster.rosteredSubbedFor" ng-change="toggleRosteredSubbedFor(teamGameRoster)">
+          <input type="checkbox" ng-model="teamGameRoster.rosteredSubbedFor" ng-change="toggleRosteredSubbedFor(teamGameRoster)" ng-disabled="locked">
         </div>
         <div class="col-xs-1">{{teamGameRoster.rostered.playerNumber}}</div>
         <div class="col-xs-1">{{teamGameRoster.rostered.position}}</div>
@@ -18,10 +18,10 @@
       <div class="row" ng-show="teamGameRoster.rosteredDidNotPlay">
         <div class="col-xs-1">{{teamGameRoster.rostered.line}}</div>
         <div class="col-xs-1">
-          <input type="checkbox" ng-model="teamGameRoster.rosteredDidNotPlay">
+          <input type="checkbox" ng-model="teamGameRoster.rosteredDidNotPlay" ng-disabled="locked">
         </div>
         <div class="col-xs-1">
-          <input type="checkbox" ng-model="teamGameRoster.rosteredSubbedFor">
+          <input type="checkbox" ng-model="teamGameRoster.rosteredSubbedFor" ng-disabled="locked">
         </div>
         <s class="col-xs-1">{{teamGameRoster.rostered.playerNumber}}</s>
         <s class="col-xs-1">{{teamGameRoster.rostered.position}}</s>
@@ -36,7 +36,7 @@
       <div class="row" ng-repeat="item in teamGameRoster.subbed">
         <div class="col-xs-1"></div>
         <div class="col-xs-1"></div>
-        <div class="col-xs-1"><span class="glyphicon glyphicon-plus"></span></div>
+        <div class="col-xs-1"><span class="glyphicon glyphicon-plus" ng-disabled="locked"></span></div>
         <div class="col-xs-1">{{item.playerNumber}}</div>
         <div class="col-xs-1">{{item.position}}</div>
         <div class="col-xs-5">{{item.player.firstName}} {{item.player.lastName}}</div>

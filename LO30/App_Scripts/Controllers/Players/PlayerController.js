@@ -7,164 +7,25 @@ lo30NgApp.controller('playersPlayerController',
     '$timeout',
     '$routeParams',
     'alertService',
+    'externalLibService',
     'dataServicePlayers',
-    'dataServicePlayerStatsGame',
-    'dataServicePlayerStatsCareer',
-    'dataServicePlayerStatsSeason',
-    'dataServicePlayerStatsSeasonTeam',
-    function ($scope, $timeout, $routeParams, alertService, dataServicePlayers, dataServicePlayerStatsGame, dataServicePlayerStatsCareer, dataServicePlayerStatsSeason, dataServicePlayerStatsSeasonTeam) {
-
-      $scope.sortAscFirst = function (column) {
-        if ($scope.sortOn === column) {
-          $scope.sortDirection = !$scope.sortDirection;
-        } else {
-          $scope.sortOn = column;
-          $scope.sortDirection = false;
-        }
-      };
-
-      $scope.sortDescFirst = function (column) {
-        if ($scope.sortOn === column) {
-          $scope.sortDirection = !$scope.sortDirection;
-        } else {
-          $scope.sortOn = column;
-          $scope.sortDirection = true;
-        }
-      };
-
-      $scope.sortAscOnly = function (column) {
-        $scope.sortOn = column;
-        $scope.sortDirection = false;
-      };
-
-      $scope.sortDescOnly = function (column) {
-        $scope.sortOn = column;
-        $scope.sortDirection = true;
-      };
+    function ($scope, $timeout, $routeParams, alertService, externalLibService, dataServicePlayers) {
+      var sjv = externalLibService.sjv;
 
       $scope.initializeScopeVariables = function () {
 
         $scope.data = {
           selectedPlayerId: -1,
           selectedSeasonId: -1,
-          player: {},
-          playerStatsCareer: [],
-          playerStatsSeason: [],
-          playerStatsSeasonTeam: [],
-          playerStatsGame: []
-          
+          player: {}
         };
 
         $scope.requests = {
-          playerLoaded: false,
-          playerStatsCareerLoaded: false,
-          playerStatsSeasonLoaded: false,
-          playerStatsSeasonTeamLoaded: false,
-          playerStatsGameLoaded: false
+          playerLoaded: false
         };
 
         $scope.user = {
         };
-      };
-
-      $scope.getPlayerStatsCareer = function (playerId) {
-        var retrievedType = "PlayerStatsCareer";
-
-        dataServicePlayerStatsCareer.listByPlayerId(playerId).$promise.then(
-          function (result) {
-            if (result && result.length && result.length > 0) {
-
-              angular.forEach(result, function (item) {
-                $scope.data.playerStatsCareer.push(item);
-              });
-
-              $scope.requests.playerStatsCareerLoaded = true;
-
-              alertService.successRetrieval(retrievedType, $scope.data.playerStatsCareer.length);
-
-            } else {
-              alertService.warningRetrieval(retrievedType, "No results returned");
-            }
-          },
-          function (err) {
-            alertService.errorRetrieval(retrievedType, err.message);
-          }
-        );
-      };
-
-      $scope.getPlayerStatsSeason = function (playerId) {
-        var retrievedType = "PlayerStatsSeason";
-
-        dataServicePlayerStatsSeason.listByPlayerId(playerId).$promise.then(
-          function (result) {
-            if (result && result.length && result.length > 0) {
-
-              angular.forEach(result, function (item) {
-                $scope.data.playerStatsSeason.push(item);
-              });
-
-              $scope.requests.playerStatsSeasonLoaded = true;
-
-              alertService.successRetrieval(retrievedType, $scope.data.playerStatsSeason.length);
-
-            } else {
-              alertService.warningRetrieval(retrievedType, "No results returned");
-            }
-          },
-          function (err) {
-            alertService.errorRetrieval(retrievedType, err.message);
-          }
-        );
-      };
-
-      $scope.getPlayerStatsSeasonTeam = function (playerId) {
-        var retrievedType = "PlayerStatsSeasonTeam";
-
-        dataServicePlayerStatsSeasonTeam.listByPlayerId(playerId).$promise.then(
-          function (result) {
-            if (result && result.length && result.length > 0) {
-
-              angular.forEach(result, function (item) {
-                $scope.data.playerStatsSeasonTeam.push(item);
-              });
-
-              $scope.requests.playerStatsSeasonTeamLoaded = true;
-
-              alertService.successRetrieval(retrievedType, $scope.data.playerStatsSeasonTeam.length);
-
-            } else {
-              alertService.warningRetrieval(retrievedType, "No results returned");
-            }
-          },
-          function (err) {
-            alertService.errorRetrieval(retrievedType, err.message);
-          }
-        );
-      };
-
-      $scope.getPlayerStatsGame = function (playerId) {
-        var retrievedType = "PlayerStatsGame";
-
-        dataServicePlayerStatsGame.listByPlayerId(playerId).$promise.then(
-          function (result) {
-            if (result && result.length && result.length > 0) {
-
-              angular.forEach(result, function (item) {
-                $scope.data.playerStatsGame.push(item);
-              });
-
-              $scope.requests.playerStatsGameLoaded = true;
-
-              alertService.successRetrieval(retrievedType, $scope.data.playerStatsGame.length);
-
-            } else {
-              alertService.warningRetrieval(retrievedType, "No results returned");
-            }
-          },
-          function (err) {
-            alertService.errorRetrieval(retrievedType, err.message);
-          }
-        );
       };
 
       $scope.getPlayer = function (playerId) {
@@ -205,21 +66,21 @@ lo30NgApp.controller('playersPlayerController',
         $scope.setWatches();
 
         //TODO make this a user selection
-        if ($routeParams.playerId === null) {
-          //$scope.data.selectedPlayerId = 593;
-          $scope.data.selectedPlayerId = 631;
+        if (sjv.isEmpty($routeParams.playerId)) {
+          $scope.data.selectedPlayerId = 593;
+          //$scope.data.selectedPlayerId = 631;
         } else {
           $scope.data.selectedPlayerId = $routeParams.playerId;
         }
 
+        //TODO make this a user selection
+        if (sjv.isEmpty($routeParams.seasonId)) {
+          $scope.data.selectedSeasonId = 54;
+        } else {
+          $scope.data.selectedSeasonId = $routeParams.seasonId;
+        }
+
         $scope.getPlayer($scope.data.selectedPlayerId);
-        $scope.getPlayerStatsCareer($scope.data.selectedPlayerId);
-        $scope.getPlayerStatsSeason($scope.data.selectedPlayerId);
-        $scope.getPlayerStatsSeasonTeam($scope.data.selectedPlayerId);
-        $scope.getPlayerStatsGame($scope.data.selectedPlayerId);
-        $timeout(function () {
-          $scope.sortAscOnly('game.gameYYYYMMDD');
-        }, 0);  // using timeout so it fires when done rendering
       };
 
       $scope.activate();

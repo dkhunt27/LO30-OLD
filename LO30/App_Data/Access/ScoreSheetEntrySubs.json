@@ -144,7 +144,7 @@
     "SEASON_ID": 54,
     "GAME_ID": 3329,
     "TEAM": 2.0,
-    "JERSEY": 6,
+    "JERSEY": 76,
     "SUB_ID": 34,
     "SUB_FOR_ID": 49,
     "UPDATED_ON": "2015-02-06T00:01:52"
@@ -165,7 +165,7 @@
     "GAME_ID": 3331,
     "TEAM": 1.0,
     "JERSEY": 8,
-    "SUB_ID": null,
+    "SUB_ID": 0,
     "SUB_FOR_ID": 53,
     "UPDATED_ON": "2015-02-06T00:01:52"
   },
@@ -224,7 +224,7 @@
     "SEASON_ID": 54,
     "GAME_ID": 3333,
     "TEAM": 1.0,
-    "JERSEY": 7,
+    "JERSEY": 77,
     "SUB_ID": 3,
     "SUB_FOR_ID": 120,
     "UPDATED_ON": "2015-02-06T00:01:52"
@@ -394,7 +394,7 @@
     "SEASON_ID": 54,
     "GAME_ID": 3334,
     "TEAM": 1.0,
-    "JERSEY": 7,
+    "JERSEY": 77,
     "SUB_ID": 0,
     "SUB_FOR_ID": 660,
     "UPDATED_ON": "2015-02-09T20:28:19"

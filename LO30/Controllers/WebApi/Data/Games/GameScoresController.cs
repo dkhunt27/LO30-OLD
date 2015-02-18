@@ -17,7 +17,7 @@ namespace LO30.Controllers.Data.Games
     public List<GameScore> GetGameScores(bool fullDetail = true)
     {
       var results = _repo.GetGameScores(fullDetail);
-      return results.OrderByDescending(x => x.GameTeam.GameId)
+      return results.OrderByDescending(x => x.GameScoreId)
                     .ToList();
     }
 

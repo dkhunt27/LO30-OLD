@@ -507,8 +507,11 @@ namespace LO30.Services
 
         // look up the home and away season team id
         // TODO..do this once per game, not per score sheet entry
-        var homeSeasonTeamId = gameTeams.Where(gt => gt.GameId == gameId && gt.HomeTeam == true).FirstOrDefault().SeasonTeamId;
-        var awaySeasonTeamId = gameTeams.Where(gt => gt.GameId == gameId && gt.HomeTeam == false).FirstOrDefault().SeasonTeamId;
+        var homeGameTeam = gameTeams.Where(gt => gt.GameId == gameId && gt.HomeTeam == true).FirstOrDefault();
+        var awayGameTeam = gameTeams.Where(gt => gt.GameId == gameId && gt.HomeTeam == false).FirstOrDefault();
+
+        var homeSeasonTeamId = homeGameTeam.SeasonTeamId;
+        var awaySeasonTeamId = awayGameTeam.SeasonTeamId;
 
         // lookup game rosters
         var homeTeamRoster = gameRosters.Where(x => x.GameTeam.GameId == gameId && x.GameTeam.SeasonTeamId == homeSeasonTeamId).ToList();
@@ -521,9 +524,11 @@ namespace LO30.Services
         var assist3PlayerNumber = scoreSheetEntry.Assist3;
 
         var gameRosterToUse = awayTeamRoster;
+        var gameTeamToUse = awayGameTeam;
         if (homeTeamFlag)
         {
           gameRosterToUse = homeTeamRoster;
+          gameTeamToUse = homeGameTeam;
         }
 
         // lookup player ids
@@ -545,6 +550,7 @@ namespace LO30.Services
                           per: scoreSheetEntry.Period,
                           ht: scoreSheetEntry.HomeTeam,
                           time: scoreSheetEntry.TimeRemaining,
+                          gtid: gameTeamToUse.GameTeamId,
 
                           gpid: Convert.ToInt32(goalPlayerId),
                           a1pid: assist1PlayerId,
@@ -572,8 +578,10 @@ namespace LO30.Services
 
         // look up the home and away season team id
         // TODO..do this once per game, not per score sheet entry
-        var homeSeasonTeamId = gameTeams.Where(gt => gt.GameId == gameId && gt.HomeTeam == true).FirstOrDefault().SeasonTeamId;
-        var awaySeasonTeamId = gameTeams.Where(gt => gt.GameId == gameId && gt.HomeTeam == false).FirstOrDefault().SeasonTeamId;
+        var homeGameTeam = gameTeams.Where(gt => gt.GameId == gameId && gt.HomeTeam == true).FirstOrDefault();
+        var awayGameTeam = gameTeams.Where(gt => gt.GameId == gameId && gt.HomeTeam == false).FirstOrDefault();
+        var homeSeasonTeamId = homeGameTeam.SeasonTeamId;
+        var awaySeasonTeamId = awayGameTeam.SeasonTeamId;
 
         // lookup game rosters
         var homeTeamRoster = gameRosters.Where(x => x.GameTeam.GameId == gameId && x.GameTeam.SeasonTeamId == homeSeasonTeamId).ToList();
@@ -583,9 +591,11 @@ namespace LO30.Services
         var playerNumber = scoreSheetEntryPenalty.Player;
 
         var gameRosterToUse = awayTeamRoster;
+        var gameTeamToUse = awayGameTeam;
         if (homeTeamFlag)
         {
           gameRosterToUse = homeTeamRoster;
+          gameTeamToUse = homeGameTeam;
         }
 
         // lookup player id
@@ -601,6 +611,7 @@ namespace LO30.Services
                           per: scoreSheetEntryPenalty.Period,
                           ht: scoreSheetEntryPenalty.HomeTeam,
                           time: scoreSheetEntryPenalty.TimeRemaining,
+                          gtid: gameTeamToUse.GameTeamId,
 
                           playid: Convert.ToInt32(playerId),
                           penid: penaltyId,
@@ -608,6 +619,73 @@ namespace LO30.Services
 
                           upd: DateTime.Now
                   ));
+      }
+
+      return newData;
+    }
+
+    public List<ScoreSheetEntrySubProcessed> DeriveScoreSheetEntrySubsProcessed(List<ScoreSheetEntrySub> scoreSheetEntrySubs, List<Game> games, List<GameTeam> gameTeams, List<TeamRoster> teamRosters, List<Player> players)
+    {
+      var newData = new List<ScoreSheetEntrySubProcessed>();
+
+      foreach (var scoreSheetEntrySub in scoreSheetEntrySubs)
+      {
+        var gameId = scoreSheetEntrySub.GameId;
+
+        var game = games.Where(x=>x.GameId == gameId).FirstOrDefault();
+        var gameDateYYYYMMDD = ConvertDateTimeIntoYYYYMMDD(game.GameDateTime, ifNullReturnMax: false);
+
+        // look up the home and away season team id
+        // TODO..do this once per game, not per score sheet entry
+        var homeGameTeam = gameTeams.Where(gt => gt.GameId == gameId && gt.HomeTeam == true).FirstOrDefault();
+        var awayGameTeam = gameTeams.Where(gt => gt.GameId == gameId && gt.HomeTeam == false).FirstOrDefault();
+        var homeSeasonTeamId = homeGameTeam.SeasonTeamId;
+        var awaySeasonTeamId = awayGameTeam.SeasonTeamId;
+
+        // lookup team rosters
+        var homeTeamRoster = teamRosters.Where(x => x.SeasonTeamId == homeSeasonTeamId && x.StartYYYYMMDD <= gameDateYYYYMMDD && x.EndYYYYMMDD >= gameDateYYYYMMDD).ToList();
+        var awayTeamRoster = teamRosters.Where(x => x.SeasonTeamId == awaySeasonTeamId && x.StartYYYYMMDD <= gameDateYYYYMMDD && x.EndYYYYMMDD >= gameDateYYYYMMDD).ToList();
+
+
+        var homeTeamFlag = scoreSheetEntrySub.HomeTeam;
+        var jerseyNumber = scoreSheetEntrySub.JerseyNumber;
+        var subPlayerId = scoreSheetEntrySub.SubPlayerId;
+        var subbingForPlayerId = scoreSheetEntrySub.SubbingForPlayerId;
+
+        var teamRosterToUse = awayTeamRoster;
+        var gameTeamToUse = awayGameTeam;
+        if (homeTeamFlag)
+        {
+          teamRosterToUse = homeTeamRoster;
+          gameTeamToUse = homeGameTeam;
+        }
+
+        // lookup player ids
+
+        // make sure the subbing for is on the team roster
+        var foundSubbingForPlayer = teamRosterToUse.Where(x => x.PlayerId == subbingForPlayerId).FirstOrDefault();
+        var foundSubPlayer = players.Where(x => x.PlayerId == subPlayerId).FirstOrDefault();
+
+        if (foundSubbingForPlayer == null || foundSubPlayer == null)
+        {
+          // todo handle bad data
+        }
+        else
+        {
+          newData.Add(new ScoreSheetEntrySubProcessed(
+                  ssesid: scoreSheetEntrySub.ScoreSheetEntrySubId,
+
+                  gid: gameId,
+                  ht: homeTeamFlag,
+                  gtid: homeGameTeam.GameTeamId,
+
+                  spid: subPlayerId,
+                  sfpid: subbingForPlayerId,
+                  jer: jerseyNumber,
+
+                  upd: DateTime.Now
+          ));
+        }
       }
 
       return newData;

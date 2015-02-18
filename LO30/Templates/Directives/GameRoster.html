@@ -1,7 +1,7 @@
 ﻿<div>
   <div class="row">
     <div class="col-xs-1">Line</div>
-    <div class="col-xs-1">In</div>
+    <div class="col-xs-1">Out</div>
     <div class="col-xs-1">Sub</div>
     <div class="col-xs-1">Num</div>
     <div class="col-xs-1">Pos</div>
@@ -13,7 +13,7 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="row" ng-repeat="item in data.goalies">
-          <lo30-game-roster-player team-game-roster="item" />
+          <lo30-game-roster-player team-game-roster="item" locked="locked" />
         </div>
       </div>
     </div>
@@ -22,7 +22,7 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="row" ng-repeat="item in data.line1 | orderBy:['-position','ratingPrimary','ratingSecondary']">
-          <lo30-game-roster-player team-game-roster="item" />
+          <lo30-game-roster-player team-game-roster="item" locked="locked" />
         </div>
       </div>
     </div>
@@ -31,7 +31,7 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="row" ng-repeat="item in data.line2 | orderBy:['-position','ratingPrimary','ratingSecondary']">
-          <lo30-game-roster-player team-game-roster="item" />
+          <lo30-game-roster-player team-game-roster="item" locked="locked" />
         </div>
       </div>
     </div>
@@ -40,7 +40,7 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="row" ng-repeat="item in data.line3 | orderBy:['-position','ratingPrimary','ratingSecondary']">
-          <lo30-game-roster-player team-game-roster="item" />
+          <lo30-game-roster-player team-game-roster="item" locked="locked" />
         </div>
       </div>
     </div>

@@ -25,6 +25,15 @@ namespace LO30.Data.Objects
     public int Games { get; set; }
 
     [Required]
+    public double GoalsAgainstAverage
+    {
+      get
+      {
+        return (double)GoalsAgainst / (double)Games;
+      }
+    }
+
+    [Required]
     public int GoalsAgainst { get; set; }
 
     [Required]

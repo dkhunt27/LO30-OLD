@@ -64,10 +64,14 @@ namespace LO30.Data
 
     public DbSet<PlayerStatus> PlayerStatuses { get; set; }
     public DbSet<PlayerStatusType> PlayerStatusTypes { get; set; }
+    
     public DbSet<ScoreSheetEntry> ScoreSheetEntries { get; set; }
     public DbSet<ScoreSheetEntryProcessed> ScoreSheetEntriesProcessed { get; set; }
     public DbSet<ScoreSheetEntryPenalty> ScoreSheetEntryPenalties { get; set; }
     public DbSet<ScoreSheetEntryPenaltyProcessed> ScoreSheetEntryPenaltiesProcessed { get; set; }
+    public DbSet<ScoreSheetEntrySub> ScoreSheetEntrySubs { get; set; }
+    public DbSet<ScoreSheetEntrySubProcessed> ScoreSheetEntrySubsProcessed { get; set; }
+
     public DbSet<Season> Seasons { get; set; }
     public DbSet<SeasonTeam> SeasonTeams { get; set; }
     public DbSet<Setting> Settings { get; set; }

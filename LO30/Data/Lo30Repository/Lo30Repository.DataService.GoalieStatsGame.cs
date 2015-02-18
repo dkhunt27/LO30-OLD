@@ -16,9 +16,9 @@ namespace LO30.Data
       return GetGoalieStatsGameBase(whereClause);
     }
 
-    public List<GoalieStatGame> GetGoalieStatsGameByPlayerId(int playerId)
+    public List<GoalieStatGame> GetGoalieStatsGameByGameId(int gameId)
     {
-      Expression<Func<GoalieStatGame, bool>> whereClause = x => x.PlayerId == playerId;
+      Expression<Func<GoalieStatGame, bool>> whereClause = x => x.GameId == gameId;
       return GetGoalieStatsGameBase(whereClause);
     }
 

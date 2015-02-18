@@ -20,9 +20,9 @@ namespace LO30.Controllers.Data.GoalieStats
       return results.ToList();
     }
 
-    public List<GoalieStatGame> GetGoalieStatsGameByPlayerId(int playerId)
+    public List<GoalieStatGame> GetGoalieStatsGameByGameId(int gameId)
     {
-      var results = _repo.GetGoalieStatsGameByPlayerId(playerId);
+      var results = _repo.GetGoalieStatsGameByGameId(gameId);
       return results;
     }
 

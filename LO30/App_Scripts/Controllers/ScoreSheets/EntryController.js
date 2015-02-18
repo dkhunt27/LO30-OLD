@@ -4,12 +4,14 @@
 lo30NgApp.controller('scoreSheetsEntryController',
   [
     '$scope',
+    '$routeParams',
     'alertService',
     'dataServiceGames',
     'dataServiceGameTeams',
     'dataServiceGameRosters',
     'dataServiceTeamRosters',
-    function ($scope, alertService, dataServiceGames, dataServiceGameTeams, dataServiceGameRosters, dataServiceTeamRosters) {
+    'dataServiceScoreSheetEntryProcessedPenalties',
+    function ($scope, $routeParams, alertService, dataServiceGames, dataServiceGameTeams, dataServiceGameRosters, dataServiceTeamRosters, dataServiceScoreSheetEntryProcessedPenalties) {
 
       $scope.initializeScopeVariables = function () {
         $scope.data = {
@@ -27,17 +29,22 @@ lo30NgApp.controller('scoreSheetsEntryController',
           gameRosterHome: [],
           gameRosterAway: [],
           teamRosterHome: [],
-          teamRosterAway: []
+          teamRosterAway: [],
+          scoreSheetEntryScoring: [],
+          scoreSheetEntryPenalties: []
         };
 
-        $scope.requests = {
+        $scope.events = {
           gamesLoaded: false,
+          gameSelectedLoaded: false,
           gameTeamHomeLoaded: false,
           gameTeamAwayLoaded: false,    
           gameRosterHomeLoaded: false,
           gameRosterAwayLoaded: false,
           teamRosterHomeLoaded: false,
-          teamRosterAwayLoaded: false
+          teamRosterAwayLoaded: false,
+          scoreSheetEntryScoringLoaded: false,
+          scoreSheetEntryPenaltiesLoaded: false
         };
 
         $scope.user = {
@@ -60,7 +67,7 @@ lo30NgApp.controller('scoreSheetsEntryController',
           teamName = "awayTeamName";
         }
 
-        $scope.requests[gameTeamLoaded] = false;
+        $scope.events[gameTeamLoaded] = false;
         $scope.data[gameTeam] = [];
         $scope.data[teamName] = "";
 
@@ -70,7 +77,7 @@ lo30NgApp.controller('scoreSheetsEntryController',
             if (result) {
               $scope.data[gameTeam] = result;
               $scope.data[teamName] = result.seasonTeam.team.teamShortName;
-              $scope.requests[gameTeamLoaded] = true;
+              $scope.events[gameTeamLoaded] = true;
 
               alertService.successRetrieval(retrievedType, 1);
             } else {
@@ -94,7 +101,7 @@ lo30NgApp.controller('scoreSheetsEntryController',
           retrievedType = "Away TeamRoster";
         }
 
-        $scope.requests[teamRostersLoaded] = false;
+        $scope.events[teamRostersLoaded] = false;
         $scope.data[teamRosters] = [];
 
         dataServiceTeamRosters.listTeamRostersBySeasonTeamIdAndYYYYMMDD(seasonTeamId, $scope.data.gameSelected.gameYYYYMMDD).$promise.then(
@@ -106,7 +113,7 @@ lo30NgApp.controller('scoreSheetsEntryController',
                 $scope.data[teamRosters].push(item);
               });
 
-              $scope.requests[teamRostersLoaded] = true;
+              $scope.events[teamRostersLoaded] = true;
 
               alertService.successRetrieval(retrievedType, $scope.data[teamRosters].length);
             } else {
@@ -131,7 +138,7 @@ lo30NgApp.controller('scoreSheetsEntryController',
           retrievedType = "Away GameRoster";
         }
 
-        $scope.requests[gameRostersLoaded] = false;
+        $scope.events[gameRostersLoaded] = false;
         $scope.data[gameRosters] = [];
 
         dataServiceGameRosters.listGameRostersByGameIdAndHomeTeam(gameId, homeTeam).$promise.then(
@@ -143,7 +150,7 @@ lo30NgApp.controller('scoreSheetsEntryController',
                 $scope.data[gameRosters].push(item);
               });
 
-              $scope.requests[gameRostersLoaded] = true;
+              $scope.events[gameRostersLoaded] = true;
 
               alertService.successRetrieval(retrievedType, $scope.data[gameRosters].length);
             } else {
@@ -154,10 +161,38 @@ lo30NgApp.controller('scoreSheetsEntryController',
         );
       };
 
+
+
+      $scope.getScoreSheetEntryPenalties = function (gameId, fullDetail) {
+        var retrievedType = "ScoreSheetEntryPenalties";
+
+        $scope.events.scoreSheetEntryPenaltiesLoaded = false;
+        $scope.data.scoreSheetEntryPenalties = [];
+
+        dataServiceScoreSheetEntryProcessedPenalties.listByGameId(gameId, fullDetail).$promise.then(
+          function (result) {
+            // service call on success
+            if (result) {
+
+              angular.forEach(result, function (item, index) {
+                $scope.data.scoreSheetEntryPenalties.push(item);
+              });
+
+              $scope.events.scoreSheetEntryPenaltiesLoaded = true;
+
+              alertService.successRetrieval(retrievedType, $scope.data.scoreSheetEntryPenalties.length);
+            } else {
+              // results not successful
+              alertService.errorRetrieval(retrievedType, result.reason);
+            }
+          }
+        );
+      };
+
       $scope.getGames = function () {
         var retrievedType = "Games";
-
-        $scope.initializeScopeVariables();
+        $scope.events.gamesLoaded = false;
+        $scope.events.gameSelectedLoaded = false;
 
         dataServiceGames.listGames().$promise.then(
           function (result) {
@@ -167,15 +202,13 @@ lo30NgApp.controller('scoreSheetsEntryController',
               angular.forEach(result, function (item) {
                 $scope.data.games.push(item);
               });
-
-              $scope.requests.gamesLoaded = true;
+              $scope.events.gamesLoaded = true;
 
               alertService.successRetrieval(retrievedType, $scope.data.games.length);
 
-              // TODO MOVE THIS TO A USER INPUT
-              $scope.user.selectedGameId = true;
-              $scope.data.gameIdSelected = 3227;
-              $scope.data.gameSelected = _.find($scope.data.games, function (item) { return item.gameId === $scope.data.gameIdSelected });
+              $scope.data.gameSelected = _.find($scope.data.games, function (item) { return item.gameId.toString() === $scope.data.gameIdSelected });
+
+              $scope.events.gameSelectedLoaded = true;
 
             } else {
               // results not successful
@@ -186,8 +219,8 @@ lo30NgApp.controller('scoreSheetsEntryController',
       };
 
       $scope.setWatches = function () {
-        $scope.$watch('data.gameIdSelected', function (val) {
-          if (val > -1) {
+        $scope.$watch('events.gameSelectedLoaded', function (val) {
+          if (val === true) {
             $scope.getGameTeam($scope.data.gameIdSelected, true);
             $scope.getGameTeam($scope.data.gameIdSelected, false);
             $scope.getGameRosters($scope.data.gameIdSelected, true);
@@ -195,13 +228,14 @@ lo30NgApp.controller('scoreSheetsEntryController',
           }
         }, true);
 
-        $scope.$watch('requests.gameTeamHomeLoaded', function (val) {
+
+        $scope.$watch('events.gameTeamHomeLoaded', function (val) {
           if (val === true) {
             $scope.getTeamRosters($scope.data.gameTeamHome.seasonTeamId, true);
           }
         }, true);
 
-        $scope.$watch('requests.gameTeamAwayLoaded', function (val) {
+        $scope.$watch('events.gameTeamAwayLoaded', function (val) {
           if (val === true) {
             $scope.getTeamRosters($scope.data.gameTeamAway.seasonTeamId, false);
           }
@@ -209,7 +243,18 @@ lo30NgApp.controller('scoreSheetsEntryController',
       }
 
       $scope.activate = function () {
+        $scope.initializeScopeVariables();
         $scope.setWatches();
+
+        //TODO make this a user selection
+        if ($routeParams.gameId === null) {
+          $scope.data.gameIdSelected = 3200;
+          $scope.user.selectedGameId = true;
+        } else {
+          $scope.data.gameIdSelected = $routeParams.gameId;
+          $scope.user.selectedGameId = true;
+        }
+
         $scope.getGames();
       };
 

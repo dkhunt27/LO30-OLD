@@ -14,9 +14,9 @@ namespace LO30.Controllers.Data.PlayerStats
       _repo = repo;
     }
 
-    public PlayerStatCareer GetPlayerStatCareerByPlayerIdSub(int playerId, bool sub)
+    public PlayerStatCareer GetPlayerStatCareerByPlayerIdPlayoffs(int playerId, bool playoffs)
     {
-      var results = _repo.GetPlayerStatCareerByPlayerIdSub(playerId, sub);
+      var results = _repo.GetPlayerStatCareerByPlayerIdPlayoffs(playerId, playoffs);
       return results;
     }
 

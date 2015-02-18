@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 /* jshint -W117 */ //(remove the undefined warning)
-lo30NgApp.controller('lo30BoxScoreController',
+lo30NgApp.controller('lo30ScoringByPeriodController',
   [
     '$scope',
     '$timeout',
@@ -76,7 +76,7 @@ lo30NgApp.controller('lo30BoxScoreController',
 
       $scope.getGameScores = function (gameId) {
         var retrievedType = "GameScores";
-        var fullDetail = false;
+        var fullDetail = true;
         dataServiceGameScores.listGameScoresByGameId(gameId, fullDetail).$promise.then(
           function (result) {
             if (result && result.length && result.length > 0) {

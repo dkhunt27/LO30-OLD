@@ -199,7 +199,13 @@ namespace LO30
       config.Routes.MapHttpRoute(
           name: "ApiGoalieStatsGame",
           routeTemplate: constApisUrl + "/goalieStatsGame/{playerId}/{seasonId}",
-          defaults: new { controller = "GoalieStatsGame", playerId = RouteParameter.Optional, seasonId = RouteParameter.Optional }
+          defaults: new { controller = "GoalieStatsGame" }
+      );
+
+      config.Routes.MapHttpRoute(
+          name: "ApiGoalieStatsGame2",
+          routeTemplate: constApisUrl + "/goalieStatsGame/{gameId}",
+          defaults: new { controller = "GoalieStatsGame", gameId = RouteParameter.Optional}
       );
 
       config.Routes.MapHttpRoute(
@@ -232,7 +238,7 @@ namespace LO30
 
       config.Routes.MapHttpRoute(
           name: "ApiPlayerStatCareer",
-          routeTemplate: constApisUrl + "/playerStatCareer/{playerId}/{sub}",
+          routeTemplate: constApisUrl + "/playerStatCareer/{playerId}/{playoffs}",
           defaults: new { controller = "PlayerStatCareer" }
       );
       #endregion
@@ -290,28 +296,28 @@ namespace LO30
       #region scoreSheetEntry(s)Processed routes
       config.Routes.MapHttpRoute(
           name: "ApiScoreSheetEntriesProcessed",
-          routeTemplate: constApisUrl + "/scoreSheetEntriesProcessed/{fullDetail}",
-          defaults: new { controller = "ScoreSheetEntriesProcessed" }
+          routeTemplate: constApisUrl + "/scoreSheetEntryProcessedScoring/{fullDetail}",
+          defaults: new { controller = "ScoreSheetEntryProcessedScoring" }
       );
 
       config.Routes.MapHttpRoute(
           name: "ApiScoreSheetEntriesProcessed2",
-          routeTemplate: constApisUrl + "/scoreSheetEntriesProcessed/{gameId}/{fullDetail}",
-          defaults: new { controller = "ScoreSheetEntriesProcessed" }
+          routeTemplate: constApisUrl + "/scoreSheetEntryProcessedScoring/{gameId}/{fullDetail}",
+          defaults: new { controller = "ScoreSheetEntryProcessedScoring" }
       );
       #endregion
 
       #region scoreSheetEntryPenalty(s)Processed routes
       config.Routes.MapHttpRoute(
           name: "ApiScoreSheetEntryPenaltiesProcessed",
-          routeTemplate: constApisUrl + "/scoreSheetEntryPenaltiesProcessed/{fullDetail}",
-          defaults: new { controller = "ScoreSheetEntryPenaltiesProcessed" }
+          routeTemplate: constApisUrl + "/scoreSheetEntryProcessedPenalties/{fullDetail}",
+          defaults: new { controller = "ScoreSheetEntryProcessedPenalties" }
       );
 
       config.Routes.MapHttpRoute(
           name: "ApiScoreSheetEntryPenaltiesProcessed2",
-          routeTemplate: constApisUrl + "/scoreSheetEntryPenaltiesProcessed/{gameId}/{fullDetail}",
-          defaults: new { controller = "ScoreSheetEntryPenaltiesProcessed" }
+          routeTemplate: constApisUrl + "/scoreSheetEntryProcessedPenalties/{gameId}/{fullDetail}",
+          defaults: new { controller = "ScoreSheetEntryProcessedPenalties" }
       );
       #endregion
 

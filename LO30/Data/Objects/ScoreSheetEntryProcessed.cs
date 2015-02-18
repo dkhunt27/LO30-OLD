@@ -21,6 +21,9 @@ namespace LO30.Data.Objects
     [Required]
     public bool HomeTeam { get; set; }
 
+    [Required, ForeignKey("GameTeam")]
+    public int GameTeamId { get; set; }
+
     [Required, ForeignKey("GoalPlayer")]
     public int GoalPlayerId { get; set; }
 
@@ -48,6 +51,7 @@ namespace LO30.Data.Objects
     public DateTime UpdatedOn { get; set; }
 
     public virtual Game Game { get; set; }
+    public virtual GameTeam GameTeam { get; set; }
     public virtual Player GoalPlayer { get; set; }
     public virtual Player Assist1Player { get; set; }
     public virtual Player Assist2Player { get; set; }
@@ -57,7 +61,7 @@ namespace LO30.Data.Objects
     {
     }
 
-    public ScoreSheetEntryProcessed(int sseid, int gid, int per, bool ht, string time, int gpid, int? a1pid, int? a2pid, int? a3pid, bool shg, bool ppg, bool gwg, DateTime upd)
+    public ScoreSheetEntryProcessed(int sseid, int gid, int per, bool ht, string time, int gtid, int gpid, int? a1pid, int? a2pid, int? a3pid, bool shg, bool ppg, bool gwg, DateTime upd)
     {
       this.ScoreSheetEntryId = sseid;
 
@@ -65,6 +69,7 @@ namespace LO30.Data.Objects
       this.Period = per;
       this.HomeTeam = ht;
       this.TimeRemaining = time;
+      this.GameTeamId = gtid;
 
       this.GoalPlayerId = gpid;
       this.Assist1PlayerId = a1pid;

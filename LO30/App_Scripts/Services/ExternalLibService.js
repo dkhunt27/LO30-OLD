@@ -6,14 +6,16 @@ lo30NgApp.factory(
   [
     function () {
 
-      /* global _, sjv */
+      /* global _, sjv, moment */
 
       var _temp = _;
       var sjvtemp = sjv;
+      var momenttemp = moment;
 
       return {
         _: _temp,
-        sjv: sjvtemp
+        sjv: sjvtemp,
+        moment: momenttemp
       };
     }
   ]

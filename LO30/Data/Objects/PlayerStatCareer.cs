@@ -13,7 +13,7 @@ namespace LO30.Data.Objects
     public int PlayerId { get; set; }
 
     [Key, Column(Order = 2)]
-    public bool Sub { get; set; }
+    public bool Playoffs { get; set; }
 
     [Required]
     public int Games { get; set; }
@@ -48,10 +48,10 @@ namespace LO30.Data.Objects
     {
     }
 
-    public PlayerStatCareer(int pid, bool sub, int games, int g, int a, int p, int ppg, int shg, int gwg, int pim)
+    public PlayerStatCareer(int pid, bool pfs, int games, int g, int a, int p, int ppg, int shg, int gwg, int pim)
     {
       this.PlayerId = pid;
-      this.Sub = sub;
+      this.Playoffs = pfs;
 
       this.Games = games;
 
@@ -72,9 +72,8 @@ namespace LO30.Data.Objects
 
     private void Validate()
     {
-      var locationKey = string.Format("pid: {0}, sub: {1}",
-                                  this.PlayerId,
-                                  this.Sub);
+      var locationKey = string.Format("pid: {0} pfs: {1}",
+                                  this.PlayerId, this.Playoffs);
 
       if (this.Points != this.Goals + this.Assists)
       {

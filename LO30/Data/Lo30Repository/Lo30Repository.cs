@@ -208,6 +208,61 @@ namespace LO30.Data
       return result;
     }
 
+    public ProcessingResult ProcessScoreSheetEntrySubs(int startingGameId, int endingGameId)
+    {
+      var result = new ProcessingResult();
+
+      DateTime last = DateTime.Now;
+      TimeSpan diffFromLast = new TimeSpan();
+
+      try
+      {
+        var scoreSheetEntrySubs = _ctx.ScoreSheetEntrySubs.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
+        var players = _ctx.Players.ToList();
+        var games = _ctx.Games.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
+        var gameTeams = _ctx.GameTeams.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
+        var teamRosters = _ctx.TeamRosters.ToList();
+
+        result.toProcess = scoreSheetEntrySubs.Count;
+
+        var scoreSheetEntrySubsProcessed = _lo30DataService.DeriveScoreSheetEntrySubsProcessed(scoreSheetEntrySubs, games, gameTeams, teamRosters, players);
+
+        result.modified = _contextService.SaveOrUpdateScoreSheetEntrySubProcessed(scoreSheetEntrySubsProcessed);
+
+        // AUDIT ScoreSheetEntrySubs and ScoreSheetEntrySubsProcessed should have same ids 
+        var inputs = _ctx.ScoreSheetEntrySubs.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
+        var outputs = _ctx.ScoreSheetEntrySubsProcessed.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
+
+        if (inputs.Count != outputs.Count)
+        {
+          result.error = "Error processing ScoreSheetEntrySubs. The ScoreSheetEntrySubs count (" + inputs.Count + ") does not match ScoreSheetEntrySubsProcessed count (" + outputs.Count + ")";
+        }
+        else
+        {
+          foreach (var input in inputs)
+          {
+            var output = outputs.Where(x => x.ScoreSheetEntrySubId == input.ScoreSheetEntrySubId).FirstOrDefault();
+
+            if (output == null)
+            {
+              result.error = "Error processing ScoreSheetEntrySubs. The ScoreSheetEntrySubId (" + input.ScoreSheetEntrySubId + ") is missing from ScoreSheetEntrySubsProcessed";
+            }
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        result.modified = -2;
+        result.error = ex.Message;
+
+        ErrorHandlingService.PrintFullErrorMessage(ex);
+      }
+
+      diffFromLast = DateTime.Now - last;
+      result.time = diffFromLast.ToString();
+      return result;
+    }
+
     public ProcessingResult ProcessScoreSheetEntriesIntoGameResults(int startingGameId, int endingGameId)
     {
       var result = new ProcessingResult();
@@ -565,7 +620,7 @@ namespace LO30.Data
       return result;
     }
 
-    public ProcessingResult ProcessScoreSheetEntriesIntoPlayerStats(int startingGameId, int endingGameId)
+    public ProcessingResult  ProcessScoreSheetEntriesIntoPlayerStats(int startingGameId, int endingGameId)
     {
       var result = new ProcessingResult();
 

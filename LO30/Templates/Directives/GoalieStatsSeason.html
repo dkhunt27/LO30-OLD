@@ -1,0 +1,30 @@
+﻿<div>
+  <div>
+    <h4>
+      {{data.goalieStatsSeason[0].season.seasonName}} Season Statistics
+    </h4>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-condensed table-bordered table-striped table-dk-blue">
+      <thead>
+        <tr>
+          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'season.seasonName'}" ng-click="sortDescOnly('name')">Type</td>
+          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'games'}" ng-click="sortDescOnly('games')">GP</td>
+          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'goalsAgainst'}" ng-click="sortAscOnly('goalsAgainst')">GA</td>
+          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'goalsAgainstAverage'}" ng-click="sortAscOnly('goalsAgainstAverage')">GAA</td>
+          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'wins'}" ng-click="sortDescOnly('wins')">W</td>
+          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'shutouts'}" ng-click="sortDescOnly('shutouts')">SO</td>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in data.goalieStatsSeason | orderBy:sortOn:sortDirection">
+          <td ng-class="{'td-sorted-by':sortOn === 'name' }">{{item.name}}</td>
+          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'games'}">{{item.games}}</td>
+          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'goalsAgainst' }">{{item.goalsAgainst}}</td>
+          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'goalsAgainstAverage' }">{{item.goalsAgainstAverage | number:2}}</td>
+          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'wins' }">{{item.wins}}</td>
+          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'shutouts' }">{{item.shutouts}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

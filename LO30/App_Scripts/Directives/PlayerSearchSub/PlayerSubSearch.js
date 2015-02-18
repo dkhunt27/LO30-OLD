@@ -14,8 +14,6 @@ lo30NgApp.directive('lo30PlayerSubSearch',
         },
         controller: "lo30PlayerSubSearchController",
         link: function (scope, element, attrs, controller) {
-
-          scope.activate();
         }
       };
     }

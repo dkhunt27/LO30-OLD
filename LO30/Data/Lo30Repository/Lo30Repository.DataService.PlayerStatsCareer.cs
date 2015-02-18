@@ -31,9 +31,9 @@ namespace LO30.Data
       return results;
     }
 
-    public PlayerStatCareer GetPlayerStatCareerByPlayerIdSub(int playerId, bool sub)
+    public PlayerStatCareer GetPlayerStatCareerByPlayerIdPlayoffs(int playerId, bool playoffs)
     {
-      return _contextService.FindPlayerStatCareer(playerId, sub, errorIfNotFound: false, errorIfMoreThanOneFound: true, populateFully: true);
+      return _contextService.FindPlayerStatCareer(playerId, playoffs, errorIfNotFound: false, errorIfMoreThanOneFound: true, populateFully: true);
     }
   }
 }
