@@ -24,6 +24,8 @@ namespace LO30.Data.Objects
     [Required]
     public int PenaltyMinutes { get; set; }
 
+    public int Subs { get; set; }
+
     [Required]
     public bool Override { get; set; }
 
@@ -38,6 +40,10 @@ namespace LO30.Data.Objects
     }
 
     public GameOutcome(int gtid, string res, int gf, int ga, int pim, bool over, int ogtid)
+      : this(gtid, res, gf, ga, pim, over, ogtid, 0)
+    { }
+
+    public GameOutcome(int gtid, string res, int gf, int ga, int pim, bool over, int ogtid, int subs)
     {
       this.GameTeamId = gtid;
 
@@ -47,6 +53,7 @@ namespace LO30.Data.Objects
       this.PenaltyMinutes = pim;
       this.Override = over;
       this.OpponentGameTeamId = ogtid;
+      this.Subs = subs;
 
       Validate();
     }
@@ -94,6 +101,11 @@ namespace LO30.Data.Objects
       if (this.GameTeamId == this.OpponentGameTeamId)
       {
         throw new ArgumentException("OpponentGameTeamId (" + this.OpponentGameTeamId + ") cannot equal GameTeamId for:" + locationKey, "OpponentGameTeamId");
+      }
+
+      if (this.Subs < 0)
+      {
+        throw new ArgumentException("Subs (" + this.Subs + ") must be a positive number for:" + locationKey, "Subs");
       }
     }
   }

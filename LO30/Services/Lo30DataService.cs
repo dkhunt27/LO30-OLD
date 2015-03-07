@@ -35,6 +35,7 @@ namespace LO30.Services
           GF = item.GoalsFor,
           GA = item.GoalsAgainst,
           PIM = item.PenaltyMinutes,
+          S = item.Subs,
           WPCT = winPct
         };
 

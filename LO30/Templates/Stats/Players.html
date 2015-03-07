@@ -18,129 +18,137 @@
     </header>
   </div>
 
-  <table>
-    <tr>
-      <td align="center" colspan="3">
-        <div class="col-xs-12">
-          <div class="input-group">
-            <div class="input-group-addon">
-              <span class="glyphicon glyphicon-search"></span>
-            </div>
-            <input class="form-control" id="search-text" name="searchText" ng-model="user.searchText" type="text" focus="" required="" ng-keyup="$event.keyCode == 13 ? navigateToOfferDetailsExecution(user.searchText) : null" placeholder="SEARCH ANY FIELD">
-            <div class="input-group-addon">
-              <span class="glyphicon glyphicon-remove" ng-click="removeSearch()"></span>
-            </div>
-          </div>
-        </div>
-      </td>
-    </tr>
-  </table>
-  <table>
-    <tr>
-      <td align="center" colspan="3">
-        <div class="col-xs-12">
-          <div class="btn-group btn-group-xs btn-group-justified">
-            <div class="btn-group">
-              <button type="button" class="btn btn-primary btn-lo30-disabled">Teams:</button>
-            </div>
-            <div data-ng-repeat="team in teams" class="btn-group">
-              <button type="button" class="btn" ng-click="filterByTeam(team)"
-                      ng-class="{'btn-default':team !== user.selectedTeam, 'btn-primary':team === user.selectedTeam}">
-                {{team}}
-              </button>
+  <div>
+    <table>
+      <tr>
+        <td align="center">
+          <div class="col-xs-12">
+            <div class="input-group">
+              <div class="input-group-addon">
+                <span class="glyphicon glyphicon-search"></span>
+              </div>
+              <input class="form-control" id="search-text" name="searchText" ng-model="user.searchText" type="text" focus="" required="" ng-keyup="$event.keyCode == 13 ? navigateToOfferDetailsExecution(user.searchText) : null" placeholder="SEARCH ANY FIELD">
+              <div class="input-group-addon">
+                <span class="glyphicon glyphicon-remove" ng-click="removeSearch()"></span>
+              </div>
             </div>
           </div>
-        </div>
-      </td>
-    </tr>
-  </table>
-  <table>
-    <tr>
-      <td align="center">
-        <div class="col-xs-12">
-          <div class="btn-group btn-group-xs btn-group-justified">
-            <div class="btn-group">
-              <button type="button" class="btn btn-danger btn-lo30-disabled">Pos:</button>
-            </div>
-            <div data-ng-repeat="position in positions" class="btn-group">
-              <button type="button" class="btn" ng-click="filterByPosition(position)"
-                      ng-class="{'btn-default':position !== user.selectedPosition, 'btn-danger':position === user.selectedPosition}">
-                {{position}}
-              </button>
-            </div>
-          </div>
-        </div>
-      </td>
-      <td align="center">
-        <div class="col-xs-12">
-          <div class="btn-group btn-group-xs btn-group-justified">
-            <div class="btn-group">
-              <button type="button" class="btn btn-warning btn-lo30-disabled">Line:</button>
-            </div>
-            <div data-ng-repeat="line in lines" class="btn-group">
-              <button type="button" class="btn" ng-click="filterByLine(line)"
-                      ng-class="{'btn-default':line !== user.selectedLine, 'btn-warning':line === user.selectedLine}">
-                {{line}}
-              </button>
-            </div>
-          </div>
-        </div>
-      </td>
-      <td align="center">
-        <div class="col-xs-12">
-          <div class="btn-group btn-group-xs btn-group-justified">
-            <div class="btn-group">
-              <button type="button" class="btn btn-success btn-lo30-disabled">Subs:</button>
-            </div>
-            <div data-ng-repeat="sub in subs" class="btn-group">
-              <button type="button" class="btn" ng-click="filterBySub(sub)"
-                      ng-class="{'btn-default':sub !== user.selectedSub, 'btn-success':sub === user.selectedSub}">
-                {{sub}}
-              </button>
-            </div>
-          </div>
-        </div>
-      </td>
-    </tr>
-  </table>
-  <br />
-  <div class="table-responsive">
-    <table class="table table-condensed table-bordered table-striped table-dk-blue">
-      <thead>
-        <tr>
-          <td>Rank</td>
-          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'team'}" ng-click="sortAscOnly('team')">Team</td>
-          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'player'}" ng-click="sortAscOnly('player')">Player</td>
-          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'pos'}" ng-click="sortAscOnly('pos')">Position</td>
-          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'line'}" ng-click="sortAscOnly('line')">Line</td>
-          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'gp'}" ng-click="sortDescOnly('gp')">GP</td>
-          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'g'}" ng-click="sortDescOnly('g')">Goals</td>
-          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'a'}" ng-click="sortDescOnly('a')">Assists</td>
-          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'p'}" ng-click="sortDescOnly('p')">Points</td>
-          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'pim'}" ng-click="sortDescOnly('pim')">PIM</td>
-          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'ppg'}" ng-click="sortDescOnly('ppg')">PPG</td>
-          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'shg'}" ng-click="sortDescOnly('shg')">SHG</td>
-          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'gwg'}" ng-click="sortDescOnly('gwg')">GWG</td>
-          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'sub'}" ng-click="sortAscOnly('sub')">Sub</td>
-      </thead>
-      <tbody>
-        <tr ng-repeat="item in data.playerStats | filterize:user.searchText | orderBy:sortOn:sortDirection">
-          <td>{{$index+1}}</td>
-          <td ng-class="{'td-sorted-by':sortOn === 'team' }">{{item.team}}</td>
-          <td ng-class="{'td-sorted-by':sortOn === 'player' }"><a ng-href="/Ng/#/Players/Player/{{item.pid}}">{{item.player}}</a></td>
-          <td ng-class="{'td-sorted-by':sortOn === 'pos' }">{{item.pos}}</td>
-          <td ng-class="{'td-sorted-by':sortOn === 'line' }">{{item.line}}</td>
-          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'gp'}">{{item.gp}}</td>
-          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'g'}">{{item.g}}</td>
-          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'a' }">{{item.a}}</td>
-          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'p' }">{{item.p}}</td>
-          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'pim' }">{{item.pim}}</td>
-          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'ppg' }">{{item.ppg}}</td>
-          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'shg' }">{{item.shg}}</td>
-          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'gwg' }">{{item.gwg}}</td>
-          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'sub'}">{{item.sub}}</td>
-        </tr>
-      </tbody>
+        </td>
+      </tr>
     </table>
+  </div>
+  <div>
+    <table>
+      <tr>
+        <td align="center">
+          <div class="col-xs-12">
+            <div class="btn-group btn-group-xs btn-group-justified">
+              <div class="btn-group">
+                <button type="button" class="btn btn-primary btn-lo30-disabled">Teams:</button>
+              </div>
+              <div data-ng-repeat="team in teams" class="btn-group">
+                <button type="button" class="btn" ng-click="filterByTeam(team)"
+                        ng-class="{'btn-default':team !== user.selectedTeam, 'btn-primary':team === user.selectedTeam}">
+                  {{team}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div>
+    <table>
+      <tr>
+        <td align="center">
+          <div class="col-xs-12">
+            <div class="btn-group btn-group-xs btn-group-justified">
+              <div class="btn-group">
+                <button type="button" class="btn btn-danger btn-lo30-disabled">Pos:</button>
+              </div>
+              <div data-ng-repeat="position in positions" class="btn-group">
+                <button type="button" class="btn" ng-click="filterByPosition(position)"
+                        ng-class="{'btn-default':position !== user.selectedPosition, 'btn-danger':position === user.selectedPosition}">
+                  {{position}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td align="center">
+          <div class="col-xs-12">
+            <div class="btn-group btn-group-xs btn-group-justified">
+              <div class="btn-group">
+                <button type="button" class="btn btn-warning btn-lo30-disabled">Line:</button>
+              </div>
+              <div data-ng-repeat="line in lines" class="btn-group">
+                <button type="button" class="btn" ng-click="filterByLine(line)"
+                        ng-class="{'btn-default':line !== user.selectedLine, 'btn-warning':line === user.selectedLine}">
+                  {{line}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td align="center">
+          <div class="col-xs-12">
+            <div class="btn-group btn-group-xs btn-group-justified">
+              <div class="btn-group">
+                <button type="button" class="btn btn-success btn-lo30-disabled">Subs:</button>
+              </div>
+              <div data-ng-repeat="sub in subs" class="btn-group">
+                <button type="button" class="btn" ng-click="filterBySub(sub)"
+                        ng-class="{'btn-default':sub !== user.selectedSub, 'btn-success':sub === user.selectedSub}">
+                  {{sub}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <br />
+  <div>
+    <div class="table-responsive">
+      <table class="table table-condensed table-bordered table-striped table-dk-blue">
+        <thead>
+          <tr>
+            <td>Rank</td>
+            <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'team'}" ng-click="sortAscOnly('team')">Team</td>
+            <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'player'}" ng-click="sortAscOnly('player')">Player</td>
+            <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'pos'}" ng-click="sortAscOnly('pos')">Position</td>
+            <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'line'}" ng-click="sortAscOnly('line')">Line</td>
+            <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'gp'}" ng-click="sortDescOnly('gp')">GP</td>
+            <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'g'}" ng-click="sortDescOnly('g')">Goals</td>
+            <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'a'}" ng-click="sortDescOnly('a')">Assists</td>
+            <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'p'}" ng-click="sortDescOnly('p')">Points</td>
+            <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'pim'}" ng-click="sortDescOnly('pim')">PIM</td>
+            <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'ppg'}" ng-click="sortDescOnly('ppg')">PPG</td>
+            <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'shg'}" ng-click="sortDescOnly('shg')">SHG</td>
+            <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'gwg'}" ng-click="sortDescOnly('gwg')">GWG</td>
+            <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'sub'}" ng-click="sortAscOnly('sub')">Sub</td>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in data.playerStats | filterize:user.searchText | orderBy:sortOn:sortDirection">
+            <td>{{$index+1}}</td>
+            <td ng-class="{'td-sorted-by':sortOn === 'team' }">{{item.team}}</td>
+            <td ng-class="{'td-sorted-by':sortOn === 'player' }"><a ng-href="/Ng/#/Players/Player/{{item.pid}}">{{item.player}}</a></td>
+            <td ng-class="{'td-sorted-by':sortOn === 'pos' }">{{item.pos}}</td>
+            <td ng-class="{'td-sorted-by':sortOn === 'line' }">{{item.line}}</td>
+            <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'gp'}">{{item.gp}}</td>
+            <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'g'}">{{item.g}}</td>
+            <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'a' }">{{item.a}}</td>
+            <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'p' }">{{item.p}}</td>
+            <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'pim' }">{{item.pim}}</td>
+            <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'ppg' }">{{item.ppg}}</td>
+            <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'shg' }">{{item.shg}}</td>
+            <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'gwg' }">{{item.gwg}}</td>
+            <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'sub'}">{{item.sub}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

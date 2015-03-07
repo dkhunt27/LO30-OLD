@@ -51,6 +51,8 @@ namespace LO30.Data.Objects
     [Required]
     public int PIM { get; set; }
 
+    public int S { get; set; }
+
     [Required]
     public float WPCT { get; set; }
   }

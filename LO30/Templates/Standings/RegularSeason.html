@@ -31,8 +31,9 @@
           <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'pts'}" ng-click="sortDescOnly('pts')">PTS</td>
           <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'gf'}" ng-click="sortDescOnly('gf')">GF</td>
           <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'ga'}" ng-click="sortAscOnly('ga')">GA</td>
-          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'pim'}" ng-click="sortDescOnly('pim')">PIM</td>
-          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'wpct'}">W%</td>
+          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'pim'}" ng-click="sortAscOnly('pim')">PIM</td>
+          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'wpct'}" ng-click="sortDescOnly('wpct')">W%</td>
+          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 's'}" ng-click="sortDescOnly('s')">Subs</td>
         </tr>
       </thead>
       <tbody>
@@ -48,6 +49,7 @@
           <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'ga' }">{{item.ga}}</td>
           <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'pim' }">{{item.pim}}</td>
           <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'wpct' }">{{item.wpct | percentage:0}}</td>
+          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 's' }">{{item.s}}</td>
         </tr>
       </tbody>
     </table>

@@ -45,6 +45,8 @@ namespace LO30.Data.Objects
     [Required]
     public int PenaltyMinutes { get; set; }
 
+    public int Subs { get; set; }
+
     public Division Division { get; set; }
     public SeasonTeam SeasonTeam { get; set; }
 
@@ -58,6 +60,7 @@ namespace LO30.Data.Objects
       this.GoalsFor = 0;
       this.GoalsAgainst = 0;
       this.PenaltyMinutes = 0;
+      this.Subs = 0;
     }
   }
 }

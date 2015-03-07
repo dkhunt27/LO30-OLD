@@ -26,6 +26,7 @@ namespace LO30.Data
                 GameDateTime = grp.Max(x => x.Game.GameDateTime)
               })
               .Where(x => x.SeasonId == seasonId)
+              .OrderByDescending(x => x.GameDateTime)
               .ToList();
 
       var gameDateTime = maxGameData.FirstOrDefault().GameDateTime;

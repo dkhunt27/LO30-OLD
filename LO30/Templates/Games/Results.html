@@ -15,7 +15,8 @@
             <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'gf'}" ng-click="sortDescOnly('gf')">GF</td>
             <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'ga'}" ng-click="sortAscOnly('ga')">GA</td>
             <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'pim'}" ng-click="sortDescOnly('pim')">PIM</td>
-            <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'wpct'}">W%</td>
+            <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'wpct'}" ng-click="sortDescOnly('wpct')">W%</td>
+            <td class="pointer" ng-class="{'td-sorted-by':sortOn === 's'}" ng-click="sortDescOnly('s')">Subs</td>
           </tr>
         </thead>
         <tbody>
@@ -31,6 +32,7 @@
             <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'ga' }">{{item.ga}}</td>
             <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'pim' }">{{item.pim}}</td>
             <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'wpct' }">{{item.wpct | percentage:0}}</td>
+            <td class="text-right" ng-class="{'td-sorted-by':sortOn === 's' }">{{item.s}}</td>
           </tr>
         </tbody>
       </table>
@@ -50,7 +52,7 @@
               <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'position'}" ng-click="sortDescOnly('goalsFor')">Goals For</td>
               <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'games'}" ng-click="sortDescOnly('goalsAgainst')">Goals Against</td>
               <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'penaltyMinutes'}" ng-click="sortAscOnly('penaltyMinutes')">PIM</td>
-
+              <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'subs'}" ng-click="sortDescOnly('subs')">Subs</td>
           </thead>
           <tbody>
             <tr ng-repeat="item in data.gameOutcomes | orderBy:sortOn:sortDirection">
@@ -61,6 +63,7 @@
               <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'goalsFor'}">{{item.goalsFor}}</td>
               <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'goalsAgainst'}">{{item.goalsAgainst}}</td>
               <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'penaltyMinutes' }">{{item.penaltyMinutes}}</td>
+              <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'subs' }">{{item.subs}}</td>
             </tr>
           </tbody>
         </table>

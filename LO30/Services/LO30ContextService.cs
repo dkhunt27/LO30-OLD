@@ -1443,6 +1443,68 @@ namespace LO30.Services
         return found;
       }
 
+      public List<GameRoster> FindGameRostersWithGameId(int gameId)
+      {
+        return FindGameRostersWithGameId(errorIfNotFound: true, gameId: gameId);
+      }
+
+      public List<GameRoster> FindGameRostersWithGameId(bool errorIfNotFound, int gameId)
+      {
+        var found = _ctx.GameRosters
+                          .Include("GameTeam")
+                          .Include("GameTeam.Game")
+                          .Include("GameTeam.Game.Season")
+                          .Include("GameTeam.SeasonTeam")
+                          .Include("GameTeam.SeasonTeam.Season")
+                          .Include("GameTeam.SeasonTeam.Team")
+                          .Include("GameTeam.SeasonTeam.Team.Coach")
+                          .Include("GameTeam.SeasonTeam.Team.Sponsor")
+
+                          .Include("Player")
+                          .Include("SubbingForPlayer")
+                          .Where(x => x.GameTeam.GameId == gameId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find GameRosters for" +
+                                                  " GameTeam.GameId:" + gameId 
+                                          );
+        }
+
+        return found;
+      }
+
+      public List<GameRoster> FindGameRostersWithGameTeamId(int gameTeamId)
+      {
+        return FindGameRostersWithGameTeamId(errorIfNotFound: true, gameTeamId: gameTeamId);
+      }
+
+      public List<GameRoster> FindGameRostersWithGameTeamId(bool errorIfNotFound, int gameTeamId)
+      {
+        var found = _ctx.GameRosters
+                          .Include("GameTeam")
+                          .Include("GameTeam.Game")
+                          .Include("GameTeam.Game.Season")
+                          .Include("GameTeam.SeasonTeam")
+                          .Include("GameTeam.SeasonTeam.Season")
+                          .Include("GameTeam.SeasonTeam.Team")
+                          .Include("GameTeam.SeasonTeam.Team.Coach")
+                          .Include("GameTeam.SeasonTeam.Team.Sponsor")
+
+                          .Include("Player")
+                          .Include("SubbingForPlayer")
+                          .Where(x => x.GameTeamId == gameTeamId).ToList();
+
+        if (errorIfNotFound == true && found.Count < 1)
+        {
+          throw new ArgumentNullException("found", "Could not find GameRosters for" +
+                                                  " GameTeamId:" + gameTeamId
+                                          );
+        }
+
+        return found;
+      }
+
       public GameRoster FindGameRosterByPK2(int gameTeamId, string playerNumber)
       {
         return FindGameRosterByPK2(errorIfNotFound: true, errorIfMoreThanOneFound: true, gameTeamId: gameTeamId, playerNumber: playerNumber);

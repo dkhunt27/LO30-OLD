@@ -406,6 +406,21 @@ namespace LO30.Data
             awayResult = "W";
           }
 
+          var gameRosters = _contextService.FindGameRostersWithGameId(gameId);
+
+          var gameSubCounts = gameRosters
+              .GroupBy(x => new { x.GameTeamId })
+              .Select(grp => new
+              {
+                GameTeamId = grp.Key.GameTeamId,
+
+                Subs = grp.Sum(x => Convert.ToInt32(x.Sub))
+              })
+              .ToList();
+
+          var homeSubCount = gameSubCounts.Where(x => x.GameTeamId == homeGameTeam.GameTeamId).FirstOrDefault().Subs;
+          var awaySubCount = gameSubCounts.Where(x => x.GameTeamId == awayGameTeam.GameTeamId).FirstOrDefault().Subs;
+
           var homeGameOutcome = new GameOutcome(
                                         gtid: homeGameTeam.GameTeamId,
                                         res: homeResult,
@@ -413,7 +428,8 @@ namespace LO30.Data
                                         ga: scoreAwayTeamTotal,
                                         pim: penaltyHomeTeamTotal,
                                         over: false,
-                                        ogtid: awayGameTeam.GameTeamId
+                                        ogtid: awayGameTeam.GameTeamId,
+                                        subs: homeSubCount
                                         );
 
           modifiedCount += _contextService.SaveOrUpdateGameOutcome(homeGameOutcome);
@@ -425,7 +441,8 @@ namespace LO30.Data
                                         ga: scoreHomeTeamTotal,
                                         pim: penaltyAwayTeamTotal,
                                         over: false,
-                                        ogtid: homeGameTeam.GameTeamId
+                                        ogtid: homeGameTeam.GameTeamId,
+                                        subs: awaySubCount
                                         );
 
           modifiedCount += _contextService.SaveOrUpdateGameOutcome(awayGameOutcome);
@@ -485,6 +502,7 @@ namespace LO30.Data
             int goalsFor = 0;
             int goalsAgainst = 0;
             int penaltyMinutes = 0;
+            int subs = 0;
 
             // get game outcomes for this season team
             bool errorIfNotFound = false;
@@ -501,7 +519,7 @@ namespace LO30.Data
               goalsAgainst = 0;
               goalsFor = 0;
               penaltyMinutes = 0;
-              
+              subs = 0;
             }
             else
             {
@@ -530,6 +548,7 @@ namespace LO30.Data
                 goalsFor = goalsFor + gameOutcome.GoalsFor;
                 goalsAgainst = goalsAgainst + gameOutcome.GoalsAgainst;
                 penaltyMinutes = penaltyMinutes + gameOutcome.PenaltyMinutes;
+                subs = subs + gameOutcome.Subs;
               }
             }
 
@@ -553,7 +572,8 @@ namespace LO30.Data
               Points = points,
               GoalsFor = goalsFor,
               GoalsAgainst = goalsAgainst,
-              PenaltyMinutes = penaltyMinutes
+              PenaltyMinutes = penaltyMinutes,
+              Subs = subs
             };
 
             modified = modified + _contextService.SaveOrUpdateTeamStanding(teamStanding);
@@ -599,7 +619,8 @@ namespace LO30.Data
             Points = s.Points,
             GoalsFor = s.GoalsFor,
             GoalsAgainst = s.GoalsAgainst,
-            PenaltyMinutes = s.PenaltyMinutes
+            PenaltyMinutes = s.PenaltyMinutes,
+            Subs = s.Subs
           };
 
           _contextService.SaveOrUpdateTeamStanding(teamStanding);
