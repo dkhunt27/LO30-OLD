@@ -24,6 +24,8 @@ namespace LO30.Data
 
     ProcessingResult ProcessScoreSheetEntrySubs(int startingGameId, int endingGameId);
 
+    ProcessingResult UpdateScoreSheetEntriesWithPPAndSH(int startingGameId, int endingGameId);
+
     ProcessingResult ProcessScoreSheetEntriesIntoGameResults(int startingGameId, int endingGameId);
 
     ProcessingResult ProcessGameResultsIntoTeamStandings(int seasonId, bool playoffs, int startingGameId, int endingGameId);

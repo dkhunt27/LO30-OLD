@@ -45,7 +45,7 @@
         <table class="table table-condensed table-bordered table-striped table-dk-blue">
           <thead>
             <tr>
-              <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'gameId'}" ng-click="sortAscOnly('gameTeam.gameId')">Game</td>
+              <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'gameId'}" ng-click="sortDescFirst('gameTeam.gameId')">Game</td>
               <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'gameTeam.game.gameDate'}" ng-click="sortDescFirst('gameTeam.game.gameDate')">Date</td>
               <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'opponentGameTeam.seasonTeam.team.teamShortName'}" ng-click="sortAscOnly('opponentGameTeam.seasonTeam.team.teamShortName')">Opponent</td>
               <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'line'}" ng-click="sortAscOnly('outcome')">Outcome</td>

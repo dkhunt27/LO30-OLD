@@ -8,6 +8,8 @@ namespace LO30.Services
 {
   public class Lo30DataService
   {
+    public int TimePerPeriod = 14;
+
     public List<ForWebTeamStanding> DeriveWebTeamStandings(List<TeamStanding> teamStandings)
     {
       var newData = new List<ForWebTeamStanding>();
@@ -339,6 +341,8 @@ namespace LO30.Services
           // sanity check...make sure there is only 1 goalie for each team for each game
           var check = gameRostersGoalies.Where(x => x.GameTeam.GameId == gameId && x.GameTeam.SeasonTeamId == seasonTeamId && x.Goalie == true).ToList();
 
+          // remove if goal "subbed" for himself because he forgot his jersey
+
           if (check.Count < 1 || check.Count > 1)
           {
             throw new ArgumentNullException("gameRosterGoalies", "Every GameRoster must have 1 and only 1 goalie GameId:" + gameId + " SeasonTeamId:" + seasonTeamId + " Goalie Count:" + check.Count);
@@ -515,6 +519,7 @@ namespace LO30.Services
         var awaySeasonTeamId = awayGameTeam.SeasonTeamId;
 
         // lookup game rosters
+        // TODO..do this once per game, not per score sheet entry
         var homeTeamRoster = gameRosters.Where(x => x.GameTeam.GameId == gameId && x.GameTeam.SeasonTeamId == homeSeasonTeamId).ToList();
         var awayTeamRoster = gameRosters.Where(x => x.GameTeam.GameId == gameId && x.GameTeam.SeasonTeamId == awaySeasonTeamId).ToList();
 
@@ -692,6 +697,281 @@ namespace LO30.Services
       return newData;
     }
 
+    public List<ScoreSheetEntryEvent> DeriveScoreSheetEntryEvents(List<ScoreSheetEntryProcessed> scoreSheetEntries, List<ScoreSheetEntryPenaltyProcessed> scoreSheetEntryPenalties)
+    {
+      // put all the goals and penalties in order
+      List<ScoreSheetEntryEvent> sseEvents = new List<ScoreSheetEntryEvent>();
+
+      // add all the goals to the events
+      foreach (var sseGoal in scoreSheetEntries)
+      {
+        sseEvents.Add(new ScoreSheetEntryEvent()
+          {
+            GameId = sseGoal.GameId,
+            TimeElapsed = sseGoal.TimeElapsed,
+            EventType  = ScoreSheetEntryEventType.Goal,
+            ScoreSheetEntryId = sseGoal.ScoreSheetEntryId,
+            ScoreSheetEntryPenaltyId = null,
+            HomeTeam = sseGoal.HomeTeam,
+            MatchPenalty = false
+          }
+        );
+      }
+
+      // add all the penalties to the events
+      foreach (var ssePenalty in scoreSheetEntryPenalties)
+      {
+        sseEvents.Add(new ScoreSheetEntryEvent()
+          {
+            GameId = ssePenalty.GameId,
+            TimeElapsed = ssePenalty.TimeElapsed,
+            EventType = ScoreSheetEntryEventType.PenaltyStart,
+            ScoreSheetEntryId = null,
+            ScoreSheetEntryPenaltyId = ssePenalty.ScoreSheetEntryPenaltyId,
+            HomeTeam = ssePenalty.HomeTeam,
+            MatchPenalty = ssePenalty.PenaltyMinutes == 5 ? true : false
+          }
+        );
+
+        sseEvents.Add(new ScoreSheetEntryEvent()
+          {
+            GameId = ssePenalty.GameId,
+            TimeElapsed = ssePenalty.TimeElapsed.Add(new TimeSpan(0, ssePenalty.PenaltyMinutes, 0)),
+            EventType = ScoreSheetEntryEventType.PenaltyEnd,
+            ScoreSheetEntryId = null,
+            ScoreSheetEntryPenaltyId = ssePenalty.ScoreSheetEntryPenaltyId,
+            HomeTeam = ssePenalty.HomeTeam,
+            MatchPenalty = ssePenalty.PenaltyMinutes == 5 ? true : false
+          }
+        );
+      }
+
+      // VERY IMPORTANT, order the events by time elapsed then event type
+      sseEvents = sseEvents.OrderBy(x => x.TimeElapsed).ThenBy(x=>x.EventType).ToList();
+
+      return sseEvents;
+    }
+
+    public List<ScoreSheetEntryGoalType> ProcessOneGameScoreSheetEntryEvents(List<ScoreSheetEntryEvent> scoreSheetEntryEvents)
+    {
+      List<ScoreSheetEntryGoalType> results = new List<ScoreSheetEntryGoalType>();
+
+      List<ScoreSheetEntryEvent> homeTeamPenaltyBox = new List<ScoreSheetEntryEvent>();
+      List<ScoreSheetEntryEvent> awayTeamPenaltyBox = new List<ScoreSheetEntryEvent>();
+      ScoreSheetEntryEvent leavesPenaltyBox;
+      ScoreSheetEntryEvent eventToRemove;
+
+      // loop through the events and see if any goals where scored during the penalties
+      while (scoreSheetEntryEvents.Count > 0)
+      {
+        var sseEvent = scoreSheetEntryEvents[0];
+
+        var penaltyBoxToUse = awayTeamPenaltyBox;
+        if (sseEvent.HomeTeam)
+        {
+          penaltyBoxToUse = homeTeamPenaltyBox;
+        }
+
+        switch (sseEvent.EventType)
+        {
+          case ScoreSheetEntryEventType.PenaltyEnd:
+            // the penalty ended before any goal was scored...
+            // remove person from penalty box
+
+            leavesPenaltyBox = penaltyBoxToUse.Single(x => x.ScoreSheetEntryPenaltyId == sseEvent.ScoreSheetEntryPenaltyId);
+            penaltyBoxToUse.Remove(leavesPenaltyBox);
+
+            // remove event since it has been handled
+            eventToRemove = scoreSheetEntryEvents.Single(x => x.ScoreSheetEntryPenaltyId == sseEvent.ScoreSheetEntryPenaltyId && x.EventType == sseEvent.EventType);
+            scoreSheetEntryEvents.Remove(eventToRemove);
+            break;
+          case ScoreSheetEntryEventType.PenaltyStart:
+            // a penalty occurred, add person to penalty box
+             
+            penaltyBoxToUse.Add(sseEvent);
+
+            // remove event since it has been handled
+            eventToRemove = scoreSheetEntryEvents.Single(x => x.ScoreSheetEntryPenaltyId == sseEvent.ScoreSheetEntryPenaltyId && x.EventType == sseEvent.EventType);
+            scoreSheetEntryEvents.Remove(eventToRemove);
+            break;
+          case ScoreSheetEntryEventType.Goal:
+            // if no one in the penalty box, then its just a regular goal
+            if (homeTeamPenaltyBox.Count == 0 && awayTeamPenaltyBox.Count == 0)
+            {
+              // if no one in the penalty box, then its just a regular goal
+              // do nothing
+            }
+            else if (homeTeamPenaltyBox.Count == awayTeamPenaltyBox.Count)
+            {
+              // there are the same number of people in the penalty box
+              // so the goal was even strength
+              // do nothing
+            }
+            else if (homeTeamPenaltyBox.Count < awayTeamPenaltyBox.Count)
+            {
+              // the home team is on the power play
+              if (sseEvent.HomeTeam)
+              {
+                // home team scored...on the power play
+                results.Add(new ScoreSheetEntryGoalType(){
+                  ScoreSheetEntryId = Convert.ToInt32(sseEvent.ScoreSheetEntryId),
+                  PowerPlayGoal = true,
+                  ShortHandedGoal = false,
+                  GameWinningGoal = false
+                });
+
+                //release person from away team penalty box (but not if match penalty)
+                leavesPenaltyBox = awayTeamPenaltyBox.Where(x => x.MatchPenalty == false).OrderBy(x => x.TimeElapsed).FirstOrDefault();
+                if (leavesPenaltyBox != null)
+                {
+                  awayTeamPenaltyBox.Remove(leavesPenaltyBox);
+
+                  // also remove the penalty end event
+                  eventToRemove = scoreSheetEntryEvents.Single(x => x.ScoreSheetEntryPenaltyId == leavesPenaltyBox.ScoreSheetEntryPenaltyId && x.EventType == ScoreSheetEntryEventType.PenaltyEnd);
+                  scoreSheetEntryEvents.Remove(eventToRemove);
+                }
+              }
+              else
+              {
+                // away team scored...shorthanded
+                results.Add(new ScoreSheetEntryGoalType(){
+                  ScoreSheetEntryId = Convert.ToInt32(sseEvent.ScoreSheetEntryId),
+                  PowerPlayGoal = false,
+                  ShortHandedGoal = true,
+                  GameWinningGoal = false
+                });
+              }
+            }
+            else
+            {
+              // the away team is on the power play
+              if (sseEvent.HomeTeam)
+              {
+                // home team scored...shorthanded
+                results.Add(new ScoreSheetEntryGoalType(){
+                  ScoreSheetEntryId = Convert.ToInt32(sseEvent.ScoreSheetEntryId),
+                  PowerPlayGoal = false,
+                  ShortHandedGoal = true,
+                  GameWinningGoal = false
+                });
+              }
+              else
+              {
+                // away team scored...on the power play
+                results.Add(new ScoreSheetEntryGoalType(){
+                  ScoreSheetEntryId = Convert.ToInt32(sseEvent.ScoreSheetEntryId),
+                  PowerPlayGoal = true,
+                  ShortHandedGoal = false,
+                  GameWinningGoal = false
+                });
+
+                //release person from home team penalty box (but not if match penalty)
+                leavesPenaltyBox = homeTeamPenaltyBox.Where(x => x.MatchPenalty == false).OrderBy(x => x.TimeElapsed).FirstOrDefault();
+                if (leavesPenaltyBox != null)
+                {
+                  homeTeamPenaltyBox.Remove(leavesPenaltyBox);
+
+                  // also remove the penalty end event
+                  eventToRemove = scoreSheetEntryEvents.Single(x => x.ScoreSheetEntryPenaltyId == leavesPenaltyBox.ScoreSheetEntryPenaltyId && x.EventType == ScoreSheetEntryEventType.PenaltyEnd);
+                  scoreSheetEntryEvents.Remove(eventToRemove);
+                }
+              }
+            }
+
+            // remove event since it has been handled
+            eventToRemove = scoreSheetEntryEvents.Single(x => x.ScoreSheetEntryId == sseEvent.ScoreSheetEntryId && x.EventType == sseEvent.EventType);
+            scoreSheetEntryEvents.Remove(eventToRemove);
+            break;
+          default:
+            throw new NotImplementedException("The EventType (" + sseEvent.EventType.ToString() + ") is not implemented");
+        }
+      }
+
+      return results;
+    }
+
+    public List<ScoreSheetEntryProcessed> UpdateScoreSheetEntryProcessedWithPPAndSH(List<ScoreSheetEntryProcessed> scoreSheetEntries, List<ScoreSheetEntryPenaltyProcessed> scoreSheetEntryPenalties)
+    {
+      List<ScoreSheetEntryGoalType> scoreSheetEntryGoalTypes = new List<ScoreSheetEntryGoalType>();
+
+      // put all the goals and penalties in order
+      List<ScoreSheetEntryEvent> scoreSheetEntryEvents = DeriveScoreSheetEntryEvents(scoreSheetEntries, scoreSheetEntryPenalties);
+
+      int currentGameId = -1;
+      int previosGameId = -1;
+      List<int> penaltiesProcessing = new List<int>();
+
+      // loop through the events and see if any goals where scored during the penalties
+      foreach (var sseEvent in scoreSheetEntryEvents)
+      {
+        currentGameId = sseEvent.GameId;
+
+        if (currentGameId == previosGameId)
+        {
+          // this gameid has already been processed; do nothing
+        }
+        else
+        {
+          previosGameId = currentGameId;
+
+          var allCurrentGameEvents = scoreSheetEntryEvents.Where(x => x.GameId == currentGameId).OrderBy(x => x.TimeElapsed).ToList();
+          var results = ProcessOneGameScoreSheetEntryEvents(allCurrentGameEvents);
+          scoreSheetEntryGoalTypes.AddRange(results);
+        }
+      }
+
+
+      // loop through goal type results and update score sheet entries
+      foreach (var goalTypeResult in scoreSheetEntryGoalTypes)
+      {
+        var scoreSheetEntry = scoreSheetEntries.Single(x => x.ScoreSheetEntryId == goalTypeResult.ScoreSheetEntryId);
+        scoreSheetEntry.PowerPlayGoal = goalTypeResult.PowerPlayGoal;
+        scoreSheetEntry.ShortHandedGoal = goalTypeResult.ShortHandedGoal;
+      }
+
+      // loop through the penalties and see if any goals where scored during them
+      /*foreach (var scoreSheetEntryPenalty in scoreSheetEntryPenalties)
+      {
+        var gameId = scoreSheetEntryPenalty.GameId;
+        var penaltyHomeTeam = scoreSheetEntryPenalty.HomeTeam;
+
+        //get start/end time of the penalty
+        var start = scoreSheetEntryPenalty.TimeElapsed;
+        var end = start.Add(new TimeSpan(0, scoreSheetEntryPenalty.PenaltyMinutes, 0));
+        var major = scoreSheetEntryPenalty.PenaltyMinutes == 5 ? true : false;
+
+
+
+        //check if there were any goals during the penalty
+        var goalsDuringPenalty = scoreSheetEntries.Where(x => x.GameId == gameId && x.TimeElapsed >= start && x.TimeElapsed <= end).OrderBy(x=>x.TimeElapsed).ToList();
+
+        //now see if they were power play or shorthanded
+        foreach (var goalDuringPenalty in goalsDuringPenalty)
+        {
+          // if it was a power play goal (hometeam != penalty hometeam)
+          // and it was not a major penalty
+          // then the power play is over, no need to continue processing
+          if (goalDuringPenalty.HomeTeam != penaltyHomeTeam)
+          {
+            goalDuringPenalty.PowerPlayGoal = true;
+
+            if (!major)
+            {
+              // then the power play is over, no need to continue processing
+              break; 
+            }
+          }
+          else
+          {
+            // it was a shorthanded goal
+            goalDuringPenalty.ShortHandedGoal = true;
+          }
+        }
+      }*/
+
+      return scoreSheetEntries;
+    }
+
     public int? ConvertPlayerNumberIntoPlayer(ICollection<GameRoster> gameRoster, string playerNumber)
     {
       int? playerId = null;
@@ -782,6 +1062,108 @@ namespace LO30.Services
       string ratingCombined = "";
       ratingCombined = ratingPrimary.ToString() + '.' + ratingSecondary.ToString();
       return ratingCombined;
+    }
+
+    public TimeSpan ConvertToOverallTimeElapsed(int period, string time)
+    {
+      var fullPeriodsAlreadyPlayedTime = new TimeSpan(0, (period - 1) * TimePerPeriod, 0);
+      var playedInThisPeriodTime = new TimeSpan(0, TimePerPeriod, 0).Subtract(ConvertTimeToTimeSpan(time));
+
+      var overallTime = playedInThisPeriodTime.Add(fullPeriodsAlreadyPlayedTime);
+
+      if (overallTime.CompareTo(TimeSpan.Zero) < 0)
+      {
+        throw new ArgumentOutOfRangeException("overallTime", overallTime, "overallTime cannot be negative. period:" + period.ToString() + " time: " + time);
+      }
+
+      return overallTime;
+    }
+
+    public TimeSpan ConvertToOverallTimeRemaining(int period, string time, int totalPeriods)
+    {
+      var totalTime = new TimeSpan(0, totalPeriods * TimePerPeriod, 0);
+      var fullPeriodsAlreadyPlayedTime = new TimeSpan(0, (period - 1) * TimePerPeriod, 0);
+      var playedInThisPeriodTime = new TimeSpan(0, TimePerPeriod, 0).Subtract(ConvertTimeToTimeSpan(time));
+
+      var overallTime = totalTime.Subtract(fullPeriodsAlreadyPlayedTime).Subtract(playedInThisPeriodTime);
+
+      return overallTime;
+    }
+
+    public TimeSpan ConvertTimeToTimeSpan(string time)
+    {
+      TimeSpan result;
+
+      if (string.IsNullOrWhiteSpace(time))
+      {
+        throw new ArgumentOutOfRangeException("time", time, "Cannot be null or empty");
+      }
+      else if (time.IndexOf('.') > -1)
+      {
+        var parts = time.Split('.');
+        if (parts.Length != 2)
+        {
+          throw new ArgumentOutOfRangeException("parts.length", parts.Length, "Should be 2");
+        }
+
+        result = ConvertTimePartsToTimeSpan(parts[0], parts[1], time);
+      }
+      else if (time.IndexOf(':') > -1)
+      {
+        var parts = time.Split(':');
+        if (parts.Length != 2)
+        {
+          throw new ArgumentOutOfRangeException("parts.length", parts.Length, "Should be 2");
+        }
+
+        result = ConvertTimePartsToTimeSpan(parts[0], parts[1], time);
+      }
+      else
+      {
+        // assume time is just seconds
+        result = ConvertTimePartsToTimeSpan("0", time, time);
+      }
+
+      return result;
+    }
+
+    private TimeSpan ConvertTimePartsToTimeSpan(string timePart0, string timePart1, string origTime)
+    {
+      TimeSpan result;
+
+      int part0, part1;
+
+      if (string.IsNullOrWhiteSpace(timePart0))
+      {
+        timePart0 = "0";
+      }
+
+      if (string.IsNullOrWhiteSpace(timePart1))
+      {
+        timePart1 = "0";
+      }
+
+      try
+      {
+        part0 = Convert.ToInt32(timePart0);
+      }
+      catch
+      {
+        throw new ArgumentOutOfRangeException("timePart0", timePart0, "Could not covert timePart0 to Integer from origTime:" + origTime);
+      }
+
+      try
+      {
+        part1 = Convert.ToInt32(timePart1);
+      }
+      catch
+      {
+        throw new ArgumentOutOfRangeException("timePart1", timePart1, "Could not covert timePart1 to Integer from origTime:" + origTime);
+      }
+
+      result = new TimeSpan(0, part0, part1);
+
+      return result;
     }
   }
 }

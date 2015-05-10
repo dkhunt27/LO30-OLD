@@ -1040,6 +1040,40 @@ namespace LO30.Services
       }
       #endregion
 
+      #region SaveOrUpdate-Team
+      public int SaveOrUpdateTeam(List<Team> listToSave)
+      {
+        var saved = 0;
+        foreach (var toSave in listToSave)
+        {
+          var results = SaveOrUpdateTeam(toSave);
+          saved = saved + results;
+        }
+
+        return saved;
+      }
+
+      public int SaveOrUpdateTeam(Team toSave)
+      {
+        var errorIfNotFound = false;
+        var errorIfMoreThanOneFound = true;
+        Team found = FindTeam(toSave.TeamId, errorIfNotFound, errorIfMoreThanOneFound);
+
+        if (found == null)
+        {
+          _ctx.Teams.Add(toSave);
+        }
+        else
+        {
+          var entry = _ctx.Entry(found);
+          entry.OriginalValues.SetValues(found);
+          entry.CurrentValues.SetValues(toSave);
+        }
+
+        return ContextSaveChanges();
+      }
+      #endregion
+
       #region SaveOrUpdate-TeamRoster
       public int SaveOrUpdateTeamRoster(List<TeamRoster> listToSave)
       {
@@ -2595,6 +2629,38 @@ namespace LO30.Services
           return null;
         }
       }
+      #endregion
+
+      #region Find-Team NEW FORMAT
+      public Team FindTeam(int teamId, bool errorIfNotFound = true, bool errorIfMoreThanOneFound = true, bool populateFully = false)
+      {
+        Expression<Func<Team, bool>> whereClause = x => x.TeamId == teamId;
+
+        string errMsgNotFoundFor = " TeamId:" + teamId;
+
+        return FindTeam(whereClause, errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound, populateFully);
+      }
+
+      private Team FindTeam(Expression<Func<Team, bool>> whereClause, string errMsgNotFoundFor, bool errorIfNotFound, bool errorIfMoreThanOneFound, bool populateFully)
+      {
+        List<Team> found;
+
+        if (populateFully)
+        {
+          found = _ctx.Teams
+                        .Include("Coach")
+                        .Include("Sponsor")
+                        .Where(whereClause)
+                        .ToList();
+        }
+        else
+        {
+          found = _ctx.Teams.Where(whereClause).ToList();
+        }
+
+        return FindBase<Team>(found, "Team", errMsgNotFoundFor, errorIfNotFound, errorIfMoreThanOneFound);
+      }
+
       #endregion
 
       #region Find-TeamRoster(s) (addtl finds)  NEW FORMAT

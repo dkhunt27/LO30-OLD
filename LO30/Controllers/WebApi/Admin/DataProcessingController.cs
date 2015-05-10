@@ -44,11 +44,11 @@ namespace LO30.Controllers.Admin
       switch (model.action)
       {
         case "ProcessScoreSheetEntries":
-          results = _repo.ProcessScoreSheetEntries(model.startingGameId, model.endingGameId);
+          results = _repo.ProcessScoreSheetEntryPenalties(model.startingGameId, model.endingGameId);
 
           if (string.IsNullOrWhiteSpace(results.error))
           {
-            result2 = _repo.ProcessScoreSheetEntryPenalties(model.startingGameId, model.endingGameId);
+            result2 = _repo.ProcessScoreSheetEntries(model.startingGameId, model.endingGameId);
             results.error = result2.error;
             results.toProcess += result2.toProcess;
             results.modified += result2.modified;
@@ -66,11 +66,19 @@ namespace LO30.Controllers.Admin
         case "ProcessPlayerStatsIntoWebStats":
           results = _repo.ProcessPlayerStatsIntoWebStats();
           break;
-        case "ProcessAll":          
-          result1 = _repo.ProcessScoreSheetEntries(model.startingGameId, model.endingGameId);
+        case "ProcessAll":
+          result1 = _repo.ProcessScoreSheetEntryPenalties(model.startingGameId, model.endingGameId);
           results.error = result1.error;
           results.toProcess = result1.toProcess;
           results.modified = result1.modified;
+
+          if (string.IsNullOrWhiteSpace(results.error))
+          {
+            result2 = _repo.ProcessScoreSheetEntries(model.startingGameId, model.endingGameId);
+            results.error = result2.error;
+            results.toProcess += result2.toProcess;
+            results.modified += result2.modified;
+          }
 
           if (string.IsNullOrWhiteSpace(results.error))
           {

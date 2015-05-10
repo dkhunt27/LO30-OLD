@@ -7,8 +7,9 @@ lo30NgApp.controller('lo30ScoringDetailController',
     'alertService',
     'externalLibService',
     'dataServiceScoreSheetEntryProcessedScoring',
+    'dataServiceScoreSheetEntryProcessedPenalties',
     'dataServiceGoalieStatsGame',
-    function ($scope, alertService, externalLibService, dataServiceScoreSheetEntryProcessedScoring, dataServiceGoalieStatsGame) {
+    function ($scope, alertService, externalLibService, dataServiceScoreSheetEntryProcessedScoring, dataServiceScoreSheetEntryProcessedPenalties, dataServiceGoalieStatsGame) {
       var _ = externalLibService._;
 
       $scope.initializeScopeVariables = function () {
@@ -22,13 +23,20 @@ lo30NgApp.controller('lo30ScoringDetailController',
           scoreSheetEntryScoring2nd: [],
           scoreSheetEntryScoring3rd: [],
           scoreSheetEntryScoringOT: [],
+          scoreSheetEntryPenalties: [],
+          scoreSheetEntryPenalties1st: [],
+          scoreSheetEntryPenalties2nd: [],
+          scoreSheetEntryPenalties3rd: [],
+          scoreSheetEntryPenaltiesOT: [],
           goalieStatsGame: [],
           goalieStatsGameWinner: {},
-          goalieStatsGameLoser: {}
+          goalieStatsGameLoser: {},
+          timeElapsedSortBy: false
         };
 
         $scope.events = {
           scoreSheetEntryScoringLoaded: false,
+          scoreSheetEntryPenaltiesLoaded: false,
           goalieStatsGameLoaded: false
         };
 
@@ -64,6 +72,42 @@ lo30NgApp.controller('lo30ScoringDetailController',
               $scope.events.scoreSheetEntryScoringLoaded = true;
 
               alertService.successRetrieval(retrievedType, $scope.data.scoreSheetEntryScoring.length);
+            } else {
+              // results not successful
+              alertService.errorRetrieval(retrievedType, result.reason);
+            }
+          }
+        );
+      };
+
+      $scope.getScoreSheetEntryPenalties = function (gameId, fullDetail) {
+        var retrievedType = "ScoreSheetEntryPenalties";
+
+        $scope.events.scoreSheetEntryPenaltiesLoaded = false;
+        $scope.data.scoreSheetEntryPenalties = [];
+
+        dataServiceScoreSheetEntryProcessedPenalties.listByGameId(gameId, fullDetail).$promise.then(
+          function (result) {
+            // service call on success
+            if (result) {
+
+              angular.forEach(result, function (item, index) {
+                $scope.data.scoreSheetEntryPenalties.push(item);
+
+                if (item.period === 1) {
+                  $scope.data.scoreSheetEntryPenalties1st.push(item);
+                } else if (item.period === 2) {
+                  $scope.data.scoreSheetEntryPenalties2nd.push(item);
+                } else if (item.period === 3) {
+                  $scope.data.scoreSheetEntryPenalties3rd.push(item);
+                } else {
+                  $scope.data.scoreSheetEntryPenaltiesOT.push(item);
+                }
+              });
+
+              $scope.events.scoreSheetEntryPenaltiesLoaded = true;
+
+              alertService.successRetrieval(retrievedType, $scope.data.scoreSheetEntryPenalties.length);
             } else {
               // results not successful
               alertService.errorRetrieval(retrievedType, result.reason);
@@ -123,6 +167,7 @@ lo30NgApp.controller('lo30ScoringDetailController',
         $scope.initializeScopeVariables();
         $scope.setWatches();
         $scope.getScoreSheetEntryScoring($scope.gameId, true);
+        $scope.getScoreSheetEntryPenalties($scope.gameId, true);
         $scope.getGoalieStatsGame($scope.gameId, true);
       };
 

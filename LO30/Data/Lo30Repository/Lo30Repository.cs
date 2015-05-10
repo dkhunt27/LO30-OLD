@@ -208,6 +208,38 @@ namespace LO30.Data
       return result;
     }
 
+    public ProcessingResult UpdateScoreSheetEntriesWithPPAndSH(int startingGameId, int endingGameId)
+    {
+      var result = new ProcessingResult();
+
+      DateTime last = DateTime.Now;
+      TimeSpan diffFromLast = new TimeSpan();
+
+      try
+      {
+        var scoreSheetEntries = _ctx.ScoreSheetEntriesProcessed.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
+        var scoreSheetEntryPenalties = _ctx.ScoreSheetEntryPenaltiesProcessed.Where(x => x.GameId >= startingGameId && x.GameId <= endingGameId).ToList();
+
+        result.toProcess = scoreSheetEntries.Count;
+
+        var scoreSheetEntriesProcessed = _lo30DataService.UpdateScoreSheetEntryProcessedWithPPAndSH(scoreSheetEntries, scoreSheetEntryPenalties);
+
+        result.modified = _contextService.SaveOrUpdateScoreSheetEntryProcessed(scoreSheetEntriesProcessed);
+
+      }
+      catch (Exception ex)
+      {
+        result.modified = -2;
+        result.error = ex.Message;
+
+        ErrorHandlingService.PrintFullErrorMessage(ex);
+      }
+
+      diffFromLast = DateTime.Now - last;
+      result.time = diffFromLast.ToString();
+      return result;
+    }
+
     public ProcessingResult ProcessScoreSheetEntrySubs(int startingGameId, int endingGameId)
     {
       var result = new ProcessingResult();

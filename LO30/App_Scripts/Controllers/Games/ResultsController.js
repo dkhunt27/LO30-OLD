@@ -155,7 +155,9 @@ lo30NgApp.controller('gamesResultsController',
         $scope.getGameOutcomes($scope.data.selectedSeasonId, $scope.data.selectedPlayoffs, $scope.data.selectedSeasonTeamId);
         $scope.getForWebTeamStandings($scope.data.selectedSeasonId, $scope.data.selectedPlayoffs, $scope.data.selectedSeasonTeamId);
         $scope.getForWebTeamStandingsGoodThru($scope.data.selectedSeasonId);
+
         $timeout(function () {
+          $scope.sortDescFirst('gameTeam.gameId')
         }, 0);  // using timeout so it fires when done rendering
       };
 

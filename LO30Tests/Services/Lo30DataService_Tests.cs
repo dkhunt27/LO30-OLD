@@ -471,6 +471,327 @@ namespace LO30.Services.Tests
     }
     #endregion
 
+    #region UpdateScoreSheetEntryProcessedWithPPAndSH Tests
+    [TestMethod()]
+    public void UpdateScoreSheetEntryProcessedWithPPAndSH_NoGoalsNoPenalties()
+    {
+      List<ScoreSheetEntryProcessed> scoreSheetEntries = new List<ScoreSheetEntryProcessed>()
+      {
+      };
+
+      List<ScoreSheetEntryPenaltyProcessed> scoreSheetEntryPenalties = new List<ScoreSheetEntryPenaltyProcessed>()
+      {
+      };
+
+      var actual = _lo30DataService.UpdateScoreSheetEntryProcessedWithPPAndSH(scoreSheetEntries, scoreSheetEntryPenalties);
+
+      var expected = scoreSheetEntries;
+
+      AssertAreEqualScoreSheetEntryProcessedLists(expected, actual);
+    }
+
+    [TestMethod()]
+    public void UpdateScoreSheetEntryProcessedWithPPAndSH_GoalsNoPenalties()
+    {
+      List<ScoreSheetEntryProcessed> scoreSheetEntries = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: true, time: "10.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:2, gid:101, per:2, ht: true, time: "13.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:3, gid:101, per:3, ht: true, time: "2.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now)
+      };
+
+      List<ScoreSheetEntryPenaltyProcessed> scoreSheetEntryPenalties = new List<ScoreSheetEntryPenaltyProcessed>()
+      {
+      };
+
+      var actual = _lo30DataService.UpdateScoreSheetEntryProcessedWithPPAndSH(scoreSheetEntries, scoreSheetEntryPenalties);
+
+      var expected = scoreSheetEntries;
+
+      AssertAreEqualScoreSheetEntryProcessedLists(expected, actual);
+    }
+
+    [TestMethod()]
+    public void UpdateScoreSheetEntryProcessedWithPPAndSH_GoalsPenaltiesNoPPNoSH()
+    {
+      List<ScoreSheetEntryProcessed> scoreSheetEntries = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: true, time: "10.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:2, gid:101, per:2, ht: true, time: "13.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:3, gid:101, per:3, ht: true, time: "2.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now)
+      };
+
+      List<ScoreSheetEntryPenaltyProcessed> scoreSheetEntryPenalties = new List<ScoreSheetEntryPenaltyProcessed>()
+      {
+        new ScoreSheetEntryPenaltyProcessed(ssepid:1, gid:101, per:1, ht:false, time:"9.27", gtid:201, playid: 302, penid: 401, pim:2, upd: DateTime.Now),
+        new ScoreSheetEntryPenaltyProcessed(ssepid:2, gid:101, per:2, ht:false, time:"3.27", gtid:201, playid: 302, penid: 401, pim:2, upd: DateTime.Now),
+        new ScoreSheetEntryPenaltyProcessed(ssepid:3, gid:101, per:3, ht:false, time:"4.27", gtid:201, playid: 302, penid: 401, pim:2, upd: DateTime.Now)
+      };
+
+      var actual = _lo30DataService.UpdateScoreSheetEntryProcessedWithPPAndSH(scoreSheetEntries, scoreSheetEntryPenalties);
+
+      var expected = scoreSheetEntries;
+
+      AssertAreEqualScoreSheetEntryProcessedLists(expected, actual);
+    }
+
+    [TestMethod()]
+    public void UpdateScoreSheetEntryProcessedWithPPAndSH_GoalsPenalties1PPNoSH()
+    {
+      List<ScoreSheetEntryProcessed> scoreSheetEntries = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: true, time: "10.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:2, gid:101, per:2, ht: true, time: "13.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:3, gid:101, per:3, ht: true, time: "2.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now)
+      };
+
+      List<ScoreSheetEntryPenaltyProcessed> scoreSheetEntryPenalties = new List<ScoreSheetEntryPenaltyProcessed>()
+      {
+        new ScoreSheetEntryPenaltyProcessed(ssepid:1, gid:101, per:1, ht:false, time:"10.27", gtid:201, playid: 302, penid: 401, pim:2, upd: DateTime.Now),
+        new ScoreSheetEntryPenaltyProcessed(ssepid:2, gid:101, per:2, ht:false, time:"3.27", gtid:201, playid: 302, penid: 401, pim:2, upd: DateTime.Now),
+        new ScoreSheetEntryPenaltyProcessed(ssepid:3, gid:101, per:3, ht:false, time:"4.27", gtid:201, playid: 302, penid: 401, pim:2, upd: DateTime.Now)
+      };
+
+      var actual = _lo30DataService.UpdateScoreSheetEntryProcessedWithPPAndSH(scoreSheetEntries, scoreSheetEntryPenalties);
+
+      var expected = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: true, time: "10.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: true, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:2, gid:101, per:2, ht: true, time: "13.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:3, gid:101, per:3, ht: true, time: "2.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now)
+      };
+
+      AssertAreEqualScoreSheetEntryProcessedLists(expected, actual);
+    }
+
+    [TestMethod()]
+    public void UpdateScoreSheetEntryProcessedWithPPAndSH_GoalsPenalties1PP1SH()
+    {
+      List<ScoreSheetEntryProcessed> scoreSheetEntries = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: true, time: "10.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:2, gid:101, per:2, ht: true, time: "13.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:3, gid:101, per:3, ht: true, time: "2.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now)
+      };
+
+      List<ScoreSheetEntryPenaltyProcessed> scoreSheetEntryPenalties = new List<ScoreSheetEntryPenaltyProcessed>()
+      {
+        new ScoreSheetEntryPenaltyProcessed(ssepid:1, gid:101, per:1, ht:false, time:"10.27", gtid:201, playid: 302, penid: 401, pim:2, upd: DateTime.Now),
+        new ScoreSheetEntryPenaltyProcessed(ssepid:2, gid:101, per:2, ht:true, time:"13.27", gtid:201, playid: 302, penid: 401, pim:2, upd: DateTime.Now),
+        new ScoreSheetEntryPenaltyProcessed(ssepid:3, gid:101, per:3, ht:false, time:"4.27", gtid:201, playid: 302, penid: 401, pim:2, upd: DateTime.Now)
+      };
+
+      var actual = _lo30DataService.UpdateScoreSheetEntryProcessedWithPPAndSH(scoreSheetEntries, scoreSheetEntryPenalties);
+
+      var expected = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: true, time: "10.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: true, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:2, gid:101, per:2, ht: true, time: "13.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: true, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:3, gid:101, per:3, ht: true, time: "2.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now)
+      };
+
+      AssertAreEqualScoreSheetEntryProcessedLists(expected, actual);
+    }
+
+    [TestMethod()]
+    public void UpdateScoreSheetEntryProcessedWithPPAndSH_GoalsBeforeAndAfterPenalty()
+    {
+      List<ScoreSheetEntryProcessed> scoreSheetEntries = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: true, time: "10.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:2, gid:101, per:2, ht: true, time: "8.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:3, gid:101, per:3, ht: true, time: "2.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now)
+      };
+
+      List<ScoreSheetEntryPenaltyProcessed> scoreSheetEntryPenalties = new List<ScoreSheetEntryPenaltyProcessed>()
+      {
+        new ScoreSheetEntryPenaltyProcessed(ssepid:1, gid:101, per:1, ht:false, time:"12.12", gtid:201, playid: 302, penid: 401, pim:2, upd: DateTime.Now),
+        new ScoreSheetEntryPenaltyProcessed(ssepid:2, gid:101, per:1, ht:true, time:"10.10", gtid:201, playid: 302, penid: 401, pim:2, upd: DateTime.Now)
+      };
+
+      var actual = _lo30DataService.UpdateScoreSheetEntryProcessedWithPPAndSH(scoreSheetEntries, scoreSheetEntryPenalties);
+
+      var expected = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: true, time: "10.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:2, gid:101, per:2, ht: true, time: "8.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:3, gid:101, per:3, ht: true, time: "2.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now)
+      };
+
+      AssertAreEqualScoreSheetEntryProcessedLists(expected, actual);
+    }
+
+    [TestMethod()]
+    public void UpdateScoreSheetEntryProcessedWithPPAndSH_MultiplePPGoalsDuringPenalty()
+    {
+      List<ScoreSheetEntryProcessed> scoreSheetEntries = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: true, time: "10.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:2, gid:101, per:1, ht: true, time: "9.23", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:3, gid:101, per:1, ht: true, time: "8.45", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now)
+      };
+
+      List<ScoreSheetEntryPenaltyProcessed> scoreSheetEntryPenalties = new List<ScoreSheetEntryPenaltyProcessed>()
+      {
+        new ScoreSheetEntryPenaltyProcessed(ssepid:1, gid:101, per:1, ht:false, time:"10.12", gtid:201, playid: 302, penid: 401, pim:2, upd: DateTime.Now),
+        new ScoreSheetEntryPenaltyProcessed(ssepid:2, gid:101, per:2, ht:true, time:"10.10", gtid:201, playid: 302, penid: 401, pim:2, upd: DateTime.Now)
+      };
+
+      var actual = _lo30DataService.UpdateScoreSheetEntryProcessedWithPPAndSH(scoreSheetEntries, scoreSheetEntryPenalties);
+
+      var expected = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: true, time: "10.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: true, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:2, gid:101, per:1, ht: true, time: "9.23", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:3, gid:101, per:1, ht: true, time: "8.45", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now)
+      };
+
+      AssertAreEqualScoreSheetEntryProcessedLists(expected, actual);
+    }
+
+    [TestMethod()]
+    public void UpdateScoreSheetEntryProcessedWithPPAndSH_MultipleSHPPGoalsDuringPenalty()
+    {
+      List<ScoreSheetEntryProcessed> scoreSheetEntries = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: false, time: "10.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:2, gid:101, per:1, ht: false, time: "9.55", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:3, gid:101, per:1, ht: true, time: "9.23", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:4, gid:101, per:1, ht: false, time: "8.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now)
+      };
+
+      List<ScoreSheetEntryPenaltyProcessed> scoreSheetEntryPenalties = new List<ScoreSheetEntryPenaltyProcessed>()
+      {
+        new ScoreSheetEntryPenaltyProcessed(ssepid:1, gid:101, per:1, ht:false, time:"10.12", gtid:201, playid: 302, penid: 401, pim:2, upd: DateTime.Now),
+        new ScoreSheetEntryPenaltyProcessed(ssepid:2, gid:101, per:2, ht:true, time:"10.10", gtid:201, playid: 302, penid: 401, pim:2, upd: DateTime.Now)
+      };
+
+      var actual = _lo30DataService.UpdateScoreSheetEntryProcessedWithPPAndSH(scoreSheetEntries, scoreSheetEntryPenalties);
+
+      var expected = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: false, time: "10.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: true, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:2, gid:101, per:1, ht: false, time: "9.55", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: true, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:3, gid:101, per:1, ht: true, time: "9.23", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: true, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:4, gid:101, per:1, ht: false, time: "8.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now)
+      };
+
+      AssertAreEqualScoreSheetEntryProcessedLists(expected, actual);
+
+    }
+    [TestMethod()]
+    public void UpdateScoreSheetEntryProcessedWithPPAndSH_PPGoalAtStartOfPenalty()
+    {
+      List<ScoreSheetEntryProcessed> scoreSheetEntries = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: true, time: "10.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now)
+      };
+
+      List<ScoreSheetEntryPenaltyProcessed> scoreSheetEntryPenalties = new List<ScoreSheetEntryPenaltyProcessed>()
+      {
+        new ScoreSheetEntryPenaltyProcessed(ssepid:1, gid:101, per:1, ht:false, time:"10.11", gtid:201, playid: 302, penid: 401, pim:2, upd: DateTime.Now)
+      };
+
+      var actual = _lo30DataService.UpdateScoreSheetEntryProcessedWithPPAndSH(scoreSheetEntries, scoreSheetEntryPenalties);
+
+      var expected = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: true, time: "10.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: true, gwg: false, upd: DateTime.Now)
+      };
+
+      AssertAreEqualScoreSheetEntryProcessedLists(expected, actual);
+    }
+
+    [TestMethod()]
+    public void UpdateScoreSheetEntryProcessedWithPPAndSH_PPGoalAtEndOfPenalty()
+    {
+      List<ScoreSheetEntryProcessed> scoreSheetEntries = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: true, time: "8.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now)
+      };
+
+      List<ScoreSheetEntryPenaltyProcessed> scoreSheetEntryPenalties = new List<ScoreSheetEntryPenaltyProcessed>()
+      {
+        new ScoreSheetEntryPenaltyProcessed(ssepid:1, gid:101, per:1, ht:false, time:"10.11", gtid:201, playid: 302, penid: 401, pim:2, upd: DateTime.Now)
+      };
+
+      var actual = _lo30DataService.UpdateScoreSheetEntryProcessedWithPPAndSH(scoreSheetEntries, scoreSheetEntryPenalties);
+
+      var expected = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: true, time: "8.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: true, gwg: false, upd: DateTime.Now)
+      };
+
+      AssertAreEqualScoreSheetEntryProcessedLists(expected, actual);
+    }
+
+    [TestMethod()]
+    public void UpdateScoreSheetEntryProcessedWithPPAndSH_MultiplePPGoalsDuringMatchPenalty()
+    {
+      List<ScoreSheetEntryProcessed> scoreSheetEntries = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: true, time: "10.13", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:2, gid:101, per:1, ht: true, time: "9.23", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:3, gid:101, per:1, ht: true, time: "7.43", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:4, gid:101, per:1, ht: true, time: "6.33", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:5, gid:101, per:1, ht: true, time: "5.56", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:6, gid:101, per:1, ht: true, time: "5.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now)
+      };
+
+      List<ScoreSheetEntryPenaltyProcessed> scoreSheetEntryPenalties = new List<ScoreSheetEntryPenaltyProcessed>()
+      {
+        new ScoreSheetEntryPenaltyProcessed(ssepid:1, gid:101, per:1, ht:false, time:"10.12", gtid:201, playid: 302, penid: 401, pim:5, upd: DateTime.Now)
+      };
+
+      var actual = _lo30DataService.UpdateScoreSheetEntryProcessedWithPPAndSH(scoreSheetEntries, scoreSheetEntryPenalties);
+
+      var expected = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: true, time: "10.13", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:2, gid:101, per:1, ht: true, time: "9.23", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: true, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:3, gid:101, per:1, ht: true, time: "7.43", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: true, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:4, gid:101, per:1, ht: true, time: "6.33", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: true, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:5, gid:101, per:1, ht: true, time: "5.56", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: true, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:6, gid:101, per:1, ht: true, time: "5.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now)
+      };
+
+      AssertAreEqualScoreSheetEntryProcessedLists(expected, actual);
+    }
+    
+    [TestMethod()]
+    public void UpdateScoreSheetEntryProcessedWithPPAndSH_MultipleSHPPGoalsDuringMatchPenalty()
+    {
+      List<ScoreSheetEntryProcessed> scoreSheetEntries = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: true, time: "10.13", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:2, gid:101, per:1, ht: false, time: "9.23", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:3, gid:101, per:1, ht: true, time: "7.43", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:4, gid:101, per:1, ht: true, time: "6.33", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:5, gid:101, per:1, ht: false, time: "5.56", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:6, gid:101, per:1, ht: true, time: "5.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now)
+      };
+
+      List<ScoreSheetEntryPenaltyProcessed> scoreSheetEntryPenalties = new List<ScoreSheetEntryPenaltyProcessed>()
+      {
+        new ScoreSheetEntryPenaltyProcessed(ssepid:1, gid:101, per:1, ht:false, time:"10.12", gtid:201, playid: 302, penid: 401, pim:5, upd: DateTime.Now)
+      };
+
+      var actual = _lo30DataService.UpdateScoreSheetEntryProcessedWithPPAndSH(scoreSheetEntries, scoreSheetEntryPenalties);
+
+      var expected = new List<ScoreSheetEntryProcessed>()
+      {
+        new ScoreSheetEntryProcessed(sseid:1, gid:101, per:1, ht: true, time: "10.13", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:2, gid:101, per:1, ht: false, time: "9.23", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: true, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:3, gid:101, per:1, ht: true, time: "7.43", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: true, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:4, gid:101, per:1, ht: true, time: "6.33", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: true, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:5, gid:101, per:1, ht: false, time: "5.56", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: true, ppg: false, gwg: false, upd: DateTime.Now),
+        new ScoreSheetEntryProcessed(sseid:6, gid:101, per:1, ht: true, time: "5.11", gtid: 201, gpid: 301, a1pid: null, a2pid: null, a3pid: null, shg: false, ppg: false, gwg: false, upd: DateTime.Now)
+      };
+
+      AssertAreEqualScoreSheetEntryProcessedLists(expected, actual);
+    }
+    #endregion
+
     #region ConvertYYYYMMDDIntoDateTime
     [TestMethod()]
     public void ConvertYYYYMMDDIntoDateTime_TooSmall()
@@ -531,6 +852,192 @@ namespace LO30.Services.Tests
       Assert.AreEqual(19770223, result, "Result");
     }
     #endregion
+
+    #region ConvertTimeToTimeSpan
+    [TestMethod()]
+    public void ConvertTimeToTimeSpan_ErrorIf_TimeIsNull()
+    {
+      string expectedExMsg = "Cannot be null or empty";
+      try
+      {
+        string time = null;
+        var result = _lo30DataService.ConvertTimeToTimeSpan(time);
+        Assert.Fail("Expected exception to be thrown");
+      }
+      catch (Exception ex)
+      {
+        Assert.AreEqual(expectedExMsg, ex.Message.Substring(0, expectedExMsg.Length), "Not expected exception");
+      }
+    }
+    [TestMethod()]
+    public void ConvertTimeToTimeSpan_TimeWithPeriod()
+    {
+      string time = "10.11";
+      var result = _lo30DataService.ConvertTimeToTimeSpan(time);
+      Assert.AreEqual(new TimeSpan(0, 10, 11), result, "Result");
+    }
+    [TestMethod()]
+    public void ConvertTimeToTimeSpan_TimeStartsWithPeriod()
+    {
+      string time = ".11";
+      var result = _lo30DataService.ConvertTimeToTimeSpan(time);
+      Assert.AreEqual(new TimeSpan(0, 0, 11), result, "Result");
+    }
+    [TestMethod()]
+    public void ConvertTimeToTimeSpan_TimeWithColon()
+    {
+      string time = "10:11";
+      var result = _lo30DataService.ConvertTimeToTimeSpan(time);
+      Assert.AreEqual(new TimeSpan(0, 10, 11), result, "Result");
+    }
+    #endregion
+
+    #region ConvertToOverallTimeRemaining
+    [TestMethod()]
+    public void ConvertToOverallTimeRemaining_ErrorIf_TimeIsNull()
+    {
+      string expectedExMsg = "Cannot be null or empty";
+      try
+      {
+        int totalPeriods=3;
+        int period =1;
+        string time = null;
+        var result = _lo30DataService.ConvertToOverallTimeRemaining(period, time, totalPeriods);
+        Assert.Fail("Expected exception to be thrown");
+      }
+      catch (Exception ex)
+      {
+        Assert.AreEqual(expectedExMsg, ex.Message.Substring(0, expectedExMsg.Length), "Not expected exception");
+      }
+    }
+    [TestMethod()]
+    public void ConvertToOverallTimeRemaining_1SecondIntoTheGame()
+    {
+      int totalPeriods = 3;
+      int period = 1;
+      string time = "13.59";
+      var result = _lo30DataService.ConvertToOverallTimeRemaining(period, time, totalPeriods);
+      // 3 periods, 14 mins each = total time of 42 mins;
+      // 14:00-13:59 = 0:01
+      // 42:00-0:01 = 41:59
+      Assert.AreEqual(new TimeSpan(0, 41, 59), result, "Result");
+    }
+    [TestMethod()]
+    public void ConvertToOverallTimeRemaining_1SecondLeftInTheGame()
+    {
+      int totalPeriods = 3;
+      int period = 3;
+      string time = "0.01";
+      var result = _lo30DataService.ConvertToOverallTimeRemaining(period, time, totalPeriods);
+      // 3 periods, 14 mins each = total time of 42 mins;
+      // 14:00+14:00+(14:00-13:59) = 41:59
+      // 42:00-41:59 = 0:01
+      Assert.AreEqual(new TimeSpan(0, 0, 1), result, "Result");
+    }
+    [TestMethod()]
+    public void ConvertToOverallTimeRemaining_TimeInPeriod1()
+    {
+      int totalPeriods = 3;
+      int period = 1;
+      string time = "10.11";
+      var result = _lo30DataService.ConvertToOverallTimeRemaining(period, time, totalPeriods);
+      // 3 periods, 14 mins each = total time of 42 mins;
+      // 14:00-10:11 = 3:49
+      // 42:00-3:49 = 38:11
+      Assert.AreEqual(new TimeSpan(0, 38, 11), result, "Result");
+    }
+    [TestMethod()]
+    public void ConvertToOverallTimeRemaining_TimeInPeriod2()
+    {
+      int totalPeriods = 3;
+      int period = 2;
+      string time = "5.23";
+      var result = _lo30DataService.ConvertToOverallTimeRemaining(period, time, totalPeriods);
+      // 3 periods, 14 mins each = total time of 42 mins;
+      // 14:00+(14:00-5:23) = 22:37
+      // 42:00-22:37 = 19:23
+      Assert.AreEqual(new TimeSpan(0, 19, 23), result, "Result");
+    }
+    [TestMethod()]
+    public void ConvertToOverallTimeRemaining_TimeInPeriod3()
+    {
+      int totalPeriods = 3;
+      int period = 3;
+      string time = "2.57";
+      var result = _lo30DataService.ConvertToOverallTimeRemaining(period, time, totalPeriods);
+      // 3 periods, 14 mins each = total time of 42 mins;
+      // 14:00+14:00+(14:00-2:57) = 39:03
+      // 42:00-39:03 = 2:57
+      Assert.AreEqual(new TimeSpan(0, 2, 57), result, "Result");
+    }
+
+    #endregion
+
+    #region ConvertToOverallTimeElapsed
+    [TestMethod()]
+    public void ConvertToOverallTimeElapsed_ErrorIf_TimeIsNull()
+    {
+      string expectedExMsg = "Cannot be null or empty";
+      try
+      {
+        int period = 1;
+        string time = null;
+        var result = _lo30DataService.ConvertToOverallTimeElapsed(period, time);
+        Assert.Fail("Expected exception to be thrown");
+      }
+      catch (Exception ex)
+      {
+        Assert.AreEqual(expectedExMsg, ex.Message.Substring(0, expectedExMsg.Length), "Not expected exception");
+      }
+    }
+    [TestMethod()]
+    public void ConvertToOverallTimeElapsed_1SecondIntoTheGame()
+    {
+      int period = 1;
+      string time = "13.59";
+      var result = _lo30DataService.ConvertToOverallTimeElapsed(period, time);
+      // 14:00-13:59 = 0:01
+      Assert.AreEqual(new TimeSpan(0, 0, 1), result, "Result");
+    }
+    [TestMethod()]
+    public void ConvertToOverallTimeElapsed_1SecondLeftInTheGame()
+    {
+      int period = 3;
+      string time = "0.01";
+      var result = _lo30DataService.ConvertToOverallTimeElapsed(period, time);
+      // 14:00+14:00+(14:00-13:59) = 41:59
+      Assert.AreEqual(new TimeSpan(0, 41, 59), result, "Result");
+    }
+    [TestMethod()]
+    public void ConvertToOverallTimeElapsed_TimeInPeriod1()
+    {
+      int period = 1;
+      string time = "10.11";
+      var result = _lo30DataService.ConvertToOverallTimeElapsed(period, time);
+      // 14:00-10:11 = 3:49
+      Assert.AreEqual(new TimeSpan(0, 3, 49), result, "Result");
+    }
+    [TestMethod()]
+    public void ConvertToOverallTimeElapsed_TimeInPeriod2()
+    {
+      int period = 2;
+      string time = "5.23";
+      var result = _lo30DataService.ConvertToOverallTimeElapsed(period, time);
+      // 14:00+(14:00-5:23) = 22:37
+      Assert.AreEqual(new TimeSpan(0, 22, 37), result, "Result");
+    }
+    [TestMethod()]
+    public void ConvertToOverallTimeElapsed_TimeInPeriod3()
+    {
+      int period = 3;
+      string time = "2.57";
+      var result = _lo30DataService.ConvertToOverallTimeElapsed(period, time);
+      // 14:00+14:00+(14:00-2:57) = 39:03
+      Assert.AreEqual(new TimeSpan(0, 39, 03), result, "Result");
+    }
+
+    #endregion
+
 
     #region Asserts
     private void AssertAreEqualPlayerStatGameLists(List<PlayerStatGame> expected, List<PlayerStatGame> actual)
@@ -685,6 +1192,41 @@ namespace LO30.Services.Tests
       Assert.AreEqual(expected.Shutouts, actual.Shutouts, "Shutouts key: " + locationKey);
       Assert.AreEqual(expected.Wins, actual.Wins, "Wins key: " + locationKey);
     }
+
+    private void AssertAreEqualScoreSheetEntryProcessedLists(List<ScoreSheetEntryProcessed> expected, List<ScoreSheetEntryProcessed> actual)
+    {
+
+      Assert.AreEqual(expected.Count, actual.Count, "Count");
+      for (var e = 0; e < expected.Count; e++)
+      {
+        var actualMatch = actual.Where(x => x.ScoreSheetEntryId == expected[e].ScoreSheetEntryId)
+                                .FirstOrDefault();
+
+        var locationKey = string.Format("sseid: {0}",
+                                    expected[e].ScoreSheetEntryId);
+
+        Assert.IsNotNull(actualMatch, "actualMatch key: " + locationKey);
+        AssertAreEqualScoreSheetEntryProcessedItem(expected[e], actualMatch, locationKey);
+      }
+    }
+
+    private void AssertAreEqualScoreSheetEntryProcessedItem(ScoreSheetEntryProcessed expected, ScoreSheetEntryProcessed actual, string locationKey)
+    {
+      Assert.AreEqual(expected.Assist1PlayerId, actual.Assist1PlayerId, "Assist1PlayerId key: " + locationKey);
+      Assert.AreEqual(expected.Assist2PlayerId, actual.Assist2PlayerId, "Assist2PlayerId key: " + locationKey);
+      Assert.AreEqual(expected.Assist3PlayerId, actual.Assist3PlayerId, "Assist3PlayerId key: " + locationKey);
+      Assert.AreEqual(expected.GameId, actual.GameId, "GameId key: " + locationKey);
+      Assert.AreEqual(expected.GameTeamId, actual.GameTeamId, "GameTeamId key: " + locationKey);
+      Assert.AreEqual(expected.GameWinningGoal, actual.GameWinningGoal, "GameWinningGoal key: " + locationKey);
+      Assert.AreEqual(expected.GoalPlayerId, actual.GoalPlayerId, "GoalPlayerId key: " + locationKey);
+      Assert.AreEqual(expected.HomeTeam, actual.HomeTeam, "HomeTeam key: " + locationKey);
+      Assert.AreEqual(expected.Period, actual.Period, "Period key: " + locationKey);
+      Assert.AreEqual(expected.PowerPlayGoal, actual.PowerPlayGoal, "PowerPlayGoal key: " + locationKey);
+      Assert.AreEqual(expected.ShortHandedGoal, actual.ShortHandedGoal, "ShortHandedGoal key: " + locationKey);
+      Assert.AreEqual(expected.TimeElapsed, actual.TimeElapsed, "TimeElapsed key: " + locationKey);
+      Assert.AreEqual(expected.TimeRemaining, actual.TimeRemaining, "TimeRemaining key: " + locationKey);
+    }
+
     #endregion
   }
 }

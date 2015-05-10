@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LO30.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,6 +10,9 @@ namespace LO30.Data.Objects
 {
   public class ScoreSheetEntryProcessed
   {
+    private const int TimePerPeriod = 14;
+    private Lo30DataService _lo30DataService = new Lo30DataService();
+
     [Required, Key, DatabaseGenerated(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.None)]
     public int ScoreSheetEntryId { get; set; }
 
@@ -38,6 +42,8 @@ namespace LO30.Data.Objects
 
     [Required, MaxLength(5)]
     public string TimeRemaining { get; set; }
+
+    public TimeSpan TimeElapsed { get; set; }
 
     [Required]
     public bool ShortHandedGoal { get; set; }
@@ -69,6 +75,7 @@ namespace LO30.Data.Objects
       this.Period = per;
       this.HomeTeam = ht;
       this.TimeRemaining = time;
+      this.TimeElapsed = _lo30DataService.ConvertToOverallTimeElapsed(per, time);
       this.GameTeamId = gtid;
 
       this.GoalPlayerId = gpid;
@@ -83,7 +90,6 @@ namespace LO30.Data.Objects
 
       Validate();
     }
-
 
     private void Validate()
     {

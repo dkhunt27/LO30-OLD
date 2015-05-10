@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LO30.Services;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,6 +13,9 @@ namespace LO30.Data.Objects
 {
   public class ScoreSheetEntryPenaltyProcessed
   {
+    private const int TimePerPeriod = 14;
+    private Lo30DataService _lo30DataService = new Lo30DataService();
+
     [Required, Key, DatabaseGenerated(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.None)]
     public int ScoreSheetEntryPenaltyId { get; set; }
 
@@ -36,6 +40,8 @@ namespace LO30.Data.Objects
     [Required, MaxLength(5)]
     public string TimeRemaining { get; set; }
 
+    public TimeSpan TimeElapsed { get; set; }
+
     [Required]
     public int PenaltyMinutes { get; set; }
 
@@ -58,6 +64,7 @@ namespace LO30.Data.Objects
       this.Period = per;
       this.HomeTeam = ht;
       this.TimeRemaining = time;
+      this.TimeElapsed = _lo30DataService.ConvertToOverallTimeElapsed(per, time);
       this.GameTeamId = gtid;
 
       this.PlayerId = playid;

@@ -494,6 +494,8 @@
     <Compile Include="Data\Objects\Division.cs" />
     <Compile Include="Data\Objects\PlayerSubSearch.cs" />
     <Compile Include="Data\Objects\ProcessingResult.cs" />
+    <Compile Include="Data\Objects\ScoreSheetEntryGoalType.cs" />
+    <Compile Include="Data\Objects\ScoreSheetEntryEvent.cs" />
     <Compile Include="Data\Objects\ScoreSheetEntrySubProcessed.cs" />
     <Compile Include="Data\Objects\ScoreSheetEntrySub.cs" />
     <Compile Include="Data\Objects\Setting.cs" />
@@ -2361,6 +2363,9 @@
     <Content Include="Areas\_ViewStart.cshtml" />
     <Content Include="Areas\ScoreSheet\ScoreSheet.Index.cshtml" />
     <Content Include="App_Data\Access\ScoreSheetEntrySubs.json" />
+    <Content Include="App_Data\Access\FactPlayerStats.json" />
+    <Content Include="App_Data\Access\FactSubPlayerStats.json" />
+    <Content Include="App_Data\Access\FactTeamStats.json" />
     <None Include="Properties\PublishProfiles\lo30 %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\lo30.pubxml" />
     <Content Include="Scripts\angular-moment.min.js.map" />
