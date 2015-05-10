@@ -1,9 +1,7 @@
 ﻿using LO30.Data;
-using System;
+using LO30.Data.Objects;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace LO30.Controllers
@@ -18,8 +16,7 @@ namespace LO30.Controllers
 
     public IEnumerable<TeamStanding> Get()
     {
-      IQueryable<TeamStanding> results = _repo.GetTeamStandings();
-
+      var results = _repo.GetTeamStandings();
       var standings = results.OrderBy(t => t.Rank).ToList();
 
       return standings;

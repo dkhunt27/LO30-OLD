@@ -1,0 +1,37 @@
+﻿using LO30.Data.Objects;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace LO30.Data
+{
+  public partial interface ILo30Repository
+  {
+    List<Article> GetArticles();
+
+    List<TeamStanding> GetTeamStandings();
+
+    List<ScoreSheetEntry> GetScoreSheetEntries();
+
+    bool Save();
+
+    void SaveTablesToJson();
+
+    bool AddArticle(Article newArticle);
+
+    ProcessingResult ProcessScoreSheetEntries(int startingGameId, int endingGameId);
+
+    ProcessingResult ProcessScoreSheetEntryPenalties(int startingGameId, int endingGameId);
+
+    ProcessingResult ProcessScoreSheetEntrySubs(int startingGameId, int endingGameId);
+
+    ProcessingResult UpdateScoreSheetEntriesWithPPAndSH(int startingGameId, int endingGameId);
+
+    ProcessingResult ProcessScoreSheetEntriesIntoGameResults(int startingGameId, int endingGameId);
+
+    ProcessingResult ProcessGameResultsIntoTeamStandings(int seasonId, bool playoffs, int startingGameId, int endingGameId);
+
+    ProcessingResult ProcessScoreSheetEntriesIntoPlayerStats(int startingGameId, int endingGameId);
+
+    ProcessingResult ProcessPlayerStatsIntoWebStats();
+  }
+}

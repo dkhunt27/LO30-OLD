@@ -1,0 +1,34 @@
+﻿<!-- Top Nav -->
+<div class="navbar-collapse nav-main-collapse collapse pull-right">
+  <nav class="nav-main mega-menu">
+    <ul class="nav nav-pills nav-main scroll-menu" id="topMain">
+      <li>@Html.ActionLink("Home", "Index", "Home")</li>
+      <li id="Standings" class="dropdown">
+        <a class="dropdown-toggle" href="#">
+          Standings <i class="fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="/Ng/#/Standings/RegularSeason">Regular Season</a></li>
+          <li><a href="/Ng/#/Standings/Playoffs">Playoffs</a></li>
+        </ul>
+      </li>
+      <li id="Stats" class="dropdown">
+        <a class="dropdown-toggle" href="#">
+          Stats <i class="fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu" role="menu">
+          <li> Regular Season</li>
+          <li><a href="/Ng/#/Stats/Players/54/false">  Players</a></li>
+          <li><a href="/Ng/#/Stats/Goalies/54/false">  Goalies</a></li>
+          <li class="divider"></li>
+          <li> Playoffs</li>
+          <li><a href="/Ng/#/Stats/Players/54/true">  Players</a></li>
+          <li><a href="/Ng/#/Stats/Goalies/54/true">  Goalies</a></li>
+        </ul>
+      </li>
+      <li>@Html.ActionLink("Login", "Login", "Account")</li>
+
+    </ul>
+  </nav>
+</div>
+<!-- /Top Nav -->

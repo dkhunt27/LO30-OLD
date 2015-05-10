@@ -1,0 +1,51 @@
+﻿@model LO30.Data.Objects.Setting
+
+@{
+  ViewBag.Title = "Admin | Settings | Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+  <div class="alert alert-danger" role="alert">@ViewBag.ErrorMessage</div>
+  ViewBag.ErrorMessage = "";
+}
+
+
+<fieldset>
+  <legend>Setting</legend>
+
+  <dl class="dl-horizontal">
+    <dt>
+      @Html.LabelFor(model => model.SettingId)
+    </dt>
+    <dd class="clearfix">
+      @Html.DisplayFor(model => model.SettingId)
+    </dd>
+
+    <dt>
+      @Html.LabelFor(model => model.SettingName)
+    </dt>
+    <dd class="clearfix">
+      @Html.DisplayFor(model => model.SettingName)
+    </dd>
+
+    <dt>
+      @Html.LabelFor(model => model.SettingValue)
+    </dt>
+    <dd class="clearfix">
+      @Html.DisplayFor(model => model.SettingValue)
+    </dd>
+  </dl>
+</fieldset>
+@using (Html.BeginForm())
+{
+  @Html.AntiForgeryToken()
+  <p>
+    <input type="submit" value="Delete" /> |
+    @Html.ActionLink("Back to List", "List")
+  </p>
+}

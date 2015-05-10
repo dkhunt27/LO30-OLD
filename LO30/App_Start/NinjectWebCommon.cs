@@ -1,7 +1,7 @@
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(LO30.App_Start.NinjectWebCommon), "Start")]
-[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(LO30.App_Start.NinjectWebCommon), "Stop")]
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(LO30.NinjectWebCommon), "Start")]
+[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(LO30.NinjectWebCommon), "Stop")]
 
-namespace LO30.App_Start
+namespace LO30
 {
   using System;
   using System.Web;
@@ -14,7 +14,6 @@ namespace LO30.App_Start
   using System.Web.Http;
   using WebApiContrib.IoC.Ninject;
   using LO30.Data;
-  using LO30.Data.Access;
 
   public static class NinjectWebCommon
   {
@@ -70,15 +69,14 @@ namespace LO30.App_Start
     {
 #if DEBUG
       kernel.Bind<IMailService>().To<MockMailService>().InRequestScope();
+      kernel.Bind<ILo30Repository>().To<Lo30Repository>().InRequestScope();
 #else
-            kernel.Bind<IMailService>().To<MailService>().InRequestScope();
+      kernel.Bind<IMailService>().To<MailService>().InRequestScope();
+      kernel.Bind<ILo30Repository>().To<Lo30Repository>().InRequestScope();
 #endif
 
       kernel.Bind<Lo30Context>().To<Lo30Context>().InRequestScope();
-      kernel.Bind<ILo30Repository>().To<Lo30Repository>().InRequestScope();
-
-      kernel.Bind<AccessO30Context>().To<AccessO30Context>().InRequestScope();
-      kernel.Bind<IAccessO30Repository>().To<AccessO30Repository>().InRequestScope();
+      kernel.Bind<Lo30ContextService>().To<Lo30ContextService>().InRequestScope();
     }
   }
 }

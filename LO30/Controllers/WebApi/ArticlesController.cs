@@ -1,4 +1,5 @@
 ﻿using LO30.Data;
+using LO30.Data.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,9 @@ namespace LO30.Controllers
       _repo = repo;
     }
 
-    public IEnumerable<Article> Get()
+    public List<Article> Get()
     {
-      IQueryable<Article> results = _repo.GetArticles();
+      List<Article> results = _repo.GetArticles();
 
       //var articles = results.OrderByDescending(t => t.Created)
       //                    .Take(25)
@@ -30,7 +31,7 @@ namespace LO30.Controllers
 
     public HttpResponseMessage Get(int id)
     {
-      IQueryable<Article> results = _repo.GetArticles();
+      List<Article> results = _repo.GetArticles();
 
       var article = results.Where(t => t.ArticleId == id).FirstOrDefault();
       

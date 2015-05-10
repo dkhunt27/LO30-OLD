@@ -1,4 +1,4 @@
-﻿using LO30.Data.Access;
+﻿using LO30.Services;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -20,8 +20,10 @@ namespace LO30.Data
     {
       base.Seed(context);
 
-      Lo30ContextSeed seeder = new Lo30ContextSeed();
-      seeder.Seed(context);
+      Lo30ContextService contextService = new Lo30ContextService(context);
+
+      Lo30ContextSeed seeder = new Lo30ContextSeed(context, contextService);
+      seeder.Seed();
     }
   }
 }

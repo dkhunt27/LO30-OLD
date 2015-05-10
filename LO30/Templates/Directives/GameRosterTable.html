@@ -1,0 +1,30 @@
+﻿<div>
+  <div class="table-responsive">
+    <table class="table table-responsive table-condensed table-striped">
+      <thead>
+        <tr>
+          <td>Out</td>
+          <td>Num</td>
+          <td>Pos</td>
+          <td>Player Name</td>
+          <td>Rating</td>
+          <td>Line</td>
+          <td>Pid</td>
+          <td>sfPid</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in teamRoster | orderBy:['line','-position','ratingPrimary','ratingSecondary']">
+          <td>{{item.sub}}</td>
+          <td>{{item.playerNumber}}</td>
+          <td>{{item.position}}</td>
+          <td>{{item.player.FirstName}} {{item.player.LastName}}</td>
+          <td>{{item.ratingPrimary}}.{{item.ratingSecondary}}</td>
+          <td>{{item.line}}</td>
+          <td>{{item.playerId}}</td>
+          <td>{{item.subbingForPlayerId}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

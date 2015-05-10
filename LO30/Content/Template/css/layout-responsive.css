@@ -166,7 +166,7 @@
 	}
 
 
-@media (max-width: 990px) {
+@media (max-width: 1200px) {
 	header#topHead .signin-dd {
 		margin-right:0 !important;
 		border-left:rgba(0,0,0,0.1) 1px solid;

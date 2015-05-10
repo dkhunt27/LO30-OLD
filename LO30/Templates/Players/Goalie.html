@@ -1,0 +1,86 @@
+<div id="PlayersPlayer">
+  <br />
+  <header>
+    <div class="row">
+      <div class="col-md-2 col-md-offset-1">
+        <img src="../../Content/Images/Profile/no-profile-man-medium.jpg">
+      </div>
+      <div class="col-md-6">
+        <div class="row">
+          <h3>
+            {{data.player.firstName}} {{data.player.lastName}} {{data.player.suffix}}
+          </h3>
+        </div>
+        <div class="row">
+          <h6>
+            Current Status: TBD
+          </h6>
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col-md-6">
+            Preferred Position: {{data.player.preferredPosition}}
+          </div>
+          <div class="col-md-6">
+            Years as League Member: TBD
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            Shoots: {{data.player.shoots}}
+          </div>
+          <div class="col-md-6">
+            Years as Board Member: TBD
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            Entered League: TBD
+          </div>
+          <div class="col-md-6">
+            Years as League President: TBD
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <br />
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <lo30-goalie-stats-season player-id="data.selectedPlayerId" season-id="data.selectedSeasonId" />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <lo30-goalie-stats-game player-id="data.selectedPlayerId" season-id="data.selectedSeasonId" />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <h4>
+        Career Regular Season Statistics
+        <small>(other years still to be added)</small>
+      </h4>
+      <lo30-goalie-stats-season-team player-id="data.selectedPlayerId" playoffs=false />
+      <!--lo30-goalie-stats-career player-id="data.selectedPlayerId" playoffs=false /-->
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <h4>
+        Career Playoff Statistics
+        <small>(other years still to be added)</small>
+      </h4>
+      <lo30-goalie-stats-season-team player-id="data.selectedPlayerId" playoffs=true />
+      <!--lo30-goalie-stats-career player-id="data.selectedPlayerId" playoffs=true /-->
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <h6>
+        * Player subbed for team
+      </h6>
+    </div>
+  </div>
+
+</div>

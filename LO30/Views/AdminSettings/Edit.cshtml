@@ -1,0 +1,62 @@
+﻿@model LO30.Data.Objects.Setting
+
+@{
+  ViewBag.Title = "Admin | Settings | Edit";
+}
+
+<h2>Edit</h2>
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+  <div class="alert alert-danger" role="alert">@ViewBag.ErrorMessage</div>
+  ViewBag.ErrorMessage = "";
+}
+
+@using (Html.BeginForm())
+{
+  @Html.AntiForgeryToken()
+  @Html.ValidationSummary(true)
+
+  <fieldset>
+    <legend>Setting</legend>
+
+    <dl class="dl-horizontal">
+      <dt>
+        @Html.LabelFor(model => model.SettingId)
+      </dt>
+      <dd class="clearfix">
+        @Html.DisplayFor(model => model.SettingId)
+      </dd>
+
+      @Html.HiddenFor(model => model.SettingId)
+
+      <dt>
+        @Html.LabelFor(model => model.SettingName)
+      </dt>
+      <dd class="clearfix">
+        @Html.EditorFor(model => model.SettingName)
+        @Html.ValidationMessageFor(model => model.SettingName)
+      </dd>
+
+      <dt>
+        @Html.LabelFor(model => model.SettingValue)
+      </dt>
+      <dd class="clearfix">
+        @Html.EditorFor(model => model.SettingValue)
+        @Html.ValidationMessageFor(model => model.SettingValue)
+      </dd>
+    </dl>
+
+    <p>
+      <input type="submit" value="Save" />
+    </p>
+  </fieldset>
+}
+
+<div>
+  @Html.ActionLink("Back to List", "List")
+</div>
+
+@section Scripts {
+  @Scripts.Render("~/bundles/jqueryval")
+}
