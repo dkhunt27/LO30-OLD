@@ -33,7 +33,7 @@ header#topNav nav div.mega-menu-content li:hover > a,
 header#topNav nav ul.nav-main ul.dropdown-menu li:hover > a {
 	background-color:#eee !important;
 }
-@media (max-width: 990px) {
+@media (max-width: 1200px) {
 	header#topNav div.nav-main-collapse {
 		background-color:#333;
 	}

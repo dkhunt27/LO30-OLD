@@ -1,0 +1,35 @@
+﻿<div>
+  <div>
+    <h4>
+      {{data.goalieStatsGame[0].season.seasonName}} Season Game Log
+      <button class="pull-right btn btn-link" ng-click="setLimitToAll()">Show All</button>
+      <button class="pull-right btn btn-link" ng-click="setLimitTo5()">Show Last 5</button>
+    </h4>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-condensed table-bordered table-striped table-dk-blue">
+      <thead>
+        <tr>
+          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'gameId'}" ng-click="sortAscOnly('gameId')">Game</td>
+          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'game.gameDate'}" ng-click="sortAscOnly('game.gameDate')">Date</td>
+          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'seasonTeam.team.teamShortName'}" ng-click="sortAscOnly('seasonTeam.team.teamShortName')">Team</td>
+          <td class="pointer" ng-class="{'td-sorted-by':sortOn === 'playoffs'}" ng-click="sortAscOnly('playoffs')">Playoffs</td>
+          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'goalsAgainst'}" ng-click="sortAscOnly('goalsAgainst')">GA</td>
+          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'wins'}" ng-click="sortDescOnly('wins')">W</td>
+          <td class="pointer text-right" ng-class="{'td-sorted-by':sortOn === 'shutouts'}" ng-click="sortDescOnly('shutouts')">SO</td>
+
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in data.goalieStatsGame | orderBy:sortOn:sortDirection | limitTo:data.limitTo">
+          <td ng-class="{'td-sorted-by':sortOn === 'gameId' }"><a ng-href="/Ng/#/Games/BoxScores/{{item.gameId}}">{{item.gameId}}</a></td>
+          <td ng-class="{'td-sorted-by':sortOn === 'game.gameDate' }">{{item.game.gameDate  | amDateFormat:'MMM Do YYYY'}}</td>
+          <td ng-class="{'td-sorted-by':sortOn === 'seasonTeam.team.teamShortName' }">{{item.seasonTeam.team.teamShortName}}{{item.sub == true ? "*" : ""}}</td>
+          <td ng-class="{'td-sorted-by':sortOn === 'playoffs'}">{{item.playoffs}}</td>
+          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'goalsAgainst'}">{{item.goalsAgainst}}</td>
+          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'wins' }">{{item.wins}}</td>
+          <td class="text-right" ng-class="{'td-sorted-by':sortOn === 'shutouts' }">{{item.shutouts}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

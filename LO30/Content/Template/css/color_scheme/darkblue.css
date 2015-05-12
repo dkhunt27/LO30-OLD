@@ -134,7 +134,8 @@
 
 	/* Buttons */
 	.btn-default {
-		border:#1980B6 2px solid;
+    /*lo30 was not commented out */
+		/*border:#1980B6 2px solid;*/
 	}
 	.btn-default:hover, .btn-default:active, .btn-default:focus {
 		border:#146794 2px solid;

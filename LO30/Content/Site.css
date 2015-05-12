@@ -1,1 +1,105 @@
-﻿
+﻿.navbar-default {
+background-color: #1980B6;
+border-color: #1980B6;
+}
+
+.navbar-default .navbar-brand {
+color: aliceblue;
+}
+
+.navbar-default .navbar-nav>li>a {
+color: aliceblue;
+}
+
+.navbar-default .navbar-toggle {
+border-color: #1980B6;
+color: #1980B6;
+}
+
+.table-dk-blue > thead {
+font-weight: 700;
+}
+
+.table-dk-blue > thead > tr > th,
+.table-dk-blue > thead > tr > td {
+color: #fff;
+background-color: #1980B6;
+}
+
+.table-dk-blue>tbody>tr>td {
+}
+
+.table-dk-blue > tbody > tr:hover > td,
+.table-dk-blue > tbody > tr:hover > th {
+  background-color: rgba(25,128,182,0.5);
+  font-weight: 700;
+}
+
+td.td-sorted-by {
+  /*background-color: #d9edf7 !important;*/
+  /*color: #fff;*/
+  background-color: rgba(25,128,182,0.5) !important;
+  font-weight: 700;
+}
+
+.img-responsive-center,
+.thumbnail > img,
+.thumbnail a > img,
+.carousel-inner > .item > img,
+.carousel-inner > .item > a > img {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.grayscale {
+    filter: url('../Content/Images/gray.svg#grayscale'); /* Firefox 3.5+ */
+    filter: gray; /* IE6-9 */
+    filter: grayscale(1); /* W3C */  
+    -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+}
+ 
+.grayscale-hover:hover {
+    filter: none;
+    -webkit-filter: grayscale(0);
+}
+
+.btn-lo30-disabled {
+	border: #bbb 2px solid;
+  pointer-events: none;
+  cursor: not-allowed;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  opacity: .65;
+}
+
+.on-its-side {
+  transform: rotate(270deg); /* W3C */
+  -webkit-transform: rotate(270deg); /* Safari & Chrome */
+  -moz-transform: rotate(270deg); /* Firefox */
+  -ms-transform: rotate(270deg); /* Internet Explorer */
+  -o-transform: rotate(270deg); /* Opera */
+}
+
+hr {
+  margin: 10px 0px 10px 0px;
+}
+
+h3 {
+  margin: 5px 0px 5px 0px;
+}
+
+h6 {
+  margin: 5px 0px 5px 0px;
+}
+
+.division-title {
+color: #1980B6;
+}
+
+/* firefox fixes */
+/*@-moz-document url-prefix() {
+    fieldset {
+        display: table-cell;
+    }
+}*/

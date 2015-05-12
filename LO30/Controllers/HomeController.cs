@@ -16,7 +16,13 @@ namespace LO30.Controllers
     {
       _mailService = mailService;
     }
+
     public ActionResult Index()
+    {
+      return View();
+    }
+
+    public ActionResult IndexNg()
     {
       ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
 
