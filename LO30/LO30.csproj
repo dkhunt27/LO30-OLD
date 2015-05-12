@@ -2527,9 +2527,6 @@
     <Content Include="Views\Standings\Playoffs.cshtml" />
     <Content Include="Views\Scores\Index.cshtml" />
     <Content Include="Views\AboutUs\Services.cshtml" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Views\Navigation\NavAdmin.cshtml" />
     <Content Include="Views\Navigation\NavPublic.cshtml" />
     <Content Include="Views\Navigation\NavBoard.cshtml" />
@@ -2548,13 +2545,7 @@
     <Content Include="Views\AdminSettings\Delete.cshtml" />
     <Content Include="Scripts\version.json" />
     <Content Include="Views\ScoreSheetEntry\ScoreSheetEntry.cshtml" />
-    <None Include="Web.config" />
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
+    <Content Include="Web.config.template" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Images\2010\Teams\" />
