@@ -112,7 +112,7 @@ namespace LO30.Services
         new AccessTableList(){ConnString=_connStringSSE, QueryBegin="SELECT * FROM", QueryEnd="ORDER BY SCORE_SHEET_ENTRY_SUB_ID", TableName="SCORE_SHEET_ENTRY_SUB", FileName="ScoreSheetEntrySubs"},
         new AccessTableList(){ConnString=_connString, QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54 ORDER BY SEASON_ID, GAME_ID, PERIOD, TIME_REMAINING DESC", TableName="SCORING_DETAIL", FileName="ScoringDetails"},
         new AccessTableList(){ConnString=_connString, QueryBegin="SELECT * FROM", QueryEnd="ORDER BY SEASON_ID, TEAM_ID", TableName="TEAM", FileName="Teams"},
-        new AccessTableList(){ConnString=_connString, QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54 ORDER BY SEASON_ID, TEAM_ID", TableName="TEAM_ROSTER", FileName="TeamRosters"},
+        new AccessTableList(){ConnString=_connString, QueryBegin="SELECT * FROM", QueryEnd="WHERE SEASON_ID=54 ORDER BY SEASON_ID, TEAM_ID, PLAYOFF_SEASON_IND DESC", TableName="TEAM_ROSTER", FileName="TeamRosters"},
 
         // addtl tables
         new AccessTableList(){ConnString=_connString, QueryBegin="SELECT * FROM", QueryEnd="ORDER BY SEASON_ID, PLAYER_ID", TableName="FACT_PLAYER_STATS", FileName="FactPlayerStats"},
