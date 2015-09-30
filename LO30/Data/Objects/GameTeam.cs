@@ -21,18 +21,23 @@ namespace LO30.Data.Objects
     [Required, ForeignKey("SeasonTeam")]
     public int SeasonTeamId { get; set; }
 
+    [Required, ForeignKey("OpponentSeasonTeam")]
+    public int OpponentSeasonTeamId { get; set; }
+
     public virtual Game Game { get; set; }
     public virtual SeasonTeam SeasonTeam { get; set; }
+    public virtual SeasonTeam OpponentSeasonTeam { get; set; }
 
     public GameTeam()
     {
     }
 
-    public GameTeam(int gid, bool ht, int stid)
+    public GameTeam(int gid, bool ht, int stid, int ostid)
     {
       this.GameId = gid;
       this.HomeTeam = ht;
       this.SeasonTeamId = stid;
+      this.OpponentSeasonTeamId = ostid;
 
       Validate();
     }
@@ -44,6 +49,11 @@ namespace LO30.Data.Objects
                             this.GameId,
                             this.HomeTeam,
                             this.SeasonTeamId);
+
+      if (this.SeasonTeamId == this.OpponentSeasonTeamId)
+      {
+        throw new ArgumentException("SeasonTeamId cannot equal OpponentSeasonTeamId:" + locationKey, "SeasonTeamId");
+      }
 
     }
   }

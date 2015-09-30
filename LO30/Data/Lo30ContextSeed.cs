@@ -7,14 +7,13 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Web.Security;
+using WebMatrix.WebData;
 
 namespace LO30.Data
 {
   public class Lo30ContextSeed
   {
-    private Lo30ContextService _lo30ContextService;
-    private AccessDatabaseService _accessDatabaseService;
-    private Lo30DataService _lo30DataService;
     private Lo30ContextService contextService;
     private Lo30Context context;
 

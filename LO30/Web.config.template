@@ -10,7 +10,7 @@
   </configSections>
   <connectionStrings>
     <add name="DefaultConnection" connectionString="Data Source=(LocalDb)\v11.0;Initial Catalog=aspnet-LO30-20140907215409;Integrated Security=SSPI;AttachDBFilename=|DataDirectory|\aspnet-LO30-20140907215409.mdf" providerName="System.Data.SqlClient"/>
-    <add name="LO30AccessDB" connectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Over30\Database\Over30.mdb;" providerName="System.Data.OleDb"/>
+    <add name="LO30AccessDB" connectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=D:\1Drive\lo30\OneDrive\LO30\Over30\Database\Over30.mdb;" providerName="System.Data.OleDb"/>
     <add name="OleDbServices"
          connectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=LO30\App_Data\Users.mdb"
              providerName="System.Data.OleDb"
@@ -26,6 +26,7 @@
     <add key="autoFormsAuthentication" value="false"/>
   </appSettings>
   <system.web>
+    <!--customErrors mode="Off"/-->
     <compilation debug="true" targetFramework="4.5"/>
     <httpRuntime targetFramework="4.5"/>
     <authentication mode="Forms">

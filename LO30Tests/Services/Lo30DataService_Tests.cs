@@ -25,12 +25,12 @@ namespace LO30.Services.Tests
     {
       List<GameRoster> gameRosters = new List<GameRoster>()
       {
-        new GameRoster(grid: 1, gtid: 101, pn: 1, line:1, pos:"F", g:false, pid: 401, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: true, stid:201){SeasonTeam = new SeasonTeam(stid:201, sid:501, tid:601, div: 0)}},
-        new GameRoster(grid: 1, gtid: 101, pn: 2, line:1, pos:"F", g:false, pid: 402, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: true, stid:201){SeasonTeam = new SeasonTeam(stid:201, sid:501, tid:60, div: 01)}},
-        new GameRoster(grid: 1, gtid: 101, pn: 3, line:1, pos:"F", g:false, pid: 403, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: true, stid:201){SeasonTeam = new SeasonTeam(stid:301, sid:501, tid:601, div: 0)}},
-        new GameRoster(grid: 1, gtid: 102, pn: 1, line:1, pos:"F", g:false, pid: 404, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: false, stid:202){SeasonTeam = new SeasonTeam(stid:302, sid:501, tid:602, div: 0)}},
-        new GameRoster(grid: 1, gtid: 102, pn: 2, line:1, pos:"F", g:false, pid: 405, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: false, stid:202){SeasonTeam = new SeasonTeam(stid:302, sid:501, tid:602, div: 0)}},
-        new GameRoster(grid: 1, gtid: 102, pn: 3, line:1, pos:"F", g:false, pid: 406, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: false, stid:202){SeasonTeam = new SeasonTeam(stid:302, sid:501, tid:602, div: 0)}}
+        new GameRoster(grid: 1, gtid: 101, pn: 1, line:1, pos:"F", g:false, pid: 401, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: true, stid:201, ostid:202){SeasonTeam = new SeasonTeam(stid:201, sid:501, tid:601, div: 0)}},
+        new GameRoster(grid: 1, gtid: 101, pn: 2, line:1, pos:"F", g:false, pid: 402, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: true, stid:201, ostid:202){SeasonTeam = new SeasonTeam(stid:201, sid:501, tid:60, div: 01)}},
+        new GameRoster(grid: 1, gtid: 101, pn: 3, line:1, pos:"F", g:false, pid: 403, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: true, stid:201, ostid:202){SeasonTeam = new SeasonTeam(stid:301, sid:501, tid:601, div: 0)}},
+        new GameRoster(grid: 1, gtid: 102, pn: 1, line:1, pos:"F", g:false, pid: 404, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: false, stid:202, ostid:201){SeasonTeam = new SeasonTeam(stid:302, sid:501, tid:602, div: 0)}},
+        new GameRoster(grid: 1, gtid: 102, pn: 2, line:1, pos:"F", g:false, pid: 405, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: false, stid:202, ostid:201){SeasonTeam = new SeasonTeam(stid:302, sid:501, tid:602, div: 0)}},
+        new GameRoster(grid: 1, gtid: 102, pn: 3, line:1, pos:"F", g:false, pid: 406, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: false, stid:202, ostid:201){SeasonTeam = new SeasonTeam(stid:302, sid:501, tid:602, div: 0)}}
       };
 
       List<ScoreSheetEntryProcessed> scoreSheetEntriesProcessed = new List<ScoreSheetEntryProcessed>()
@@ -61,12 +61,12 @@ namespace LO30.Services.Tests
     {
       List<GameRoster> gameRosters = new List<GameRoster>()
       {
-        new GameRoster(grid: 1, gtid: 101, pn: 1, line:1, pos:"F", g:false, pid: 401, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: true, stid:201){SeasonTeam = new SeasonTeam(stid:201, sid:501, tid:601, div: 0)}},
-        new GameRoster(grid: 1, gtid: 101, pn: 2, line:1, pos:"F", g:false, pid: 408, sub: true, sfpid: 402){GameTeam = new GameTeam(gid:701, ht: true, stid:201){SeasonTeam = new SeasonTeam(stid:201, sid:501, tid:601, div: 0)}},
-        new GameRoster(grid: 1, gtid: 101, pn: 3, line:1, pos:"F", g:false, pid: 403, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: true, stid:201){SeasonTeam = new SeasonTeam(stid:301, sid:501, tid:601, div: 0)}},
-        new GameRoster(grid: 1, gtid: 102, pn: 1, line:1, pos:"F", g:false, pid: 407, sub: true, sfpid: 404){GameTeam = new GameTeam(gid:701, ht: false, stid:202){SeasonTeam = new SeasonTeam(stid:302, sid:501, tid:602, div: 0)}},
-        new GameRoster(grid: 1, gtid: 102, pn: 2, line:1, pos:"F", g:false, pid: 405, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: false, stid:202){SeasonTeam = new SeasonTeam(stid:302, sid:501, tid:602, div: 0)}},
-        new GameRoster(grid: 1, gtid: 102, pn: 3, line:1, pos:"F", g:false, pid: 406, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: false, stid:202){SeasonTeam = new SeasonTeam(stid:302, sid:501, tid:602, div: 0)}}
+        new GameRoster(grid: 1, gtid: 101, pn: 1, line:1, pos:"F", g:false, pid: 401, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: true, stid:201, ostid:202){SeasonTeam = new SeasonTeam(stid:201, sid:501, tid:601, div: 0)}},
+        new GameRoster(grid: 1, gtid: 101, pn: 2, line:1, pos:"F", g:false, pid: 408, sub: true, sfpid: 402){GameTeam = new GameTeam(gid:701, ht: true, stid:201, ostid:202){SeasonTeam = new SeasonTeam(stid:201, sid:501, tid:601, div: 0)}},
+        new GameRoster(grid: 1, gtid: 101, pn: 3, line:1, pos:"F", g:false, pid: 403, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: true, stid:201, ostid:202){SeasonTeam = new SeasonTeam(stid:301, sid:501, tid:601, div: 0)}},
+        new GameRoster(grid: 1, gtid: 102, pn: 1, line:1, pos:"F", g:false, pid: 407, sub: true, sfpid: 404){GameTeam = new GameTeam(gid:701, ht: false, stid:202, ostid:201){SeasonTeam = new SeasonTeam(stid:302, sid:501, tid:602, div: 0)}},
+        new GameRoster(grid: 1, gtid: 102, pn: 2, line:1, pos:"F", g:false, pid: 405, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: false, stid:202, ostid:201){SeasonTeam = new SeasonTeam(stid:302, sid:501, tid:602, div: 0)}},
+        new GameRoster(grid: 1, gtid: 102, pn: 3, line:1, pos:"F", g:false, pid: 406, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: false, stid:202, ostid:201){SeasonTeam = new SeasonTeam(stid:302, sid:501, tid:602, div: 0)}}
       };
 
       List<ScoreSheetEntryProcessed> scoreSheetEntriesProcessed = new List<ScoreSheetEntryProcessed>()
@@ -97,12 +97,12 @@ namespace LO30.Services.Tests
     {
       List<GameRoster> gameRosters = new List<GameRoster>()
       {
-        new GameRoster(grid: 1, gtid: 101, pn: 1, line:1, pos:"F", g:false, pid: 401, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: true, stid:201){SeasonTeam = new SeasonTeam(stid:201, sid:501, tid:601, div: 0)}},
-        new GameRoster(grid: 1, gtid: 101, pn: 2, line:1, pos:"F", g:false, pid: 408, sub: true, sfpid: 402){GameTeam = new GameTeam(gid:701, ht: true, stid:201){SeasonTeam = new SeasonTeam(stid:201, sid:501, tid:601, div: 0)}},
-        new GameRoster(grid: 1, gtid: 101, pn: 3, line:1, pos:"F", g:false, pid: 403, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: true, stid:201){SeasonTeam = new SeasonTeam(stid:301, sid:501, tid:601, div: 0)}},
-        new GameRoster(grid: 1, gtid: 102, pn: 1, line:1, pos:"F", g:false, pid: 407, sub: true, sfpid: 404){GameTeam = new GameTeam(gid:701, ht: false, stid:202){SeasonTeam = new SeasonTeam(stid:302, sid:501, tid:602, div: 0)}},
-        new GameRoster(grid: 1, gtid: 102, pn: 2, line:1, pos:"F", g:false, pid: 405, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: false, stid:202){SeasonTeam = new SeasonTeam(stid:302, sid:501, tid:602, div: 0)}},
-        new GameRoster(grid: 1, gtid: 102, pn: 3, line:1, pos:"F", g:false, pid: 406, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: false, stid:202){SeasonTeam = new SeasonTeam(stid:302, sid:501, tid:602, div: 0)}}
+        new GameRoster(grid: 1, gtid: 101, pn: 1, line:1, pos:"F", g:false, pid: 401, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: true, stid:201, ostid:202){SeasonTeam = new SeasonTeam(stid:201, sid:501, tid:601, div: 0)}},
+        new GameRoster(grid: 1, gtid: 101, pn: 2, line:1, pos:"F", g:false, pid: 408, sub: true, sfpid: 402){GameTeam = new GameTeam(gid:701, ht: true, stid:201, ostid:202){SeasonTeam = new SeasonTeam(stid:201, sid:501, tid:601, div: 0)}},
+        new GameRoster(grid: 1, gtid: 101, pn: 3, line:1, pos:"F", g:false, pid: 403, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: true, stid:201, ostid:202){SeasonTeam = new SeasonTeam(stid:301, sid:501, tid:601, div: 0)}},
+        new GameRoster(grid: 1, gtid: 102, pn: 1, line:1, pos:"F", g:false, pid: 407, sub: true, sfpid: 404){GameTeam = new GameTeam(gid:701, ht: false, stid:202, ostid:201){SeasonTeam = new SeasonTeam(stid:302, sid:501, tid:602, div: 0)}},
+        new GameRoster(grid: 1, gtid: 102, pn: 2, line:1, pos:"F", g:false, pid: 405, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: false, stid:202, ostid:201){SeasonTeam = new SeasonTeam(stid:302, sid:501, tid:602, div: 0)}},
+        new GameRoster(grid: 1, gtid: 102, pn: 3, line:1, pos:"F", g:false, pid: 406, sub: false, sfpid: null){GameTeam = new GameTeam(gid:701, ht: false, stid:202, ostid:201){SeasonTeam = new SeasonTeam(stid:302, sid:501, tid:602, div: 0)}}
       };
 
       List<ScoreSheetEntryProcessed> scoreSheetEntriesProcessed = new List<ScoreSheetEntryProcessed>()
@@ -136,7 +136,7 @@ namespace LO30.Services.Tests
     [TestMethod()]
     public void DerivePlayerGameStats_SeasonId54GameId3227()
     {
-      string folderPath = @"C:\git\LO30\LO30Tests\TestData\SeasonId54GameId3227\";
+      string folderPath = @"D:\git\LO30\LO30Tests\TestData\SeasonId54GameId3227\";
 
       List<GameRoster> gameRosters = _lo30DataSerializationService.FromJsonFromFile<List<GameRoster>>(folderPath + "GameRosters.json");
       List<ScoreSheetEntryProcessed> scoreSheetEntriesProcessed = _lo30DataSerializationService.FromJsonFromFile<List<ScoreSheetEntryProcessed>>(folderPath + "ScoreSheetEntriesProcessed.json");
@@ -325,7 +325,7 @@ namespace LO30.Services.Tests
     [TestMethod()]
     public void DerivePlayerSeasonTeamStats_SeasonId54GameId3227()
     {
-      string folderPath = @"C:\git\LO30\LO30Tests\TestData\SeasonId54GameId3227\";
+      string folderPath = @"D:\git\LO30\LO30Tests\TestData\SeasonId54GameId3227\";
 
       List<GameRoster> gameRosters = _lo30DataSerializationService.FromJsonFromFile<List<GameRoster>>(folderPath + "GameRosters.json");
       List<ScoreSheetEntryProcessed> scoreSheetEntriesProcessed = _lo30DataSerializationService.FromJsonFromFile<List<ScoreSheetEntryProcessed>>(folderPath + "ScoreSheetEntriesProcessed.json");
@@ -356,8 +356,8 @@ namespace LO30.Services.Tests
     [TestMethod()]
     public void DeriveGoalieGameStats_NoGameOutcomes_NoSubs()
     {
-      GameTeam gt101 = new GameTeam(gid: 701, ht: true, stid: 201) { SeasonTeam = new SeasonTeam(stid: 201, sid: 501, tid: 601, div: 0) };
-      GameTeam gt102 = new GameTeam(gid: 701, ht: false, stid: 202) { SeasonTeam = new SeasonTeam(stid: 202, sid: 501, tid: 601, div: 0) };
+      GameTeam gt101 = new GameTeam(gid: 701, ht: true, stid: 201, ostid: 202) { SeasonTeam = new SeasonTeam(stid: 201, sid: 501, tid: 601, div: 0) };
+      GameTeam gt102 = new GameTeam(gid: 701, ht: false, stid: 202, ostid: 201) { SeasonTeam = new SeasonTeam(stid: 202, sid: 501, tid: 601, div: 0) };
 
       List<GameRoster> gameRosters = new List<GameRoster>()
       {
@@ -383,8 +383,8 @@ namespace LO30.Services.Tests
     [TestMethod()]
     public void DeriveGoalieGameStats_NoGameOutcomes_WithSubs()
     {
-      GameTeam gt101 = new GameTeam(gid: 701, ht: true, stid: 201) { SeasonTeam = new SeasonTeam(stid: 201, sid: 501, tid: 601, div: 0) };
-      GameTeam gt102 = new GameTeam(gid: 701, ht: false, stid: 202) { SeasonTeam = new SeasonTeam(stid: 202, sid: 501, tid: 601, div: 0) };
+      GameTeam gt101 = new GameTeam(gid: 701, ht: true, stid: 201, ostid: 202) { SeasonTeam = new SeasonTeam(stid: 201, sid: 501, tid: 601, div: 0) };
+      GameTeam gt102 = new GameTeam(gid: 701, ht: false, stid: 202, ostid: 201) { SeasonTeam = new SeasonTeam(stid: 202, sid: 501, tid: 601, div: 0) };
 
       List<GameRoster> gameRosters = new List<GameRoster>()
       {
@@ -411,8 +411,8 @@ namespace LO30.Services.Tests
     [TestMethod()]
     public void DeriveGoalieGameStats_OneScoreSheets_WithSubs()
     {
-      GameTeam gt101 = new GameTeam(gid: 701, ht: true, stid: 201) { SeasonTeam = new SeasonTeam(stid: 201, sid: 501, tid: 601, div: 0) };
-      GameTeam gt102 = new GameTeam(gid: 701, ht: false, stid: 202) { SeasonTeam = new SeasonTeam(stid: 202, sid: 501, tid: 601, div: 0) };
+      GameTeam gt101 = new GameTeam(gid: 701, ht: true, stid: 201, ostid: 202) { SeasonTeam = new SeasonTeam(stid: 201, sid: 501, tid: 601, div: 0) };
+      GameTeam gt102 = new GameTeam(gid: 701, ht: false, stid: 202, ostid: 201) { SeasonTeam = new SeasonTeam(stid: 202, sid: 501, tid: 601, div: 0) };
 
       List<GameRoster> gameRosters = new List<GameRoster>()
       {
@@ -440,7 +440,7 @@ namespace LO30.Services.Tests
     [TestMethod()]
     public void DeriveGoalieGameStats_SeasonId54GameId3227()
     {
-      string folderPath = @"C:\git\LO30\LO30Tests\TestData\SeasonId54GameId3227\";
+      string folderPath = @"D:\git\LO30\LO30Tests\TestData\SeasonId54GameId3227\";
 
       List<GameRoster> gameRosters = _lo30DataSerializationService.FromJsonFromFile<List<GameRoster>>(folderPath + "GameRosters.json");
       List<GameOutcome> gameOutcomes = _lo30DataSerializationService.FromJsonFromFile<List<GameOutcome>>(folderPath + "GameOutcomes.json");

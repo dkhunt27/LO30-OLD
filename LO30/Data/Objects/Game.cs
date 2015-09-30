@@ -10,8 +10,6 @@ namespace LO30.Data.Objects
 {
   public class Game
   {
-    private Lo30DataService _lo30DataService;
-
     [Required, Key, DatabaseGenerated(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.None)]
     public int GameId { get; set; }
 

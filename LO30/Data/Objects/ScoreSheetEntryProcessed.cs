@@ -112,7 +112,7 @@ namespace LO30.Data.Objects
         throw new ArgumentException("Period cannot be more than 4 for:" + locationKey, "Period");
       }
 
-      if ((this.GoalPlayerId != null && this.GoalPlayerId != 0) && (this.GoalPlayerId == this.Assist1PlayerId || this.GoalPlayerId == this.Assist2PlayerId || this.GoalPlayerId == this.Assist3PlayerId))
+      if ((this.GoalPlayerId != 0) && (this.GoalPlayerId == this.Assist1PlayerId || this.GoalPlayerId == this.Assist2PlayerId || this.GoalPlayerId == this.Assist3PlayerId))
       {
         throw new ArgumentException("GoalPlayerId cannot also be an Assist#PlayerId for:" + locationKey, "GoalPlayerId");
       }

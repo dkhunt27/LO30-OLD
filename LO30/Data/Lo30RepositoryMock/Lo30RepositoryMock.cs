@@ -10,8 +10,6 @@ namespace LO30.Data
 {
   public partial class Lo30RepositoryMock
   {
-    int currentSeasonId = 54;
-
     private Lo30DataService _lo30DataService;
     private Lo30DataSerializationService _lo30DataSerializationService;
     
@@ -47,7 +45,7 @@ namespace LO30.Data
       //string appRoot = Environment.GetEnvironmentVariable("RoleRoot");
       //string folderPath2 = Path.Combine(appRoot + @"\", string.Format(@"approot\{0}", "ForWebGoalieStats.json"));
 
-      var folderPath = @"C:\git\LO30\LO30\App_Data\SqlServer\";
+      var folderPath = @"D:\git\LO30.v3\LO30.Common\RawData\Access\SqlServer\";
       _webGoalieStats = _lo30DataSerializationService.FromJsonFromFile<List<ForWebGoalieStat>>(folderPath + "ForWebGoalieStats.json");
       _webPlayerStats = _lo30DataSerializationService.FromJsonFromFile<List<ForWebPlayerStat>>(folderPath + "ForWebPlayerStats.json");
       _webTeamStandings = _lo30DataSerializationService.FromJsonFromFile<List<ForWebTeamStanding>>(folderPath + "ForWebTeamStandings.json");

@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LO30", "LO30\LO30.csproj", "{A2635D2D-3913-400A-9F2A-9786B8037085}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7F4DB2CB-FDC7-4029-AA14-B42A8F8D8099}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
@@ -12,15 +10,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7F4DB2
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LO30Tests", "LO30Tests\LO30Tests.csproj", "{EF40382F-B2F0-46D9-A126-29B5BFAB6B2A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9B6D0B7A-9E25-4E31-A98E-376DA690351F}"
 	ProjectSection(SolutionItems) = preProject
+		ConnStrings.txt = ConnStrings.txt
 		Includes to Populate Fully.txt = Includes to Populate Fully.txt
 		log-fully updating production.txt = log-fully updating production.txt
 		log.txt = log.txt
 		startup-url.txt = startup-url.txt
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LO30", "LO30\LO30.csproj", "{A2635D2D-3913-400A-9F2A-9786B8037085}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LO30Tests", "LO30Tests\LO30Tests.csproj", "{EF40382F-B2F0-46D9-A126-29B5BFAB6B2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

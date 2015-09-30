@@ -30,7 +30,7 @@ namespace LO30.Services
         _ctx = ctx;
         _lo30DataService = new Lo30DataService();
         _lo30DataSerializationService = new Lo30DataSerializationService();
-        _folderPath = @"C:\git\LO30\LO30\App_Data\SqlServer\";
+        _folderPath = @"D:\git\LO30.v3\LO30.Common\RawData\SqlServer\";
       }
 
       #region SaveOrUpdate functions
@@ -3052,7 +3052,7 @@ namespace LO30.Services
       {
         var results = new ProcessingResult();
 
-        var folderPath = @"C:\git\LO30\LO30\App_Data\Access\";
+        var folderPath = @"D:\git\LO30.v3\LO30.Common\RawData\Access\";
 
         DateTime last = DateTime.Now;
         TimeSpan diffFromLast = new TimeSpan();
@@ -3072,7 +3072,7 @@ namespace LO30.Services
       {
         var results = new ProcessingResult();
 
-        var folderPath = @"C:\git\LO30\LO30\App_Data\Access\";
+        var folderPath = @"D:\git\LO30.v3\LO30.Common\RawData\Access\";
 
         DateTime last = DateTime.Now;
         TimeSpan diffFromLast = new TimeSpan();
@@ -3092,7 +3092,7 @@ namespace LO30.Services
       {
         var results = new ProcessingResult();
 
-        var folderPath = @"C:\git\LO30\LO30\App_Data\Access\";
+        var folderPath = @"D:\git\LO30.v3\LO30.Common\RawData\Access\";
 
         DateTime last = DateTime.Now;
         TimeSpan diffFromLast = new TimeSpan();

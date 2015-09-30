@@ -24,6 +24,9 @@ namespace LO30.Data.Objects
     [ForeignKey("Sponsor")]
     public int? SponsorId { get; set; }
 
+    //[Required]
+    public int? SeasonId { get; set; }
+
     public virtual Player Coach { get; set; }
     public virtual Sponsor Sponsor { get; set; }
   }

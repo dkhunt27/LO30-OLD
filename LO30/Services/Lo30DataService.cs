@@ -69,7 +69,7 @@ namespace LO30.Services
           var line = gameRoster.Line;
           var position = gameRoster.Position;
 
-          if (gameRoster.GameTeam.SeasonTeam == null || gameRoster.GameTeam.SeasonTeam.SeasonId == null)
+          if (gameRoster.GameTeam.SeasonTeam == null || gameRoster.GameTeam.SeasonTeam.SeasonId <= 0)
           {
             throw new ArgumentNullException("gameRoster.GameTeam.SeasonTeam.SeasonId");
           }
@@ -331,7 +331,7 @@ namespace LO30.Services
           var sub = gameRoster.Sub;
           var playerId = gameRoster.PlayerId;
 
-          if (gameRoster.GameTeam.SeasonTeam == null || gameRoster.GameTeam.SeasonTeam.SeasonId == null)
+          if (gameRoster.GameTeam.SeasonTeam == null)
           {
             throw new ArgumentNullException("gameRoster.SeasonTeam.SeasonId");
           }

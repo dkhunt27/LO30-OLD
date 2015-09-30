@@ -90,6 +90,11 @@ lo30NgApp.config(
         templateUrl: "/Templates/Stats/Goalies.html"
       });
 
+      // Schedule
+      $routeProvider.when("/Schedule/Settings/:seasonId/:playoffs/:seasonTeamId", {
+        controller: "iCalController",
+        templateUrl: "/Templates/iCal.html"
+      });
 
 
       $routeProvider.when("/News", {

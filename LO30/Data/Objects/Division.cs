@@ -10,8 +10,6 @@ namespace LO30.Data.Objects
 {
   public class Division
   {
-    private Lo30DataService _lo30DataService;
-
     [Required, Key]
     public int DivisionId { get; set; }
 

@@ -14,7 +14,6 @@ namespace LO30.Data
     Lo30ContextService _contextService;
 
     Player _unknownPlayer;
-    int currentSeasonId = 54;
 
     public Lo30Repository(Lo30Context ctx, Lo30ContextService contextService)
     {
